@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="main.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crickingo - Home</title>
+    <link rel="icon" type="image/png" href="logo.png">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0a0e27;
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 121, 63, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(138, 43, 226, 0.2) 0%, transparent 50%);
+      animation: gradientShift 15s ease infinite;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-50px, -50px); }
+    }
+
+    .container {
+      max-width: 1000px;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 40px;
+      animation: fadeInDown 0.8s ease;
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .header h1 {
+      font-size: 4em;
+      margin-bottom: 15px;
+      background: linear-gradient(135deg, #667eea 0%, #ff6b9d 50%, #ffa400 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 900;
+      letter-spacing: -2px;
+      text-shadow: 0 0 80px rgba(102, 126, 234, 0.5);
+    }
+
+    .header p {
+      font-size: 1.3em;
+      opacity: 0.9;
+      color: #e0e0e0;
+      letter-spacing: 0.5px;
+    }
+
+    .game-selector {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 30px;
+      box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      padding: 50px;
+      animation: fadeInUp 0.8s ease 0.2s both;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .game-selector h2 {
+      margin-bottom: 35px;
+      color: white;
+      font-size: 2em;
+      text-align: center;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .date-selector {
+      margin-bottom: 35px;
+      padding: 25px;
+      background: rgba(102, 126, 234, 0.15);
+      border: 2px solid rgba(102, 126, 234, 0.3);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .date-selector:hover {
+      border-color: rgba(102, 126, 234, 0.5);
+      background: rgba(102, 126, 234, 0.2);
+    }
+
+    .date-selector label {
+      display: block;
+      margin-bottom: 12px;
+      font-weight: 700;
+      color: white;
+      font-size: 1.15em;
+      letter-spacing: 0.5px;
+    }
+
+    .date-selector input {
+      padding: 15px 18px;
+      font-size: 1.05em;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .date-selector input:focus {
+      outline: none;
+      border-color: #667eea;
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .date-selector input::-webkit-calendar-picker-indicator {
+      filter: invert(1);
+      cursor: pointer;
+    }
+
+    .date-selector p {
+      margin-top: 12px;
+      font-size: 0.95em;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.5;
+    }
+
+    .game-buttons {
+      display: grid;
+      gap: 20px;
+    }
+
+    .game-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      color: white;
+      padding: 30px;
+      border-radius: 20px;
+      font-size: 1.1em;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      text-align: left;
+      text-decoration: none;
+      display: block;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .game-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .game-btn:hover::before {
+      opacity: 1;
+    }
+
+    .game-btn:hover {
+      transform: translateY(-5px);
+      border-color: rgba(102, 126, 234, 0.5);
+      box-shadow: 
+        0 20px 40px rgba(102, 126, 234, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    .game-btn:active {
+      transform: translateY(-2px);
+    }
+
+    .game-title {
+      font-weight: 800;
+      font-size: 1.4em;
+      display: block;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+      letter-spacing: -0.5px;
+    }
+
+    .game-desc {
+      font-size: 1em;
+      opacity: 0.85;
+      line-height: 1.6;
+      position: relative;
+      z-index: 1;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .game-btn:nth-child(1) {
+      animation: fadeInUp 0.6s ease 0.4s both;
+    }
+
+    .game-btn:nth-child(2) {
+      animation: fadeInUp 0.6s ease 0.5s both;
+    }
+
+    .game-btn:nth-child(3) {
+      animation: fadeInUp 0.6s ease 0.6s both;
+    }
+
+    .game-btn:nth-child(4) {
+      animation: fadeInUp 0.6s ease 0.7s both;
+    }
+
+    .game-icon {
+      display: inline-block;
+      margin-right: 8px;
+      font-size: 1.2em;
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 2.8em;
+      }
+
+      .header p {
+        font-size: 1.1em;
+      }
+      
+      .game-selector {
+        padding: 30px 20px;
+      }
+
+      .game-selector h2 {
+        font-size: 1.6em;
+      }
+
+      .game-btn {
+        padding: 25px 20px;
+      }
+
+      .game-title {
+        font-size: 1.2em;
+      }
+
+      .game-desc {
+        font-size: 0.95em;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header h1 {
+        font-size: 2.2em;
+      }
+
+      .game-selector {
+        padding: 25px 15px;
+      }
+
+      .date-selector {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🏏 Crickingo</h1>
+      <p>The Ultimate Cricket Challenge</p>
+    </div>
+
+    <div class="game-selector">
+      <h2>Choose Your Game</h2>
+      
+      <div class="date-selector">
+        <label><span class="game-icon">📅</span>Select Date:</label>
+        <input type="date" id="gameDate">
+        <p>Play today's puzzle or revisit previous days!</p>
+      </div>
+
+      <div class="game-buttons">
+        <a href="rivalry.html" class="game-btn" id="rivalryBtn">
+          <span class="game-title"><span class="game-icon">🔥</span>Cricket Bingo</span>
+          <span class="game-desc">CSK vs MI - The ultimate IPL rivalry showdown</span>
+        </a>
+        
+        <a href="transfer.html" class="game-btn" id="transferBtn">
+          <span class="game-title"><span class="game-icon">🔄</span>Transfer History</span>
+          <span class="game-desc">Guess the player from their IPL journey across teams</span>
+        </a>
+        
+        <a href="wordle.html" class="game-btn" id="wordleBtn">
+          <span class="game-title"><span class="game-icon">🔤</span>Player Wordle</span>
+          <span class="game-desc">Guess the cricket player name from letter clues</span>
+        </a>
+        
+        <a href="hl.html" class="game-btn" id="hlBtn">
+          <span class="game-title"><span class="game-icon">📊</span>Higher or Lower</span>
+          <span class="game-desc">Compare cricket stats and guess which player ranks higher</span>
+        </a>
+       
+        <a href="builder.html" class="game-btn" id="hlBtn">
+  <span class="game-title"><span class="game-icon">🧠</span>Build Your XI</span>
+  <span class="game-desc">Select players and test your cricket brain</span>
+</a>
+
+
+<a href="tournament.html" class="game-btn" id="hlBtn">
+  <span class="game-title"><span class="game-icon">🎮</span>Play with Friends</span>
+  <span class="game-desc">Create a room and compete with your friends</span>
+</a>
+
+      </div>
+    </div>
+  </div>
+</body>
+</html>

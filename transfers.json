@@ -1,0 +1,65 @@
+{
+  "2026-01-15": [
+    {
+      "name": "Virat Kohli",
+      "transfers": [
+        { "year": "2008-2024", "team": "Royal Challengers Bangalore" }
+      ]
+    },
+    {
+      "name": "MS Dhoni",
+      "transfers": [
+        { "year": "2008-2015", "team": "Chennai Super Kings" },
+        { "year": "2016-2017", "team": "Rising Pune Supergiant" },
+        { "year": "2018-2024", "team": "Chennai Super Kings" }
+      ]
+    },
+    {
+      "name": "Rohit Sharma",
+      "transfers": [
+        { "year": "2008-2010", "team": "Deccan Chargers" },
+        { "year": "2011-2024", "team": "Mumbai Indians" }
+      ]
+    },
+    {
+      "name": "David Warner",
+      "transfers": [
+        { "year": "2009-2013", "team": "Delhi Daredevils" },
+        { "year": "2014-2021", "team": "Sunrisers Hyderabad" },
+        { "year": "2022-2024", "team": "Delhi Capitals" }
+      ]
+    },
+    {
+      "name": "Ravindra Jadeja",
+      "transfers": [
+        { "year": "2008-2009", "team": "Rajasthan Royals" },
+        { "year": "2010-2011", "team": "Kochi Tuskers Kerala" },
+        { "year": "2012-2024", "team": "Chennai Super Kings" }
+      ]
+    }
+  ],
+  "2026-01-16": [
+    {
+      "name": "KL Rahul",
+      "transfers": [
+        { "year": "2013-2017", "team": "Royal Challengers Bangalore" },
+        { "year": "2018-2021", "team": "Punjab Kings" },
+        { "year": "2022-2024", "team": "Lucknow Super Giants" }
+      ]
+    },
+    {
+      "name": "Shreyas Iyer",
+      "transfers": [
+        { "year": "2015-2017", "team": "Delhi Capitals" },
+        { "year": "2018-2021", "team": "Delhi Capitals" },
+        { "year": "2022-2024", "team": "Kolkata Knight Riders" }
+      ]
+    },
+    {
+      "name": "Rishabh Pant",
+      "transfers": [
+        { "year": "2016-2024", "team": "Delhi Capitals" }
+      ]
+    }
+  ]
+}

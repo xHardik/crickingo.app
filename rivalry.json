@@ -1,0 +1,92 @@
+{
+  "rivalry": {
+    "title": "🔥 Rivalry Grid",
+    "subtitle": "CSK vs MI - The greatest IPL rivalry",
+    "players": [
+      "MS Dhoni","Suresh Raina","Ravindra Jadeja","Dwayne Bravo","Rohit Sharma","Kieron Pollard","Jasprit Bumrah","Hardik Pandya",
+      "Virat Kohli","AB de Villiers","Chris Gayle","KL Rahul","David Warner","Rishabh Pant","Shreyas Iyer","Andre Russell" 
+    ,"Ambati Rayudu","Sunil Narine"   ],
+    
+      "categories": [
+      {"title": "Played for CSK",
+      "image": "https://images.sportsbrief.com/images/1920/4f69d86949dd0a4e.png?v=1",
+      "validPlayers": ["MS Dhoni", "Suresh Raina", "Ravindra Jadeja", "Dwayne Bravo", "Ambati Rayudu"]
+      },
+      {
+        "title": "Played for MI",
+        "image": "https://iconape.com/wp-content/uploads/1/12/mumbai-indians-logo-0%D9%A4.png",
+        "validPlayers": ["Rohit Sharma", "Kieron Pollard", "Jasprit Bumrah", "Hardik Pandya"]
+      },
+      {
+        "title": "Scored IPL 100",
+        "image": "https://cdn-icons-png.flaticon.com/512/857/857418.png",
+        "validPlayers": ["Virat Kohli", "Chris Gayle", "AB de Villiers", "KL Rahul", "David Warner"]
+      },
+      {
+        "title": "Won IPL Trophy",
+    "image":"https://tse3.mm.bing.net/th/id/OIP.5xZU9bOkxqF6igI4Yy16ugHaHa?rs=1&pid=ImgDetMain&o=7&rm=3",   
+     "validPlayers": ["MS Dhoni", "Suresh Raina", "Rohit Sharma", "Kieron Pollard", "Jasprit Bumrah", "Hardik Pandya", "Andre Russell", "Sunil Narine"]
+      },
+      {
+        "title": "IPL Captain",
+        "image": "https://cdn-icons-png.flaticon.com/512/2917/2917995.png",
+        "validPlayers": ["MS Dhoni", "Rohit Sharma", "Virat Kohli", "David Warner", "Rishabh Pant", "Shreyas Iyer", "KL Rahul"]
+      },
+      {
+        "title": "100+ IPL Wickets",
+        "image": "https://cdn-icons-png.flaticon.com/512/2250/2250114.png",
+        "validPlayers": ["Jasprit Bumrah", "Ravindra Jadeja", "Dwayne Bravo"]
+      },
+      {
+        "title": "Overseas Player",
+        "image": "https://cdn-icons-png.flaticon.com/512/201/201623.png",
+        "validPlayers": ["AB de Villiers", "Chris Gayle", "David Warner", "Kieron Pollard", "Dwayne Bravo", "Andre Russell"]
+      },
+      {
+        "title": "Indian Player",
+        "image": "https://cdn-icons-png.flaticon.com/512/206/206606.png",
+        "validPlayers": ["MS Dhoni", "Virat Kohli", "Rohit Sharma", "Suresh Raina", "Jasprit Bumrah", "Hardik Pandya", "Ravindra Jadeja", "KL Rahul", "Rishabh Pant", "Shreyas Iyer"]
+      },
+      {
+        "title": "Wicketkeeper",
+        "image": "https://cdn-icons-png.flaticon.com/512/2906/2906282.png",
+        "validPlayers": ["MS Dhoni", "Rishabh Pant", "KL Rahul"]
+      },
+      {
+        "title": "All-Rounder",
+        "image": "https://cdn-icons-png.flaticon.com/512/3774/3774278.png",
+        "validPlayers": ["Ravindra Jadeja", "Hardik Pandya", "Andre Russell", "Dwayne Bravo", "Kieron Pollard"]
+      },
+      {
+        "title": "Fast Bowler",
+        "image": "https://cdn-icons-png.flaticon.com/512/857/857421.png",
+        "validPlayers": ["Jasprit Bumrah"]
+      },
+      {
+        "title": "5000+ IPL Runs",
+        "image": "https://cdn-icons-png.flaticon.com/512/3588/3588314.png",
+        "validPlayers": ["Virat Kohli", "Rohit Sharma", "Suresh Raina", "David Warner", "AB de Villiers", "MS Dhoni"]
+      },
+      {
+        "title": "Played for RCB",
+        "image": "https://images.sportsbrief.com/images/1920/7f6b05cbf0fc8f72.png?v=1",
+        "validPlayers": ["Virat Kohli", "AB de Villiers", "Chris Gayle"]
+      },
+      {
+        "title": "Played for KKR",
+        "image": "https://images.sportsbrief.com/images/1920/27e48638f24ca1b1.png?v=1",
+        "validPlayers": ["Andre Russell"]
+      },
+      {
+        "title": "Played for DC",
+        "image": "https://images.sportsbrief.com/images/1920/c70aef6cb76e45b1.png?v=1",
+        "validPlayers": ["David Warner", "Rishabh Pant", "Shreyas Iyer"]
+      },
+      {
+        "title": "Played for PBKS",
+        "image": "https://images.sportsbrief.com/images/1920/63c5f3c0c0a97a0f.png?v=1",
+        "validPlayers": ["KL Rahul", "Chris Gayle"]
+      }
+    ]
+  }
+}
