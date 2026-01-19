@@ -185,5 +185,12 @@ window.addEventListener('beforeunload', () => {
     }
 });
 
+window.addEventListener('DOMContentLoaded', () => {
+    // Load active tournaments by default
+    TournamentManager.loadActiveTournaments();
+});
+
+
+
 // Make functions available globally
 window.switchTab = switchTab;
