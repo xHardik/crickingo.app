@@ -9,18 +9,33 @@ const MatchManager = {
 
     async viewTournamentLobby(code) {
         try {
+            console.log('🔍 Looking for tournament with code:', code);
+            console.log('🔍 Searching key:', `tournament_${code}`);
+            
             const result = await StorageManager.get(`tournament_${code}`);
+            
+            console.log('📥 Result received:', result);
+            
             if (!result?.value) {
-                alert('Tournament not found!');
+                // Better debugging
+                console.error('❌ Tournament not found!');
+                console.log('Checking all stored tournaments...');
+                
+                const allKeys = await StorageManager.list('tournament_');
+                console.log('Available tournament keys:', allKeys);
+                
+                alert(`❌ Tournament not found!\n\nCode: ${code}\n\nDebug Info:\n- Looking for: tournament_${code}\n- Available tournaments: ${allKeys.keys.length}\n\nCheck console for details.`);
                 return;
             }
 
             const tournament = JSON.parse(result.value);
+            console.log('✅ Tournament loaded:', tournament);
+            
             this.currentTournamentCode = code;
             this.showMatchLobby(tournament);
         } catch (error) {
-            console.error('Error loading tournament:', error);
-            alert('Error loading tournament.');
+            console.error('💥 Error loading tournament:', error);
+            alert(`Error loading tournament: ${error.message}\n\nCheck browser console (F12) for details.`);
         }
     },
 
@@ -42,6 +57,7 @@ const MatchManager = {
         overlay.innerHTML = `
             <div class="details-container">
                 <h2>${tournament.name} - Match Lobby</h2>
+                <p style="color:rgba(255,255,255,0.7);margin-bottom:10px;">Code: <strong>${tournament.code}</strong></p>
                 <p style="color:rgba(255,255,255,0.7);margin-bottom:30px;">All players compete together in a synchronized 5-game series!</p>
 
                 <div class="waiting-room">
@@ -192,6 +208,8 @@ const MatchManager = {
 
             await StorageManager.set(`tournament_${tournamentCode}`, JSON.stringify(tournament));
             await StorageManager.set(`match_${matchId}`, JSON.stringify(series));
+
+            console.log('✅ Series created successfully!');
 
             alert(`🚀 5-Game Series Started!\n\n${tournament.participants.length} players ready!\n\nAll players can now start Game 1!`);
             
