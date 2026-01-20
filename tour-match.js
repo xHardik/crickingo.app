@@ -1,7 +1,7 @@
-// Match Manager - Streamlined Tournament Series
+// Match Manager - Streamlined Tournament Series (FIXED FOR MULTI-DEVICE)
 const MatchManager = {
     currentTournamentCode: null,
-    firebaseUnsubscribe: null,
+    pollInterval: null,
 
     generateMatchId() {
         return 'match_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
@@ -9,7 +9,7 @@ const MatchManager = {
 
     async viewTournamentLobby(code) {
         try {
-            const result = await StorageManager.get(`tournament_${code}`);
+            const result = await window.storage.get(`tournament_${code}`, true);
             if (!result?.value) {
                 alert('Tournament not found!');
                 return;
@@ -20,7 +20,7 @@ const MatchManager = {
             this.showMatchLobby(tournament);
         } catch (error) {
             console.error('Error loading tournament:', error);
-            alert('Error loading tournament.');
+            alert('Tournament not found or error loading.');
         }
     },
 
@@ -109,7 +109,7 @@ const MatchManager = {
         `;
 
         document.body.appendChild(overlay);
-        this.startFirebaseListener(tournament.code);
+        this.startLiveUpdates(tournament.code);
     },
 
     renderPlayerProgress(series, participants) {
@@ -164,7 +164,7 @@ const MatchManager = {
 
     async createTournamentSeries(tournamentCode) {
         try {
-            const result = await StorageManager.get(`tournament_${tournamentCode}`);
+            const result = await window.storage.get(`tournament_${tournamentCode}`, true);
             const tournament = JSON.parse(result.value);
 
             if (tournament.participants.length < 2) {
@@ -190,8 +190,8 @@ const MatchManager = {
 
             tournament.activeMatches = [series];
 
-            await StorageManager.set(`tournament_${tournamentCode}`, JSON.stringify(tournament));
-            await StorageManager.set(`match_${matchId}`, JSON.stringify(series));
+            await window.storage.set(`tournament_${tournamentCode}`, JSON.stringify(tournament), true);
+            await window.storage.set(`match_${matchId}`, JSON.stringify(series), true);
 
             alert(`🚀 5-Game Series Started!\n\n${tournament.participants.length} players ready!\n\nAll players can now start Game 1!`);
             
@@ -205,7 +205,7 @@ const MatchManager = {
 
     async playCurrentGame(tournamentCode, matchId) {
         try {
-            const matchResult = await StorageManager.get(`match_${matchId}`);
+            const matchResult = await window.storage.get(`match_${matchId}`, true);
             const series = JSON.parse(matchResult.value);
 
             // Check if player already completed this game
@@ -257,7 +257,7 @@ const MatchManager = {
 
     async submitMatchScore(matchId, playerName, score) {
         try {
-            const result = await StorageManager.get(`match_${matchId}`);
+            const result = await window.storage.get(`match_${matchId}`, true);
             if (!result?.value) return;
 
             const series = JSON.parse(result.value);
@@ -285,16 +285,16 @@ const MatchManager = {
                     await this.completeTournamentSeries(localStorage.getItem('activeTournamentCode'), matchId, series);
                 } else {
                     // Save updated series with new game index
-                    await StorageManager.set(`match_${matchId}`, JSON.stringify(series));
+                    await window.storage.set(`match_${matchId}`, JSON.stringify(series), true);
                     
                     // Update tournament
                     const tournamentCode = localStorage.getItem('activeTournamentCode');
                     if (tournamentCode) {
-                        const tournamentResult = await StorageManager.get(`tournament_${tournamentCode}`);
+                        const tournamentResult = await window.storage.get(`tournament_${tournamentCode}`, true);
                         if (tournamentResult?.value) {
                             const tournament = JSON.parse(tournamentResult.value);
                             tournament.activeMatches = [series];
-                            await StorageManager.set(`tournament_${tournamentCode}`, JSON.stringify(tournament));
+                            await window.storage.set(`tournament_${tournamentCode}`, JSON.stringify(tournament), true);
                         }
                     }
                     
@@ -305,16 +305,16 @@ const MatchManager = {
                 }
             } else {
                 // Save score and wait for others
-                await StorageManager.set(`match_${matchId}`, JSON.stringify(series));
+                await window.storage.set(`match_${matchId}`, JSON.stringify(series), true);
                 
                 // Update tournament
                 const tournamentCode = localStorage.getItem('activeTournamentCode');
                 if (tournamentCode) {
-                    const tournamentResult = await StorageManager.get(`tournament_${tournamentCode}`);
+                    const tournamentResult = await window.storage.get(`tournament_${tournamentCode}`, true);
                     if (tournamentResult?.value) {
                         const tournament = JSON.parse(tournamentResult.value);
                         tournament.activeMatches = [series];
-                        await StorageManager.set(`tournament_${tournamentCode}`, JSON.stringify(tournament));
+                        await window.storage.set(`tournament_${tournamentCode}`, JSON.stringify(tournament), true);
                     }
                 }
                 
@@ -367,10 +367,10 @@ const MatchManager = {
         
         series.winner = sortedPlayers[0].name;
 
-        await StorageManager.set(`match_${matchId}`, JSON.stringify(series));
+        await window.storage.set(`match_${matchId}`, JSON.stringify(series), true);
 
         // Update tournament with final scores
-        const tournamentResult = await StorageManager.get(`tournament_${tournamentCode}`);
+        const tournamentResult = await window.storage.get(`tournament_${tournamentCode}`, true);
         if (tournamentResult?.value) {
             const tournament = JSON.parse(tournamentResult.value);
             tournament.activeMatches = [];
@@ -386,7 +386,7 @@ const MatchManager = {
                 }
             });
             
-            await StorageManager.set(`tournament_${tournamentCode}`, JSON.stringify(tournament));
+            await window.storage.set(`tournament_${tournamentCode}`, JSON.stringify(tournament), true);
         }
 
         let resultsText = `🏆 5-Game Series Complete!\n\n`;
@@ -398,25 +398,37 @@ const MatchManager = {
         alert(resultsText);
     },
 
-    startFirebaseListener(tournamentCode) {
-        if (this.firebaseUnsubscribe) {
-            this.firebaseUnsubscribe();
+    startLiveUpdates(tournamentCode) {
+        // Stop existing polling
+        if (this.pollInterval) {
+            clearInterval(this.pollInterval);
         }
 
-        this.firebaseUnsubscribe = StorageManager.listen(`tournament_${tournamentCode}`, (data) => {
-            const tournament = JSON.parse(data.value);
-            this.closeLobby();
-            this.showMatchLobby(tournament);
-        });
+        // Poll every 2 seconds for updates
+        this.pollInterval = setInterval(async () => {
+            try {
+                const result = await window.storage.get(`tournament_${tournamentCode}`, true);
+                if (result?.value) {
+                    const tournament = JSON.parse(result.value);
+                    const overlay = document.getElementById('lobbyOverlay');
+                    if (overlay) {
+                        this.closeLobby();
+                        this.showMatchLobby(tournament);
+                    }
+                }
+            } catch (error) {
+                console.error('Polling error:', error);
+            }
+        }, 2000);
     },
 
     closeLobby() {
         const overlay = document.getElementById('lobbyOverlay');
         if (overlay) overlay.remove();
         
-        if (this.firebaseUnsubscribe) {
-            this.firebaseUnsubscribe();
-            this.firebaseUnsubscribe = null;
+        if (this.pollInterval) {
+            clearInterval(this.pollInterval);
+            this.pollInterval = null;
         }
     }
 };
