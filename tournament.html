@@ -718,6 +718,14 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+
+
+// Call init when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    TournamentManager.init();
+    TournamentManager.loadActiveTournaments();
+});
+
     </script>
 </body>
 </html>
