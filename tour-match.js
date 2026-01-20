@@ -2,9 +2,20 @@
 const MatchManager = {
     currentTournamentCode: null,
     firebaseUnsubscribe: null,
+    currentPlayerName: null,
 
     generateMatchId() {
         return 'match_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    },
+
+    // Get current player name from storage
+    getCurrentPlayerName() {
+        if (!this.currentPlayerName) {
+            this.currentPlayerName = StorageManager.getPlayerName() || 
+                                    localStorage.getItem('tournamentPlayerName') || 
+                                    'Player';
+        }
+        return this.currentPlayerName;
     },
 
     async viewTournamentLobby(code) {
@@ -12,12 +23,15 @@ const MatchManager = {
             console.log('🔍 Looking for tournament with code:', code);
             console.log('🔍 Searching key:', `tournament_${code}`);
             
+            // Make sure we have player name
+            this.getCurrentPlayerName();
+            console.log('👤 Current player:', this.currentPlayerName);
+            
             const result = await StorageManager.get(`tournament_${code}`);
             
             console.log('📥 Result received:', result);
             
             if (!result?.value) {
-                // Better debugging
                 console.error('❌ Tournament not found!');
                 console.log('Checking all stored tournaments...');
                 
@@ -53,11 +67,13 @@ const MatchManager = {
         };
 
         const activeSeries = tournament.activeMatches?.[0] || null;
+        const playerName = this.getCurrentPlayerName();
 
         overlay.innerHTML = `
             <div class="details-container">
                 <h2>${tournament.name} - Match Lobby</h2>
-                <p style="color:rgba(255,255,255,0.7);margin-bottom:10px;">Code: <strong>${tournament.code}</strong></p>
+                <p style="color:rgba(255,255,255,0.7);margin-bottom:5px;">Code: <strong>${tournament.code}</strong></p>
+                <p style="color:rgba(255,255,255,0.7);margin-bottom:5px;">You: <strong>${playerName}</strong></p>
                 <p style="color:rgba(255,255,255,0.7);margin-bottom:30px;">All players compete together in a synchronized 5-game series!</p>
 
                 <div class="waiting-room">
@@ -100,12 +116,12 @@ const MatchManager = {
                             
                             <div style="background:rgba(0,0,0,0.4);padding:20px;border-radius:12px;margin-bottom:20px;">
                                 <h4 style="color:white;margin-bottom:15px;">👥 Player Progress</h4>
-                                ${this.renderPlayerProgress(activeSeries, tournament.participants)}
+                                ${this.renderPlayerProgress(activeSeries, tournament.participants, playerName)}
                             </div>
 
                             <button class="btn" onclick="MatchManager.playCurrentGame('${tournament.code}', '${activeSeries.id}')" 
                                     style="background:linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);font-size:1.1em;">
-                                ${activeSeries.playerScores[TournamentManager.currentPlayerName]?.games[activeSeries.currentGameIndex] !== undefined
+                                ${activeSeries.playerScores[playerName]?.games[activeSeries.currentGameIndex] !== undefined
                                     ? '✅ Waiting for Others...' 
                                     : '🎮 Play Current Game'}
                             </button>
@@ -116,7 +132,7 @@ const MatchManager = {
                 ${activeSeries ? `
                     <div style="margin-top:30px;background:rgba(255,255,255,0.1);padding:25px;border-radius:16px;">
                         <h3 style="color:white;margin-bottom:20px;">🏆 Live Leaderboard</h3>
-                        ${this.renderLiveLeaderboard(activeSeries)}
+                        ${this.renderLiveLeaderboard(activeSeries, playerName)}
                     </div>
                 ` : ''}
 
@@ -128,7 +144,7 @@ const MatchManager = {
         this.startFirebaseListener(tournament.code);
     },
 
-    renderPlayerProgress(series, participants) {
+    renderPlayerProgress(series, participants, currentPlayerName) {
         const currentGameIndex = series.currentGameIndex;
         let html = '<div style="display:flex;flex-direction:column;gap:10px;">';
         
@@ -139,7 +155,7 @@ const MatchManager = {
                             background:rgba(255,255,255,0.05);border-radius:8px;
                             border:2px solid ${hasCompleted ? '#28a745' : 'rgba(255,255,255,0.2)'};">
                     <span style="color:white;font-weight:600;">
-                        ${participant.name}${participant.name === TournamentManager.currentPlayerName ? ' (You)' : ''}
+                        ${participant.name}${participant.name === currentPlayerName ? ' (You)' : ''}
                     </span>
                     <span style="color:${hasCompleted ? '#28a745' : '#ffd700'};font-weight:700;font-size:1.1em;">
                         ${hasCompleted ? '✅ Done' : '⏳ Playing...'}
@@ -152,7 +168,7 @@ const MatchManager = {
         return html;
     },
 
-    renderLiveLeaderboard(series) {
+    renderLiveLeaderboard(series, currentPlayerName) {
         const scores = Object.entries(series.playerScores).map(([name, data]) => ({
             name,
             total: data.total
@@ -168,7 +184,7 @@ const MatchManager = {
                         ${idx + 1}${idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : ''}
                     </span>
                     <span style="color:white;font-weight:600;font-size:1.1em;">
-                        ${player.name}${player.name === TournamentManager.currentPlayerName ? ' (You)' : ''}
+                        ${player.name}${player.name === currentPlayerName ? ' (You)' : ''}
                     </span>
                 </div>
                 <span style="color:#ffd700;font-weight:700;font-size:1.3em;">
@@ -180,16 +196,25 @@ const MatchManager = {
 
     async createTournamentSeries(tournamentCode) {
         try {
+            console.log('🚀 Starting tournament series for code:', tournamentCode);
+            
             const result = await StorageManager.get(`tournament_${tournamentCode}`);
+            if (!result?.value) {
+                alert('❌ Could not load tournament data!');
+                return;
+            }
+            
             const tournament = JSON.parse(result.value);
+            console.log('📋 Tournament data:', tournament);
 
-            if (tournament.participants.length < 2) {
-                alert('⚠️ Need at least 2 players to start a series!');
+            if (tournament.participants.length < 1) {
+                alert('⚠️ Need at least 1 player to start a series!');
                 return;
             }
 
             const matchId = this.generateMatchId();
             const playerScores = {};
+            
             tournament.participants.forEach(p => {
                 playerScores[p.name] = { total: 0, games: {} };
             });
@@ -204,30 +229,43 @@ const MatchManager = {
                 playerScores: playerScores
             };
 
+            console.log('📦 Created series:', series);
+
             tournament.activeMatches = [series];
 
             await StorageManager.set(`tournament_${tournamentCode}`, JSON.stringify(tournament));
             await StorageManager.set(`match_${matchId}`, JSON.stringify(series));
 
-            console.log('✅ Series created successfully!');
+            console.log('✅ Series saved to storage!');
 
-            alert(`🚀 5-Game Series Started!\n\n${tournament.participants.length} players ready!\n\nAll players can now start Game 1!`);
+            alert(`🚀 5-Game Series Started!\n\n${tournament.participants.length} player(s) ready!\n\nAll players can now start Game 1!`);
             
             this.closeLobby();
             this.viewTournamentLobby(tournamentCode);
         } catch (error) {
-            console.error('Error creating series:', error);
-            alert('Failed to create series. Please try again.');
+            console.error('💥 Error creating series:', error);
+            alert(`Failed to create series: ${error.message}\n\nCheck console for details.`);
         }
     },
 
     async playCurrentGame(tournamentCode, matchId) {
         try {
+            console.log('🎮 Playing game - Match ID:', matchId);
+            
+            const playerName = this.getCurrentPlayerName();
+            console.log('👤 Player:', playerName);
+            
             const matchResult = await StorageManager.get(`match_${matchId}`);
+            if (!matchResult?.value) {
+                alert('❌ Could not load match data!');
+                return;
+            }
+            
             const series = JSON.parse(matchResult.value);
+            console.log('📦 Series data:', series);
 
             // Check if player already completed this game
-            if (series.playerScores[TournamentManager.currentPlayerName]?.games[series.currentGameIndex] !== undefined) {
+            if (series.playerScores[playerName]?.games[series.currentGameIndex] !== undefined) {
                 alert('⏳ You\'ve already completed this game!\n\nWaiting for other players to finish...');
                 return;
             }
@@ -260,26 +298,36 @@ const MatchManager = {
                 'builder': 'Build Your Team'
             };
 
+            console.log('🎯 Opening game:', currentGame);
+
             alert(`🎮 Game ${series.currentGameIndex + 1}/5: ${gameNames[currentGame]}\n\n✨ Your score will be recorded automatically.\n📊 Return to lobby after finishing!`);
             
             const gameUrl = gameUrls[currentGame];
             if (gameUrl) {
                 window.open(gameUrl, '_blank');
             } else {
-                alert('Game not available.');
+                alert('Game not available: ' + currentGame);
             }
         } catch (error) {
-            console.error('Error starting game:', error);
+            console.error('💥 Error starting game:', error);
+            alert(`Error: ${error.message}`);
         }
     },
 
     async submitMatchScore(matchId, playerName, score) {
         try {
+            console.log('📊 Submitting score - Match:', matchId, 'Player:', playerName, 'Score:', score);
+            
             const result = await StorageManager.get(`match_${matchId}`);
-            if (!result?.value) return;
+            if (!result?.value) {
+                console.error('❌ Match not found!');
+                return;
+            }
 
             const series = JSON.parse(result.value);
             const currentGameIndex = series.currentGameIndex;
+            
+            console.log('Current game index:', currentGameIndex);
             
             // Record player's score for this game
             if (!series.playerScores[playerName]) {
@@ -289,10 +337,14 @@ const MatchManager = {
             series.playerScores[playerName].games[currentGameIndex] = score;
             series.playerScores[playerName].total += score;
 
+            console.log('Updated player scores:', series.playerScores);
+
             // Check if ALL players have completed this game
             const allPlayersCompleted = series.players.every(player => 
                 series.playerScores[player]?.games[currentGameIndex] !== undefined
             );
+
+            console.log('All players completed?', allPlayersCompleted);
 
             if (allPlayersCompleted) {
                 // Move to next game
@@ -300,6 +352,7 @@ const MatchManager = {
                 
                 if (series.currentGameIndex >= series.games.length) {
                     // Series complete!
+                    console.log('🏆 Series complete!');
                     await this.completeTournamentSeries(localStorage.getItem('activeTournamentCode'), matchId, series);
                 } else {
                     // Save updated series with new game index
@@ -316,10 +369,9 @@ const MatchManager = {
                         }
                     }
                     
-                    alert(`✅ Score submitted: ${score} points!\n\n🎉 All players finished! Starting next game...`);
+                    console.log('✅ Moving to next game:', series.currentGameIndex + 1);
                     
-                    // Auto-open next game
-                    this.openNextGame(tournamentCode, matchId, series);
+                    alert(`✅ Score submitted: ${score} points!\n\n🎉 All players finished! Ready for next game...`);
                 }
             } else {
                 // Save score and wait for others
@@ -340,37 +392,8 @@ const MatchManager = {
             }
 
         } catch (error) {
-            console.error('Error submitting match score:', error);
-        }
-    },
-
-    openNextGame(tournamentCode, matchId, series) {
-        const currentGame = series.games[series.currentGameIndex];
-        
-        const gameUrls = {
-            'hl': 'hl.html',
-            'transfer': 'transfer.html',
-            'rivalry': 'rivalry.html',
-            'wordle': 'wordle.html',
-            'builder': 'builder.html'
-        };
-
-        const gameNames = {
-            'hl': 'Higher or Lower',
-            'transfer': 'Transfer History',
-            'rivalry': 'Cricket Bingo',
-            'wordle': 'Cricket Wordle',
-            'builder': 'Build Your Team'
-        };
-        
-        localStorage.setItem('activeTournamentCode', tournamentCode);
-        localStorage.setItem('activeMatchId', matchId);
-        localStorage.setItem('currentGame', currentGame);
-        localStorage.setItem('isSeriesMatch', 'true');
-        
-        const gameUrl = gameUrls[currentGame];
-        if (gameUrl) {
-            window.open(gameUrl, '_blank');
+            console.error('💥 Error submitting match score:', error);
+            alert(`Error submitting score: ${error.message}`);
         }
     },
 
@@ -422,6 +445,7 @@ const MatchManager = {
         }
 
         this.firebaseUnsubscribe = StorageManager.listen(`tournament_${tournamentCode}`, (data) => {
+            console.log('🔔 Tournament updated via Firebase');
             const tournament = JSON.parse(data.value);
             this.closeLobby();
             this.showMatchLobby(tournament);
@@ -439,5 +463,6 @@ const MatchManager = {
     }
 };
 
-// Make submitMatchScore available globally for game pages
+// Make functions available globally
+window.MatchManager = MatchManager;
 window.submitMatchScore = MatchManager.submitMatchScore.bind(MatchManager);
