@@ -695,37 +695,5 @@ body::before {
     <script src="tour-main.js"></script>
     <script src="tour-match.js"></script>
     <script src="tour-app.js"></script>
-    <script>
-        // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyC5nqnzG2jGtDcZlL6x9mg7r1xRrldyfpg",
-  authDomain: "ogcrickingo.firebaseapp.com",
-  databaseURL: "https://ogcrickingo-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "ogcrickingo",
-  storageBucket: "ogcrickingo.firebasestorage.app",
-  messagingSenderId: "672434440025",
-  appId: "1:672434440025:web:ba51a4b85b7cb78bfeee48",
-  measurementId: "G-LYH8BMVBFE"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-
-
-// Call init when page loads
-document.addEventListener('DOMContentLoaded', () => {
-    TournamentManager.init();
-    TournamentManager.loadActiveTournaments();
-});
-
-    </script>
 </body>
 </html>

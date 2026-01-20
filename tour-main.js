@@ -1,232 +1,233 @@
-// OLD:
-// localStorage.setItem(...)
-
-// NEW:
+// Tournament Manager - Handles tournament creation and management
 const TournamentManager = {
-    
-    async createTournament() {
-        const name = document.getElementById('tournamentName').value.trim();
-        const creatorName = document.getElementById('creatorName').value.trim();
-        const desc = document.getElementById('tournamentDesc').value.trim();
-        const duration = document.getElementById('tournamentDuration').value;
-        
-        if (!name || !creatorName) {
-            alert('Please fill in all required fields');
-            return;
-        }
-        
-        // Get selected games
-        const selectedGames = [];
-        document.querySelectorAll('.game-checkbox input:checked').forEach(cb => {
-            selectedGames.push(cb.value);
-        });
-        
-        if (selectedGames.length === 0) {
-            alert('Please select at least one game');
-            return;
-        }
-        
-        // Generate code
-        const code = this.generateCode();
-        
-        const tournamentData = {
-            code: code,
-            name: name,
-            creator: creatorName,
-            description: desc,
-            duration: parseFloat(duration),
-            games: selectedGames,
-            participants: {},
-            createdAt: new Date().toISOString(),
-            status: 'active'
-        };
-        
-        try {
-            await TournamentStorage.createTournament(tournamentData);
-            alert(`✅ Tournament Created!\n\nCode: ${code}\n\nShare this code with your friends!`);
-            
-            // Switch to active tab to see it
-            switchTab('active');
-            this.loadActiveTournaments();
-            
-        } catch (error) {
-            console.error('Error creating tournament:', error);
-            alert('Failed to create tournament. Please try again.');
+    currentPlayerName: '',
+
+    init() {
+        this.currentPlayerName = StorageManager.getPlayerName();
+        if (this.currentPlayerName) {
+            document.getElementById('creatorName').value = this.currentPlayerName;
+            document.getElementById('joinPlayerName').value = this.currentPlayerName;
         }
     },
-    
-    async joinTournament() {
-        const code = document.getElementById('tournamentCode').value.trim().toUpperCase();
-        const playerName = document.getElementById('joinPlayerName').value.trim();
-        
-        if (!code || !playerName) {
-            alert('Please enter both code and your name');
-            return;
-        }
-        
-        try {
-            await TournamentStorage.addParticipant(code, playerName);
-            alert(`✅ Successfully joined tournament: ${code}`);
-            
-            // Save player name for later use
-            localStorage.setItem('currentPlayerName', playerName);
-            
-            // Switch to my tournaments
-            switchTab('my-tournaments');
-            this.loadMyTournaments();
-            
-        } catch (error) {
-            console.error('Error joining tournament:', error);
-            alert(error.message || 'Failed to join tournament');
-        }
-    },
-    
-    async loadActiveTournaments() {
-        const container = document.getElementById('activeTournamentsContainer');
-        container.innerHTML = '<p style="color:white; text-align:center;">Loading...</p>';
-        
-        try {
-            const tournaments = await TournamentStorage.getActiveTournaments();
-            
-            if (tournaments.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <h3>No Active Tournaments</h3>
-                        <p>Create one to get started!</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            container.innerHTML = '';
-            tournaments.forEach(tournament => {
-                container.innerHTML += this.renderTournamentCard(tournament);
-            });
-            
-        } catch (error) {
-            console.error('Error loading tournaments:', error);
-            container.innerHTML = '<p style="color:red;">Error loading tournaments</p>';
-        }
-    },
-    
-    async loadMyTournaments() {
-        const playerName = localStorage.getItem('currentPlayerName');
-        const container = document.getElementById('myTournamentsContainer');
-        
-        if (!playerName) {
-            container.innerHTML = `
-                <div class="empty-state">
-                    <h3>No Tournaments Yet</h3>
-                    <p>Join a tournament to get started!</p>
-                </div>
-            `;
-            return;
-        }
-        
-        container.innerHTML = '<p style="color:white; text-align:center;">Loading...</p>';
-        
-        try {
-            const tournaments = await TournamentStorage.getMyTournaments(playerName);
-            
-            if (tournaments.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <h3>No Tournaments Yet</h3>
-                        <p>Join a tournament to get started!</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            container.innerHTML = '';
-            tournaments.forEach(tournament => {
-                container.innerHTML += this.renderTournamentCard(tournament, true);
-            });
-            
-        } catch (error) {
-            console.error('Error loading my tournaments:', error);
-            container.innerHTML = '<p style="color:red;">Error loading tournaments</p>';
-        }
-    },
-    
-    renderTournamentCard(tournament, showPlayButton = false) {
-        const participants = tournament.participants || {};
-        const participantCount = Object.keys(participants).length;
-        
-        // Sort participants by score
-        const sortedParticipants = Object.values(participants).sort((a, b) => b.totalScore - a.totalScore);
-        
-        let participantsHTML = '';
-        if (participantCount > 0) {
-            participantsHTML = '<div class="participants"><h4>Leaderboard</h4>';
-            sortedParticipants.slice(0, 5).forEach((p, idx) => {
-                const rankClass = idx === 0 ? 'gold' : idx === 1 ? 'silver' : idx === 2 ? 'bronze' : '';
-                participantsHTML += `
-                    <div class="participant-item">
-                        <span class="rank ${rankClass}">#${idx + 1}</span>
-                        <span class="participant-name">${p.name}</span>
-                        <span class="total-score">${p.totalScore} pts</span>
-                    </div>
-                `;
-            });
-            participantsHTML += '</div>';
-        }
-        
-        const playButton = showPlayButton ? 
-            `<button class="btn btn-success small-btn" onclick="TournamentManager.startPlaying('${tournament.code}')">🎮 Play Games</button>` : '';
-        
-        return `
-            <div class="tournament-card">
-                <div class="tournament-header">
-                    <div>
-                        <div class="tournament-title">${tournament.name}</div>
-                        <div class="tournament-info">Created by ${tournament.creator}</div>
-                    </div>
-                    <div class="tournament-code">${tournament.code}</div>
-                </div>
-                
-                <div class="tournament-info">${tournament.description || 'No description'}</div>
-                
-                <div class="games-list">
-                    ${tournament.games.map(g => `<span class="game-badge">${this.getGameName(g)}</span>`).join('')}
-                </div>
-                
-                <div class="tournament-info">
-                    👥 ${participantCount} participant${participantCount !== 1 ? 's' : ''}
-                </div>
-                
-                ${participantsHTML}
-                
-                <div class="action-buttons">
-                    ${playButton}
-                    <button class="btn btn-secondary small-btn" onclick="TournamentManager.viewDetails('${tournament.code}')">View Details</button>
-                </div>
-            </div>
-        `;
-    },
-    
-    getGameName(gameCode) {
-        const names = {
-            'hl': '📈 Higher/Lower',
-            'transfer': '🔄 Transfer',
-            'rivalry': '🎯 Bingo',
-            'wordle': '🔤 Wordle',
-            'builder': '👥 Builder'
-        };
-        return names[gameCode] || gameCode;
-    },
-    
+
     generateCode() {
         return Math.random().toString(36).substring(2, 8).toUpperCase();
     },
-    
-    startPlaying(code) {
-        // This will be used later for sequential game flow
-        alert('Game flow coming soon!');
+
+    async createTournament() {
+        const creatorName = document.getElementById('creatorName').value.trim();
+        const name = document.getElementById('tournamentName').value.trim();
+        const desc = document.getElementById('tournamentDesc').value.trim();
+        const duration = parseFloat(document.getElementById('tournamentDuration').value);
+        
+        if (!creatorName || !name) {
+            alert('⚠️ Please enter your name and tournament name!');
+            return;
+        }
+
+        const selectedGames = Array.from(document.querySelectorAll('.game-checkbox input:checked'))
+            .map(cb => cb.value);
+
+        if (selectedGames.length === 0) {
+            alert('⚠️ Please select at least one game!');
+            return;
+        }
+
+        this.currentPlayerName = creatorName;
+        StorageManager.setPlayerName(creatorName);
+
+        const code = this.generateCode();
+        const createdDate = new Date();
+        // Changed to 10 minutes instead of days
+        const expiresDate = new Date(createdDate.getTime() + 10 * 60 * 1000);
+        
+        const tournament = {
+            code: code,
+            name: name,
+            description: desc,
+            creator: creatorName,
+            games: selectedGames,
+            participants: [{ name: creatorName, scores: {} }],
+            status: 'active',
+            createdAt: createdDate.toISOString(),
+            expiresAt: expiresDate.toISOString(),
+            durationDays: duration,
+            activeMatches: []
+        };
+
+        try {
+            await StorageManager.set(`tournament_${code}`, JSON.stringify(tournament));
+            UIManager.showCodeModal(code, name, duration);
+            
+            // Clear form
+            document.getElementById('tournamentName').value = '';
+            document.getElementById('tournamentDesc').value = '';
+        } catch (error) {
+            console.error('Error creating tournament:', error);
+            alert(`❌ Failed to create tournament: ${error.message}`);
+        }
     },
-    
-    viewDetails(code) {
-        // Show detailed view
-        alert('Details view coming soon!');
+
+    async joinTournament() {
+        const playerName = document.getElementById('joinPlayerName').value.trim();
+        const code = document.getElementById('tournamentCode').value.trim().toUpperCase();
+
+        if (!playerName || !code) {
+            alert('Please enter your name and code!');
+            return;
+        }
+
+        this.currentPlayerName = playerName;
+        StorageManager.setPlayerName(playerName);
+
+        try {
+            const result = await StorageManager.get(`tournament_${code}`);
+            if (!result?.value) {
+                alert('❌ Tournament not found! Please check the code.');
+                return;
+            }
+
+            const tournament = JSON.parse(result.value);
+
+            if (tournament.participants.some(p => p.name === playerName)) {
+                alert('You have already joined this tournament!');
+                return;
+            }
+
+            tournament.participants.push({ name: playerName, scores: {} });
+            await StorageManager.set(`tournament_${code}`, JSON.stringify(tournament));
+            
+            alert(`✅ Successfully joined "${tournament.name}"!`);
+            document.getElementById('tournamentCode').value = '';
+            
+            // Switch to My Tournaments tab
+            switchTab('my-tournaments');
+        } catch (error) {
+            console.error('Error joining tournament:', error);
+            alert('Failed to join tournament. Please try again.');
+        }
+    },
+
+    async loadMyTournaments() {
+        const container = document.getElementById('myTournamentsContainer');
+        
+        if (!container.dataset.loaded) {
+            container.innerHTML = '<div style="text-align:center;padding:20px;color:white;">Loading...</div>';
+        }
+
+        try {
+            const result = await StorageManager.list('tournament_');
+            
+            if (!result?.keys?.length) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No tournaments yet!</h3>
+                        <p>Create or join a tournament to get started.</p>
+                    </div>
+                `;
+                container.dataset.loaded = 'true';
+                return;
+            }
+
+            const tournaments = [];
+            for (let key of result.keys) {
+                try {
+                    const data = await StorageManager.get(key);
+                    if (data?.value) {
+                        const t = JSON.parse(data.value);
+                        if (t.participants.some(p => p.name === this.currentPlayerName)) {
+                            tournaments.push(t);
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error loading tournament:', e);
+                }
+            }
+
+            if (!tournaments.length) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h3>You haven't joined any tournaments yet!</h3>
+                        <p>Join or create a tournament to compete with friends.</p>
+                    </div>
+                `;
+                container.dataset.loaded = 'true';
+                return;
+            }
+
+            tournaments.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            container.innerHTML = tournaments.map(t => UIManager.renderTournamentCard(t, true)).join('');
+            container.dataset.loaded = 'true';
+        } catch (error) {
+            console.error('Error loading tournaments:', error);
+            container.innerHTML = '<div class="empty-state"><h3>Error loading tournaments</h3></div>';
+        }
+    },
+
+    async loadActiveTournaments() {
+        const container = document.getElementById('activeTournamentsContainer');
+        
+        if (!container.dataset.loaded) {
+            container.innerHTML = '<div style="text-align:center;padding:20px;color:white;">Loading...</div>';
+        }
+
+        try {
+            const result = await StorageManager.list('tournament_');
+            
+            if (!result?.keys?.length) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No tournaments yet!</h3>
+                        <p>Be the first to create one!</p>
+                    </div>
+                `;
+                container.dataset.loaded = 'true';
+                return;
+            }
+
+            const tournaments = [];
+            const now = new Date();
+            
+            for (let key of result.keys) {
+                try {
+                    const data = await StorageManager.get(key);
+                    if (data?.value) {
+                        const tournament = JSON.parse(data.value);
+                        // Only show tournaments that haven't expired
+                        const isExpired = tournament.expiresAt && new Date(tournament.expiresAt) < now;
+                        if (!isExpired) {
+                            tournaments.push(tournament);
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error loading tournament:', e);
+                }
+            }
+
+            if (!tournaments.length) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No active tournaments!</h3>
+                        <p>Create a new tournament to get started.</p>
+                    </div>
+                `;
+                container.dataset.loaded = 'true';
+                return;
+            }
+
+            tournaments.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            container.innerHTML = tournaments.map(t => UIManager.renderTournamentCard(t, false)).join('');
+            container.dataset.loaded = 'true';
+        } catch (error) {
+            console.error('Error loading tournaments:', error);
+            container.innerHTML = '<div class="empty-state"><h3>Error loading tournaments</h3></div>';
+        }
+    },
+
+    calculateLeaderboard(tournament) {
+        return tournament.participants.map(p => ({
+            ...p,
+            totalScore: Object.values(p.scores).reduce((sum, score) => sum + (score || 0), 0)
+        })).sort((a, b) => b.totalScore - a.totalScore);
     }
 };

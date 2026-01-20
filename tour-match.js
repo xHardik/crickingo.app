@@ -1,305 +1,12 @@
-// Combined Tournament & Match Manager
-const TournamentManager = {
-    currentPlayerName: null,
+// Match Manager - Streamlined Tournament Series
+const MatchManager = {
+    currentTournamentCode: null,
     firebaseUnsubscribe: null,
-    
-    // Initialize - call this on page load
-    init() {
-        this.currentPlayerName = localStorage.getItem('currentPlayerName');
-    },
-    
-    async createTournament() {
-        try {
-            const name = document.getElementById('tournamentName')?.value?.trim();
-            const creatorName = document.getElementById('creatorName')?.value?.trim();
-            const desc = document.getElementById('tournamentDesc')?.value?.trim() || '';
-            const duration = document.getElementById('tournamentDuration')?.value || '7';
-            
-            console.log('Form values:', { name, creatorName, desc, duration });
-            
-            if (!name || !creatorName) {
-                alert('Please fill in all required fields');
-                return;
-            }
-            
-            const selectedGames = [];
-            document.querySelectorAll('.game-checkbox input:checked').forEach(cb => {
-                selectedGames.push(cb.value);
-            });
-            
-            console.log('Selected games:', selectedGames);
-            
-            if (selectedGames.length === 0) {
-                alert('Please select at least one game');
-                return;
-            }
-            
-            const code = this.generateCode();
-            
-            const tournamentData = {
-                code: code,
-                name: name,
-                creator: creatorName,
-                description: desc,
-                duration: parseFloat(duration),
-                games: selectedGames,
-                participants: [],
-                activeMatches: [],
-                createdAt: new Date().toISOString(),
-                status: 'active'
-            };
-            
-            console.log('Creating tournament:', tournamentData);
-            
-            if (!window.StorageManager) {
-                alert('❌ StorageManager not loaded! Make sure storage.js is included.');
-                return;
-            }
-            
-            const result = await window.StorageManager.set(`tournament_${code}`, JSON.stringify(tournamentData));
-            console.log('Storage result:', result);
-            
-            if (!result) {
-                alert('❌ Failed to save tournament to storage');
-                return;
-            }
-            
-            alert(`✅ Tournament Created!\n\nCode: ${code}\n\nShare this code with your friends!`);
-            
-            if (typeof switchTab === 'function') {
-                switchTab('active');
-            }
-            this.loadActiveTournaments();
-            
-        } catch (error) {
-            console.error('Error creating tournament:', error);
-            alert(`Failed to create tournament: ${error.message}`);
-        }
-    },
-    
-    async joinTournament() {
-        const code = document.getElementById('tournamentCode').value.trim().toUpperCase();
-        const playerName = document.getElementById('joinPlayerName').value.trim();
-        
-        if (!code || !playerName) {
-            alert('Please enter both code and your name');
-            return;
-        }
-        
-        try {
-            const result = await StorageManager.get(`tournament_${code}`);
-            if (!result?.value) {
-                alert('Tournament not found!');
-                return;
-            }
-            
-            const tournament = JSON.parse(result.value);
-            
-            // Check if already joined
-            if (tournament.participants.find(p => p.name === playerName)) {
-                alert('You have already joined this tournament!');
-                return;
-            }
-            
-            // Add participant
-            tournament.participants.push({
-                name: playerName,
-                joinedAt: new Date().toISOString(),
-                scores: {}
-            });
-            
-            await StorageManager.set(`tournament_${code}`, JSON.stringify(tournament));
-            
-            // Save player name
-            localStorage.setItem('currentPlayerName', playerName);
-            this.currentPlayerName = playerName;
-            
-            alert(`✅ Successfully joined tournament: ${code}`);
-            
-            switchTab('my-tournaments');
-            this.loadMyTournaments();
-            
-        } catch (error) {
-            console.error('Error joining tournament:', error);
-            alert(error.message || 'Failed to join tournament');
-        }
-    },
-    
-    async loadActiveTournaments() {
-        const container = document.getElementById('activeTournamentsContainer');
-        container.innerHTML = '<p style="color:white; text-align:center;">Loading...</p>';
-        
-        try {
-            const result = await StorageManager.list('tournament_');
-            
-            if (!result?.keys || result.keys.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <h3>No Active Tournaments</h3>
-                        <p>Create one to get started!</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            const tournaments = [];
-            for (const key of result.keys) {
-                const tournamentResult = await StorageManager.get(key);
-                if (tournamentResult?.value) {
-                    tournaments.push(JSON.parse(tournamentResult.value));
-                }
-            }
-            
-            container.innerHTML = '';
-            tournaments.forEach(tournament => {
-                container.innerHTML += this.renderTournamentCard(tournament);
-            });
-            
-        } catch (error) {
-            console.error('Error loading tournaments:', error);
-            container.innerHTML = '<p style="color:red;">Error loading tournaments</p>';
-        }
-    },
-    
-    async loadMyTournaments() {
-        const playerName = this.currentPlayerName || localStorage.getItem('currentPlayerName');
-        const container = document.getElementById('myTournamentsContainer');
-        
-        if (!playerName) {
-            container.innerHTML = `
-                <div class="empty-state">
-                    <h3>No Tournaments Yet</h3>
-                    <p>Join a tournament to get started!</p>
-                </div>
-            `;
-            return;
-        }
-        
-        container.innerHTML = '<p style="color:white; text-align:center;">Loading...</p>';
-        
-        try {
-            const result = await StorageManager.list('tournament_');
-            
-            if (!result?.keys || result.keys.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <h3>No Tournaments Yet</h3>
-                        <p>Join a tournament to get started!</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            const myTournaments = [];
-            for (const key of result.keys) {
-                const tournamentResult = await StorageManager.get(key);
-                if (tournamentResult?.value) {
-                    const tournament = JSON.parse(tournamentResult.value);
-                    if (tournament.participants.find(p => p.name === playerName)) {
-                        myTournaments.push(tournament);
-                    }
-                }
-            }
-            
-            if (myTournaments.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <h3>No Tournaments Yet</h3>
-                        <p>Join a tournament to get started!</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            container.innerHTML = '';
-            myTournaments.forEach(tournament => {
-                container.innerHTML += this.renderTournamentCard(tournament, true);
-            });
-            
-        } catch (error) {
-            console.error('Error loading my tournaments:', error);
-            container.innerHTML = '<p style="color:red;">Error loading tournaments</p>';
-        }
-    },
-    
-    renderTournamentCard(tournament, showPlayButton = false) {
-        const participantCount = tournament.participants.length;
-        
-        const sortedParticipants = [...tournament.participants].sort((a, b) => {
-            const aTotal = Object.values(a.scores).reduce((sum, score) => sum + score, 0);
-            const bTotal = Object.values(b.scores).reduce((sum, score) => sum + score, 0);
-            return bTotal - aTotal;
-        });
-        
-        let participantsHTML = '';
-        if (participantCount > 0) {
-            participantsHTML = '<div class="participants"><h4>Leaderboard</h4>';
-            sortedParticipants.slice(0, 5).forEach((p, idx) => {
-                const totalScore = Object.values(p.scores).reduce((sum, score) => sum + score, 0);
-                const rankClass = idx === 0 ? 'gold' : idx === 1 ? 'silver' : idx === 2 ? 'bronze' : '';
-                participantsHTML += `
-                    <div class="participant-item">
-                        <span class="rank ${rankClass}">#${idx + 1}</span>
-                        <span class="participant-name">${p.name}</span>
-                        <span class="total-score">${totalScore} pts</span>
-                    </div>
-                `;
-            });
-            participantsHTML += '</div>';
-        }
-        
-        const playButton = showPlayButton ? 
-            `<button class="btn btn-success small-btn" onclick="TournamentManager.viewTournamentLobby('${tournament.code}')">🎮 View Lobby</button>` : '';
-        
-        return `
-            <div class="tournament-card">
-                <div class="tournament-header">
-                    <div>
-                        <div class="tournament-title">${tournament.name}</div>
-                        <div class="tournament-info">Created by ${tournament.creator}</div>
-                    </div>
-                    <div class="tournament-code">${tournament.code}</div>
-                </div>
-                
-                <div class="tournament-info">${tournament.description || 'No description'}</div>
-                
-                <div class="games-list">
-                    ${tournament.games.map(g => `<span class="game-badge">${this.getGameName(g)}</span>`).join('')}
-                </div>
-                
-                <div class="tournament-info">
-                    👥 ${participantCount} participant${participantCount !== 1 ? 's' : ''}
-                </div>
-                
-                ${participantsHTML}
-                
-                <div class="action-buttons">
-                    ${playButton}
-                </div>
-            </div>
-        `;
-    },
-    
-    getGameName(gameCode) {
-        const names = {
-            'hl': '📈 Higher/Lower',
-            'transfer': '🔄 Transfer',
-            'rivalry': '🎯 Bingo',
-            'wordle': '🔤 Wordle',
-            'builder': '👥 Builder'
-        };
-        return names[gameCode] || gameCode;
-    },
-    
-    generateCode() {
-        return Math.random().toString(36).substring(2, 8).toUpperCase();
-    },
-    
+
     generateMatchId() {
         return 'match_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
     },
-    
-    // MATCH LOBBY FUNCTIONS
+
     async viewTournamentLobby(code) {
         try {
             const result = await StorageManager.get(`tournament_${code}`);
@@ -309,6 +16,7 @@ const TournamentManager = {
             }
 
             const tournament = JSON.parse(result.value);
+            this.currentTournamentCode = code;
             this.showMatchLobby(tournament);
         } catch (error) {
             console.error('Error loading tournament:', error);
@@ -342,7 +50,7 @@ const TournamentManager = {
                         <p style="color:rgba(255,255,255,0.8);margin-bottom:20px;">
                             All ${tournament.participants.length} players will play all 5 games together!
                         </p>
-                        <button class="btn" onclick="TournamentManager.createTournamentSeries('${tournament.code}')">
+                        <button class="btn" onclick="MatchManager.createTournamentSeries('${tournament.code}')">
                             🚀 Start 5-Game Series for Everyone
                         </button>
                     ` : `
@@ -379,9 +87,9 @@ const TournamentManager = {
                                 ${this.renderPlayerProgress(activeSeries, tournament.participants)}
                             </div>
 
-                            <button class="btn" onclick="TournamentManager.playCurrentGame('${tournament.code}', '${activeSeries.id}')" 
+                            <button class="btn" onclick="MatchManager.playCurrentGame('${tournament.code}', '${activeSeries.id}')" 
                                     style="background:linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);font-size:1.1em;">
-                                ${activeSeries.playerScores[this.currentPlayerName]?.games[activeSeries.currentGameIndex] !== undefined
+                                ${activeSeries.playerScores[TournamentManager.currentPlayerName]?.games[activeSeries.currentGameIndex] !== undefined
                                     ? '✅ Waiting for Others...' 
                                     : '🎮 Play Current Game'}
                             </button>
@@ -396,7 +104,7 @@ const TournamentManager = {
                     </div>
                 ` : ''}
 
-                <button class="btn btn-secondary" onclick="TournamentManager.closeLobby()" style="margin-top:20px;">Close Lobby</button>
+                <button class="btn btn-secondary" onclick="MatchManager.closeLobby()" style="margin-top:20px;">Close Lobby</button>
             </div>
         `;
 
@@ -415,7 +123,7 @@ const TournamentManager = {
                             background:rgba(255,255,255,0.05);border-radius:8px;
                             border:2px solid ${hasCompleted ? '#28a745' : 'rgba(255,255,255,0.2)'};">
                     <span style="color:white;font-weight:600;">
-                        ${participant.name}${participant.name === this.currentPlayerName ? ' (You)' : ''}
+                        ${participant.name}${participant.name === TournamentManager.currentPlayerName ? ' (You)' : ''}
                     </span>
                     <span style="color:${hasCompleted ? '#28a745' : '#ffd700'};font-weight:700;font-size:1.1em;">
                         ${hasCompleted ? '✅ Done' : '⏳ Playing...'}
@@ -444,7 +152,7 @@ const TournamentManager = {
                         ${idx + 1}${idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : ''}
                     </span>
                     <span style="color:white;font-weight:600;font-size:1.1em;">
-                        ${player.name}${player.name === this.currentPlayerName ? ' (You)' : ''}
+                        ${player.name}${player.name === TournamentManager.currentPlayerName ? ' (You)' : ''}
                     </span>
                 </div>
                 <span style="color:#ffd700;font-weight:700;font-size:1.3em;">
@@ -500,7 +208,8 @@ const TournamentManager = {
             const matchResult = await StorageManager.get(`match_${matchId}`);
             const series = JSON.parse(matchResult.value);
 
-            if (series.playerScores[this.currentPlayerName]?.games[series.currentGameIndex] !== undefined) {
+            // Check if player already completed this game
+            if (series.playerScores[TournamentManager.currentPlayerName]?.games[series.currentGameIndex] !== undefined) {
                 alert('⏳ You\'ve already completed this game!\n\nWaiting for other players to finish...');
                 return;
             }
@@ -538,6 +247,8 @@ const TournamentManager = {
             const gameUrl = gameUrls[currentGame];
             if (gameUrl) {
                 window.open(gameUrl, '_blank');
+            } else {
+                alert('Game not available.');
             }
         } catch (error) {
             console.error('Error starting game:', error);
@@ -552,6 +263,7 @@ const TournamentManager = {
             const series = JSON.parse(result.value);
             const currentGameIndex = series.currentGameIndex;
             
+            // Record player's score for this game
             if (!series.playerScores[playerName]) {
                 series.playerScores[playerName] = { total: 0, games: {} };
             }
@@ -559,18 +271,23 @@ const TournamentManager = {
             series.playerScores[playerName].games[currentGameIndex] = score;
             series.playerScores[playerName].total += score;
 
+            // Check if ALL players have completed this game
             const allPlayersCompleted = series.players.every(player => 
                 series.playerScores[player]?.games[currentGameIndex] !== undefined
             );
 
             if (allPlayersCompleted) {
+                // Move to next game
                 series.currentGameIndex++;
                 
                 if (series.currentGameIndex >= series.games.length) {
+                    // Series complete!
                     await this.completeTournamentSeries(localStorage.getItem('activeTournamentCode'), matchId, series);
                 } else {
+                    // Save updated series with new game index
                     await StorageManager.set(`match_${matchId}`, JSON.stringify(series));
                     
+                    // Update tournament
                     const tournamentCode = localStorage.getItem('activeTournamentCode');
                     if (tournamentCode) {
                         const tournamentResult = await StorageManager.get(`tournament_${tournamentCode}`);
@@ -582,11 +299,15 @@ const TournamentManager = {
                     }
                     
                     alert(`✅ Score submitted: ${score} points!\n\n🎉 All players finished! Starting next game...`);
+                    
+                    // Auto-open next game
                     this.openNextGame(tournamentCode, matchId, series);
                 }
             } else {
+                // Save score and wait for others
                 await StorageManager.set(`match_${matchId}`, JSON.stringify(series));
                 
+                // Update tournament
                 const tournamentCode = localStorage.getItem('activeTournamentCode');
                 if (tournamentCode) {
                     const tournamentResult = await StorageManager.get(`tournament_${tournamentCode}`);
@@ -639,6 +360,7 @@ const TournamentManager = {
         series.status = 'completed';
         series.completedAt = new Date().toISOString();
 
+        // Find winner
         const sortedPlayers = Object.entries(series.playerScores)
             .map(([name, data]) => ({ name, total: data.total }))
             .sort((a, b) => b.total - a.total);
@@ -647,11 +369,13 @@ const TournamentManager = {
 
         await StorageManager.set(`match_${matchId}`, JSON.stringify(series));
 
+        // Update tournament with final scores
         const tournamentResult = await StorageManager.get(`tournament_${tournamentCode}`);
         if (tournamentResult?.value) {
             const tournament = JSON.parse(tournamentResult.value);
             tournament.activeMatches = [];
             
+            // Add all game scores to tournament participants
             Object.entries(series.playerScores).forEach(([playerName, data]) => {
                 const participant = tournament.participants.find(p => p.name === playerName);
                 if (participant) {
@@ -697,10 +421,5 @@ const TournamentManager = {
     }
 };
 
-// Initialize on page load
-document.addEventListener('DOMContentLoaded', () => {
-    TournamentManager.init();
-});
-
 // Make submitMatchScore available globally for game pages
-window.submitMatchScore = TournamentManager.submitMatchScore.bind(TournamentManager);
+window.submitMatchScore = MatchManager.submitMatchScore.bind(MatchManager);
