@@ -21,7 +21,7 @@ const StorageManager = (function() {
   storageBucket: "ogcrickingo.firebasestorage.app",
   messagingSenderId: "672434440025",
   appId: "1:672434440025:web:ba51a4b85b7cb78bfeee48",
-  measurementId: "G-LYH8BMVBFE"
+  
 };
 
             firebase.initializeApp(firebaseConfig);
