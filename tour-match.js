@@ -9,51 +9,71 @@ const TournamentManager = {
     },
     
     async createTournament() {
-        const name = document.getElementById('tournamentName').value.trim();
-        const creatorName = document.getElementById('creatorName').value.trim();
-        const desc = document.getElementById('tournamentDesc').value.trim();
-        const duration = document.getElementById('tournamentDuration').value;
-        
-        if (!name || !creatorName) {
-            alert('Please fill in all required fields');
-            return;
-        }
-        
-        const selectedGames = [];
-        document.querySelectorAll('.game-checkbox input:checked').forEach(cb => {
-            selectedGames.push(cb.value);
-        });
-        
-        if (selectedGames.length === 0) {
-            alert('Please select at least one game');
-            return;
-        }
-        
-        const code = this.generateCode();
-        
-        const tournamentData = {
-            code: code,
-            name: name,
-            creator: creatorName,
-            description: desc,
-            duration: parseFloat(duration),
-            games: selectedGames,
-            participants: [],
-            activeMatches: [],
-            createdAt: new Date().toISOString(),
-            status: 'active'
-        };
-        
         try {
-            await StorageManager.set(`tournament_${code}`, JSON.stringify(tournamentData));
+            const name = document.getElementById('tournamentName')?.value?.trim();
+            const creatorName = document.getElementById('creatorName')?.value?.trim();
+            const desc = document.getElementById('tournamentDesc')?.value?.trim() || '';
+            const duration = document.getElementById('tournamentDuration')?.value || '7';
+            
+            console.log('Form values:', { name, creatorName, desc, duration });
+            
+            if (!name || !creatorName) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            const selectedGames = [];
+            document.querySelectorAll('.game-checkbox input:checked').forEach(cb => {
+                selectedGames.push(cb.value);
+            });
+            
+            console.log('Selected games:', selectedGames);
+            
+            if (selectedGames.length === 0) {
+                alert('Please select at least one game');
+                return;
+            }
+            
+            const code = this.generateCode();
+            
+            const tournamentData = {
+                code: code,
+                name: name,
+                creator: creatorName,
+                description: desc,
+                duration: parseFloat(duration),
+                games: selectedGames,
+                participants: [],
+                activeMatches: [],
+                createdAt: new Date().toISOString(),
+                status: 'active'
+            };
+            
+            console.log('Creating tournament:', tournamentData);
+            
+            if (!window.StorageManager) {
+                alert('❌ StorageManager not loaded! Make sure storage.js is included.');
+                return;
+            }
+            
+            const result = await window.StorageManager.set(`tournament_${code}`, JSON.stringify(tournamentData));
+            console.log('Storage result:', result);
+            
+            if (!result) {
+                alert('❌ Failed to save tournament to storage');
+                return;
+            }
+            
             alert(`✅ Tournament Created!\n\nCode: ${code}\n\nShare this code with your friends!`);
             
-            switchTab('active');
+            if (typeof switchTab === 'function') {
+                switchTab('active');
+            }
             this.loadActiveTournaments();
             
         } catch (error) {
             console.error('Error creating tournament:', error);
-            alert('Failed to create tournament. Please try again.');
+            alert(`Failed to create tournament: ${error.message}`);
         }
     },
     
