@@ -20,7 +20,7 @@ const db = getDatabase(app);
 console.log('Firebase initialized successfully');
 
 // Add this to test the connection
-window.testFirebase = async function() {
+ async function testFirebase() {
   try {
     const testRef = ref(db, 'test');
     await set(testRef, { test: 'working', timestamp: Date.now() });
@@ -45,7 +45,7 @@ window.testFirebase = async function() {
     let currentPlayer = null;
     let currentGameIndex = 0;
 
-    window.createTournament = async function() {
+    async function createTournament() {
   console.log('===== CREATE TOURNAMENT BUTTON CLICKED =====');
   
   const name = document.getElementById('tournamentName').value.trim();
@@ -108,7 +108,7 @@ window.testFirebase = async function() {
   }
 };
 
-    window.joinTournament = async function() {
+      async function joinTournament() {
       const code = document.getElementById('joinCode').value.trim().toUpperCase();
       const name = document.getElementById('joinName').value.trim();
 
@@ -184,7 +184,7 @@ window.testFirebase = async function() {
       }
     }
 
-    window.startTournament = async function() {
+    async function startTournament() {
       if (!currentTournament) return;
       
       await update(ref(db, `tournaments/${currentTournament}`), {
@@ -233,7 +233,7 @@ window.testFirebase = async function() {
       });
     }
 
-    window.submitScore = async function() {
+    async function submitScore() {
       const score = parseInt(document.getElementById('scoreInput').value);
       
       if (isNaN(score) || score < 0) {
@@ -314,7 +314,7 @@ window.testFirebase = async function() {
       });
     }
 
-    window.resetTournament = function() {
+    async function resetTournament() {
       currentTournament = null;
       currentPlayer = null;
       currentGameIndex = 0;
@@ -331,3 +331,20 @@ window.testFirebase = async function() {
     function generateCode() {
       return Math.random().toString(36).substring(2, 8).toUpperCase();
     }
+  
+    // Attach event listeners after DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('Attaching event listeners...');
+  
+  document.getElementById('createTournamentBtn').addEventListener('click', createTournament);
+  document.getElementById('joinTournamentBtn').addEventListener('click', joinTournament);
+  document.getElementById('startTournamentBtn').addEventListener('click', startTournament);
+  document.getElementById('submitScoreBtn').addEventListener('click', submitScore);
+  document.getElementById('resetTournamentBtn').addEventListener('click', resetTournament);
+  
+  console.log('Event listeners attached!');
+});
+
+// Also keep the window assignments for any dynamic buttons
+window.startTournament = startTournament;
+window.submitScore = submitScore;

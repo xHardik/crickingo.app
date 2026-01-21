@@ -261,7 +261,7 @@
         <input type="text" id="hostName" placeholder="Enter your name">
       </div>
       
-      <button onclick="createTournament()">Create Tournament</button>
+      <button id="createTournamentBtn">Create Tournament</button>
       
       <div style="text-align: center; margin: 30px 0; color: #666;">OR</div>
       
@@ -275,7 +275,7 @@
         <input type="text" id="joinName" placeholder="Enter your name">
       </div>
       
-      <button onclick="joinTournament()">Join Tournament</button>
+      <button id="joinTournamentBtn">Join Tournament</button>
     </div>
     
     <!-- Lobby Screen -->
@@ -289,7 +289,7 @@
       
       <div class="info-text">Waiting for all players to join...</div>
       
-      <button onclick="startTournament()" id="startBtn" style="display: none;">Start Tournament</button>
+      <button id="startTournamentBtn" style="display: none;">Start Tournament</button>
     </div>
     
     <!-- Game Screen -->
@@ -306,7 +306,7 @@
         <input type="number" id="scoreInput" placeholder="Enter your score" min="0">
       </div>
       
-      <button onclick="submitScore()">Submit Score & Continue</button>
+      <button id="submitScoreBtn">Submit Score & Continue</button>
     </div>
     
     <!-- Results Screen -->
@@ -315,7 +315,7 @@
       
       <div class="scoreboard" id="finalScoreboard"></div>
       
-      <button onclick="resetTournament()">Create New Tournament</button>
+      <button id="resetTournamentBtn">Create New Tournament</button>
     </div>
   </div>
 </body>
