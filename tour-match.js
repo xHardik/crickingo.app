@@ -163,26 +163,41 @@ console.log('Firebase initialized successfully');
       document.getElementById('lobbyScreen').classList.add('active');
       document.getElementById('displayCode').textContent = code;
     }
-
+ 
     function updateLobby(tournament) {
-      const playerList = document.getElementById('playerList');
-      const players = Object.values(tournament.players || {});
-      
-      playerList.innerHTML = '<h3 style="margin-bottom: 15px;">Players Joined:</h3>';
-      players.forEach(player => {
-        playerList.innerHTML += `
-          <div class="player-item">
-            <span class="player-name">${player.name}</span>
-            <span class="player-status">✓ Ready</span>
-          </div>
-        `;
-      });
+  const playerList = document.getElementById('playerList');
+  const players = Object.values(tournament.players || {});
+  
+  playerList.innerHTML = '<h3 style="margin-bottom: 15px;">Players Joined:</h3>';
+  players.forEach(player => {
+    playerList.innerHTML += `
+      <div class="player-item">
+        <span class="player-name">${player.name}</span>
+        <span class="player-status">✓ Ready</span>
+      </div>
+    `;
+  });
 
-      const startBtn = document.getElementById('startBtn');
-      if (tournament.host === currentPlayer.id && players.length === tournament.maxPlayers) {
-        startBtn.style.display = 'block';
-      }
-    }
+  const startBtn = document.getElementById('startTournamentBtn');
+  const infoText = document.querySelector('.info-text');
+  
+  // Show start button if host and at least 2 players have joined
+  if (tournament.host === currentPlayer.id && players.length >= 2) {
+    startBtn.style.display = 'block';
+    infoText.textContent = `${players.length}/${tournament.maxPlayers} players ready. You can start now!`;
+    infoText.style.color = '#28a745';
+    infoText.style.fontWeight = '600';
+  } else if (players.length >= 2) {
+    // Non-host sees ready message
+    infoText.textContent = `${players.length}/${tournament.maxPlayers} players ready. Waiting for host to start...`;
+    infoText.style.color = '#667eea';
+  } else {
+    // Less than 2 players
+    startBtn.style.display = 'none';
+    infoText.textContent = `Waiting for players... (${players.length}/${tournament.maxPlayers})`;
+    infoText.style.color = '#666';
+  }
+}
 
     async function startTournament() {
       if (!currentTournament) return;
