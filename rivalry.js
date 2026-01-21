@@ -296,3 +296,19 @@ async function submitTournamentScore(finalScore) {
 
 // Initialize when DOM is loaded
 window.addEventListener('DOMContentLoaded', initGame);
+
+// Add to the end of each game's JavaScript
+function finishGame(finalScore) {
+  const tournamentCode = localStorage.getItem('tournamentCode');
+  
+  if (tournamentCode) {
+    // Return to tournament with score
+    window.location.href = `tournament.html?score=${finalScore}`;
+  } else {
+    // Normal game end (not in tournament)
+    alert(`Game Over! Score: ${finalScore}`);
+  }
+}
+
+// Call finishGame(score) when the game ends
+// Example: finishGame(150);
