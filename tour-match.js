@@ -15,7 +15,22 @@
 };
 
     const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+const db = getDatabase(app);
+
+console.log('Firebase initialized successfully');
+
+// Add this to test the connection
+window.testFirebase = async function() {
+  try {
+    const testRef = ref(db, 'test');
+    await set(testRef, { test: 'working', timestamp: Date.now() });
+    console.log('Firebase connection test: SUCCESS');
+    alert('Firebase is working!');
+  } catch (error) {
+    console.error('Firebase connection test FAILED:', error);
+    alert('Firebase Error: ' + error.message);
+  }
+};
 
     // CONFIGURE YOUR GAME URLS HERE
     const GAMES = [
