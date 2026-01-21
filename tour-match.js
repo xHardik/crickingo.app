@@ -46,38 +46,67 @@ window.testFirebase = async function() {
     let currentGameIndex = 0;
 
     window.createTournament = async function() {
-      const name = document.getElementById('tournamentName').value.trim();
-      const playerCount = parseInt(document.getElementById('playerCount').value);
-      const hostName = document.getElementById('hostName').value.trim();
+  console.log('===== CREATE TOURNAMENT BUTTON CLICKED =====');
+  
+  const name = document.getElementById('tournamentName').value.trim();
+  const playerCount = parseInt(document.getElementById('playerCount').value);
+  const hostName = document.getElementById('hostName').value.trim();
 
-      if (!name || !hostName) {
-        alert('Please fill in all fields');
-        return;
-      }
+  console.log('Name:', name);
+  console.log('Player Count:', playerCount);
+  console.log('Host Name:', hostName);
 
-      const code = generateCode();
-      currentPlayer = { name: hostName, id: Date.now().toString() };
+  if (!name || !hostName) {
+    console.log('ERROR: Missing fields');
+    alert('Please fill in all fields');
+    return;
+  }
 
-      const tournament = {
-        name,
-        code,
-        maxPlayers: playerCount,
-        players: {
-          [currentPlayer.id]: currentPlayer
-        },
-        currentGame: 0,
-        scores: {},
-        status: 'waiting',
-        host: currentPlayer.id,
-        createdAt: Date.now()
-      };
+  try {
+    console.log('Step 1: Generating code...');
+    const code = generateCode();
+    console.log('Generated code:', code);
+    
+    console.log('Step 2: Creating player object...');
+    currentPlayer = { name: hostName, id: Date.now().toString() };
+    console.log('Current player:', currentPlayer);
 
-      await set(ref(db, `tournaments/${code}`), tournament);
-      currentTournament = code;
-      
-      showLobby(code);
-      listenToTournament(code);
+    console.log('Step 3: Creating tournament object...');
+    const tournament = {
+      name,
+      code,
+      maxPlayers: playerCount,
+      players: {
+        [currentPlayer.id]: currentPlayer
+      },
+      currentGame: 0,
+      scores: {},
+      status: 'waiting',
+      host: currentPlayer.id,
+      createdAt: Date.now()
     };
+    console.log('Tournament object:', tournament);
+
+    console.log('Step 4: Saving to Firebase...');
+    await set(ref(db, `tournaments/${code}`), tournament);
+    console.log('✅ Tournament saved successfully!');
+    
+    currentTournament = code;
+    
+    console.log('Step 5: Showing lobby...');
+    showLobby(code);
+    
+    console.log('Step 6: Setting up listener...');
+    listenToTournament(code);
+    
+    console.log('===== TOURNAMENT CREATED SUCCESSFULLY =====');
+  } catch (error) {
+    console.error('❌ ERROR:', error);
+    console.error('Error message:', error.message);
+    console.error('Error code:', error.code);
+    alert('Error creating tournament: ' + error.message);
+  }
+};
 
     window.joinTournament = async function() {
       const code = document.getElementById('joinCode').value.trim().toUpperCase();
