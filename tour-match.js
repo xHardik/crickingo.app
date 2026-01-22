@@ -117,26 +117,86 @@ function listenToTournament(code) {
     if (!snapshot.exists()) return;
     
     const tournament = snapshot.val();
-    updateLobby(tournament);
+    
+    // Update lobby if we're in waiting status
+    if (tournament.status === 'waiting') {
+      updateLobby(tournament);
+    }
 
     if (tournament.status === 'playing') {
-      currentGameIndex = tournament.currentGame;
-      
-      // Check if current player has submitted score for current game
-      const gameKey = `game${currentGameIndex}`;
-      const playerScore = tournament.scores?.[currentPlayer.id]?.[gameKey];
-      
-      if (playerScore === undefined) {
-        // Redirect to game
-        redirectToGame(tournament);
-      } else {
-        // Show waiting screen
-        showWaitingScreen(tournament);
-      }
+      handlePlayingState(tournament);
     } else if (tournament.status === 'finished') {
       showResults(tournament);
     }
   });
+}
+
+function handlePlayingState(tournament) {
+  const scores = tournament.scores || {};
+  const playerScores = scores[currentPlayer.id] || {};
+  
+  // Find which game this player should play next
+  let nextGameIndex = -1;
+  for (let i = 0; i < GAMES.length; i++) {
+    const gameKey = `game${i}`;
+    if (playerScores[gameKey] === undefined) {
+      nextGameIndex = i;
+      break;
+    }
+  }
+  
+  // If player has finished all games, show waiting screen
+  if (nextGameIndex === -1) {
+    showAllGamesComplete(tournament);
+    return;
+  }
+  
+  // Redirect to the next game the player needs to play
+  currentGameIndex = nextGameIndex;
+  redirectToGame(nextGameIndex);
+}
+
+function showAllGamesComplete(tournament) {
+  document.getElementById('lobbyScreen').classList.remove('active');
+  document.getElementById('resultsScreen').classList.remove('active');
+  document.getElementById('gameScreen').classList.add('active');
+
+  document.getElementById('gameFrame').style.display = 'none';
+  document.getElementById('scoreInputSection').style.display = 'none';
+  
+  const waitingDiv = document.getElementById('waitingMessage');
+  waitingDiv.style.display = 'block';
+  
+  const players = Object.values(tournament.players);
+  const scores = tournament.scores || {};
+  
+  let waitingFor = [];
+  players.forEach(player => {
+    const playerScores = scores[player.id] || {};
+    for (let i = 0; i < GAMES.length; i++) {
+      const gameKey = `game${i}`;
+      if (playerScores[gameKey] === undefined) {
+        if (!waitingFor.includes(player.name)) {
+          waitingFor.push(player.name);
+        }
+        break;
+      }
+    }
+  });
+  
+  waitingDiv.innerHTML = `
+    <div style="text-align: center; padding: 40px;">
+      <h2 style="color: #667eea; margin-bottom: 20px;">🎉 All Games Complete!</h2>
+      <p style="font-size: 18px; color: #666;">You've finished all ${GAMES.length} games!</p>
+      <p style="font-size: 16px; color: #999; margin-top: 10px;">Waiting for other players to finish...</p>
+      <div style="margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 12px;">
+        <p style="font-weight: 600; margin-bottom: 10px;">Still playing:</p>
+        ${waitingFor.map(name => `<p style="color: #667eea;">• ${name}</p>`).join('')}
+      </div>
+    </div>
+  `;
+  
+  updateGameProgress(tournament);
 }
 
 function showLobby(code) {
@@ -186,8 +246,7 @@ async function startTournament() {
   });
 }
 
-function redirectToGame(tournament) {
-  const gameIndex = tournament.currentGame;
+function redirectToGame(gameIndex) {
   const gameUrl = GAMES[gameIndex].url;
   
   // Set tournament mode flag BEFORE redirecting
@@ -197,56 +256,23 @@ function redirectToGame(tournament) {
   window.location.href = gameUrl;
 }
 
-function showWaitingScreen(tournament) {
-  document.getElementById('lobbyScreen').classList.remove('active');
-  document.getElementById('resultsScreen').classList.remove('active');
-  document.getElementById('gameScreen').classList.add('active');
-
-  const gameIndex = tournament.currentGame;
-  updateGameProgress(tournament);
-  
-  // Show waiting message
-  document.getElementById('gameFrame').style.display = 'none';
-  document.getElementById('scoreInputSection').style.display = 'none';
-  
-  const waitingDiv = document.getElementById('waitingMessage');
-  waitingDiv.style.display = 'block';
-  
-  const players = Object.values(tournament.players);
-  const scores = tournament.scores || {};
-  const gameKey = `game${gameIndex}`;
-  
-  let waitingFor = [];
-  players.forEach(player => {
-    if (!scores[player.id] || scores[player.id][gameKey] === undefined) {
-      waitingFor.push(player.name);
-    }
-  });
-  
-  waitingDiv.innerHTML = `
-    <div style="text-align: center; padding: 40px;">
-      <h2 style="color: #667eea; margin-bottom: 20px;">✓ Score Submitted!</h2>
-      <p style="font-size: 18px; color: #666;">Waiting for other players to finish...</p>
-      <div style="margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 12px;">
-        <p style="font-weight: 600; margin-bottom: 10px;">Waiting for:</p>
-        ${waitingFor.map(name => `<p style="color: #667eea;">• ${name}</p>`).join('')}
-      </div>
-    </div>
-  `;
-}
-
 function updateGameProgress(tournament) {
   const progressDiv = document.getElementById('gameProgress');
   progressDiv.innerHTML = '<h3 style="margin-bottom: 15px;">Tournament Progress:</h3>';
 
+  const playerScores = tournament.scores?.[currentPlayer.id] || {};
+
   GAMES.forEach((game, index) => {
+    const gameKey = `game${index}`;
     let status = 'pending';
     let statusText = 'Pending';
+    let score = '';
 
-    if (index < tournament.currentGame) {
+    if (playerScores[gameKey] !== undefined) {
       status = 'completed';
       statusText = 'Completed';
-    } else if (index === tournament.currentGame) {
+      score = ` - ${playerScores[gameKey]} pts`;
+    } else if (index === currentGameIndex) {
       status = 'active';
       statusText = 'Playing Now';
     }
@@ -255,7 +281,7 @@ function updateGameProgress(tournament) {
       <div class="game-item ${status}">
         <div class="game-number">${index + 1}</div>
         <div class="game-info">
-          <div class="game-name">${game.name}</div>
+          <div class="game-name">${game.name}${score}</div>
           <div class="game-status">${statusText}</div>
         </div>
       </div>
@@ -342,40 +368,53 @@ window.addEventListener('load', async () => {
       currentTournament = code;
       currentPlayer = { name: playerName, id: playerId };
       
-      // Get current game index
+      // Get current tournament data
       const tournamentRef = ref(db, `tournaments/${code}`);
       const snapshot = await get(tournamentRef);
       
       if (snapshot.exists()) {
         const tournament = snapshot.val();
-        currentGameIndex = tournament.currentGame;
+        const playerScores = tournament.scores?.[playerId] || {};
         
-        // Submit the score
-        const gameKey = `game${currentGameIndex}`;
-        await update(ref(db, `tournaments/${code}/scores/${playerId}`), {
-          [gameKey]: parseInt(returnScore)
-        });
-        
-        // Check if all players submitted
-        const allScores = tournament.scores || {};
-        const players = Object.keys(tournament.players);
-        let allSubmitted = true;
-
-        for (let pId of players) {
-          if (!allScores[pId] || allScores[pId][gameKey] === undefined) {
-            if (pId !== playerId) {
-              allSubmitted = false;
-              break;
-            }
+        // Find which game this score is for (first game without a score)
+        let gameToUpdate = -1;
+        for (let i = 0; i < GAMES.length; i++) {
+          const gameKey = `game${i}`;
+          if (playerScores[gameKey] === undefined) {
+            gameToUpdate = i;
+            break;
           }
         }
-
-        if (allSubmitted) {
-          if (currentGameIndex < GAMES.length - 1) {
-            await update(ref(db, `tournaments/${code}`), {
-              currentGame: currentGameIndex + 1
-            });
-          } else {
+        
+        if (gameToUpdate !== -1) {
+          // Submit the score for this game
+          const gameKey = `game${gameToUpdate}`;
+          await update(ref(db, `tournaments/${code}/scores/${playerId}`), {
+            [gameKey]: parseInt(returnScore)
+          });
+          
+          console.log(`✅ Score ${returnScore} submitted for ${GAMES[gameToUpdate].name}`);
+          
+          // Check if ALL players have finished ALL games
+          const updatedSnapshot = await get(tournamentRef);
+          const updatedTournament = updatedSnapshot.val();
+          const players = Object.keys(updatedTournament.players);
+          const allScores = updatedTournament.scores || {};
+          
+          let allPlayersFinished = true;
+          for (let pId of players) {
+            const pScores = allScores[pId] || {};
+            for (let i = 0; i < GAMES.length; i++) {
+              if (pScores[`game${i}`] === undefined) {
+                allPlayersFinished = false;
+                break;
+              }
+            }
+            if (!allPlayersFinished) break;
+          }
+          
+          // If all players finished all games, mark tournament as finished
+          if (allPlayersFinished && updatedTournament.host === playerId) {
             await update(ref(db, `tournaments/${code}`), {
               status: 'finished'
             });
@@ -383,8 +422,20 @@ window.addEventListener('load', async () => {
         }
         
         // Start listening to tournament updates
+        // This will automatically redirect to next game if needed
         listenToTournament(code);
       }
+    }
+  } else {
+    // Check if there's an active tournament in localStorage
+    const code = localStorage.getItem('tournamentCode');
+    const playerId = localStorage.getItem('playerId');
+    const playerName = localStorage.getItem('playerName');
+    
+    if (code && playerId) {
+      currentTournament = code;
+      currentPlayer = { name: playerName, id: playerId };
+      listenToTournament(code);
     }
   }
 });
