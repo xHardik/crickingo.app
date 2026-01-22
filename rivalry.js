@@ -1,9 +1,7 @@
-
 // rivalry.js - Script for Rivalry Grid Game with Tournament Integration
 
-// Tournament Detection
-const isTournamentMode = localStorage.getItem('activeMatchId') !== null;
-const isSeriesMatch = localStorage.getItem('isSeriesMatch') === 'true';
+// Check if in tournament mode - SIMPLIFIED
+const isInTournament = localStorage.getItem('inTournamentGame') === 'true';
 
 let gridData = {};
 let currentGame = null;
@@ -31,7 +29,7 @@ function showTournamentInfo() {
     text-align: center;
     font-size: 0.9em;
   `;
-  infoDiv.innerHTML = `🎮 Tournament Series Mode`;
+  infoDiv.innerHTML = `🏆 Tournament Mode - Play Your Best!`;
   document.body.insertBefore(infoDiv, document.body.firstChild);
 }
 
@@ -40,7 +38,7 @@ async function loadData() {
   try {
     const response = await fetch('./rivalry.json');
     if (!response.ok) {
-      throw new Error('Failed to load grids.json');
+      throw new Error('Failed to load rivalry.json');
     }
     gridData = await response.json();
   } catch (error) {
@@ -59,8 +57,8 @@ function getDateFromURL() {
 async function initGame() {
   await loadData();
   
-  // Show tournament banner if in series mode
-  if (isSeriesMatch) {
+  // Show tournament banner if in tournament mode
+  if (isInTournament) {
     showTournamentInfo();
   }
   
@@ -207,6 +205,7 @@ function endGame() {
   
   // Use actual number of cells shown (16 for 4x4 grid)
   const total = Math.min(currentGame.categories.length, 16);
+  const finalScore = correctCount;
   const phrase = getResultPhrase(correctCount, total);
   
   document.getElementById('scoreText').innerText = `${correctCount} / ${total}`;
@@ -218,30 +217,56 @@ function endGame() {
   document.getElementById('gameGrid').style.display = 'none';
   document.querySelector('.game-info').style.display = 'none';
   
-  // Modify result area for tournament mode
-  if (isSeriesMatch) {
+  // Clear any existing tournament buttons
+  const existingTournamentBtns = document.getElementById('tournamentButtons');
+  if (existingTournamentBtns) {
+    existingTournamentBtns.remove();
+  }
+  
+  if (isInTournament) {
+    // TOURNAMENT MODE
     // Hide normal buttons
     const restartBtn = resultArea.querySelector('.btn-restart');
     const backBtn = resultArea.querySelector('.btn-back');
     if (restartBtn) restartBtn.style.display = 'none';
     if (backBtn) backBtn.style.display = 'none';
     
-    // Submit score
-    submitTournamentScore(correctCount);
-    
-    // Add tournament button
+    // Add tournament completion message
     const tournamentBtnContainer = document.createElement('div');
     tournamentBtnContainer.id = 'tournamentButtons';
+    tournamentBtnContainer.style.cssText = `
+      text-align: center;
+      margin-top: 20px;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 15px;
+      color: white;
+    `;
     tournamentBtnContainer.innerHTML = `
-      <button class="btn btn-restart" onclick="returnToTournament()" 
-              style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); margin-top: 20px;">
-        📊 Return to Tournament Lobby
-      </button>
-      <p style="color: #667eea; margin-top: 15px; font-weight: 600;">
-        ✅ Score Submitted: ${correctCount} / ${total}
+      <p style="font-size: 1.2em; font-weight: 700; margin-bottom: 10px;">
+        ✅ Score Submitted!
+      </p>
+      <p style="font-size: 2em; font-weight: 900; margin: 10px 0;">
+        ${finalScore} / ${total} Points
+      </p>
+      <p style="font-size: 0.9em; opacity: 0.9;">
+        Returning to tournament...
       </p>
     `;
     resultArea.appendChild(tournamentBtnContainer);
+    
+    // Auto-return to tournament after 2 seconds
+    setTimeout(() => {
+      finishGame(finalScore);
+    }, 2000);
+    
+  } else {
+    // NORMAL MODE - standalone play
+    // Show normal buttons
+    const restartBtn = resultArea.querySelector('.btn-restart');
+    const backBtn = resultArea.querySelector('.btn-back');
+    if (restartBtn) restartBtn.style.display = 'inline-block';
+    if (backBtn) backBtn.style.display = 'inline-block';
   }
   
   resultArea.style.display = 'block';
@@ -265,50 +290,26 @@ function backToMenu() {
   window.location.href = 'index.html';
 }
 
-function returnToTournament() {
-  window.close();
-}
-
-async function submitTournamentScore(finalScore) {
-  const matchId = localStorage.getItem('activeMatchId');
-  const tournamentCode = localStorage.getItem('activeTournamentCode');
-  
-  if (!window.opener || !window.opener.TournamentManager) {
-    console.error('Cannot access tournament - window.opener not available');
-    alert('⚠️ Score saved locally. Please return to tournament manually.');
-    return;
-  }
-  
-  const playerName = window.opener.TournamentManager.currentPlayerName;
-  
-  if (matchId && playerName && window.opener && window.opener.MatchManager) {
-    try {
-      await window.opener.MatchManager.submitMatchScore(matchId, playerName, finalScore);
-      console.log('✅ Score submitted successfully:', finalScore);
-    } catch (error) {
-      console.error('❌ Error submitting score:', error);
-      alert('⚠️ Could not submit score. Please check tournament connection.');
-    }
-  } else {
-    console.error('Missing tournament data:', { matchId, playerName });
-  }
-}
-
-// Initialize when DOM is loaded
-window.addEventListener('DOMContentLoaded', initGame);
-
-// Add to the end of each game's JavaScript
 function finishGame(finalScore) {
-  const tournamentCode = localStorage.getItem('tournamentCode');
+  const isInTournament = localStorage.getItem('inTournamentGame') === 'true';
   
-  if (tournamentCode) {
+  if (isInTournament) {
+    // Clear the tournament game flag
+    localStorage.removeItem('inTournamentGame');
+    
     // Return to tournament with score
     window.location.href = `tournament.html?score=${finalScore}`;
   } else {
-    // Normal game end (not in tournament)
+    // Normal game end (should not happen, but safety fallback)
     alert(`Game Over! Score: ${finalScore}`);
   }
 }
 
-// Call finishGame(score) when the game ends
-// Example: finishGame(150);
+// Make functions globally accessible
+window.skipPlayer = skipPlayer;
+window.restartGame = restartGame;
+window.backToMenu = backToMenu;
+window.finishGame = finishGame;
+
+// Initialize when DOM is loaded
+window.addEventListener('DOMContentLoaded', initGame);
