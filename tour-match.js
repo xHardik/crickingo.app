@@ -190,6 +190,9 @@ function redirectToGame(tournament) {
   const gameIndex = tournament.currentGame;
   const gameUrl = GAMES[gameIndex].url;
   
+  // Set tournament mode flag BEFORE redirecting
+  localStorage.setItem('inTournamentGame', 'true');
+  
   // Redirect to game page - it will return here after completion
   window.location.href = gameUrl;
 }

@@ -185,8 +185,13 @@ function endGame() {
             tryAgainBtn.style.display = 'none';
         }
         
+        // Remove any existing tournament message
+        const existingMsg = gameOverDiv.querySelector('#tournamentCompletionMsg');
+        if (existingMsg) existingMsg.remove();
+        
         // Show tournament completion message
         const tournamentMsg = document.createElement('div');
+        tournamentMsg.id = 'tournamentCompletionMsg';
         tournamentMsg.style.cssText = `
             text-align: center;
             margin-top: 20px;
@@ -208,17 +213,21 @@ function endGame() {
         `;
         gameOverDiv.appendChild(tournamentMsg);
         
-        // Auto-return to tournament after 3 seconds
+        // Auto-return to tournament after 2 seconds
         setTimeout(() => {
             finishGame(currentScore);
-        }, 3000);
+        }, 2000);
         
     } else {
-        // NORMAL MODE
+        // NORMAL MODE - standalone play
         // Show try again button
         if (tryAgainBtn) {
             tryAgainBtn.style.display = 'block';
         }
+        
+        // Remove tournament message if exists
+        const tournamentMsg = gameOverDiv.querySelector('#tournamentCompletionMsg');
+        if (tournamentMsg) tournamentMsg.remove();
     }
     
     gameOverDiv.classList.add('show');
