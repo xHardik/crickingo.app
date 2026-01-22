@@ -6,8 +6,8 @@ let usedPlayers = [];
 let PLAYERS = [];
 
 // Check if in tournament mode
-const isTournamentMode = localStorage.getItem('activeMatchId') !== null;
-const isSeriesMatch = localStorage.getItem('isSeriesMatch') === 'true';
+const tournamentCode = localStorage.getItem('tournamentCode');
+const isInTournament = !!tournamentCode;
 
 // Load player data from JSON file
 async function loadPlayers() {
@@ -24,8 +24,8 @@ async function loadPlayers() {
 function init() {
     document.getElementById('highScore').textContent = highScore;
     
-    // Show tournament info if in series mode
-    if (isSeriesMatch) {
+    // Show tournament info if in tournament mode
+    if (isInTournament) {
         showTournamentInfo();
     }
     
@@ -51,7 +51,7 @@ function showTournamentInfo() {
         font-size: 0.9em;
     `;
     
-    infoDiv.innerHTML = `🎮 Tournament Series Mode`;
+    infoDiv.innerHTML = `🏆 Tournament Mode - Play Your Best!`;
     document.body.insertBefore(infoDiv, document.body.firstChild);
 }
 
@@ -178,33 +178,48 @@ function endGame() {
     
     const gameOverDiv = document.getElementById('gameOver');
     const tryAgainBtn = document.getElementById('tryAgainBtn');
-    const tournamentButtonsDiv = document.getElementById('tournamentButtons');
     
-    if (isSeriesMatch) {
-        // Tournament mode - hide try again button
+    if (isInTournament) {
+        // TOURNAMENT MODE
+        // Hide try again button
         if (tryAgainBtn) {
             tryAgainBtn.style.display = 'none';
         }
         
-        // Submit score automatically
-        submitTournamentScore(currentScore);
-        
-        // Show tournament completion button
-        tournamentButtonsDiv.innerHTML = `
-            <button class="play-again-btn" onclick="returnToTournament()" 
-                    style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); margin-top: 15px;">
-                📊 Return to Tournament Lobby
-            </button>
-            <p style="color: #667eea; margin-top: 15px; font-weight: 600;">
-                ✅ Score Submitted: ${currentScore} points
+        // Show tournament completion message
+        const tournamentMsg = document.createElement('div');
+        tournamentMsg.style.cssText = `
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            color: white;
+        `;
+        tournamentMsg.innerHTML = `
+            <p style="font-size: 1.2em; font-weight: 700; margin-bottom: 10px;">
+                ✅ Score Submitted!
+            </p>
+            <p style="font-size: 2em; font-weight: 900; margin: 10px 0;">
+                ${currentScore} Points
+            </p>
+            <p style="font-size: 0.9em; opacity: 0.9;">
+                Returning to tournament...
             </p>
         `;
+        gameOverDiv.appendChild(tournamentMsg);
+        
+        // Auto-return to tournament after 3 seconds
+        setTimeout(() => {
+            finishGame(currentScore);
+        }, 3000);
+        
     } else {
-        // Normal mode - show try again
+        // NORMAL MODE
+        // Show try again button
         if (tryAgainBtn) {
             tryAgainBtn.style.display = 'block';
         }
-        tournamentButtonsDiv.innerHTML = '';
     }
     
     gameOverDiv.classList.add('show');
@@ -223,53 +238,22 @@ function resetGame() {
     init();
 }
 
-function returnToTournament() {
-    // Close this window and return to tournament
-    window.close();
+function finishGame(finalScore) {
+    const tournamentCode = localStorage.getItem('tournamentCode');
+    
+    if (tournamentCode) {
+        // Return to tournament with score
+        window.location.href = `tournament.html?score=${finalScore}`;
+    } else {
+        // Normal game end (should not happen, but safety fallback)
+        alert(`Game Over! Score: ${finalScore}`);
+    }
 }
 
-async function submitTournamentScore(finalScore) {
-    const matchId = localStorage.getItem('activeMatchId');
-    const tournamentCode = localStorage.getItem('activeTournamentCode');
-    
-    // Get player name from the opener window (main tournament page)
-    if (!window.opener || !window.opener.TournamentManager) {
-        console.error('Cannot access tournament - window.opener not available');
-        alert('⚠️ Score saved locally. Please return to tournament manually.');
-        return;
-    }
-    
-    const playerName = window.opener.TournamentManager.currentPlayerName;
-    
-    if (matchId && playerName && window.opener && window.opener.MatchManager) {
-        try {
-            // Call the tournament's submitMatchScore function
-            await window.opener.MatchManager.submitMatchScore(matchId, playerName, finalScore);
-            console.log('✅ Score submitted successfully:', finalScore);
-        } catch (error) {
-            console.error('❌ Error submitting score:', error);
-            alert('⚠️ Could not submit score. Please check tournament connection.');
-        }
-    } else {
-        console.error('Missing tournament data:', { matchId, playerName });
-    }
-}
+// Make functions globally accessible for HTML onclick attributes
+window.guess = guess;
+window.resetGame = resetGame;
+window.finishGame = finishGame;
 
 // Load players when the page loads
 loadPlayers();
-
-// Add to the end of each game's JavaScript
-function finishGame(finalScore) {
-  const tournamentCode = localStorage.getItem('tournamentCode');
-  
-  if (tournamentCode) {
-    // Return to tournament with score
-    window.location.href = `tournament.html?score=${finalScore}`;
-  } else {
-    // Normal game end (not in tournament)
-    alert(`Game Over! Score: ${finalScore}`);
-  }
-}
-
-// Call finishGame(score) when the game ends
-// Example: finishGame(150);
