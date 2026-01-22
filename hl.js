@@ -5,9 +5,8 @@ let rightPlayer = null;
 let usedPlayers = [];
 let PLAYERS = [];
 
-// Check if in tournament mode
-const tournamentCode = localStorage.getItem('tournamentCode');
-const isInTournament = !!tournamentCode;
+// Check if in tournament mode - only if explicitly set
+const isInTournament = localStorage.getItem('inTournamentGame') === 'true';
 
 // Load player data from JSON file
 async function loadPlayers() {
@@ -239,9 +238,12 @@ function resetGame() {
 }
 
 function finishGame(finalScore) {
-    const tournamentCode = localStorage.getItem('tournamentCode');
+    const isInTournament = localStorage.getItem('inTournamentGame') === 'true';
     
-    if (tournamentCode) {
+    if (isInTournament) {
+        // Clear the tournament game flag
+        localStorage.removeItem('inTournamentGame');
+        
         // Return to tournament with score
         window.location.href = `tournament.html?score=${finalScore}`;
     } else {
