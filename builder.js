@@ -232,6 +232,17 @@ function checkTeam() {
             const resetBtn = document.querySelector('.reset-btn');
             if (checkBtn) checkBtn.style.display = 'none';
             if (resetBtn) resetBtn.style.display = 'none';
+        } else {
+            // Normal mode - show regular results
+            resultDiv.innerHTML = `
+                <div class="result-section success">
+                    <div class="result-title">🎉 Congratulations!</div>
+                    <div class="result-message">
+                        Your team rating is ${rating}!<br>
+                        You've successfully built a winning team!
+                    </div>
+                </div>
+                `;
         }
         
     } else {
