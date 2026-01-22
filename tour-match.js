@@ -118,12 +118,11 @@ function listenToTournament(code) {
     
     const tournament = snapshot.val();
     
-    // Update lobby if we're in waiting status
     if (tournament.status === 'waiting') {
+      // Stay in lobby, update player list
       updateLobby(tournament);
-    }
-
-    if (tournament.status === 'playing') {
+    } else if (tournament.status === 'playing') {
+      // Only redirect if we're currently in the lobby or coming back from a game
       handlePlayingState(tournament);
     } else if (tournament.status === 'finished') {
       showResults(tournament);
@@ -132,6 +131,9 @@ function listenToTournament(code) {
 }
 
 function handlePlayingState(tournament) {
+  // Hide lobby screen
+  document.getElementById('lobbyScreen').classList.remove('active');
+  
   const scores = tournament.scores || {};
   const playerScores = scores[currentPlayer.id] || {};
   
@@ -201,6 +203,8 @@ function showAllGamesComplete(tournament) {
 
 function showLobby(code) {
   document.getElementById('setupScreen').classList.remove('active');
+  document.getElementById('gameScreen').classList.remove('active');
+  document.getElementById('resultsScreen').classList.remove('active');
   document.getElementById('lobbyScreen').classList.add('active');
   document.getElementById('displayCode').textContent = code;
 }
