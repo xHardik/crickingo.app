@@ -232,33 +232,8 @@ function checkTeam() {
             const resetBtn = document.querySelector('.reset-btn');
             if (checkBtn) checkBtn.style.display = 'none';
             if (resetBtn) resetBtn.style.display = 'none';
-        } else {
-            // Normal mode - show regular results
-            resultDiv.innerHTML = `
-                <div class="result-section success">
-                    <div class="result-title">🎉 Congratulations!</div>
-                    <div class="result-message">
-                        Your team rating is ${rating}!<br>
-                        You've successfully built a winning team!
-                    </div>
-                </div>
-                ${!playerName ? `
-                <div class="name-input-section">
-                    <h3>Save your score to the leaderboard!</h3>
-                    <div class="name-input-group">
-                        <input type="text" class="name-input" id="nameInput" placeholder="Enter your name" maxlength="20">
-                        <button class="submit-score-btn" onclick="submitScore()">Submit Score</button>
-                    </div>
-                </div>
-                ` : `
-                <div class="name-input-section">
-                    <h3>Want to save this score?</h3>
-                    <button class="submit-score-btn" onclick="submitScore()">Submit as ${playerName}</button>
-                    <button class="submit-score-btn" onclick="playerName=''; checkTeam();" style="background:#6c757d; margin-left:10px;">Different Name</button>
-                </div>
-                `}
-            `;
         }
+        
     } else {
         const deficit = TARGET_RATING - rating;
         submitTournamentScore(0);
