@@ -359,6 +359,7 @@ window.addEventListener('load', async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const returnScore = urlParams.get('score');
   
+  // ONLY process tournament data if returning from a game with a score
   if (returnScore) {
     // Clear URL parameters
     window.history.replaceState({}, document.title, window.location.pathname);
@@ -430,18 +431,9 @@ window.addEventListener('load', async () => {
         listenToTournament(code);
       }
     }
-  } else {
-    // Check if there's an active tournament in localStorage
-    const code = localStorage.getItem('tournamentCode');
-    const playerId = localStorage.getItem('playerId');
-    const playerName = localStorage.getItem('playerName');
-    
-    if (code && playerId) {
-      currentTournament = code;
-      currentPlayer = { name: playerName, id: playerId };
-      listenToTournament(code);
-    }
   }
+  // If NOT returning from a game, don't automatically restore tournament
+  // User must manually create/join a tournament
 });
 
 document.addEventListener('DOMContentLoaded', () => {
