@@ -1,8 +1,8 @@
 // transfer.js - Script for Transfer History Game with Tournament Integration
 
-// Tournament Detection
-const isTournamentMode = localStorage.getItem('activeMatchId') !== null;
-const isSeriesMatch = localStorage.getItem('isSeriesMatch') === 'true';
+// Tournament Detection - Check if being played in tournament mode
+const tournamentCode = localStorage.getItem('tournamentCode');
+const inTournamentGame = localStorage.getItem('inTournamentGame') === 'true';
 
 const allIPLPlayers = [
   "Virat Kohli", "MS Dhoni", "Rohit Sharma", "David Warner", "Ravindra Jadeja",
@@ -44,7 +44,7 @@ function showTournamentInfo() {
     text-align: center;
     font-size: 0.9em;
   `;
-  infoDiv.innerHTML = `🎮 Tournament Series Mode`;
+  infoDiv.innerHTML = `🎮 Tournament Mode`;
   document.body.insertBefore(infoDiv, document.body.firstChild);
 }
 
@@ -62,10 +62,18 @@ async function loadData() {
   }
 }
 
-// Get date from URL parameter
+// Get date from URL parameter (only for non-tournament mode)
 function getDateFromURL() {
   const urlParams = new URLSearchParams(window.location.search);
   return urlParams.get('date') || new Date().toISOString().split('T')[0];
+}
+
+// Get random date key from available dates in transfersData
+function getRandomDateKey() {
+  const availableDates = Object.keys(transfersData);
+  if (availableDates.length === 0) return null;
+  const randomIndex = Math.floor(Math.random() * availableDates.length);
+  return availableDates[randomIndex];
 }
 
 // Setup search dropdown
@@ -143,17 +151,29 @@ function showDropdownResults(players) {
 async function initGame() {
   await loadData();
   
-  // Show tournament banner if in series mode
-  if (isSeriesMatch) {
+  // Show tournament banner if in tournament mode
+  if (inTournamentGame) {
     showTournamentInfo();
   }
   
-  selectedDate = getDateFromURL();
-  
-  if (!transfersData[selectedDate]) {
-    alert(`No Transfer History puzzle available for ${selectedDate}. Returning to menu.`);
-    backToMenu();
-    return;
+  // TOURNAMENT MODE: Use random date, ignore URL parameter
+  if (inTournamentGame) {
+    selectedDate = getRandomDateKey();
+    
+    if (!selectedDate || !transfersData[selectedDate]) {
+      alert('No Transfer History puzzle available. Returning to tournament.');
+      finishGame(0);
+      return;
+    }
+  } else {
+    // NORMAL MODE: Use date from URL parameter
+    selectedDate = getDateFromURL();
+    
+    if (!transfersData[selectedDate]) {
+      alert(`No Transfer History puzzle available for ${selectedDate}. Returning to menu.`);
+      backToMenu();
+      return;
+    }
   }
   
   currentGame = {
@@ -285,15 +305,12 @@ function endGame() {
   document.querySelector('.game-info').style.display = 'none';
   
   // Modify result area for tournament mode
-  if (isSeriesMatch) {
+  if (inTournamentGame) {
     // Hide normal buttons
     const restartBtn = resultArea.querySelector('.btn-restart');
     const backBtn = resultArea.querySelector('.btn-back');
     if (restartBtn) restartBtn.style.display = 'none';
     if (backBtn) backBtn.style.display = 'none';
-    
-    // Submit score
-    submitTournamentScore(correctCount);
     
     // Add tournament button
     const tournamentBtnContainer = document.createElement('div');
@@ -301,16 +318,24 @@ function endGame() {
     tournamentBtnContainer.innerHTML = `
       <button class="btn btn-restart" onclick="returnToTournament()" 
               style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); margin-top: 20px;">
-        📊 Return to Tournament Lobby
+        📊 Return to Tournament
       </button>
       <p style="color: #667eea; margin-top: 15px; font-weight: 600;">
-        ✅ Score Submitted: ${correctCount} / ${total}
+        ✅ Score: ${correctCount} / ${total}
       </p>
     `;
     resultArea.appendChild(tournamentBtnContainer);
+    
+    resultArea.style.display = 'block';
+    
+    // Auto-submit score and return after 3 seconds
+    setTimeout(() => {
+      finishGame(correctCount);
+    }, 3000);
+  } else {
+    // Normal mode - show regular buttons
+    resultArea.style.display = 'block';
   }
-  
-  resultArea.style.display = 'block';
 }
 
 function getResultPhrase(score, total) {
@@ -332,42 +357,22 @@ function backToMenu() {
 }
 
 function returnToTournament() {
-  window.close();
-}
-
-async function submitTournamentScore(finalScore) {
-  const matchId = localStorage.getItem('activeMatchId');
-  const tournamentCode = localStorage.getItem('activeTournamentCode');
-  
-  if (!window.opener || !window.opener.TournamentManager) {
-    console.error('Cannot access tournament - window.opener not available');
-    alert('⚠️ Score saved locally. Please return to tournament manually.');
-    return;
-  }
-  
-  const playerName = window.opener.TournamentManager.currentPlayerName;
-  
-  if (matchId && playerName && window.opener && window.opener.MatchManager) {
-    try {
-      await window.opener.MatchManager.submitMatchScore(matchId, playerName, finalScore);
-      console.log('✅ Score submitted successfully:', finalScore);
-    } catch (error) {
-      console.error('❌ Error submitting score:', error);
-      alert('⚠️ Could not submit score. Please check tournament connection.');
-    }
+  const tournamentCode = localStorage.getItem('tournamentCode');
+  if (tournamentCode) {
+    finishGame(correctCount);
   } else {
-    console.error('Missing tournament data:', { matchId, playerName });
+    window.close();
   }
 }
 
-// Initialize when DOM is loaded
-window.addEventListener('DOMContentLoaded', initGame);
-
-// Add to the end of each game's JavaScript
+// Tournament Integration - Finish game and return score
 function finishGame(finalScore) {
   const tournamentCode = localStorage.getItem('tournamentCode');
   
-  if (tournamentCode) {
+  if (tournamentCode && inTournamentGame) {
+    // Clear the tournament game flag
+    localStorage.removeItem('inTournamentGame');
+    
     // Return to tournament with score
     window.location.href = `tournament.html?score=${finalScore}`;
   } else {
@@ -376,5 +381,5 @@ function finishGame(finalScore) {
   }
 }
 
-// Call finishGame(score) when the game ends
-// Example: finishGame(150);
+// Initialize when DOM is loaded
+window.addEventListener('DOMContentLoaded', initGame);
