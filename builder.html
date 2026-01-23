@@ -490,20 +490,20 @@
             letter-spacing: 0.3px;
         }
 
-        .action-btn {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 15px;
-            font-size: 1.1em;
-            font-weight: 800;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            font-family: 'Inter', sans-serif;
-            letter-spacing: 0.3px;
-            position: relative;
-            overflow: hidden;
-        }
+      .action-btn {
+    width: 100%;
+    padding: 18px;  /* Increased from 16px */
+    border: none;
+    border-radius: 15px;
+    font-size: 1.2em;  /* Increased from 1.1em */
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.3px;
+    position: relative;
+    overflow: hidden;
+}
 
         .action-btn::before {
             content: '';
@@ -523,39 +523,40 @@
 
         /* Add this CSS to your <style> section */
 
+
 .back-home-btn {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    color: white;
-    padding: 12px 24px;
+    width: 100%;
+    padding: 18px;
+    background: rgba(102, 126, 234, 0.2);
+    color: #667eea;
+    border: 2px solid rgba(102, 126, 234, 0.4);
     border-radius: 15px;
-    font-weight: 700;
-    font-size: 0.95em;
+    font-size: 1.2em;
+    font-weight: 800;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 1001;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.3px;
+    text-decoration: none;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
-    text-decoration: none;
-    font-family: 'Inter', sans-serif;
-}
-
-.back-home-btn:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(102, 126, 234, 0.5);
-    transform: translateX(-5px);
-    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    position: relative;
+    overflow: hidden;
 }
 
 .back-home-btn::before {
     content: '←';
-    font-size: 1.2em;
+    font-size: 1.3em;
     font-weight: 900;
+}
+
+.back-home-btn:hover {
+    background: rgba(102, 126, 234, 0.3);
+    border-color: #667eea;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
 }
 
 @media (max-width: 768px) {
@@ -950,7 +951,7 @@
 <body>
     <!-- Add this HTML right after the opening <body> tag -->
 
-<a href="index.html" class="back-home-btn">Home</a>
+
     <div class="container">
         <div class="header">
             <h1>🏏 Build Your XI</h1>
@@ -996,11 +997,14 @@
                     <div class="team-title">Your Team</div>
                     <div id="selectedPlayers"></div>
                 </div>
-                
-                <button class="check-team-btn" id="checkBtn" onclick="checkTeam()" disabled>Check Team</button>
-                <button class="reset-btn" onclick="resetTeam()">Reset Team</button>
-                
-                <div id="result"></div>
+                 
+
+<button class="action-btn check-team-btn" id="checkBtn" onclick="checkTeam()" disabled>Check Team</button>
+<button class="action-btn reset-btn" onclick="resetTeam()">Reset Team</button>
+<a href="index.html" class="back-home-btn">Back to Home</a>
+
+<div id="result"></div>
+
             </div>
         </div>
     </div>
