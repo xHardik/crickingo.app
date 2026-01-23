@@ -521,6 +521,52 @@
             opacity: 1;
         }
 
+        /* Add this CSS to your <style> section */
+
+.back-home-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 15px;
+    font-weight: 700;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
+}
+
+.back-home-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(102, 126, 234, 0.5);
+    transform: translateX(-5px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+.back-home-btn::before {
+    content: '←';
+    font-size: 1.2em;
+    font-weight: 900;
+}
+
+@media (max-width: 768px) {
+    .back-home-btn {
+        padding: 10px 18px;
+        font-size: 0.85em;
+        top: 10px;
+        left: 10px;
+    }
+}
+
         .check-team-btn {
             background: linear-gradient(135deg, #2dd4bf 0%, #14b8a6 100%);
             color: white;
@@ -898,9 +944,13 @@
                 flex-direction: column;
             }
         }
+
     </style>
 </head>
 <body>
+    <!-- Add this HTML right after the opening <body> tag -->
+
+<a href="index.html" class="back-home-btn">Home</a>
     <div class="container">
         <div class="header">
             <h1>🏏 Build Your XI</h1>
