@@ -1,66 +1,17 @@
-// BUILD YOUR XI - TOURNAMENT INTEGRATION (Simplified to match Higher/Lower)
-
-// ===== AT THE TOP OF THE FILE =====
-// Simple tournament detection (matches Higher/Lower pattern)
-const isInTournament = localStorage.getItem('inTournamentGame') === 'true';
-
-// Remove these lines:
-// const isTournamentMode = localStorage.getItem('activeMatchId') !== null;
-// const isSeriesMatch = localStorage.getItem('isSeriesMatch') === 'true';
-
-// ===== REPLACE showTournamentInfo() =====
-function showTournamentInfo() {
-    const infoDiv = document.createElement('div');
-    infoDiv.id = 'tournamentInfo';
-    infoDiv.style.cssText = `
-        position: fixed;
-        top: 10px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 12px 25px;
-        border-radius: 25px;
-        font-weight: 700;
-        z-index: 1000;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        text-align: center;
-        font-size: 0.9em;
-    `;
-    infoDiv.innerHTML = `🏆 Tournament Mode - Play Your Best!`;
-    document.body.insertBefore(infoDiv, document.body.firstChild);
-}
-
-// ===== UPDATE init() =====
-async function init() {
-    // Show tournament banner if in tournament mode
-    if (isInTournament) {
-        showTournamentInfo();
-    }
-    
-    // Load players for the current date
-    PLAYERS = await loadPlayersByDate('2026-01-15');
-    
-    if (PLAYERS.length === 0) {
-        document.getElementById('playersGrid').innerHTML = '<p>Failed to load players. Please refresh.</p>';
-        return;
-    }
-    
-    renderPlayers();
-    updateStats();
-    updateSelectedTeam();
-}
-
-// ===== REPLACE checkTeam() entirely =====
+// ===== REPLACE checkTeam() with this dual-mode version =====
 function checkTeam() {
     const rating = calculateTeamRating();
     const resultDiv = document.getElementById('result');
+    
+    // Hide check button and reset button initially
+    const checkBtn = document.getElementById('checkBtn');
+    const resetBtn = document.querySelector('.reset-btn');
     
     if (rating >= TARGET_RATING) {
         currentSessionScore = rating;
         
         if (isInTournament) {
-            // TOURNAMENT MODE - Auto-redirect like Higher/Lower
+            // ===== TOURNAMENT MODE =====
             resultDiv.innerHTML = `
                 <div class="result-section success">
                     <div class="result-title">🎉 Congratulations!</div>
@@ -82,19 +33,17 @@ function checkTeam() {
                 </div>
             `;
             
-            // Hide normal buttons
-            const checkBtn = document.getElementById('checkBtn');
-            const resetBtn = document.querySelector('.reset-btn');
+            // Hide buttons in tournament mode
             if (checkBtn) checkBtn.style.display = 'none';
             if (resetBtn) resetBtn.style.display = 'none';
             
-            // Auto-return after 2 seconds (SAME AS HIGHER/LOWER)
+            // Auto-return after 2 seconds
             setTimeout(() => {
                 finishGame(rating);
             }, 2000);
             
         } else {
-            // NORMAL MODE - Regular play
+            // ===== STANDALONE MODE =====
             resultDiv.innerHTML = `
                 <div class="result-section success">
                     <div class="result-title">🎉 Congratulations!</div>
@@ -102,16 +51,34 @@ function checkTeam() {
                         Your team rating is ${rating}!<br>
                         You've successfully built a winning team!
                     </div>
+                    <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: center;">
+                        <button onclick="resetTeam()" 
+                                style="background: #667eea; color: white; border: none; 
+                                       padding: 12px 24px; border-radius: 8px; font-size: 1em; 
+                                       font-weight: 600; cursor: pointer;">
+                            🔄 Try Again
+                        </button>
+                        <button onclick="submitScore()" 
+                                style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); 
+                                       color: white; border: none; padding: 12px 24px; border-radius: 8px; 
+                                       font-size: 1em; font-weight: 600; cursor: pointer;">
+                            📊 Submit Score
+                        </button>
+                    </div>
                 </div>
             `;
+            
+            // Keep buttons visible in standalone mode (or hide them as you prefer)
+            if (checkBtn) checkBtn.style.display = 'none';
         }
         
     } else {
+        // ===== FAILED TO REACH TARGET =====
         const deficit = TARGET_RATING - rating;
         currentSessionScore = 0;
         
         if (isInTournament) {
-            // TOURNAMENT MODE - Auto-redirect
+            // ===== TOURNAMENT MODE - FAILURE =====
             resultDiv.innerHTML = `
                 <div class="result-section failure">
                     <div class="result-title">Not Quite There!</div>
@@ -133,9 +100,7 @@ function checkTeam() {
                 </div>
             `;
             
-            // Hide normal buttons
-            const checkBtn = document.getElementById('checkBtn');
-            const resetBtn = document.querySelector('.reset-btn');
+            // Hide buttons
             if (checkBtn) checkBtn.style.display = 'none';
             if (resetBtn) resetBtn.style.display = 'none';
             
@@ -145,7 +110,7 @@ function checkTeam() {
             }, 2000);
             
         } else {
-            // NORMAL MODE
+            // ===== STANDALONE MODE - FAILURE =====
             resultDiv.innerHTML = `
                 <div class="result-section failure">
                     <div class="result-title">Not Quite There!</div>
@@ -154,13 +119,40 @@ function checkTeam() {
                         You need ${deficit} more points to win!<br>
                         Try selecting stronger players.
                     </div>
+                    <div style="margin-top: 20px;">
+                        <button onclick="resetTeam()" 
+                                style="background: #667eea; color: white; border: none; 
+                                       padding: 12px 24px; border-radius: 8px; font-size: 1em; 
+                                       font-weight: 600; cursor: pointer;">
+                            🔄 Try Again
+                        </button>
+                    </div>
                 </div>
             `;
+            
+            // Keep reset button visible
         }
     }
 }
 
-// ===== ADD finishGame() function (SAME AS HIGHER/LOWER) =====
+// ===== KEEP resetTeam() as is =====
+function resetTeam() {
+    selectedTeam = [];
+    document.getElementById('result').innerHTML = '';
+    currentSessionScore = null;
+    
+    // Show buttons again
+    const checkBtn = document.getElementById('checkBtn');
+    const resetBtn = document.querySelector('.reset-btn');
+    if (checkBtn) checkBtn.style.display = 'block';
+    if (resetBtn) resetBtn.style.display = 'block';
+    
+    renderPlayers();
+    updateStats();
+    updateSelectedTeam();
+}
+
+// ===== KEEP finishGame() exactly as shown earlier =====
 function finishGame(finalScore) {
     const isInTournament = localStorage.getItem('inTournamentGame') === 'true';
     
@@ -169,12 +161,12 @@ function finishGame(finalScore) {
         // Return to tournament with score
         window.location.href = `tournament.html?score=${finalScore}`;
     } else {
-        // Normal game end
+        // Normal game end (shouldn't happen, but safety)
         alert(`Game Over! Rating: ${finalScore}`);
     }
 }
 
-// ===== REMOVE THESE FUNCTIONS ENTIRELY =====
-// Delete: returnToTournament()
-// Delete: submitTournamentScore()
-// Delete: The duplicate finishGame() at the bottom of the file
+// ===== DELETE these old functions =====
+// Remove: returnToTournament()
+// Remove: submitTournamentScore() 
+// Remove: The duplicate finishGame() at bottom
