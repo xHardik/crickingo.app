@@ -454,7 +454,7 @@ async function showLeaderboard() {
     }
 }
 
-function closeLeaderboard() {
+function closeLeaderboard()  {
     document.getElementById('leaderboardModal').classList.remove('show');
 }
 
