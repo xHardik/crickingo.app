@@ -1,7 +1,16 @@
 // Build Your XI with Tournament Integration
 
 // Tournament Detection - SIMPLIFIED (like Higher/Lower)
-const isInTournament = localStorage.getItem('inTournamentGame') === 'true';
+// Check if coming from tournament AND flag is still set
+const urlParams = new URLSearchParams(window.location.search);
+const hasReturnedFromGame = urlParams.has('score');
+let isInTournament = localStorage.getItem('inTournamentGame') === 'true';
+
+// If we just returned with a score, we're no longer in tournament mode
+if (hasReturnedFromGame && !window.location.href.includes('tournament.html')) {
+    isInTournament = false;
+    localStorage.removeItem('inTournamentGame');
+}
 
 // Global variables
 let PLAYERS = [];
@@ -338,13 +347,16 @@ function resetTeam() {
 }
 
 function finishGame(finalScore) {
-    const isInTournament = localStorage.getItem('inTournamentGame') === 'true';
+    // Re-check tournament status (in case it changed)
+    const currentlyInTournament = localStorage.getItem('inTournamentGame') === 'true';
     
-    if (isInTournament) {
+    if (currentlyInTournament) {
+        // Don't clear flag here - let tournament.html handle it
         // Return to tournament with score
         window.location.href = `tournament.html?score=${finalScore}`;
     } else {
-        alert(`Game Over! Rating: ${finalScore}`);
+        // Not in tournament - this shouldn't happen but safety fallback
+        console.log('Game completed in standalone mode');
     }
 }
 
@@ -454,7 +466,7 @@ async function showLeaderboard() {
     }
 }
 
-function closeLeaderboard()  {
+function closeLeaderboard() {
     document.getElementById('leaderboardModal').classList.remove('show');
 }
 
