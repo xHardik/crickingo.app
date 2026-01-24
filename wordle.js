@@ -1,24 +1,42 @@
 // Cricket Wordle with Tournament Integration
 
-// Tournament Detection
-const isTournamentMode = localStorage.getItem('activeMatchId') !== null;
-const isSeriesMatch = localStorage.getItem('isSeriesMatch') === 'true';
+// ===== TOURNAMENT INTEGRATION =====
 
-const PLAYERS = [
-    "KOHLI", "ROHIT", "DHONI", "BUMRAH", "SMITH", "ROOT", "STOKES",
-    "WARNER", "RAHUL", "PANT", "JADEJA", "ASHWIN", "SHAMI", "GAYLE",
-    "BUTLER", "BABAR", "WILLIAMSON", "BOULT", "STARC", "CUMMINS",
-    "RABADA", "ARCHER", "RASHID", "NARINE", "POLLARD", "RUSSELL",
-    "MAXWELL"
-];
+// Tournament Detection with timestamp validation
+function checkTournamentMode() {
+    const flag = localStorage.getItem('inTournamentGame');
+    const timestamp = localStorage.getItem('tournamentGameTimestamp');
+    
+    // If no flag, definitely solo mode
+    if (flag !== 'true') {
+        return false;
+    }
+    
+    // If flag exists but no timestamp, it's stale - clear it
+    if (!timestamp) {
+        console.log('No timestamp found - clearing stale tournament flag');
+        localStorage.removeItem('inTournamentGame');
+        return false;
+    }
+    
+    // If timestamp is older than 5 seconds, the flag is stale
+    const now = Date.now();
+    const flagAge = now - parseInt(timestamp);
+    
+    if (flagAge > 5000) { // 5 seconds
+        console.log('Tournament flag is stale (older than 5 seconds) - clearing');
+        localStorage.removeItem('inTournamentGame');
+        localStorage.removeItem('tournamentGameTimestamp');
+        return false;
+    }
+    
+    // Flag is fresh, we're in tournament mode
+    return true;
+}
 
-let targetPlayer = '';
-let currentAttempt = 0;
-let maxAttempts = 5;
-let gameOver = false;
-let guesses = [];
+const isInTournament = checkTournamentMode();
 
-// Show Tournament Banner
+// Show tournament banner
 function showTournamentInfo() {
     const infoDiv = document.createElement('div');
     infoDiv.id = 'tournamentInfo';
@@ -37,13 +55,29 @@ function showTournamentInfo() {
         text-align: center;
         font-size: 0.9em;
     `;
-    infoDiv.innerHTML = `🎮 Tournament Series Mode`;
+    infoDiv.innerHTML = `🏆 Tournament Mode - Play Your Best!`;
     document.body.insertBefore(infoDiv, document.body.firstChild);
 }
 
+// ===== END TOURNAMENT INTEGRATION =====
+
+const PLAYERS = [
+    "KOHLI", "ROHIT", "DHONI", "BUMRAH", "SMITH", "ROOT", "STOKES",
+    "WARNER", "RAHUL", "PANT", "JADEJA", "ASHWIN", "SHAMI", "GAYLE",
+    "BUTLER", "BABAR", "WILLIAMSON", "BOULT", "STARC", "CUMMINS",
+    "RABADA", "ARCHER", "RASHID", "NARINE", "POLLARD", "RUSSELL",
+    "MAXWELL"
+];
+
+let targetPlayer = '';
+let currentAttempt = 0;
+let maxAttempts = 5;
+let gameOver = false;
+let guesses = [];
+
 function initGame() {
-    // Show tournament banner if in series mode
-    if (isSeriesMatch && !document.getElementById('tournamentInfo')) {
+    // Show tournament banner if in tournament mode
+    if (isInTournament && !document.getElementById('tournamentInfo')) {
         showTournamentInfo();
     }
     
@@ -65,7 +99,7 @@ function updateButtonsForMode() {
     const resetBtn = document.querySelector('.reset-btn');
     const backBtn = document.querySelector('.back-btn');
     
-    if (isSeriesMatch) {
+    if (isInTournament) {
         // In tournament mode, hide these buttons initially
         if (resetBtn) resetBtn.style.display = 'none';
         if (backBtn) backBtn.style.display = 'none';
@@ -129,22 +163,24 @@ function submitGuess() {
         document.getElementById('guessInput').disabled = true;
         document.getElementById('submitBtn').disabled = true;
         
-        if (isSeriesMatch) {
+        if (isInTournament) {
             showTournamentEndScreen(score);
+            setTimeout(() => {
+                finishGame(score);
+            }, 2000);
         }
-        
-        finishGame(score);
     } else if (currentAttempt >= maxAttempts) {
         gameOver = true;
         showMessage(`😞 Game Over! The answer was ${targetPlayer}`, 'error');
         document.getElementById('guessInput').disabled = true;
         document.getElementById('submitBtn').disabled = true;
         
-        if (isSeriesMatch) {
+        if (isInTournament) {
             showTournamentEndScreen(0);
+            setTimeout(() => {
+                finishGame(0);
+            }, 2000);
         }
-        
-        finishGame(0);
     }
 }
 
@@ -155,6 +191,10 @@ function showTournamentEndScreen(score) {
     if (resetBtn) resetBtn.style.display = 'none';
     if (backBtn) backBtn.style.display = 'none';
     
+    // Remove any existing tournament div
+    const existing = document.getElementById('tournamentButtons');
+    if (existing) existing.remove();
+    
     // Create tournament end screen
     const container = document.querySelector('.container');
     const tournamentDiv = document.createElement('div');
@@ -163,20 +203,19 @@ function showTournamentEndScreen(score) {
         margin-top: 30px;
         text-align: center;
         padding: 20px;
-        background: rgba(102, 126, 234, 0.1);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         border-radius: 15px;
-        border: 2px solid rgba(102, 126, 234, 0.3);
+        color: white;
     `;
     tournamentDiv.innerHTML = `
-        <button onclick="returnToTournament()" 
-                style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-                       color: white; border: none; padding: 15px 30px; border-radius: 12px;
-                       font-size: 1.1em; font-weight: 700; cursor: pointer;
-                       box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);">
-            📊 Return to Tournament Lobby
-        </button>
-        <p style="color: #667eea; margin-top: 15px; font-weight: 600; font-size: 1.1em;">
-            ✅ Score Submitted: ${score} points
+        <p style="font-size: 1.2em; font-weight: 700; margin-bottom: 10px;">
+            ✅ Score Submitted!
+        </p>
+        <p style="font-size: 2em; font-weight: 900; margin: 10px 0;">
+            ${score} Points
+        </p>
+        <p style="font-size: 0.9em; opacity: 0.9;">
+            Returning to tournament...
         </p>
     `;
     container.appendChild(tournamentDiv);
@@ -245,57 +284,26 @@ function resetGame() {
     document.getElementById('guessInput').focus();
 }
 
-function returnToTournament() {
-    window.close();
+function finishGame(finalScore) {
+    const currentlyInTournament = localStorage.getItem('inTournamentGame') === 'true';
+    
+    if (currentlyInTournament) {
+        window.location.href = `tournament.html?score=${finalScore}&game=4`;
+    } else {
+        // Normal standalone game end
+        console.log('Game completed in standalone mode');
+    }
 }
 
-async function finishGame(finalScore) {
-    const matchId = localStorage.getItem('activeMatchId');
-    const tournamentCode = localStorage.getItem('activeTournamentCode');
-    
-    if (!isSeriesMatch) return; // Only submit for tournament games
-    
-    if (!window.opener || !window.opener.TournamentManager) {
-        console.error('Cannot access tournament - window.opener not available');
-        alert('⚠️ Score saved locally. Please return to tournament manually.');
-        return;
-    }
-    
-    const playerName = window.opener.TournamentManager.currentPlayerName;
-    
-    if (matchId && playerName && window.opener && window.opener.MatchManager) {
-        try {
-            await window.opener.MatchManager.submitMatchScore(matchId, playerName, finalScore);
-            console.log('✅ Score submitted successfully:', finalScore);
-        } catch (error) {
-            console.error('❌ Error submitting score:', error);
-            alert('⚠️ Could not submit score. Please check tournament connection.');
-        }
-    } else {
-        console.error('Missing tournament data:', { matchId, playerName });
-    }
-}
+// Make functions globally accessible
+window.submitGuess = submitGuess;
+window.resetGame = resetGame;
+window.finishGame = finishGame;
 
 document.getElementById('guessInput').addEventListener('keypress', function(e) {
     if (e.key === 'Enter') {
         submitGuess();
     }
 });
-
-// Add to the end of each game's JavaScript
-function finishGame(finalScore) {
-  const tournamentCode = localStorage.getItem('tournamentCode');
-  
-  if (tournamentCode) {
-    // Return to tournament with score
-    window.location.href = `tournament.html?score=${finalScore}`;
-  } else {
-    // Normal game end (not in tournament)
-    alert(`Game Over! Score: ${finalScore}`);
-  }
-}
-
-// Call finishGame(score) when the game ends
-// Example: finishGame(150);
 
 initGame();

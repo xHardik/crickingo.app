@@ -1,12 +1,71 @@
+// ===== TOURNAMENT INTEGRATION =====
+
+// Tournament Detection with timestamp validation
+function checkTournamentMode() {
+    const flag = localStorage.getItem('inTournamentGame');
+    const timestamp = localStorage.getItem('tournamentGameTimestamp');
+    
+    // If no flag, definitely solo mode
+    if (flag !== 'true') {
+        return false;
+    }
+    
+    // If flag exists but no timestamp, it's stale - clear it
+    if (!timestamp) {
+        console.log('No timestamp found - clearing stale tournament flag');
+        localStorage.removeItem('inTournamentGame');
+        return false;
+    }
+    
+    // If timestamp is older than 5 seconds, the flag is stale
+    const now = Date.now();
+    const flagAge = now - parseInt(timestamp);
+    
+    if (flagAge > 5000) { // 5 seconds
+        console.log('Tournament flag is stale (older than 5 seconds) - clearing');
+        localStorage.removeItem('inTournamentGame');
+        localStorage.removeItem('tournamentGameTimestamp');
+        return false;
+    }
+    
+    // Flag is fresh, we're in tournament mode
+    return true;
+}
+
+const isInTournament = checkTournamentMode();
+
+// Show tournament banner
+function showTournamentInfo() {
+    const infoDiv = document.createElement('div');
+    infoDiv.id = 'tournamentInfo';
+    infoDiv.style.cssText = `
+        position: fixed;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 12px 25px;
+        border-radius: 25px;
+        font-weight: 700;
+        z-index: 1000;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        text-align: center;
+        font-size: 0.9em;
+    `;
+    infoDiv.innerHTML = `🏆 Tournament Mode - Play Your Best!`;
+    document.body.insertBefore(infoDiv, document.body.firstChild);
+}
+
+// ===== END TOURNAMENT INTEGRATION =====
+
+// Game variables
 let currentScore = 0;
 let highScore = localStorage.getItem('cricketHigherLowerHighScore') || 0;
 let leftPlayer = null;
 let rightPlayer = null;
 let usedPlayers = [];
 let PLAYERS = [];
-
-// Check if in tournament mode - only if explicitly set
-const isInTournament = localStorage.getItem('inTournamentGame') === 'true';
 
 // Load player data from JSON file
 async function loadPlayers() {
@@ -29,29 +88,6 @@ function init() {
     }
     
     loadNewRound();
-}
-
-function showTournamentInfo() {
-    const infoDiv = document.createElement('div');
-    infoDiv.id = 'tournamentInfo';
-    infoDiv.style.cssText = `
-        position: fixed;
-        top: 10px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 12px 25px;
-        border-radius: 25px;
-        font-weight: 700;
-        z-index: 1000;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        text-align: center;
-        font-size: 0.9em;
-    `;
-    
-    infoDiv.innerHTML = `🏆 Tournament Mode - Play Your Best!`;
-    document.body.insertBefore(infoDiv, document.body.firstChild);
 }
 
 function loadNewRound() {
@@ -247,17 +283,13 @@ function resetGame() {
 }
 
 function finishGame(finalScore) {
-    const isInTournament = localStorage.getItem('inTournamentGame') === 'true';
+    const currentlyInTournament = localStorage.getItem('inTournamentGame') === 'true';
     
-    if (isInTournament) {
-        // Clear the tournament game flag
-        localStorage.removeItem('inTournamentGame');
-        
-        // Return to tournament with score
-        window.location.href = `tournament.html?score=${finalScore}`;
+    if (currentlyInTournament) {
+        window.location.href = `tournament.html?score=${finalScore}&game=0`;
     } else {
-        // Normal game end (should not happen, but safety fallback)
-        alert(`Game Over! Score: ${finalScore}`);
+        // Normal standalone game end
+        console.log('Game completed in standalone mode');
     }
 }
 

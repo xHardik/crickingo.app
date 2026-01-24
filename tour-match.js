@@ -358,9 +358,10 @@ function generateCode() {
 window.addEventListener('load', async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const returnScore = urlParams.get('score');
+  const gameId = urlParams.get('game'); // GET WHICH GAME
   
   // ONLY process tournament data if returning from a game with a score
-  if (returnScore) {
+  if (returnScore && gameId !== null) {
     // Clear URL parameters
     window.history.replaceState({}, document.title, window.location.pathname);
     
@@ -379,61 +380,45 @@ window.addEventListener('load', async () => {
       
       if (snapshot.exists()) {
         const tournament = snapshot.val();
-        const playerScores = tournament.scores?.[playerId] || {};
         
-        // Find which game this score is for (first game without a score)
-        let gameToUpdate = -1;
-        for (let i = 0; i < GAMES.length; i++) {
-          const gameKey = `game${i}`;
-          if (playerScores[gameKey] === undefined) {
-            gameToUpdate = i;
-            break;
+        // Submit the score for the SPECIFIC game that was played
+        const gameKey = `game${gameId}`;
+        await update(ref(db, `tournaments/${code}/scores/${playerId}`), {
+          [gameKey]: parseInt(returnScore)
+        });
+        
+        console.log(`✅ Score ${returnScore} submitted for ${GAMES[gameId].name}`);
+        
+        // Check if ALL players have finished ALL games
+        const updatedSnapshot = await get(tournamentRef);
+        const updatedTournament = updatedSnapshot.val();
+        const players = Object.keys(updatedTournament.players);
+        const allScores = updatedTournament.scores || {};
+        
+        let allPlayersFinished = true;
+        for (let pId of players) {
+          const pScores = allScores[pId] || {};
+          for (let i = 0; i < GAMES.length; i++) {
+            if (pScores[`game${i}`] === undefined) {
+              allPlayersFinished = false;
+              break;
+            }
           }
+          if (!allPlayersFinished) break;
         }
         
-        if (gameToUpdate !== -1) {
-          // Submit the score for this game
-          const gameKey = `game${gameToUpdate}`;
-          await update(ref(db, `tournaments/${code}/scores/${playerId}`), {
-            [gameKey]: parseInt(returnScore)
+        // If all players finished all games, mark tournament as finished
+        if (allPlayersFinished && updatedTournament.host === playerId) {
+          await update(ref(db, `tournaments/${code}`), {
+            status: 'finished'
           });
-          
-          console.log(`✅ Score ${returnScore} submitted for ${GAMES[gameToUpdate].name}`);
-          
-          // Check if ALL players have finished ALL games
-          const updatedSnapshot = await get(tournamentRef);
-          const updatedTournament = updatedSnapshot.val();
-          const players = Object.keys(updatedTournament.players);
-          const allScores = updatedTournament.scores || {};
-          
-          let allPlayersFinished = true;
-          for (let pId of players) {
-            const pScores = allScores[pId] || {};
-            for (let i = 0; i < GAMES.length; i++) {
-              if (pScores[`game${i}`] === undefined) {
-                allPlayersFinished = false;
-                break;
-              }
-            }
-            if (!allPlayersFinished) break;
-          }
-          
-          // If all players finished all games, mark tournament as finished
-          if (allPlayersFinished && updatedTournament.host === playerId) {
-            await update(ref(db, `tournaments/${code}`), {
-              status: 'finished'
-            });
-          }
         }
         
         // Start listening to tournament updates
-        // This will automatically redirect to next game if needed
         listenToTournament(code);
       }
     }
   }
-  // If NOT returning from a game, don't automatically restore tournament
-  // User must manually create/join a tournament
 });
 
 document.addEventListener('DOMContentLoaded', () => {

@@ -1,8 +1,65 @@
 // transfer.js - Script for Transfer History Game with Tournament Integration
 
-// Tournament Detection - Check if being played in tournament mode
-const tournamentCode = localStorage.getItem('tournamentCode');
-const inTournamentGame = localStorage.getItem('inTournamentGame') === 'true';
+// ===== TOURNAMENT INTEGRATION =====
+
+// Tournament Detection with timestamp validation
+function checkTournamentMode() {
+    const flag = localStorage.getItem('inTournamentGame');
+    const timestamp = localStorage.getItem('tournamentGameTimestamp');
+    
+    // If no flag, definitely solo mode
+    if (flag !== 'true') {
+        return false;
+    }
+    
+    // If flag exists but no timestamp, it's stale - clear it
+    if (!timestamp) {
+        console.log('No timestamp found - clearing stale tournament flag');
+        localStorage.removeItem('inTournamentGame');
+        return false;
+    }
+    
+    // If timestamp is older than 5 seconds, the flag is stale
+    const now = Date.now();
+    const flagAge = now - parseInt(timestamp);
+    
+    if (flagAge > 5000) { // 5 seconds
+        console.log('Tournament flag is stale (older than 5 seconds) - clearing');
+        localStorage.removeItem('inTournamentGame');
+        localStorage.removeItem('tournamentGameTimestamp');
+        return false;
+    }
+    
+    // Flag is fresh, we're in tournament mode
+    return true;
+}
+
+const isInTournament = checkTournamentMode();
+
+// Show tournament banner
+function showTournamentInfo() {
+    const infoDiv = document.createElement('div');
+    infoDiv.id = 'tournamentInfo';
+    infoDiv.style.cssText = `
+        position: fixed;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 12px 25px;
+        border-radius: 25px;
+        font-weight: 700;
+        z-index: 1000;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        text-align: center;
+        font-size: 0.9em;
+    `;
+    infoDiv.innerHTML = `🏆 Tournament Mode - Play Your Best!`;
+    document.body.insertBefore(infoDiv, document.body.firstChild);
+}
+
+// ===== END TOURNAMENT INTEGRATION =====
 
 const allIPLPlayers = [
   "Virat Kohli", "MS Dhoni", "Rohit Sharma", "David Warner", "Ravindra Jadeja",
@@ -24,29 +81,6 @@ let transferAttempts = 0;
 let maxAttempts = 3;
 let selectedPlayer = '';
 let selectedDate = null;
-
-// Show Tournament Banner
-function showTournamentInfo() {
-  const infoDiv = document.createElement('div');
-  infoDiv.id = 'tournamentInfo';
-  infoDiv.style.cssText = `
-    position: fixed;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 12px 25px;
-    border-radius: 25px;
-    font-weight: 700;
-    z-index: 1000;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-    text-align: center;
-    font-size: 0.9em;
-  `;
-  infoDiv.innerHTML = `🎮 Tournament Mode`;
-  document.body.insertBefore(infoDiv, document.body.firstChild);
-}
 
 // Load transfer data from JSON
 async function loadData() {
@@ -152,12 +186,12 @@ async function initGame() {
   await loadData();
   
   // Show tournament banner if in tournament mode
-  if (inTournamentGame) {
+  if (isInTournament) {
     showTournamentInfo();
   }
   
   // TOURNAMENT MODE: Use random date, ignore URL parameter
-  if (inTournamentGame) {
+  if (isInTournament) {
     selectedDate = getRandomDateKey();
     
     if (!selectedDate || !transfersData[selectedDate]) {
@@ -292,6 +326,7 @@ function endGame() {
   gameActive = false;
   
   const total = currentGame.players.length;
+  const finalScore = correctCount;
   const phrase = getResultPhrase(correctCount, total);
   
   document.getElementById('scoreText').innerText = `${correctCount} / ${total}`;
@@ -304,38 +339,59 @@ function endGame() {
   document.querySelector('.button-controls').style.display = 'none';
   document.querySelector('.game-info').style.display = 'none';
   
-  // Modify result area for tournament mode
-  if (inTournamentGame) {
+  // Clear any existing tournament buttons
+  const existingTournamentBtns = document.getElementById('tournamentButtons');
+  if (existingTournamentBtns) {
+    existingTournamentBtns.remove();
+  }
+  
+  if (isInTournament) {
+    // TOURNAMENT MODE
     // Hide normal buttons
     const restartBtn = resultArea.querySelector('.btn-restart');
     const backBtn = resultArea.querySelector('.btn-back');
     if (restartBtn) restartBtn.style.display = 'none';
     if (backBtn) backBtn.style.display = 'none';
     
-    // Add tournament button
+    // Add tournament completion message
     const tournamentBtnContainer = document.createElement('div');
     tournamentBtnContainer.id = 'tournamentButtons';
+    tournamentBtnContainer.style.cssText = `
+      text-align: center;
+      margin-top: 20px;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 15px;
+      color: white;
+    `;
     tournamentBtnContainer.innerHTML = `
-      <button class="btn btn-restart" onclick="returnToTournament()" 
-              style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); margin-top: 20px;">
-        📊 Return to Tournament
-      </button>
-      <p style="color: #667eea; margin-top: 15px; font-weight: 600;">
-        ✅ Score: ${correctCount} / ${total}
+      <p style="font-size: 1.2em; font-weight: 700; margin-bottom: 10px;">
+        ✅ Score Submitted!
+      </p>
+      <p style="font-size: 2em; font-weight: 900; margin: 10px 0;">
+        ${finalScore} / ${total} Points
+      </p>
+      <p style="font-size: 0.9em; opacity: 0.9;">
+        Returning to tournament...
       </p>
     `;
     resultArea.appendChild(tournamentBtnContainer);
     
-    resultArea.style.display = 'block';
-    
-    // Auto-submit score and return after 3 seconds
+    // Auto-return to tournament after 2 seconds
     setTimeout(() => {
-      finishGame(correctCount);
-    }, 3000);
+      finishGame(finalScore);
+    }, 2000);
+    
   } else {
-    // Normal mode - show regular buttons
-    resultArea.style.display = 'block';
+    // NORMAL MODE - standalone play
+    // Show normal buttons
+    const restartBtn = resultArea.querySelector('.btn-restart');
+    const backBtn = resultArea.querySelector('.btn-back');
+    if (restartBtn) restartBtn.style.display = 'inline-block';
+    if (backBtn) backBtn.style.display = 'inline-block';
   }
+  
+  resultArea.style.display = 'block';
 }
 
 function getResultPhrase(score, total) {
@@ -356,29 +412,15 @@ function backToMenu() {
   window.location.href = 'index.html';
 }
 
-function returnToTournament() {
-  const tournamentCode = localStorage.getItem('tournamentCode');
-  if (tournamentCode) {
-    finishGame(correctCount);
-  } else {
-    window.close();
-  }
-}
-
-// Tournament Integration - Finish game and return score
 function finishGame(finalScore) {
-  const tournamentCode = localStorage.getItem('tournamentCode');
-  
-  if (tournamentCode && inTournamentGame) {
-    // Clear the tournament game flag
-    localStorage.removeItem('inTournamentGame');
+    const currentlyInTournament = localStorage.getItem('inTournamentGame') === 'true';
     
-    // Return to tournament with score
-    window.location.href = `tournament.html?score=${finalScore}`;
-  } else {
-    // Normal game end (not in tournament)
-    alert(`Game Over! Score: ${finalScore}`);
-  }
+    if (currentlyInTournament) {
+        window.location.href = `tournament.html?score=${finalScore}&game=2`;
+    } else {
+        // Normal standalone game end
+        console.log('Game completed in standalone mode');
+    }
 }
 
 // Initialize when DOM is loaded

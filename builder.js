@@ -1,16 +1,38 @@
 // Build Your XI with Tournament Integration
 
-// Tournament Detection - SIMPLIFIED (like Higher/Lower)
-// Check if coming from tournament AND flag is still set
-const urlParams = new URLSearchParams(window.location.search);
-const hasReturnedFromGame = urlParams.has('score');
-let isInTournament = localStorage.getItem('inTournamentGame') === 'true';
-
-// If we just returned with a score, we're no longer in tournament mode
-if (hasReturnedFromGame && !window.location.href.includes('tournament.html')) {
-    isInTournament = false;
-    localStorage.removeItem('inTournamentGame');
+// Tournament Detection - Use timestamp to detect stale flags
+function checkTournamentMode() {
+    const flag = localStorage.getItem('inTournamentGame');
+    const timestamp = localStorage.getItem('tournamentGameTimestamp');
+    
+    // If no flag, definitely solo mode
+    if (flag !== 'true') {
+        return false;
+    }
+    
+    // If flag exists but no timestamp, it's stale - clear it
+    if (!timestamp) {
+        console.log('No timestamp found - clearing stale tournament flag');
+        localStorage.removeItem('inTournamentGame');
+        return false;
+    }
+    
+    // If timestamp is older than 5 seconds, the flag is stale
+    const now = Date.now();
+    const flagAge = now - parseInt(timestamp);
+    
+    if (flagAge > 5000) { // 5 seconds
+        console.log('Tournament flag is stale (older than 5 seconds) - clearing');
+        localStorage.removeItem('inTournamentGame');
+        localStorage.removeItem('tournamentGameTimestamp');
+        return false;
+    }
+    
+    // Flag is fresh, we're in tournament mode
+    return true;
 }
+
+let isInTournament = checkTournamentMode();
 
 // Global variables
 let PLAYERS = [];
@@ -352,8 +374,8 @@ function finishGame(finalScore) {
     
     if (currentlyInTournament) {
         // Don't clear flag here - let tournament.html handle it
-        // Return to tournament with score
-        window.location.href = `tournament.html?score=${finalScore}`;
+        // Pass GAME ID so tournament knows which game this score is for
+        window.location.href = `tournament.html?score=${finalScore}&game=3`;
     } else {
         // Not in tournament - this shouldn't happen but safety fallback
         console.log('Game completed in standalone mode');
