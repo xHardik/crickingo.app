@@ -1,38 +1,12 @@
 // Build Your XI with Tournament Integration
 
-// Tournament Detection - Use timestamp to detect stale flags
-function checkTournamentMode() {
-    const flag = localStorage.getItem('inTournamentGame');
-    const timestamp = localStorage.getItem('tournamentGameTimestamp');
-    
-    // If no flag, definitely solo mode
-    if (flag !== 'true') {
-        return false;
-    }
-    
-    // If flag exists but no timestamp, it's stale - clear it
-    if (!timestamp) {
-        console.log('No timestamp found - clearing stale tournament flag');
-        localStorage.removeItem('inTournamentGame');
-        return false;
-    }
-    
-    // If timestamp is older than 5 seconds, the flag is stale
-    const now = Date.now();
-    const flagAge = now - parseInt(timestamp);
-    
-    if (flagAge > 5000) { // 5 seconds
-        console.log('Tournament flag is stale (older than 5 seconds) - clearing');
-        localStorage.removeItem('inTournamentGame');
-        localStorage.removeItem('tournamentGameTimestamp');
-        return false;
-    }
-    
-    // Flag is fresh, we're in tournament mode
-    return true;
-}
+// Tournament Detection - Check BOTH systems
+const isTournamentMode = localStorage.getItem('activeMatchId') !== null;
+const isSeriesMatch = localStorage.getItem('isSeriesMatch') === 'true';
+const isNewTournament = localStorage.getItem('inTournamentGame') === 'true';
 
-let isInTournament = checkTournamentMode();
+// Use whichever tournament system is active
+const isInTournament = isTournamentMode || isSeriesMatch || isNewTournament;
 
 // Global variables
 let PLAYERS = [];
@@ -64,7 +38,7 @@ function showTournamentInfo() {
         text-align: center;
         font-size: 0.9em;
     `;
-    infoDiv.innerHTML = `🏆 Tournament Mode - Play Your Best!`;
+    infoDiv.innerHTML = `🏆 Tournament Mode`;
     document.body.insertBefore(infoDiv, document.body.firstChild);
 }
 
@@ -83,7 +57,7 @@ async function loadPlayersByDate(selectedDate) {
 
 // Initialize the app
 async function init() {
-    // Show tournament banner if in tournament mode
+    // Show tournament banner if in any tournament mode
     if (isInTournament) {
         showTournamentInfo();
     }
@@ -229,14 +203,14 @@ function checkTeam() {
     const rating = calculateTeamRating();
     const resultDiv = document.getElementById('result');
     
-    const checkBtn = document.getElementById('checkBtn');
-    const resetBtn = document.querySelector('.reset-btn');
-    
     if (rating >= TARGET_RATING) {
         currentSessionScore = rating;
         
+        // Submit score for OLD tournament system
+        submitTournamentScore(rating);
+        
         if (isInTournament) {
-            // TOURNAMENT MODE
+            // Tournament mode - show tournament end screen
             resultDiv.innerHTML = `
                 <div class="result-section success">
                     <div class="result-title">🎉 Congratulations!</div>
@@ -244,29 +218,28 @@ function checkTeam() {
                         Your team rating is ${rating}!<br>
                         You've successfully built a winning team!
                     </div>
-                    <div style="margin-top: 20px; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; color: white; text-align: center;">
-                        <p style="font-size: 1.2em; font-weight: 700; margin-bottom: 10px;">
-                            ✅ Score Submitted!
-                        </p>
-                        <p style="font-size: 2em; font-weight: 900; margin: 10px 0;">
-                            ${rating} Points
-                        </p>
-                        <p style="font-size: 0.9em; opacity: 0.9;">
-                            Returning to tournament...
-                        </p>
-                    </div>
+                </div>
+                <div style="margin-top: 20px; text-align: center;">
+                    <button onclick="returnToTournament()" 
+                            style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+                                   color: white; border: none; padding: 15px 30px; border-radius: 12px;
+                                   font-size: 1.1em; font-weight: 700; cursor: pointer;
+                                   box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);">
+                        📊 Return to Tournament
+                    </button>
+                    <p style="color: #667eea; margin-top: 15px; font-weight: 600; font-size: 1.1em;">
+                        ✅ Score Submitted: ${rating} points
+                    </p>
                 </div>
             `;
             
+            // Hide normal buttons
+            const checkBtn = document.getElementById('checkBtn');
+            const resetBtn = document.querySelector('.reset-btn');
             if (checkBtn) checkBtn.style.display = 'none';
             if (resetBtn) resetBtn.style.display = 'none';
-            
-            setTimeout(() => {
-                finishGame(rating);
-            }, 2000);
-            
         } else {
-            // STANDALONE MODE
+            // Normal mode - show regular results
             resultDiv.innerHTML = `
                 <div class="result-section success">
                     <div class="result-title">🎉 Congratulations!</div>
@@ -274,32 +247,18 @@ function checkTeam() {
                         Your team rating is ${rating}!<br>
                         You've successfully built a winning team!
                     </div>
-                    <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: center;">
-                        <button onclick="resetTeam()" 
-                                style="background: #667eea; color: white; border: none; 
-                                       padding: 12px 24px; border-radius: 8px; font-size: 1em; 
-                                       font-weight: 600; cursor: pointer;">
-                            🔄 Try Again
-                        </button>
-                        <button onclick="submitScore()" 
-                                style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); 
-                                       color: white; border: none; padding: 12px 24px; border-radius: 8px; 
-                                       font-size: 1em; font-weight: 600; cursor: pointer;">
-                            📊 Submit Score
-                        </button>
-                    </div>
                 </div>
             `;
-            
-            if (checkBtn) checkBtn.style.display = 'none';
         }
         
     } else {
         const deficit = TARGET_RATING - rating;
-        currentSessionScore = 0;
+        
+        // Submit 0 score for OLD tournament system
+        submitTournamentScore(0);
         
         if (isInTournament) {
-            // TOURNAMENT MODE - FAILURE
+            // Tournament mode - show tournament end screen
             resultDiv.innerHTML = `
                 <div class="result-section failure">
                     <div class="result-title">Not Quite There!</div>
@@ -307,29 +266,28 @@ function checkTeam() {
                         Your team rating is ${rating}<br>
                         You need ${deficit} more points to win!
                     </div>
-                    <div style="margin-top: 20px; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; color: white; text-align: center;">
-                        <p style="font-size: 1.2em; font-weight: 700; margin-bottom: 10px;">
-                            ✅ Score Submitted!
-                        </p>
-                        <p style="font-size: 2em; font-weight: 900; margin: 10px 0;">
-                            0 Points
-                        </p>
-                        <p style="font-size: 0.9em; opacity: 0.9;">
-                            Returning to tournament...
-                        </p>
-                    </div>
+                </div>
+                <div style="margin-top: 20px; text-align: center;">
+                    <button onclick="returnToTournament()" 
+                            style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+                                   color: white; border: none; padding: 15px 30px; border-radius: 12px;
+                                   font-size: 1.1em; font-weight: 700; cursor: pointer;
+                                   box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);">
+                        📊 Return to Tournament
+                    </button>
+                    <p style="color: #667eea; margin-top: 15px; font-weight: 600; font-size: 1.1em;">
+                        ✅ Score Submitted: 0 points
+                    </p>
                 </div>
             `;
             
+            // Hide normal buttons
+            const checkBtn = document.getElementById('checkBtn');
+            const resetBtn = document.querySelector('.reset-btn');
             if (checkBtn) checkBtn.style.display = 'none';
             if (resetBtn) resetBtn.style.display = 'none';
-            
-            setTimeout(() => {
-                finishGame(0);
-            }, 2000);
-            
         } else {
-            // STANDALONE MODE - FAILURE
+            // Normal mode
             resultDiv.innerHTML = `
                 <div class="result-section failure">
                     <div class="result-title">Not Quite There!</div>
@@ -337,14 +295,6 @@ function checkTeam() {
                         Your team rating is ${rating}<br>
                         You need ${deficit} more points to win!<br>
                         Try selecting stronger players.
-                    </div>
-                    <div style="margin-top: 20px;">
-                        <button onclick="resetTeam()" 
-                                style="background: #667eea; color: white; border: none; 
-                                       padding: 12px 24px; border-radius: 8px; font-size: 1em; 
-                                       font-weight: 600; cursor: pointer;">
-                            🔄 Try Again
-                        </button>
                     </div>
                 </div>
             `;
@@ -356,29 +306,47 @@ function resetTeam() {
     selectedTeam = [];
     document.getElementById('result').innerHTML = '';
     currentSessionScore = null;
-    
-    // Show buttons again
-    const checkBtn = document.getElementById('checkBtn');
-    const resetBtn = document.querySelector('.reset-btn');
-    if (checkBtn) checkBtn.style.display = 'block';
-    if (resetBtn) resetBtn.style.display = 'block';
-    
     renderPlayers();
     updateStats();
     updateSelectedTeam();
 }
 
-function finishGame(finalScore) {
-    // Re-check tournament status (in case it changed)
-    const currentlyInTournament = localStorage.getItem('inTournamentGame') === 'true';
+function returnToTournament() {
+    // Check which tournament system is being used
+    const hasNewTournament = localStorage.getItem('inTournamentGame') === 'true';
+    const hasOldTournament = localStorage.getItem('activeMatchId') !== null;
     
-    if (currentlyInTournament) {
-        // Don't clear flag here - let tournament.html handle it
-        // Pass GAME ID so tournament knows which game this score is for
-        window.location.href = `tournament.html?score=${finalScore}&game=3`;
+    if (hasNewTournament) {
+        // NEW system - redirect to tournament.html
+        const score = currentSessionScore || 0;
+        window.location.href = `tournament.html?score=${score}&game=3`;
+    } else if (hasOldTournament) {
+        // OLD system - close window
+        window.close();
     } else {
-        // Not in tournament - this shouldn't happen but safety fallback
-        console.log('Game completed in standalone mode');
+        // No tournament - fallback
+        alert('Returning to main menu');
+        window.close();
+    }
+}
+
+async function submitTournamentScore(finalScore) {
+    // OLD tournament system (window.opener)
+    if (isSeriesMatch || isTournamentMode) {
+        const matchId = localStorage.getItem('activeMatchId');
+        
+        if (window.opener && window.opener.TournamentManager) {
+            const playerName = window.opener.TournamentManager.currentPlayerName;
+            
+            if (matchId && playerName && window.opener.MatchManager) {
+                try {
+                    await window.opener.MatchManager.submitMatchScore(matchId, playerName, finalScore);
+                    console.log('✅ Score submitted successfully:', finalScore);
+                } catch (error) {
+                    console.error('❌ Error submitting score:', error);
+                }
+            }
+        }
     }
 }
 
@@ -497,10 +465,10 @@ window.filterPlayers = filterPlayers;
 window.togglePlayer = togglePlayer;
 window.checkTeam = checkTeam;
 window.resetTeam = resetTeam;
-window.finishGame = finishGame;
 window.submitScore = submitScore;
 window.showLeaderboard = showLeaderboard;
 window.closeLeaderboard = closeLeaderboard;
+window.returnToTournament = returnToTournament;
 
 // Start the app when page loads
 init();
