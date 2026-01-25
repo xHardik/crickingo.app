@@ -2,39 +2,8 @@
 
 // ===== TOURNAMENT INTEGRATION =====
 
-// Tournament Detection with timestamp validation
-function checkTournamentMode() {
-    const flag = localStorage.getItem('inTournamentGame');
-    const timestamp = localStorage.getItem('tournamentGameTimestamp');
-    
-    // If no flag, definitely solo mode
-    if (flag !== 'true') {
-        return false;
-    }
-    
-    // If flag exists but no timestamp, it's stale - clear it
-    if (!timestamp) {
-        console.log('No timestamp found - clearing stale tournament flag');
-        localStorage.removeItem('inTournamentGame');
-        return false;
-    }
-    
-    // If timestamp is older than 5 seconds, the flag is stale
-    const now = Date.now();
-    const flagAge = now - parseInt(timestamp);
-    
-    if (flagAge > 5000) { // 5 seconds
-        console.log('Tournament flag is stale (older than 5 seconds) - clearing');
-        localStorage.removeItem('inTournamentGame');
-        localStorage.removeItem('tournamentGameTimestamp');
-        return false;
-    }
-    
-    // Flag is fresh, we're in tournament mode
-    return true;
-}
-
-const isInTournament = checkTournamentMode();
+// Simple tournament detection - just check the flag
+const isInTournament = localStorage.getItem('inTournamentGame') === 'true';
 
 // Show tournament banner
 function showTournamentInfo() {
@@ -164,7 +133,7 @@ function submitGuess() {
         document.getElementById('submitBtn').disabled = true;
         
         if (isInTournament) {
-            showTournamentEndScreen(score);
+            showTournamentEndScreen(score, true);
             setTimeout(() => {
                 finishGame(score);
             }, 2000);
@@ -176,7 +145,7 @@ function submitGuess() {
         document.getElementById('submitBtn').disabled = true;
         
         if (isInTournament) {
-            showTournamentEndScreen(0);
+            showTournamentEndScreen(0, false);
             setTimeout(() => {
                 finishGame(0);
             }, 2000);
@@ -184,7 +153,7 @@ function submitGuess() {
     }
 }
 
-function showTournamentEndScreen(score) {
+function showTournamentEndScreen(score, isWin) {
     // Hide normal buttons
     const resetBtn = document.querySelector('.reset-btn');
     const backBtn = document.querySelector('.back-btn');
@@ -215,7 +184,10 @@ function showTournamentEndScreen(score) {
             ${score} Points
         </p>
         <p style="font-size: 0.9em; opacity: 0.9;">
-            Returning to tournament...
+            ${isWin ? '🎉 All games complete!' : '📊 Tournament complete!'}
+        </p>
+        <p style="font-size: 0.9em; opacity: 0.9; margin-top: 10px;">
+            Showing final results...
         </p>
     `;
     container.appendChild(tournamentDiv);
@@ -285,14 +257,12 @@ function resetGame() {
 }
 
 function finishGame(finalScore) {
-    const currentlyInTournament = localStorage.getItem('inTournamentGame') === 'true';
+    // Clear the tournament flag
+    localStorage.removeItem('inTournamentGame');
     
-    if (currentlyInTournament) {
-        window.location.href = `tournament.html?score=${finalScore}&game=4`;
-    } else {
-        // Normal standalone game end
-        console.log('Game completed in standalone mode');
-    }
+    // Redirect back to tournament with score - game 4 is Wordle (last game)
+    // This will trigger the final results display in tournament.js
+    window.location.href = `tournament.html?score=${finalScore}&game=4`;
 }
 
 // Make functions globally accessible

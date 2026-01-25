@@ -1,12 +1,7 @@
 // Build Your XI with Tournament Integration
 
-// Tournament Detection - Check BOTH systems
-const isTournamentMode = localStorage.getItem('activeMatchId') !== null;
-const isSeriesMatch = localStorage.getItem('isSeriesMatch') === 'true';
-const isNewTournament = localStorage.getItem('inTournamentGame') === 'true';
-
-// Use whichever tournament system is active
-const isInTournament = isTournamentMode || isSeriesMatch || isNewTournament;
+// Simple tournament detection - just check the flag
+const isInTournament = localStorage.getItem('inTournamentGame') === 'true';
 
 // Global variables
 let PLAYERS = [];
@@ -57,7 +52,7 @@ async function loadPlayersByDate(selectedDate) {
 
 // Initialize the app
 async function init() {
-    // Show tournament banner if in any tournament mode
+    // Show tournament banner if in tournament mode
     if (isInTournament) {
         showTournamentInfo();
     }
@@ -206,9 +201,6 @@ function checkTeam() {
     if (rating >= TARGET_RATING) {
         currentSessionScore = rating;
         
-        // Submit score for OLD tournament system
-        submitTournamentScore(rating);
-        
         if (isInTournament) {
             // Tournament mode - show tournament end screen
             resultDiv.innerHTML = `
@@ -219,16 +211,15 @@ function checkTeam() {
                         You've successfully built a winning team!
                     </div>
                 </div>
-                <div style="margin-top: 20px; text-align: center;">
-                    <button onclick="returnToTournament()" 
-                            style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-                                   color: white; border: none; padding: 15px 30px; border-radius: 12px;
-                                   font-size: 1.1em; font-weight: 700; cursor: pointer;
-                                   box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);">
-                        📊 Return to Tournament
-                    </button>
-                    <p style="color: #667eea; margin-top: 15px; font-weight: 600; font-size: 1.1em;">
-                        ✅ Score Submitted: ${rating} points
+                <div style="margin-top: 20px; text-align: center; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; color: white;">
+                    <p style="font-size: 1.2em; font-weight: 700; margin-bottom: 10px;">
+                        ✅ Score Submitted!
+                    </p>
+                    <p style="font-size: 2em; font-weight: 900; margin: 10px 0;">
+                        ${rating} Points
+                    </p>
+                    <p style="font-size: 0.9em; opacity: 0.9;">
+                        Returning to tournament...
                     </p>
                 </div>
             `;
@@ -238,6 +229,11 @@ function checkTeam() {
             const resetBtn = document.querySelector('.reset-btn');
             if (checkBtn) checkBtn.style.display = 'none';
             if (resetBtn) resetBtn.style.display = 'none';
+            
+            // Auto-return to tournament after 2 seconds
+            setTimeout(() => {
+                returnToTournament();
+            }, 2000);
         } else {
             // Normal mode - show regular results
             resultDiv.innerHTML = `
@@ -254,11 +250,10 @@ function checkTeam() {
     } else {
         const deficit = TARGET_RATING - rating;
         
-        // Submit 0 score for OLD tournament system
-        submitTournamentScore(0);
-        
         if (isInTournament) {
-            // Tournament mode - show tournament end screen
+            // Tournament mode - submit 0 score
+            currentSessionScore = 0;
+            
             resultDiv.innerHTML = `
                 <div class="result-section failure">
                     <div class="result-title">Not Quite There!</div>
@@ -267,16 +262,15 @@ function checkTeam() {
                         You need ${deficit} more points to win!
                     </div>
                 </div>
-                <div style="margin-top: 20px; text-align: center;">
-                    <button onclick="returnToTournament()" 
-                            style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-                                   color: white; border: none; padding: 15px 30px; border-radius: 12px;
-                                   font-size: 1.1em; font-weight: 700; cursor: pointer;
-                                   box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);">
-                        📊 Return to Tournament
-                    </button>
-                    <p style="color: #667eea; margin-top: 15px; font-weight: 600; font-size: 1.1em;">
-                        ✅ Score Submitted: 0 points
+                <div style="margin-top: 20px; text-align: center; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; color: white;">
+                    <p style="font-size: 1.2em; font-weight: 700; margin-bottom: 10px;">
+                        ✅ Score Submitted!
+                    </p>
+                    <p style="font-size: 2em; font-weight: 900; margin: 10px 0;">
+                        0 Points
+                    </p>
+                    <p style="font-size: 0.9em; opacity: 0.9;">
+                        Returning to tournament...
                     </p>
                 </div>
             `;
@@ -286,6 +280,11 @@ function checkTeam() {
             const resetBtn = document.querySelector('.reset-btn');
             if (checkBtn) checkBtn.style.display = 'none';
             if (resetBtn) resetBtn.style.display = 'none';
+            
+            // Auto-return to tournament after 2 seconds
+            setTimeout(() => {
+                returnToTournament();
+            }, 2000);
         } else {
             // Normal mode
             resultDiv.innerHTML = `
@@ -312,42 +311,14 @@ function resetTeam() {
 }
 
 function returnToTournament() {
-    // Check which tournament system is being used
-    const hasNewTournament = localStorage.getItem('inTournamentGame') === 'true';
-    const hasOldTournament = localStorage.getItem('activeMatchId') !== null;
+    // Clear the tournament flag
+    localStorage.removeItem('inTournamentGame');
     
-    if (hasNewTournament) {
-        // NEW system - redirect to tournament.html
-        const score = currentSessionScore || 0;
-        window.location.href = `tournament.html?score=${score}&game=3`;
-    } else if (hasOldTournament) {
-        // OLD system - close window
-        window.close();
-    } else {
-        // No tournament - fallback
-        alert('Returning to main menu');
-        window.close();
-    }
-}
-
-async function submitTournamentScore(finalScore) {
-    // OLD tournament system (window.opener)
-    if (isSeriesMatch || isTournamentMode) {
-        const matchId = localStorage.getItem('activeMatchId');
-        
-        if (window.opener && window.opener.TournamentManager) {
-            const playerName = window.opener.TournamentManager.currentPlayerName;
-            
-            if (matchId && playerName && window.opener.MatchManager) {
-                try {
-                    await window.opener.MatchManager.submitMatchScore(matchId, playerName, finalScore);
-                    console.log('✅ Score submitted successfully:', finalScore);
-                } catch (error) {
-                    console.error('❌ Error submitting score:', error);
-                }
-            }
-        }
-    }
+    // Get the final score (rating if passed, 0 if failed)
+    const score = currentSessionScore || 0;
+    
+    // Redirect back to tournament with score - game 3 is Build Your Team
+    window.location.href = `tournament.html?score=${score}&game=3`;
 }
 
 async function submitScore() {
