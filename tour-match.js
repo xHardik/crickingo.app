@@ -355,63 +355,6 @@ function generateCode() {
   return Math.random().toString(36).substring(2, 8).toUpperCase();
 }
 
-// NEW: Check and launch next game after score submission
-async function checkAndLaunchNextGame() {
-  const code = localStorage.getItem('tournamentCode');
-  const playerId = localStorage.getItem('playerId');
-  
-  if (!code || !playerId) return;
-  
-  const tournamentRef = ref(db, `tournaments/${code}`);
-  const snapshot = await get(tournamentRef);
-  
-  if (!snapshot.exists()) return;
-  
-  const tournament = snapshot.val();
-  const scores = tournament.scores || {};
-  const playerScores = scores[playerId] || {};
-  
-  // Find next game to play
-  let nextGameIndex = -1;
-  for (let i = 0; i < GAMES.length; i++) {
-    const gameKey = `game${i}`;
-    if (playerScores[gameKey] === undefined) {
-      nextGameIndex = i;
-      break;
-    }
-  }
-  
-  if (nextGameIndex !== -1) {
-    // Show brief message before redirecting
-    const loadingDiv = document.createElement('div');
-    loadingDiv.style.cssText = `
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-      z-index: 10000;
-      text-align: center;
-    `;
-    loadingDiv.innerHTML = `
-      <h3 style="color: #667eea; margin-bottom: 10px;">Score Submitted! ✅</h3>
-      <p>Launching next game: <strong>${GAMES[nextGameIndex].name}</strong></p>
-    `;
-    document.body.appendChild(loadingDiv);
-    
-    // Redirect after 1.5 seconds
-    setTimeout(() => {
-      redirectToGame(nextGameIndex);
-    }, 1500);
-  } else {
-    // All games complete - show waiting/results screen
-    showAllGamesComplete(tournament);
-  }
-}
-
 // Check if returning from a game
 window.addEventListener('load', async () => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -447,33 +390,94 @@ window.addEventListener('load', async () => {
         
         console.log(`✅ Score ${returnScore} submitted for ${GAMES[gameId].name}`);
         
-        // Check if ALL players have finished ALL games
-        const updatedSnapshot = await get(tournamentRef);
-        const updatedTournament = updatedSnapshot.val();
-        const players = Object.keys(updatedTournament.players);
-        const allScores = updatedTournament.scores || {};
+        // Find next game to play
+        const scores = tournament.scores || {};
+        const playerScores = scores[playerId] || {};
         
-        let allPlayersFinished = true;
-        for (let pId of players) {
-          const pScores = allScores[pId] || {};
-          for (let i = 0; i < GAMES.length; i++) {
-            if (pScores[`game${i}`] === undefined) {
-              allPlayersFinished = false;
-              break;
-            }
+        let nextGameIndex = -1;
+        for (let i = 0; i < GAMES.length; i++) {
+          const nextGameKey = `game${i}`;
+          if (playerScores[nextGameKey] === undefined && i !== parseInt(gameId)) {
+            nextGameIndex = i;
+            break;
           }
-          if (!allPlayersFinished) break;
         }
         
-        // If all players finished all games, mark tournament as finished
-        if (allPlayersFinished && updatedTournament.host === playerId) {
-          await update(ref(db, `tournaments/${code}`), {
-            status: 'finished'
-          });
+        if (nextGameIndex !== -1) {
+          // ✨ DIRECT REDIRECT - Show quick transition message
+          document.body.innerHTML = `
+            <div style="
+              position: fixed;
+              top: 0; left: 0; right: 0; bottom: 0;
+              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: white;
+              font-family: system-ui;
+            ">
+              <div style="text-align: center;">
+                <div style="font-size: 3em; margin-bottom: 20px;">✅</div>
+                <h2 style="font-size: 2em; margin-bottom: 10px;">Score Saved!</h2>
+                <p style="font-size: 1.3em; margin-bottom: 5px;">${returnScore} points</p>
+                <p style="font-size: 1.1em; opacity: 0.9; margin-top: 20px;">
+                  Next: <strong>${GAMES[nextGameIndex].name}</strong>
+                </p>
+                <div style="margin-top: 30px;">
+                  <div class="spinner" style="
+                    border: 4px solid rgba(255,255,255,0.3);
+                    border-top: 4px solid white;
+                    border-radius: 50%;
+                    width: 40px;
+                    height: 40px;
+                    animation: spin 1s linear infinite;
+                    margin: 0 auto;
+                  "></div>
+                </div>
+              </div>
+            </div>
+            <style>
+              @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+              }
+            </style>
+          `;
+          
+          // Redirect after 1.5 seconds
+          setTimeout(() => {
+            redirectToGame(nextGameIndex);
+          }, 1500);
+          
+        } else {
+          // All games complete - check if tournament is finished
+          const updatedSnapshot = await get(tournamentRef);
+          const updatedTournament = updatedSnapshot.val();
+          const players = Object.keys(updatedTournament.players);
+          const allScores = updatedTournament.scores || {};
+          
+          let allPlayersFinished = true;
+          for (let pId of players) {
+            const pScores = allScores[pId] || {};
+            for (let i = 0; i < GAMES.length; i++) {
+              if (pScores[`game${i}`] === undefined) {
+                allPlayersFinished = false;
+                break;
+              }
+            }
+            if (!allPlayersFinished) break;
+          }
+          
+          // If all players finished all games, mark tournament as finished
+          if (allPlayersFinished && updatedTournament.host === playerId) {
+            await update(ref(db, `tournaments/${code}`), {
+              status: 'finished'
+            });
+          }
+          
+          // Start listening to show waiting/results screen
+          listenToTournament(code);
         }
-        
-        // ✨ NEW: Automatically launch next game or show completion
-        await checkAndLaunchNextGame();
       }
     }
   }
