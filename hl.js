@@ -1,38 +1,7 @@
 // ===== TOURNAMENT INTEGRATION =====
 
-// Tournament Detection with timestamp validation
-function checkTournamentMode() {
-    const flag = localStorage.getItem('inTournamentGame');
-    const timestamp = localStorage.getItem('tournamentGameTimestamp');
-    
-    // If no flag, definitely solo mode
-    if (flag !== 'true') {
-        return false;
-    }
-    
-    // If flag exists but no timestamp, it's stale - clear it
-    if (!timestamp) {
-        console.log('No timestamp found - clearing stale tournament flag');
-        localStorage.removeItem('inTournamentGame');
-        return false;
-    }
-    
-    // If timestamp is older than 5 seconds, the flag is stale
-    const now = Date.now();
-    const flagAge = now - parseInt(timestamp);
-    
-    if (flagAge > 5000) { // 5 seconds
-        console.log('Tournament flag is stale (older than 5 seconds) - clearing');
-        localStorage.removeItem('inTournamentGame');
-        localStorage.removeItem('tournamentGameTimestamp');
-        return false;
-    }
-    
-    // Flag is fresh, we're in tournament mode
-    return true;
-}
-
-const isInTournament = checkTournamentMode();
+// Simple tournament detection - just check the flag
+const isInTournament = localStorage.getItem('inTournamentGame') === 'true';
 
 // Show tournament banner
 function showTournamentInfo() {
@@ -283,14 +252,11 @@ function resetGame() {
 }
 
 function finishGame(finalScore) {
-    const currentlyInTournament = localStorage.getItem('inTournamentGame') === 'true';
+    // Clear the tournament flag
+    localStorage.removeItem('inTournamentGame');
     
-    if (currentlyInTournament) {
-        window.location.href = `tournament.html?score=${finalScore}&game=0`;
-    } else {
-        // Normal standalone game end
-        console.log('Game completed in standalone mode');
-    }
+    // Redirect back to tournament with score - game 0 is Higher or Lower
+    window.location.href = `tournament.html?score=${finalScore}&game=0`;
 }
 
 // Make functions globally accessible for HTML onclick attributes

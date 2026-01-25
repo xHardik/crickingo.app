@@ -17,7 +17,7 @@ const db = getDatabase(app);
 
 // CONFIGURE YOUR GAME URLS HERE
 const GAMES = [
-  { name: "Higher Or Lower", url: "https://crickingo.vercel.app/builder.html" },
+  { name: "Higher Or Lower", url: "https://crickingo.vercel.app/hl.html" },
   { name: "Cricket Bingo", url: "https://crickingo.vercel.app/rivalry.html" },
   { name: "Transfer History", url: "https://crickingo.vercel.app/transfer.html" },
   { name: "Build Your Team", url: "https://crickingo.vercel.app/builder.html" },
@@ -340,6 +340,7 @@ async function resetTournament() {
   localStorage.removeItem('tournamentCode');
   localStorage.removeItem('playerId');
   localStorage.removeItem('playerName');
+  localStorage.removeItem('inTournamentGame');
   
   document.getElementById('resultsScreen').classList.remove('active');
   document.getElementById('setupScreen').classList.add('active');
@@ -354,11 +355,68 @@ function generateCode() {
   return Math.random().toString(36).substring(2, 8).toUpperCase();
 }
 
+// NEW: Check and launch next game after score submission
+async function checkAndLaunchNextGame() {
+  const code = localStorage.getItem('tournamentCode');
+  const playerId = localStorage.getItem('playerId');
+  
+  if (!code || !playerId) return;
+  
+  const tournamentRef = ref(db, `tournaments/${code}`);
+  const snapshot = await get(tournamentRef);
+  
+  if (!snapshot.exists()) return;
+  
+  const tournament = snapshot.val();
+  const scores = tournament.scores || {};
+  const playerScores = scores[playerId] || {};
+  
+  // Find next game to play
+  let nextGameIndex = -1;
+  for (let i = 0; i < GAMES.length; i++) {
+    const gameKey = `game${i}`;
+    if (playerScores[gameKey] === undefined) {
+      nextGameIndex = i;
+      break;
+    }
+  }
+  
+  if (nextGameIndex !== -1) {
+    // Show brief message before redirecting
+    const loadingDiv = document.createElement('div');
+    loadingDiv.style.cssText = `
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      z-index: 10000;
+      text-align: center;
+    `;
+    loadingDiv.innerHTML = `
+      <h3 style="color: #667eea; margin-bottom: 10px;">Score Submitted! ✅</h3>
+      <p>Launching next game: <strong>${GAMES[nextGameIndex].name}</strong></p>
+    `;
+    document.body.appendChild(loadingDiv);
+    
+    // Redirect after 1.5 seconds
+    setTimeout(() => {
+      redirectToGame(nextGameIndex);
+    }, 1500);
+  } else {
+    // All games complete - show waiting/results screen
+    showAllGamesComplete(tournament);
+  }
+}
+
 // Check if returning from a game
 window.addEventListener('load', async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const returnScore = urlParams.get('score');
-  const gameId = urlParams.get('game'); // GET WHICH GAME
+  const gameId = urlParams.get('game');
   
   // ONLY process tournament data if returning from a game with a score
   if (returnScore && gameId !== null) {
@@ -414,8 +472,8 @@ window.addEventListener('load', async () => {
           });
         }
         
-        // Start listening to tournament updates
-        listenToTournament(code);
+        // ✨ NEW: Automatically launch next game or show completion
+        await checkAndLaunchNextGame();
       }
     }
   }
