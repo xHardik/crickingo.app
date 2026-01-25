@@ -157,10 +157,8 @@ async function initGame() {
   // Show tournament banner if in tournament mode
   if (isInTournament) {
     showTournamentInfo();
-  }
-  
-  // TOURNAMENT MODE: Use random date, ignore URL parameter
-  if (isInTournament) {
+    
+    // TOURNAMENT MODE: Use random date from available data
     selectedDate = getRandomDateKey();
     
     if (!selectedDate || !transfersData[selectedDate]) {
@@ -168,6 +166,8 @@ async function initGame() {
       finishGame(0);
       return;
     }
+    
+    console.log(`🎲 Tournament mode: Using random date ${selectedDate}`);
   } else {
     // NORMAL MODE: Use date from URL parameter
     selectedDate = getDateFromURL();
@@ -177,6 +177,8 @@ async function initGame() {
       backToMenu();
       return;
     }
+    
+    console.log(`📅 Normal mode: Using date ${selectedDate}`);
   }
   
   currentGame = {

@@ -356,13 +356,14 @@ function generateCode() {
 }
 
 // Check if returning from a game
+// Check if returning from a game
 window.addEventListener('load', async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const returnScore = urlParams.get('score');
   const gameId = urlParams.get('game');
   
   // ONLY process tournament data if returning from a game with a score
-  if (returnScore && gameId !== null) {
+  if (returnScore !== null && gameId !== null) {
     // Clear URL parameters
     window.history.replaceState({}, document.title, window.location.pathname);
     
@@ -390,14 +391,17 @@ window.addEventListener('load', async () => {
         
         console.log(`✅ Score ${returnScore} submitted for ${GAMES[gameId].name}`);
         
-        // Find next game to play
-        const scores = tournament.scores || {};
+        // Get FRESH tournament data after score submission
+        const updatedSnapshot = await get(tournamentRef);
+        const updatedTournament = updatedSnapshot.val();
+        const scores = updatedTournament.scores || {};
         const playerScores = scores[playerId] || {};
         
+        // Find next game to play
         let nextGameIndex = -1;
         for (let i = 0; i < GAMES.length; i++) {
           const nextGameKey = `game${i}`;
-          if (playerScores[nextGameKey] === undefined && i !== parseInt(gameId)) {
+          if (playerScores[nextGameKey] === undefined) {
             nextGameIndex = i;
             break;
           }
@@ -451,8 +455,6 @@ window.addEventListener('load', async () => {
           
         } else {
           // All games complete - check if tournament is finished
-          const updatedSnapshot = await get(tournamentRef);
-          const updatedTournament = updatedSnapshot.val();
           const players = Object.keys(updatedTournament.players);
           const allScores = updatedTournament.scores || {};
           
@@ -481,7 +483,7 @@ window.addEventListener('load', async () => {
       }
     }
   }
-});
+}); 
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('createTournamentBtn').addEventListener('click', createTournament);
