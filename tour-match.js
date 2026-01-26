@@ -18,10 +18,10 @@ const db = getDatabase(app);
 // CONFIGURE YOUR GAME URLS HERE
 const GAMES = [
   { name: "Higher Or Lower", url: "https://crickingo.vercel.app/hl.html" },
-  { name: "Cricket Bingo", url: "https://crickingo.vercel.app/rivalry.html" },
+  { name: "Cricket Bingo", url: "https://crickingo.vercel.app/rivalry.html" },/*
   { name: "Transfer History", url: "https://crickingo.vercel.app/transfer.html" },
   { name: "Build Your Team", url: "https://crickingo.vercel.app/builder.html" },
-  { name: "Wordle", url: "https://crickingo.vercel.app/wordle.html" }
+  { name: "Wordle", url: "https://crickingo.vercel.app/wordle.html" }*/
 ];
 
 let currentTournament = null;
