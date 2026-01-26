@@ -114,23 +114,30 @@ async function joinTournament() {
 function listenToTournament(code) {
   const tournamentRef = ref(db, `tournaments/${code}`);
   onValue(tournamentRef, (snapshot) => {
-    if (!snapshot.exists()) return;
+    if (!snapshot.exists()) {
+      console.log('❌ Tournament snapshot does not exist');
+      return;
+    }
     
     const tournament = snapshot.val();
     
     console.log('🔔 Listener triggered - Tournament status:', tournament.status);
+    console.log('🔔 Full tournament data:', tournament);
     
     if (tournament.status === 'waiting') {
       updateLobby(tournament);
     } else if (tournament.status === 'playing') {
       handlePlayingState(tournament);
     } else if (tournament.status === 'finished') {
-      console.log('🏆 Status is FINISHED! Redirecting to results...');
-      // Redirect ALL players to results page
-      window.location.href = 'tour-result.html';
+      console.log('🏆 Status is FINISHED! Redirecting NOW...');
+      // Force immediate redirect
+      setTimeout(() => {
+        window.location.href = 'tour-result.html';
+      }, 100);
     }
   });
 }
+
 
 function handlePlayingState(tournament) {
   document.getElementById('lobbyScreen').classList.remove('active');
@@ -383,37 +390,47 @@ async function checkAndFinishTournament(code, playerId) {
   const allScores = tournament.scores || {};
   
   console.log('👥 Total players:', players.length);
-  console.log('📊 Scores data:', allScores);
+  console.log('🎮 Total games:', GAMES.length);
+  console.log('📊 All scores:', JSON.stringify(allScores, null, 2));
   
   // Check if ALL players have completed ALL games
   let allPlayersFinished = true;
+  let completionStatus = {};
+  
   for (let pId of players) {
     const pScores = allScores[pId] || {};
-    console.log(`Player ${pId} scores:`, pScores);
+    let playerGamesCompleted = 0;
     
     for (let i = 0; i < GAMES.length; i++) {
       const gameKey = `game${i}`;
-      if (pScores[gameKey] === undefined) {
-        console.log(`❌ Player ${pId} missing ${gameKey}`);
+      if (pScores[gameKey] !== undefined) {
+        playerGamesCompleted++;
+      } else {
         allPlayersFinished = false;
-        break;
       }
     }
-    if (!allPlayersFinished) break;
+    
+    completionStatus[pId] = `${playerGamesCompleted}/${GAMES.length}`;
+    console.log(`Player ${pId}: ${playerGamesCompleted}/${GAMES.length} games complete`);
   }
   
+  console.log('📊 Completion status:', completionStatus);
+  
   if (allPlayersFinished) {
-    console.log('✅ ALL PLAYERS FINISHED ALL GAMES!');
+    console.log('✅✅✅ ALL PLAYERS FINISHED ALL GAMES! ✅✅✅');
     
     // Mark tournament as finished
     await update(ref(db, `tournaments/${code}`), {
       status: 'finished'
     });
     
-    console.log('✅ Tournament status updated to FINISHED');
+    console.log('✅ Tournament status updated to FINISHED in Firebase');
     
-    // IMMEDIATELY redirect to results - don't wait for listener
-    window.location.href = 'tour-result.html';
+    // Wait a bit for Firebase to propagate, then redirect
+    setTimeout(() => {
+      console.log('🚀 Redirecting to results page NOW!');
+      window.location.href = 'tour-result.html';
+    }, 500);
     
     return true;
   } else {
@@ -421,13 +438,12 @@ async function checkAndFinishTournament(code, playerId) {
     return false;
   }
 }
-
-
-// Check if returning from a game
 window.addEventListener('load', async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const returnScore = urlParams.get('score');
   const gameId = urlParams.get('game');
+  
+  console.log('🌐 Page loaded. Score:', returnScore, 'Game:', gameId);
   
   if (returnScore !== null && gameId !== null) {
     console.log(`🎮 Returning from game ${gameId} with score ${returnScore}`);
@@ -438,6 +454,8 @@ window.addEventListener('load', async () => {
     const playerId = localStorage.getItem('playerId');
     const playerName = localStorage.getItem('playerName');
     
+    console.log('💾 Retrieved from localStorage:', { code, playerId, playerName });
+    
     if (code && playerId) {
       currentTournament = code;
       currentPlayer = { name: playerName, id: playerId };
@@ -446,20 +464,24 @@ window.addEventListener('load', async () => {
       
       // Submit score
       const gameKey = `game${gameId}`;
+      console.log(`💾 Submitting score for ${gameKey}:`, returnScore);
+      
       await update(ref(db, `tournaments/${code}/scores/${playerId}`), {
         [gameKey]: parseInt(returnScore)
       });
       
       console.log(`✅ Score ${returnScore} submitted for ${gameKey}`);
       
-      // Wait a moment for Firebase to sync
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Wait for Firebase to sync
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
       // Get FRESH tournament data
       const updatedSnapshot = await get(tournamentRef);
       const updatedTournament = updatedSnapshot.val();
       const scores = updatedTournament.scores || {};
       const playerScores = scores[playerId] || {};
+      
+      console.log('📊 Updated player scores:', playerScores);
       
       // Find next game for THIS player
       let nextGameIndex = -1;
@@ -470,6 +492,8 @@ window.addEventListener('load', async () => {
           break;
         }
       }
+      
+      console.log('🎯 Next game index:', nextGameIndex);
       
       if (nextGameIndex !== -1) {
         // More games to play - show transition and redirect
@@ -519,22 +543,22 @@ window.addEventListener('load', async () => {
         }, 1500);
         
       } else {
-  // This player finished all games!
-  console.log('🎉 This player finished all games!');
-  
-  // FIRST start the listener (so it catches the status change)
-  listenToTournament(code);
-  
-  // THEN check if tournament should be marked as finished
-  const tournamentFinished = await checkAndFinishTournament(code, playerId);
-  
-  // If not finished yet, show waiting screen
-  if (!tournamentFinished) {
-    console.log('⏳ Waiting for other players...');
-    showWaitingForOthers(updatedTournament);
-  }
-  // If finished, checkAndFinishTournament already redirected
-}
+        // This player finished all games!
+        console.log('🎉🎉🎉 THIS PLAYER FINISHED ALL GAMES! 🎉🎉🎉');
+        
+        // Show waiting screen FIRST
+        showWaitingForOthers(updatedTournament);
+        
+        // Start listener to catch status changes
+        console.log('👂 Starting listener...');
+        listenToTournament(code);
+        
+        // Wait a moment, then check if all players are done
+        setTimeout(async () => {
+          console.log('⏰ Now checking if ALL players finished...');
+          await checkAndFinishTournament(code, playerId);
+        }, 1000);
+      }
     }
   }
 });
