@@ -417,29 +417,36 @@ async function checkAndFinishTournament(code, playerId) {
   }
   
   console.log('📊 Completion status:', completionStatus);
+  console.log('🔍 allPlayersFinished flag:', allPlayersFinished);
   
   if (allPlayersFinished) {
     console.log('✅✅✅ ALL PLAYERS FINISHED ALL GAMES! ✅✅✅');
     
-    // Mark tournament as finished
-    await update(ref(db, `tournaments/${code}`), {
-      status: 'finished'
-    });
-    
-    console.log('✅ Tournament status updated to FINISHED in Firebase');
-    
-    // Wait a bit for Firebase to propagate, then redirect
-    setTimeout(() => {
+    try {
+      // Mark tournament as finished
+      await update(ref(db, `tournaments/${code}`), {
+        status: 'finished'
+      });
+      
+      console.log('✅ Tournament status updated to FINISHED in Firebase');
+      
+      // Redirect immediately
       console.log('🚀 Redirecting to results page NOW!');
       window.location.href = 'tour-result.html';
-    }, 500);
-    
-    return true;
+      
+      return true;
+    } catch (error) {
+      console.error('❌ Error updating tournament status:', error);
+      // Still try to redirect even if update fails
+      window.location.href = 'tour-result.html';
+      return false;
+    }
   } else {
     console.log('⏳ Some players still playing...');
     return false;
   }
 }
+
 
 window.addEventListener('load', async () => {
   const urlParams = new URLSearchParams(window.location.search);
