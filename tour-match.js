@@ -482,7 +482,7 @@ window.addEventListener('load', async () => {
             }
             
             // ALL PLAYERS redirect to results page
-            window.location.href = 'tournament-results.html';
+            window.location.href = 'tour-result.html';
           } else {
             // Not all players finished yet - show waiting screen
             listenToTournament(code);
