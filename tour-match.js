@@ -127,13 +127,15 @@ function listenToTournament(code) {
     if (tournament.status === 'waiting') {
       updateLobby(tournament);
     } else if (tournament.status === 'playing') {
-      handlePlayingState(tournament);
+      // Don't try to handle playing state if we're in waiting screen
+      const lobbyScreen = document.getElementById('lobbyScreen');
+      if (lobbyScreen && lobbyScreen.classList.contains('active')) {
+        handlePlayingState(tournament);
+      }
     } else if (tournament.status === 'finished') {
       console.log('🏆 Status is FINISHED! Redirecting NOW...');
       // Force immediate redirect
-      setTimeout(() => {
-        window.location.href = 'tour-result.html';
-      }, 100);
+      window.location.href = 'tour-result.html';
     }
   });
 }
@@ -438,6 +440,7 @@ async function checkAndFinishTournament(code, playerId) {
     return false;
   }
 }
+
 window.addEventListener('load', async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const returnScore = urlParams.get('score');
