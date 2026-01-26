@@ -453,8 +453,10 @@ window.addEventListener('load', async () => {
             redirectToGame(nextGameIndex);
           }, 1500);
           
-        } else {
-          // All games complete - check if tournament is finished
+        } } else {
+          // All games complete for THIS PLAYER - check if tournament is finished
+          const updatedSnapshot = await get(tournamentRef);
+          const updatedTournament = updatedSnapshot.val();
           const players = Object.keys(updatedTournament.players);
           const allScores = updatedTournament.scores || {};
           
@@ -470,20 +472,26 @@ window.addEventListener('load', async () => {
             if (!allPlayersFinished) break;
           }
           
-          // If all players finished all games, mark tournament as finished
-          if (allPlayersFinished && updatedTournament.host === playerId) {
-            await update(ref(db, `tournaments/${code}`), {
-              status: 'finished'
-            });
+          // If all players finished all games, mark tournament as finished and redirect to results
+          if (allPlayersFinished) {
+            // Mark as finished (only host does this)
+            if (updatedTournament.host === playerId) {
+              await update(ref(db, `tournaments/${code}`), {
+                status: 'finished'
+              });
+            }
+            
+            // ALL PLAYERS redirect to results page
+            window.location.href = 'tournament-results.html';
+          } else {
+            // Not all players finished yet - show waiting screen
+            listenToTournament(code);
           }
-          
-          // Start listening to show waiting/results screen
-          listenToTournament(code);
         }
       }
     }
   }
-}); 
+); 
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('createTournamentBtn').addEventListener('click', createTournament);
