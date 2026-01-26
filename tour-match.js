@@ -411,12 +411,17 @@ async function checkAndFinishTournament(code, playerId) {
     });
     
     console.log('✅ Tournament status updated to FINISHED');
+    
+    // IMMEDIATELY redirect to results - don't wait for listener
+    window.location.href = 'tour-result.html';
+    
     return true;
   } else {
     console.log('⏳ Some players still playing...');
     return false;
   }
 }
+
 
 // Check if returning from a game
 window.addEventListener('load', async () => {
@@ -514,25 +519,22 @@ window.addEventListener('load', async () => {
         }, 1500);
         
       } else {
-        // This player finished all games!
-        console.log('🎉 This player finished all games!');
-        
-        // Check if tournament should be marked as finished
-        const tournamentFinished = await checkAndFinishTournament(code, playerId);
-        
-        if (tournamentFinished) {
-          console.log('🏆 Tournament complete! Redirecting to results...');
-          // Give Firebase a moment to propagate the status change
-          setTimeout(() => {
-            window.location.href = 'tour-result.html';
-          }, 1000);
-        } else {
-          console.log('⏳ Starting listener for tournament updates...');
-          // Show waiting screen and start listener
-          showWaitingForOthers(updatedTournament);
-          listenToTournament(code);
-        }
-      }
+  // This player finished all games!
+  console.log('🎉 This player finished all games!');
+  
+  // FIRST start the listener (so it catches the status change)
+  listenToTournament(code);
+  
+  // THEN check if tournament should be marked as finished
+  const tournamentFinished = await checkAndFinishTournament(code, playerId);
+  
+  // If not finished yet, show waiting screen
+  if (!tournamentFinished) {
+    console.log('⏳ Waiting for other players...');
+    showWaitingForOthers(updatedTournament);
+  }
+  // If finished, checkAndFinishTournament already redirected
+}
     }
   }
 });
