@@ -118,20 +118,21 @@ function listenToTournament(code) {
     
     const tournament = snapshot.val();
     
+    console.log('Tournament status:', tournament.status);
+    
     if (tournament.status === 'waiting') {
-      // Stay in lobby, update player list
       updateLobby(tournament);
     } else if (tournament.status === 'playing') {
-      // Only redirect if we're currently in the lobby or coming back from a game
       handlePlayingState(tournament);
     } else if (tournament.status === 'finished') {
-      showResults(tournament);
+      console.log('🏆 Tournament finished! Redirecting to results...');
+      // Redirect ALL players to results page
+      window.location.href = 'tour-result.html';
     }
   });
 }
 
 function handlePlayingState(tournament) {
-  // Hide lobby screen
   document.getElementById('lobbyScreen').classList.remove('active');
   
   const scores = tournament.scores || {};
@@ -149,7 +150,7 @@ function handlePlayingState(tournament) {
   
   // If player has finished all games, show waiting screen
   if (nextGameIndex === -1) {
-    showAllGamesComplete(tournament);
+    showWaitingForOthers(tournament);
     return;
   }
   
@@ -158,47 +159,61 @@ function handlePlayingState(tournament) {
   redirectToGame(nextGameIndex);
 }
 
-function showAllGamesComplete(tournament) {
+function showWaitingForOthers(tournament) {
+  console.log('⏳ Player finished all games, waiting for others...');
+  
+  // Show a simple waiting screen
   document.getElementById('lobbyScreen').classList.remove('active');
   document.getElementById('resultsScreen').classList.remove('active');
-  document.getElementById('gameScreen').classList.add('active');
-
-  document.getElementById('gameFrame').style.display = 'none';
-  document.getElementById('scoreInputSection').style.display = 'none';
   
-  const waitingDiv = document.getElementById('waitingMessage');
-  waitingDiv.style.display = 'block';
-  
-  const players = Object.values(tournament.players);
-  const scores = tournament.scores || {};
-  
-  let waitingFor = [];
-  players.forEach(player => {
-    const playerScores = scores[player.id] || {};
-    for (let i = 0; i < GAMES.length; i++) {
-      const gameKey = `game${i}`;
-      if (playerScores[gameKey] === undefined) {
-        if (!waitingFor.includes(player.name)) {
-          waitingFor.push(player.name);
-        }
-        break;
-      }
-    }
-  });
-  
-  waitingDiv.innerHTML = `
-    <div style="text-align: center; padding: 40px;">
-      <h2 style="color: #667eea; margin-bottom: 20px;">🎉 All Games Complete!</h2>
-      <p style="font-size: 18px; color: #666;">You've finished all ${GAMES.length} games!</p>
-      <p style="font-size: 16px; color: #999; margin-top: 10px;">Waiting for other players to finish...</p>
-      <div style="margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 12px;">
-        <p style="font-weight: 600; margin-bottom: 10px;">Still playing:</p>
-        ${waitingFor.map(name => `<p style="color: #667eea;">• ${name}</p>`).join('')}
+  document.body.innerHTML = `
+    <div style="
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-family: system-ui;
+    ">
+      <div style="text-align: center; max-width: 500px; padding: 40px;">
+        <div style="font-size: 4em; margin-bottom: 20px;">🎉</div>
+        <h1 style="font-size: 2.5em; margin-bottom: 20px;">All Games Complete!</h1>
+        <p style="font-size: 1.3em; margin-bottom: 30px; opacity: 0.9;">
+          You've finished all ${GAMES.length} games!
+        </p>
+        <div style="
+          background: rgba(255,255,255,0.2);
+          padding: 30px;
+          border-radius: 16px;
+          backdrop-filter: blur(10px);
+        ">
+          <p style="font-size: 1.1em; margin-bottom: 15px;">⏳ Waiting for other players to finish...</p>
+          <div class="spinner" style="
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto 0;
+          "></div>
+          <p style="font-size: 0.9em; margin-top: 20px; opacity: 0.8;">
+            You'll be automatically redirected to results when everyone is done!
+          </p>
+        </div>
       </div>
     </div>
+    <style>
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
   `;
   
-  updateGameProgress(tournament);
+  // The listener is still active and will redirect when status changes to 'finished'
 }
 
 function showLobby(code) {
@@ -252,11 +267,7 @@ async function startTournament() {
 
 function redirectToGame(gameIndex) {
   const gameUrl = GAMES[gameIndex].url;
-  
-  // Set tournament mode flag BEFORE redirecting
   localStorage.setItem('inTournamentGame', 'true');
-  
-  // Redirect to game page - it will return here after completion
   window.location.href = gameUrl;
 }
 
@@ -356,15 +367,12 @@ function generateCode() {
 }
 
 // Check if returning from a game
-// Check if returning from a game
 window.addEventListener('load', async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const returnScore = urlParams.get('score');
   const gameId = urlParams.get('game');
   
-  // ONLY process tournament data if returning from a game with a score
   if (returnScore !== null && gameId !== null) {
-    // Clear URL parameters
     window.history.replaceState({}, document.title, window.location.pathname);
     
     const code = localStorage.getItem('tournamentCode');
@@ -372,32 +380,30 @@ window.addEventListener('load', async () => {
     const playerName = localStorage.getItem('playerName');
     
     if (code && playerId) {
-      // Restore tournament state
       currentTournament = code;
       currentPlayer = { name: playerName, id: playerId };
       
-      // Get current tournament data
       const tournamentRef = ref(db, `tournaments/${code}`);
       const snapshot = await get(tournamentRef);
       
       if (snapshot.exists()) {
         const tournament = snapshot.val();
         
-        // Submit the score for the SPECIFIC game that was played
+        // Submit score
         const gameKey = `game${gameId}`;
         await update(ref(db, `tournaments/${code}/scores/${playerId}`), {
           [gameKey]: parseInt(returnScore)
         });
         
-        console.log(`✅ Score ${returnScore} submitted for ${GAMES[gameId].name}`);
+        console.log(`✅ Score ${returnScore} submitted for game ${gameId}`);
         
-        // Get FRESH tournament data after score submission
+        // Get updated data
         const updatedSnapshot = await get(tournamentRef);
         const updatedTournament = updatedSnapshot.val();
         const scores = updatedTournament.scores || {};
         const playerScores = scores[playerId] || {};
         
-        // Find next game to play
+        // Find next game
         let nextGameIndex = -1;
         for (let i = 0; i < GAMES.length; i++) {
           const nextGameKey = `game${i}`;
@@ -408,7 +414,7 @@ window.addEventListener('load', async () => {
         }
         
         if (nextGameIndex !== -1) {
-          // ✨ DIRECT REDIRECT - Show quick transition message
+          // More games to play - show transition and redirect
           document.body.innerHTML = `
             <div style="
               position: fixed;
@@ -448,17 +454,17 @@ window.addEventListener('load', async () => {
             </style>
           `;
           
-          // Redirect after 1.5 seconds
           setTimeout(() => {
             redirectToGame(nextGameIndex);
           }, 1500);
           
-        } } else {
-          // All games complete for THIS PLAYER - check if tournament is finished
-          const updatedSnapshot = await get(tournamentRef);
-          const updatedTournament = updatedSnapshot.val();
-          const players = Object.keys(updatedTournament.players);
+        } else {
+          // This player finished all games!
+          console.log('🎉 Player finished all games!');
+          
+          // Check if ALL players finished
           const allScores = updatedTournament.scores || {};
+          const players = Object.keys(updatedTournament.players);
           
           let allPlayersFinished = true;
           for (let pId of players) {
@@ -472,26 +478,33 @@ window.addEventListener('load', async () => {
             if (!allPlayersFinished) break;
           }
           
-          // If all players finished all games, mark tournament as finished and redirect to results
           if (allPlayersFinished) {
-            // Mark as finished (only host does this)
+            console.log('🏆 ALL players finished! Tournament complete!');
+            
+            // Host marks tournament as finished
             if (updatedTournament.host === playerId) {
               await update(ref(db, `tournaments/${code}`), {
                 status: 'finished'
               });
+              console.log('✅ Tournament marked as finished by host');
             }
             
-            // ALL PLAYERS redirect to results page
-            window.location.href = 'tour-result.html';
+            // Direct redirect to results (don't wait for listener)
+            console.log('Redirecting to tour-result.html');
+            setTimeout(() => {
+              window.location.href = 'tour-result.html';
+            }, 500);
           } else {
-            // Not all players finished yet - show waiting screen
+            // Show waiting screen and start listener
+            console.log('⏳ Waiting for other players...');
+            showWaitingForOthers(updatedTournament);
             listenToTournament(code);
           }
         }
       }
     }
   }
-); 
+});
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('createTournamentBtn').addEventListener('click', createTournament);
