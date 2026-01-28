@@ -268,48 +268,69 @@
       font-size: 1.2em;
     }
 
-    @media (max-width: 768px) {
-      body {
+/* Add these styles to fix the mobile layout */
+
+@media (max-width: 768px) {
+  body {
     align-items: flex-start;  
-    padding:30px 0px;
+    padding: 30px 0px;
   }
 
   .container {
-    padding: 0 15px; 
+    padding: 0 15px;
+    max-width: 100%; /* Add this */
   }
   
-      .header h1 {
-        font-size: 2.8em;
-      }
+  .header h1 {
+    font-size: 2.8em;
+  }
 
-      .header p {
-        font-size: 1.1em;
-      }
-      
-      .game-selector {
-        padding: 30px 20px;
-      }
+  .header p {
+    font-size: 1.1em;
+  }
+  
+  .game-selector {
+    padding: 30px 20px;
+    width: 100%; /* Add this */
+  }
 
-      .game-selector h2 {
-        font-size: 1.6em;
-      }
+  .game-selector h2 {
+    font-size: 1.6em;
+  }
 
-      .game-btn {
-        padding: 25px 20px;
-      }
+  /* Fix the game buttons width */
+  .game-buttons {
+    width: 100%; /* Add this */
+  }
 
-      .game-title {
-        font-size: 1.2em;
-      }
+  .game-btn {
+    padding: 25px 20px;
+    width: 100%; /* Add this - most important */
+    box-sizing: border-box; /* Ensure padding is included in width */
+  }
 
-      .game-desc {
-        font-size: 0.95em;
-      }
+  .game-title {
+    font-size: 1.2em;
+  }
 
-      .sidebar{
-        display:none;
-      }
-    }
+  .game-desc {
+    font-size: 0.95em;
+  }
+
+  /* Also fix date selector */
+  .date-selector {
+    width: 100%; /* Add this */
+    box-sizing: border-box;
+  }
+
+  .date-selector input {
+    width: 100%; /* Already there but ensure it's set */
+  }
+
+  .sidebar {
+    display: none;
+  }
+}
 
     @media (max-width: 480px) {
       .header h1 {
