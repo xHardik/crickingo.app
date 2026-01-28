@@ -17,7 +17,7 @@
     body {
       font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: #0a0e27;
-      min-height: 0;
+      min-height: 100vh;
       padding: 20px;
       display: flex;
       align-items: flex-start;
@@ -28,29 +28,36 @@
 
     body::before {
       content: '';
-      position: absolute;
-      width: 200%;
-      height: 200%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 120%;
       background: 
         radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
         radial-gradient(circle at 80% 80%, rgba(255, 121, 63, 0.3) 0%, transparent 50%),
         radial-gradient(circle at 40% 20%, rgba(138, 43, 226, 0.2) 0%, transparent 50%);
       animation: gradientShift 15s ease infinite;
+      z-index: -1;
     }
 
     @keyframes gradientShift {
-      0%, 100% { transform: translate(0, 0); }
-      50% { transform: translate(-50px, -50px); }
+      0%, 100% { 
+        transform: translate(0, 0) scale(1.2);
+      }
+      50% { 
+        transform: translate(-30px, -30px) scale(1.2);
+      }
     }
 
-.container {
-  max-width: 1000px;
-  width: 100%;
-  position: relative;
-  z-index: 1;
-  padding: 0 20px; 
-  margin: 0 auto; 
-}
+    .container {
+      max-width: 1000px;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+      padding: 0 20px; 
+      margin: 0 auto; 
+    }
 
     .header {
       text-align: center;
@@ -179,7 +186,7 @@
 
     .game-buttons {
       display: grid;
-      gap: 20px;
+      gap: 25px;
     }
 
     .game-btn {
@@ -231,7 +238,7 @@
       font-weight: 800;
       font-size: 1.4em;
       display: block;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       position: relative;
       z-index: 1;
       letter-spacing: -0.5px;
@@ -268,81 +275,116 @@
       font-size: 1.2em;
     }
 
-/* Add these styles to fix the mobile layout */
+    @media (max-width: 768px) {
+      body {
+        align-items: stretch;
+        padding: 0;
+        min-height: 100vh;
+      }
 
-@media (max-width: 768px) {
-  body {
-    align-items: flex-start;  
-    padding: 30px 0px;
-  }
+      .container {
+        padding: 0;
+        max-width: 100%;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .header {
+        padding: 20px 15px 15px 15px;
+        margin-bottom: 0;
+      }
+      
+      .header h1 {
+        font-size: 2.8em;
+        margin-bottom: 8px;
+      }
 
-  .container {
-    padding: 0 15px;
-    max-width: 100%; /* Add this */
-  }
-  
-  .header h1 {
-    font-size: 2.8em;
-  }
+      .header p {
+        font-size: 1.1em;
+      }
+      
+      .game-selector {
+        padding: 25px 15px;
+        margin: 15px 15px;
+        border-radius: 20px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
 
-  .header p {
-    font-size: 1.1em;
-  }
-  
-  .game-selector {
-    padding: 30px 20px;
-    width: 100%; /* Add this */
-  }
+      .game-selector h2 {
+        font-size: 1.6em;
+        margin-bottom: 20px;
+      }
 
-  .game-selector h2 {
-    font-size: 1.6em;
-  }
+      .date-selector {
+        padding: 18px 15px;
+        margin-bottom: 20px;
+      }
 
-  /* Fix the game buttons width */
-  .game-buttons {
-    width: 100%; /* Add this */
-  }
+      .game-buttons {
+        gap: 16px;
+        flex: 1;
+      }
 
-  .game-btn {
-    padding: 25px 20px;
-    width: 100%; /* Add this - most important */
-    box-sizing: border-box; /* Ensure padding is included in width */
-  }
+      .game-btn {
+        padding: 24px 18px;
+      }
 
-  .game-title {
-    font-size: 1.2em;
-  }
+      .game-title {
+        font-size: 1.15em;
+        margin-bottom: 6px;
+      }
 
-  .game-desc {
-    font-size: 0.95em;
-  }
+      .game-desc {
+        font-size: 0.9em;
+        line-height: 1.4;
+      }
 
-  /* Also fix date selector */
-  .date-selector {
-    width: 100%; /* Add this */
-    box-sizing: border-box;
-  }
-
-  .date-selector input {
-    width: 100%; /* Already there but ensure it's set */
-  }
-
-  .sidebar {
-    display: none;
-  }
-}
+      .sidebar {
+        display: none;
+      }
+    }
 
     @media (max-width: 480px) {
+      .header {
+        padding: 15px 12px 12px 12px;
+      }
+
       .header h1 {
         font-size: 2.2em;
       }
 
       .game-selector {
-        padding: 25px 15px;
+        padding: 20px 12px;
+        margin: 12px 12px;
+      }
+
+      .game-selector h2 {
+        font-size: 1.5em;
+        margin-bottom: 18px;
       }
 
       .date-selector {
-        padding: 20px;
+        padding: 15px 12px;
+        margin-bottom: 18px;
+      }
+
+      .game-btn {
+        padding: 22px 16px;
+      }
+
+      .game-buttons {
+        gap: 14px;
+      }
+
+      .game-title {
+        font-size: 1.1em;
+      }
+
+      .game-desc {
+        font-size: 0.88em;
       }
     }
   </style>
@@ -385,16 +427,14 @@
         </a>
        
         <a href="builder.html" class="game-btn" id="hlBtn">
-  <span class="game-title"><span class="game-icon">🧠</span>Build Your XI</span>
-  <span class="game-desc">Select players and test your cricket brain</span>
-</a>
+          <span class="game-title"><span class="game-icon">🧠</span>Build Your XI</span>
+          <span class="game-desc">Select players and test your cricket brain</span>
+        </a>
 
-
-<a href="tournament.html" class="game-btn" id="hlBtn">
-  <span class="game-title"><span class="game-icon">🎮</span>Play with Friends</span>
-  <span class="game-desc">Create a room and compete with your friends</span>
-</a>
-
+        <a href="tournament.html" class="game-btn" id="hlBtn">
+          <span class="game-title"><span class="game-icon">🎮</span>Play with Friends</span>
+          <span class="game-desc">Create a room and compete with your friends</span>
+        </a>
       </div>
     </div>
   </div>
