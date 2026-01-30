@@ -20,6 +20,7 @@
       min-height: 100vh;
       padding: 20px;
       display: flex;
+      flex-direction: column;
       align-items: flex-start;
       justify-content: center;
       position: relative;
@@ -57,6 +58,7 @@
       z-index: 1;
       padding: 0 20px; 
       margin: 0 auto; 
+      flex: 1;
     }
 
     .header {
@@ -275,6 +277,101 @@
       font-size: 1.2em;
     }
 
+    /* Footer Styles */
+    .footer {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      border-top: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 30px 30px 0 0;
+      max-width: 1000px;
+      width: 100%;
+      margin: 40px auto 0;
+      padding: 20px 40px 15px;
+      box-shadow: 0 -10px 40px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 1;
+    }
+    
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 25px;
+      margin-bottom: 15px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .footer-main {
+      text-align: center;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+    }
+    
+    .footer-section h3 {
+      color: #667eea;
+      margin-bottom: 15px;
+      font-size: 1.3em;
+      background: linear-gradient(135deg, #667eea 0%, #ff6b9d 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .footer-section h4 {
+      color: #ffa400;
+      margin-bottom: 12px;
+      font-size: 1.1em;
+      text-align: center;
+    }
+    
+    .footer-section p {
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.6;
+      font-size: 0.95em;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    
+    .footer-section ul {
+      list-style: none;
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .footer-section ul li a {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: inline-block;
+      white-space: nowrap;
+    }
+    
+    .footer-section ul li a:hover {
+      color: #667eea;
+      text-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+    }
+    
+    .footer-bottom {
+      border-top: 2px solid rgba(255, 255, 255, 0.1);
+      padding-top: 20px;
+      text-align: center;
+    }
+    
+    .footer-bottom p {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.9em;
+    }
+
     @media (max-width: 768px) {
       body {
         align-items: stretch;
@@ -285,7 +382,7 @@
       .container {
         padding: 0;
         max-width: 100%;
-        min-height: 100vh;
+        min-height: auto;
         display: flex;
         flex-direction: column;
       }
@@ -345,6 +442,21 @@
       .sidebar {
         display: none;
       }
+
+      .footer {
+        margin: 20px 15px 0;
+        padding: 25px 20px 15px;
+        border-radius: 20px 20px 0 0;
+      }
+      
+      .footer-content {
+        gap: 25px;
+      }
+
+      .footer-links {
+        flex-direction: column;
+        gap: 100px;
+      }
     }
 
     @media (max-width: 480px) {
@@ -385,6 +497,11 @@
 
       .game-desc {
         font-size: 0.88em;
+      }
+
+      .footer {
+        margin: 15px 12px 0;
+        padding: 25px 15px 12px;
       }
     }
   </style>
@@ -432,11 +549,47 @@
         </a>
 
         <a href="tournament.html" class="game-btn" id="hlBtn">
-          <span class="game-title"><span class="game-icon">🎮</span>Play with Friends</span>
+          <span class="game-title"><span class="game-icon">🎮</span>Play withH Friends</span>
           <span class="game-desc">Create a room and compete with your friends</span>
         </a>
       </div>
     </div>
   </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section footer-main">
+        <h3>Crickingo</h3>
+        <p>Test your cricket knowledge with daily puzzles and challenges. Play solo or compete with friends!</p>
+      </div>
+      
+      <div class="footer-links">
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#how-to-play">How to Play</a></li>
+            <li><a href="#leaderboard">Leaderboard</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="#terms">Terms & Conditions</a></li>
+            <li><a href="#privacy">Privacy Policy</a></li>
+            <li><a href="#cookies">Cookie Policy</a></li>
+            <li><a href="#disclaimer">Disclaimer</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; 2026 Crickingo. All rights reserved. Made with 🏏 for cricket fans.</p>
+    </div>
+  </footer>
 </body>
 </html>
