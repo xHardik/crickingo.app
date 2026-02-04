@@ -278,26 +278,36 @@
     }
 
     /* Footer Styles */
-    .footer {
-      background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(20px);
-      border-top: 2px solid rgba(255, 255, 255, 0.1);
-      border-radius: 30px 30px 0 0;
+    .footer-container {
       max-width: 1000px;
       width: 100%;
-      margin: 40px auto 0;
-      padding: 20px 40px 15px;
-      box-shadow: 0 -10px 40px rgba(0,0,0,0.3);
+      padding: 0 20px;
+      margin: 0 auto;
       position: relative;
       z-index: 1;
+    }
+
+    .footer {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 30px;
+      width: 100%;
+      margin: 40px 0 0;
+      padding: 40px 50px;
+      box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      position: relative;
+      box-sizing: border-box;
     }
     
     .footer-content {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 25px;
-      margin-bottom: 15px;
+      gap: 30px;
+      margin-bottom: 20px;
       max-width: 700px;
       margin-left: auto;
       margin-right: auto;
@@ -443,10 +453,16 @@
         display: none;
       }
 
+      .footer-container {
+        padding: 0;
+        max-width: 100%;
+      }
+
       .footer {
         margin: 20px 0 0;
-        padding: 25px 20px 15px;
-        border-radius: 20px 20px 0 0;
+        padding: 30px 20px;
+        border-radius: 20px;
+        width: 100%;
         max-width: 100%;
       }
       
@@ -456,7 +472,7 @@
 
       .footer-links {
         flex-direction: column;
-        gap: 100px;
+        gap: 25px;
       }
     }
 
@@ -500,9 +516,15 @@
         font-size: 0.88em;
       }
 
+      .footer-container {
+        padding: 0;
+        max-width: 100%;
+      }
+
       .footer {
         margin: 15px 0 0;
-        padding: 25px 15px 12px;
+        padding: 25px 15px;
+        width: 100%;
         max-width: 100%;
       }
     }
@@ -559,39 +581,41 @@
   </div>
 
   <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-content">
-      <div class="footer-section footer-main">
-        <h3>Crickingo</h3>
-        <p>Test your cricket knowledge with daily puzzles and challenges. Play solo or compete with friends!</p>
-      </div>
-      
-      <div class="footer-links">
-        <div class="footer-section">
-          <h4>Quick Links</h4>
-          <ul>
-            <li><a href="#about">About Us</a></li>
-            <li><a href="#how-to-play">How to Play</a></li>
-            <li><a href="#leaderboard">Leaderboard</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
+  <div class="footer-container">
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-section footer-main">
+          <h3>Crickingo</h3>
+          <p>Test your cricket knowledge with daily puzzles and challenges. Play solo or compete with friends!</p>
         </div>
         
-        <div class="footer-section">
-          <h4>Legal</h4>
-          <ul>
-            <li><a href="#terms">Terms & Conditions</a></li>
-            <li><a href="#privacy">Privacy Policy</a></li>
-            <li><a href="#cookies">Cookie Policy</a></li>
-            <li><a href="#disclaimer">Disclaimer</a></li>
-          </ul>
+        <div class="footer-links">
+          <div class="footer-section">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="#about">About Us</a></li>
+              <li><a href="#how-to-play">How to Play</a></li>
+              <li><a href="https://reddit.com" target="_blank">Reddit</a></li>
+              <li><a href="https://discord.com" target="_blank">Discord</a></li>
+            </ul>
+          </div>
+          
+          <div class="footer-section">
+            <h4>Legal</h4>
+            <ul>
+              <li><a href="#terms">Terms & Conditions</a></li>
+              <li><a href="#privacy">Privacy Policy</a></li>
+              <li><a href="#cookies">Cookie Policy</a></li>
+              <li><a href="#disclaimer">Disclaimer</a></li>
+            </ul>
+          </div>
         </div>
       </div>
-    </div>
-    
-    <div class="footer-bottom">
-      <p>&copy; 2026 Crickingo. All rights reserved. Made with 🏏 for cricket fans.</p>
-    </div>
-  </footer>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2026 Crickingo. All rights reserved. Made with 🏏 for cricket fans.</p>
+      </div>
+    </footer>
+  </div>
 </body>
 </html>
