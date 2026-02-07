@@ -48,10 +48,6 @@
         "validPlayers": ["MS Dhoni", "Rishabh Pant", "KL Rahul", "Quinton de Kock", "Jos Buttler"]
       },
       {
-        "title": "⚔️ Genuine All-Rounder",
-        "validPlayers": ["Ravindra Jadeja", "Hardik Pandya", "Andre Russell", "Dwayne Bravo", "Kieron Pollard", "Ben Stokes"]
-      },
-      {
         "title": "🌍 Played for 4+ IPL Teams",
         "validPlayers": ["Chris Gayle", "Ambati Rayudu", "Ajinkya Rahane", "Shikhar Dhawan"]
       },
@@ -127,10 +123,6 @@
         "validPlayers": ["MS Dhoni", "Gautam Gambhir", "Harbhajan Singh", "Zaheer Khan", "Ashish Nehra", "Yusuf Pathan", "Irfan Pathan"]
       },
       {
-        "title": "🎪 Known for Big Hitting",
-        "validPlayers": ["Chris Gayle", "Andre Russell", "Yusuf Pathan", "Glenn Maxwell", "AB de Villiers"]
-      },
-      {
         "title": "🔥 Fastest IPL Fifty",
         "validPlayers": ["Chris Gayle", "AB de Villiers", "Yusuf Pathan", "Glenn Maxwell"]
       },
@@ -188,10 +180,6 @@
       {
         "title": "💰 Sold for 10+ Crores",
         "validPlayers": ["Rishabh Pant", "Ben Stokes", "KL Rahul", "Virat Kohli", "Rohit Sharma", "David Warner", "Chris Gayle"]
-      },
-      {
-        "title": "🏃 Known for Fielding",
-        "validPlayers": ["Ravindra Jadeja", "Hardik Pandya", "AB de Villiers", "Virat Kohli", "Suresh Raina"]
       },
       {
         "title": "🎯 Economy Rate < 7",
