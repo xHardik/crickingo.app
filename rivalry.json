@@ -1,91 +1,237 @@
 {
-  "rivalry": {
-    "title": "🔥 Rivalry Grid",
+  "rivalry-2026-02-01": {
+    "title": "🔥 Rivalry Grid - Day 1",
     "subtitle": "CSK vs MI - The greatest IPL rivalry",
     "players": [
-      "MS Dhoni","Suresh Raina","Ravindra Jadeja","Dwayne Bravo","Rohit Sharma","Kieron Pollard","Jasprit Bumrah","Hardik Pandya",
-      "Virat Kohli","AB de Villiers","Chris Gayle","KL Rahul","David Warner","Rishabh Pant","Shreyas Iyer","Andre Russell" 
-    ,"Ambati Rayudu","Sunil Narine"   ],
-    
-      "categories": [
-      {"title": "Played for CSK",
-      "image": "https://images.sportsbrief.com/images/1920/4f69d86949dd0a4e.png?v=1",
-      "validPlayers": ["MS Dhoni", "Suresh Raina", "Ravindra Jadeja", "Dwayne Bravo", "Ambati Rayudu"]
+      "MS Dhoni", "Suresh Raina", "Ravindra Jadeja", "Dwayne Bravo", "Rohit Sharma",
+      "Kieron Pollard", "Jasprit Bumrah", "Hardik Pandya", "Virat Kohli", "AB de Villiers",
+      "Chris Gayle", "KL Rahul", "David Warner", "Rishabh Pant", "Shreyas Iyer",
+      "Andre Russell", "Ambati Rayudu", "Sunil Narine", "Faf du Plessis", "Quinton de Kock",
+      "Jos Buttler", "Ben Stokes", "Shikhar Dhawan", "Yuzvendra Chahal", "Rashid Khan",
+      "Mohammed Shami", "Bhuvneshwar Kumar", "Ajinkya Rahane", "Kane Williamson", "Pat Cummins"
+    ],
+    "categories": [
+      {
+        "title": "⚡ Played for CSK",
+        "validPlayers": ["MS Dhoni", "Suresh Raina", "Ravindra Jadeja", "Dwayne Bravo", "Ambati Rayudu", "Faf du Plessis"]
       },
       {
-        "title": "Played for MI",
-        "image": "https://iconape.com/wp-content/uploads/1/12/mumbai-indians-logo-0%D9%A4.png",
-        "validPlayers": ["Rohit Sharma", "Kieron Pollard", "Jasprit Bumrah", "Hardik Pandya"]
+        "title": "🔵 Played for MI",
+        "validPlayers": ["Rohit Sharma", "Kieron Pollard", "Jasprit Bumrah", "Hardik Pandya", "Quinton de Kock"]
       },
       {
-        "title": "Scored IPL 100",
-        "image": "https://cdn-icons-png.flaticon.com/512/857/857418.png",
-        "validPlayers": ["Virat Kohli", "Chris Gayle", "AB de Villiers", "KL Rahul", "David Warner"]
+        "title": "💯 Scored IPL 100",
+        "validPlayers": ["Virat Kohli", "Chris Gayle", "AB de Villiers", "KL Rahul", "David Warner", "Jos Buttler", "Faf du Plessis", "MS Dhoni", "Rohit Sharma"]
       },
       {
-        "title": "Won IPL Trophy",
-    "image":"https://tse3.mm.bing.net/th/id/OIP.5xZU9bOkxqF6igI4Yy16ugHaHa?rs=1&pid=ImgDetMain&o=7&rm=3",   
-     "validPlayers": ["MS Dhoni", "Suresh Raina", "Rohit Sharma", "Kieron Pollard", "Jasprit Bumrah", "Hardik Pandya", "Andre Russell", "Sunil Narine"]
+        "title": "🏆 Won 3+ IPL Titles",
+        "validPlayers": ["MS Dhoni", "Suresh Raina", "Rohit Sharma", "Kieron Pollard", "Ravindra Jadeja"]
       },
       {
-        "title": "IPL Captain",
-        "image": "https://cdn-icons-png.flaticon.com/512/2917/2917995.png",
-        "validPlayers": ["MS Dhoni", "Rohit Sharma", "Virat Kohli", "David Warner", "Rishabh Pant", "Shreyas Iyer", "KL Rahul"]
+        "title": "👨‍✈️ Captained IPL Team",
+        "validPlayers": ["MS Dhoni", "Rohit Sharma", "Virat Kohli", "David Warner", "Rishabh Pant", "Shreyas Iyer", "KL Rahul", "Kane Williamson", "Ajinkya Rahane", "Faf du Plessis"]
       },
       {
-        "title": "100+ IPL Wickets",
-        "image": "https://cdn-icons-png.flaticon.com/512/2250/2250114.png",
-        "validPlayers": ["Jasprit Bumrah", "Ravindra Jadeja", "Dwayne Bravo"]
+        "title": "🎳 Taken 150+ IPL Wickets",
+        "validPlayers": ["Jasprit Bumrah", "Ravindra Jadeja", "Dwayne Bravo", "Yuzvendra Chahal", "Rashid Khan", "Sunil Narine"]
       },
       {
-        "title": "Overseas Player",
-        "image": "https://cdn-icons-png.flaticon.com/512/201/201623.png",
-        "validPlayers": ["AB de Villiers", "Chris Gayle", "David Warner", "Kieron Pollard", "Dwayne Bravo", "Andre Russell"]
+        "title": "🤝 Played with MS Dhoni",
+        "validPlayers": ["Suresh Raina", "Ravindra Jadeja", "Dwayne Bravo", "Ambati Rayudu", "Faf du Plessis"]
       },
       {
-        "title": "Indian Player",
-        "image": "https://cdn-icons-png.flaticon.com/512/206/206606.png",
-        "validPlayers": ["MS Dhoni", "Virat Kohli", "Rohit Sharma", "Suresh Raina", "Jasprit Bumrah", "Hardik Pandya", "Ravindra Jadeja", "KL Rahul", "Rishabh Pant", "Shreyas Iyer"]
+        "title": "🎯 6000+ IPL Runs",
+        "validPlayers": ["Virat Kohli", "Rohit Sharma", "Suresh Raina", "David Warner", "AB de Villiers", "MS Dhoni", "Shikhar Dhawan"]
       },
       {
-        "title": "Wicketkeeper",
-        "image": "https://cdn-icons-png.flaticon.com/512/2906/2906282.png",
-        "validPlayers": ["MS Dhoni", "Rishabh Pant", "KL Rahul"]
+        "title": "🧤 Wicketkeeper-Batsman",
+        "validPlayers": ["MS Dhoni", "Rishabh Pant", "KL Rahul", "Quinton de Kock", "Jos Buttler"]
       },
       {
-        "title": "All-Rounder",
-        "image": "https://cdn-icons-png.flaticon.com/512/3774/3774278.png",
-        "validPlayers": ["Ravindra Jadeja", "Hardik Pandya", "Andre Russell", "Dwayne Bravo", "Kieron Pollard"]
+        "title": "⚔️ Genuine All-Rounder",
+        "validPlayers": ["Ravindra Jadeja", "Hardik Pandya", "Andre Russell", "Dwayne Bravo", "Kieron Pollard", "Ben Stokes"]
       },
       {
-        "title": "Fast Bowler",
-        "image": "https://cdn-icons-png.flaticon.com/512/857/857421.png",
-        "validPlayers": ["Jasprit Bumrah"]
+        "title": "🌍 Played for 4+ IPL Teams",
+        "validPlayers": ["Chris Gayle", "Ambati Rayudu", "Ajinkya Rahane", "Shikhar Dhawan"]
       },
       {
-        "title": "5000+ IPL Runs",
-        "image": "https://cdn-icons-png.flaticon.com/512/3588/3588314.png",
-        "validPlayers": ["Virat Kohli", "Rohit Sharma", "Suresh Raina", "David Warner", "AB de Villiers", "MS Dhoni"]
+        "title": "🎖️ World Cup Winner",
+        "validPlayers": ["MS Dhoni", "Rohit Sharma", "Virat Kohli", "Ravindra Jadeja", "Mohammed Shami", "Shikhar Dhawan", "Bhuvneshwar Kumar", "Ben Stokes", "Jos Buttler", "Pat Cummins", "Kane Williamson"]
       },
       {
-        "title": "Played for RCB",
-        "image": "https://images.sportsbrief.com/images/1920/7f6b05cbf0fc8f72.png?v=1",
-        "validPlayers": ["Virat Kohli", "AB de Villiers", "Chris Gayle"]
+        "title": "🔴 Played for RCB",
+        "validPlayers": ["Virat Kohli", "AB de Villiers", "Chris Gayle", "Yuzvendra Chahal", "Faf du Plessis"]
       },
       {
-        "title": "Played for KKR",
-        "image": "https://images.sportsbrief.com/images/1920/27e48638f24ca1b1.png?v=1",
-        "validPlayers": ["Andre Russell"]
+        "title": "💥 Strike Rate > 150",
+        "validPlayers": ["Chris Gayle", "Andre Russell", "Hardik Pandya", "Kieron Pollard", "Jos Buttler", "Suresh Raina"]
       },
       {
-        "title": "Played for DC",
-        "image": "https://images.sportsbrief.com/images/1920/c70aef6cb76e45b1.png?v=1",
-        "validPlayers": ["David Warner", "Rishabh Pant", "Shreyas Iyer"]
+        "title": "🇮🇳 Born in 1980s",
+        "validPlayers": ["MS Dhoni", "Rohit Sharma", "Virat Kohli", "Suresh Raina", "Ravindra Jadeja", "Shikhar Dhawan", "Ajinkya Rahane", "Mohammed Shami", "Bhuvneshwar Kumar"]
       },
       {
-        "title": "Played for PBKS",
-        "image": "https://images.sportsbrief.com/images/1920/63c5f3c0c0a97a0f.png?v=1",
-        "validPlayers": ["KL Rahul", "Chris Gayle"]
+        "title": "👑 IPL MVP/Orange Cap",
+        "validPlayers": ["Virat Kohli", "David Warner", "Chris Gayle", "KL Rahul", "Jos Buttler"]
+      }
+    ]
+  },
+  
+  "rivalry-2026-02-02": {
+    "title": "🎯 Rivalry Grid - Day 2",
+    "subtitle": "Legends vs Rising Stars",
+    "players": [
+      "Virat Kohli", "AB de Villiers", "Chris Gayle", "Yuzvendra Chahal", "Glenn Maxwell",
+      "Andre Russell", "Sunil Narine", "Gautam Gambhir", "Robin Uthappa", "Dinesh Karthik",
+      "MS Dhoni", "Rohit Sharma", "David Warner", "Kane Williamson", "Steve Smith",
+      "Jonny Bairstow", "Trent Boult", "Mitchell Starc", "Dale Steyn", "Lasith Malinga",
+      "Kagiso Rabada", "Suresh Raina", "Shane Watson", "Brendon McCullum", "Yusuf Pathan",
+      "Harbhajan Singh", "Zaheer Khan", "Ashish Nehra", "Praveen Kumar", "Irfan Pathan"
+    ],
+    "categories": [
+      {
+        "title": "🟣 Played for KKR",
+        "validPlayers": ["Andre Russell", "Sunil Narine", "Gautam Gambhir", "Robin Uthappa", "Dinesh Karthik", "Brendon McCullum", "Yusuf Pathan"]
+      },
+      {
+        "title": "🔴 Played for RCB",
+        "validPlayers": ["Virat Kohli", "AB de Villiers", "Chris Gayle", "Yuzvendra Chahal", "Glenn Maxwell", "Shane Watson"]
+      },
+      {
+        "title": "🏆 Won 2+ IPL Titles",
+        "validPlayers": ["MS Dhoni", "Rohit Sharma", "Suresh Raina", "Gautam Gambhir", "Harbhajan Singh", "Yusuf Pathan", "Sunil Narine", "Andre Russell"]
+      },
+      {
+        "title": "🤝 Played with Virat Kohli",
+        "validPlayers": ["AB de Villiers", "Chris Gayle", "Yuzvendra Chahal", "Glenn Maxwell"]
+      },
+      {
+        "title": "💯 3+ IPL Centuries",
+        "validPlayers": ["Virat Kohli", "Chris Gayle", "AB de Villiers", "David Warner"]
+      },
+      {
+        "title": "⚡ Fastest to 100 IPL Wickets",
+        "validPlayers": ["Lasith Malinga", "Yuzvendra Chahal", "Sunil Narine"]
+      },
+      {
+        "title": "🎯 Purple Cap Winner",
+        "validPlayers": ["Yuzvendra Chahal", "Lasith Malinga", "Kagiso Rabada", "Trent Boult"]
+      },
+      {
+        "title": "🌏 Played 10+ Years IPL",
+        "validPlayers": ["MS Dhoni", "Virat Kohli", "Rohit Sharma", "Suresh Raina", "Harbhajan Singh", "Zaheer Khan", "Dinesh Karthik", "Robin Uthappa"]
+      },
+      {
+        "title": "🧠 Retired from Cricket",
+        "validPlayers": ["MS Dhoni", "Gautam Gambhir", "Harbhajan Singh", "Zaheer Khan", "Ashish Nehra", "Yusuf Pathan", "Irfan Pathan"]
+      },
+      {
+        "title": "🎪 Known for Big Hitting",
+        "validPlayers": ["Chris Gayle", "Andre Russell", "Yusuf Pathan", "Glenn Maxwell", "AB de Villiers"]
+      },
+      {
+        "title": "🔥 Fastest IPL Fifty",
+        "validPlayers": ["Chris Gayle", "AB de Villiers", "Yusuf Pathan", "Glenn Maxwell"]
+      },
+      {
+        "title": "👔 Now Coach/Mentor",
+        "validPlayers": ["Gautam Gambhir", "Brendon McCullum"]
+      },
+      {
+        "title": "🤝 Played with Rohit Sharma",
+        "validPlayers": ["Harbhajan Singh", "Lasith Malinga", "Zaheer Khan", "MS Dhoni", "Virat Kohli"]
+      },
+      {
+        "title": "🏏 200+ IPL Matches",
+        "validPlayers": ["MS Dhoni", "Rohit Sharma", "Virat Kohli", "Dinesh Karthik", "Suresh Raina", "Robin Uthappa"]
+      },
+      {
+        "title": "🇦🇺 Australian Player",
+        "validPlayers": ["David Warner", "Steve Smith", "Glenn Maxwell", "Shane Watson", "Mitchell Starc"]
+      },
+      {
+        "title": "🎭 Changed Teams 5+ Times",
+        "validPlayers": ["Robin Uthappa", "Yusuf Pathan", "Irfan Pathan"]
+      }
+    ]
+  },
+
+  "rivalry-2026-02-03": {
+    "title": "⚡ Rivalry Grid - Day 3",
+    "subtitle": "Modern Era Superstars",
+    "players": [
+      "Rishabh Pant", "Shreyas Iyer", "Shikhar Dhawan", "Kagiso Rabada", "Axar Patel",
+      "Jos Buttler", "Ben Stokes", "Sanju Samson", "Jofra Archer", "Yuzvendra Chahal",
+      "Rohit Sharma", "Virat Kohli", "MS Dhoni", "AB de Villiers", "David Warner",
+      "Chris Gayle", "Hardik Pandya", "Jasprit Bumrah", "Suresh Raina", "KL Rahul",
+      "Rashid Khan", "Mohammed Shami", "Ravindra Jadeja", "Andre Russell", "Sunil Narine",
+      "Ajinkya Rahane", "Rahul Dravid", "Gautam Gambhir", "Yuvraj Singh", "Mahela Jayawardene"
+    ],
+    "categories": [
+      {
+        "title": "🔷 Played for DC/DD",
+        "validPlayers": ["Rishabh Pant", "Shreyas Iyer", "Shikhar Dhawan", "Kagiso Rabada", "Axar Patel", "David Warner", "Ajinkya Rahane", "Gautam Gambhir", "Yuvraj Singh"]
+      },
+      {
+        "title": "💜 Played for RR",
+        "validPlayers": ["Jos Buttler", "Ben Stokes", "Sanju Samson", "Jofra Archer", "Yuzvendra Chahal", "Ajinkya Rahane", "Rahul Dravid"]
+      },
+      {
+        "title": "🤝 Played with Rohit Sharma",
+        "validPlayers": ["Hardik Pandya", "Jasprit Bumrah", "MS Dhoni", "Virat Kohli", "Shikhar Dhawan"]
+      },
+      {
+        "title": "🎖️ T20 World Cup Winner",
+        "validPlayers": ["MS Dhoni", "Yuvraj Singh", "Gautam Gambhir", "Rohit Sharma", "Virat Kohli", "Ravindra Jadeja", "Jos Buttler", "Ben Stokes", "Jofra Archer"]
+      },
+      {
+        "title": "💰 Sold for 10+ Crores",
+        "validPlayers": ["Rishabh Pant", "Ben Stokes", "KL Rahul", "Virat Kohli", "Rohit Sharma", "David Warner", "Chris Gayle"]
+      },
+      {
+        "title": "🏃 Known for Fielding",
+        "validPlayers": ["Ravindra Jadeja", "Hardik Pandya", "AB de Villiers", "Virat Kohli", "Suresh Raina"]
+      },
+      {
+        "title": "🎯 Economy Rate < 7",
+        "validPlayers": ["Jasprit Bumrah", "Rashid Khan", "Sunil Narine", "Yuzvendra Chahal"]
+      },
+      {
+        "title": "🔥 Hat-trick in IPL",
+        "validPlayers": ["Rohit Sharma", "Yuvraj Singh", "Axar Patel"]
+      },
+      {
+        "title": "👶 Debuted Before Age 20",
+        "validPlayers": ["Rishabh Pant", "Virat Kohli", "Shreyas Iyer", "Rashid Khan"]
+      },
+      {
+        "title": "🌟 Consistent 400+ Runs/Season",
+        "validPlayers": ["Virat Kohli", "David Warner", "KL Rahul", "Shikhar Dhawan", "Jos Buttler"]
+      },
+      {
+        "title": "🤝 Played with MS Dhoni",
+        "validPlayers": ["Suresh Raina", "Ravindra Jadeja", "Ajinkya Rahane", "Yuvraj Singh", "Shikhar Dhawan"]
+      },
+      {
+        "title": "🏏 Never Changed Team",
+        "validPlayers": ["Virat Kohli", "MS Dhoni", "Rohit Sharma"]
+      },
+      {
+        "title": "🎪 Left-Handed Batsman",
+        "validPlayers": ["Chris Gayle", "David Warner", "Shikhar Dhawan", "Rishabh Pant", "Yuvraj Singh", "Gautam Gambhir"]
+      },
+      {
+        "title": "🧘 Spinner",
+        "validPlayers": ["Yuzvendra Chahal", "Rashid Khan", "Ravindra Jadeja", "Axar Patel", "Sunil Narine"]
+      },
+      {
+        "title": "🎯 Part of 2023 WC Squad",
+        "validPlayers": ["Rohit Sharma", "Virat Kohli", "Ravindra Jadeja", "Mohammed Shami", "Jasprit Bumrah", "KL Rahul", "Hardik Pandya", "Shikhar Dhawan"]
+      },
+      {
+        "title": "👑 IPL Salary 15+ Crores",
+        "validPlayers": ["Rishabh Pant", "Shreyas Iyer", "KL Rahul"]
       }
     ]
   }
