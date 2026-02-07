@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Play - Crickingo</title>
+  <link rel="icon" type="image/png" href="logo.png">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0a0e27;
+      min-height: 100vh;
+      padding: 20px;
+      color: white;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 120%;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 121, 63, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(138, 43, 226, 0.2) 0%, transparent 50%);
+      animation: gradientShift ease infinite;
+      z-index: -1;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { 
+        transform: translate(0, 0) scale(1.2);
+      }
+      50% { 
+        transform: translate(-30px, -30px) scale(1.2);
+      }
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 30px;
+      padding: 50px;
+      box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-bottom: 30px;
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+      color: #ff6b9d;
+      transform: translateX(-5px);
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #ff6b9d 50%, #ffa400 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 900;
+    }
+
+    h2 {
+      font-size: 1.8em;
+      margin-top: 30px;
+      margin-bottom: 15px;
+      color: #667eea;
+    }
+
+    h3 {
+      font-size: 1.3em;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      color: #ffa400;
+    }
+
+    p {
+      line-height: 1.8;
+      margin-bottom: 15px;
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 1.05em;
+    }
+
+    ul, ol {
+      margin-left: 20px;
+      margin-bottom: 15px;
+    }
+
+    ul li, ol li {
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 10px;
+    }
+
+    .game-section {
+      background: rgba(102, 126, 234, 0.1);
+      border: 2px solid rgba(102, 126, 234, 0.3);
+      border-radius: 20px;
+      padding: 25px;
+      margin: 20px 0;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 30px 20px;
+        border-radius: 20px;
+      }
+
+      h1 {
+        font-size: 2.2em;
+      }
+
+      h2 {
+        font-size: 1.5em;
+      }
+
+      h3 {
+        font-size: 1.2em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="index.html" class="back-btn">← Back to Home</a>
+    
+    <h1>📖 How to Play</h1>
+    
+    <p>Welcome to Crickingo! Here's everything you need to know to get started with our cricket games.</p>
+
+    <h2>Getting Started</h2>
+    <ol>
+      <li>Select a game from the main menu</li>
+      <li>Choose to play today's puzzle or select a specific date</li>
+      <li>Follow the game-specific instructions</li>
+      <li>Track your progress and compete with friends!</li>
+    </ol>
+
+    <div class="game-section">
+      <h3>🔥 Cricket Bingo</h3>
+      <p><strong>Objective:</strong> Complete rows, columns, or diagonals based on CSK vs MI rivalry facts.</p>
+      <ul>
+        <li>Read each square's challenge or question</li>
+        <li>Mark squares that match the criteria</li>
+        <li>First to complete a line wins!</li>
+      </ul>
+    </div>
+
+    <div class="game-section">
+      <h3>🔄 Transfer History</h3>
+      <p><strong>Objective:</strong> Identify the cricket player based on their IPL team journey.</p>
+      <ul>
+        <li>View the teams a player has played for</li>
+        <li>Use hints like years and positions</li>
+        <li>Guess the player's name within limited attempts</li>
+      </ul>
+    </div>
+
+    <div class="game-section">
+      <h3>🔤 Player Wordle</h3>
+      <p><strong>Objective:</strong> Guess the cricket player's name in 6 attempts.</p>
+      <ul>
+        <li>Enter a player name</li>
+        <li>Green letters are correct and in the right position</li>
+        <li>Yellow letters are in the name but wrong position</li>
+        <li>Gray letters are not in the name</li>
+      </ul>
+    </div>
+
+    <div class="game-section">
+      <h3>📊 Higher or Lower</h3>
+      <p><strong>Objective:</strong> Guess if the next player's stat is higher or lower.</p>
+      <ul>
+        <li>Compare cricket statistics between two players</li>
+        <li>Guess if the second player's stat is higher or lower</li>
+        <li>Keep your streak going as long as possible!</li>
+      </ul>
+    </div>
+
+    <div class="game-section">
+      <h3>🧠 Build Your XI</h3>
+      <p><strong>Objective:</strong> Select 11 players that meet specific criteria.</p>
+      <ul>
+        <li>Read the constraints (budget, team limits, etc.)</li>
+        <li>Choose players strategically</li>
+        <li>Create a balanced team within the rules</li>
+      </ul>
+    </div>
+
+    <div class="game-section">
+      <h3>🎮 Play with Friends</h3>
+      <p><strong>Objective:</strong> Compete with friends in real-time tournaments.</p>
+      <ul>
+        <li>Create a private room or join an existing one</li>
+        <li>Share the room code with friends</li>
+        <li>Compete and climb the tournament leaderboard</li>
+      </ul>
+    </div>
+
+    <h2>Tips for Success</h2>
+    <ul>
+      <li>Play daily to improve your cricket knowledge</li>
+      <li>Learn from incorrect guesses</li>
+      <li>Follow cricket news to stay updated</li>
+      <li>Join our community for tips and strategies</li>
+      <li>Challenge friends to beat your scores</li>
+    </ul>
+
+    <h2>Scoring</h2>
+    <p>Each game has its own scoring system:</p>
+    <ul>
+      <li><strong>Speed bonus:</strong> Faster solutions earn more points</li>
+      <li><strong>Accuracy:</strong> Fewer attempts mean higher scores</li>
+      <li><strong>Streaks:</strong> Consecutive wins multiply your score</li>
+    </ul>
+
+    <p>Ready to play? Head back to the home page and start your cricket journey! 🏏</p>
+  </div>
+</body>
+</html>

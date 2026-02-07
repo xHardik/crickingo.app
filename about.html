@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us - Crickingo</title>
+  <link rel="icon" type="image/png" href="logo.png">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0a0e27;
+      min-height: 100vh;
+      padding: 20px;
+      color: white;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 120%;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 121, 63, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(138, 43, 226, 0.2) 0%, transparent 50%);
+      animation: gradientShift ease infinite;
+      z-index: -1;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { 
+        transform: translate(0, 0) scale(1.2);
+      }
+      50% { 
+        transform: translate(-30px, -30px) scale(1.2);
+      }
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 30px;
+      padding: 50px;
+      box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-bottom: 30px;
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+      color: #ff6b9d;
+      transform: translateX(-5px);
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #ff6b9d 50%, #ffa400 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 900;
+    }
+
+    h2 {
+      font-size: 1.8em;
+      margin-top: 30px;
+      margin-bottom: 15px;
+      color: #667eea;
+    }
+
+    p {
+      line-height: 1.8;
+      margin-bottom: 15px;
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 1.05em;
+    }
+
+    ul {
+      margin-left: 20px;
+      margin-bottom: 15px;
+    }
+
+    ul li {
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 30px 20px;
+        border-radius: 20px;
+      }
+
+      h1 {
+        font-size: 2.2em;
+      }
+
+      h2 {
+        font-size: 1.5em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="index.html" class="back-btn">← Back to Home</a>
+    
+    <h1>🏏 About Crickingo</h1>
+    
+    <p>Welcome to Crickingo - your ultimate destination for cricket-themed puzzle games and challenges!</p>
+
+    <h2>Our Mission</h2>
+    <p>At Crickingo, we're passionate about bringing cricket fans together through engaging, fun, and challenging games. Our mission is to create an interactive platform where cricket enthusiasts can test their knowledge, compete with friends, and celebrate their love for the sport.</p>
+
+    <h2>What We Offer</h2>
+    <p>Crickingo features a variety of exciting games designed for cricket lovers:</p>
+    <ul>
+      <li><strong>Cricket Bingo:</strong> Test your knowledge of the ultimate IPL rivalry - CSK vs MI</li>
+      <li><strong>Transfer History:</strong> Guess the player based on their IPL journey across teams</li>
+      <li><strong>Player Wordle:</strong> Challenge yourself with cricket-themed word puzzles</li>
+      <li><strong>Higher or Lower:</strong> Compare cricket stats and make your predictions</li>
+      <li><strong>Build Your XI:</strong> Create your dream cricket team and showcase your expertise</li>
+      <li><strong>Play with Friends:</strong> Compete in multiplayer tournaments and climb the leaderboard</li>
+    </ul>
+
+    <h2>Why Choose Crickingo?</h2>
+    <p>We're dedicated to providing:</p>
+    <ul>
+      <li>Daily fresh puzzles to keep you engaged</li>
+      <li>A friendly community of cricket enthusiasts</li>
+      <li>Fair and competitive gameplay</li>
+      <li>Regular updates with new features and games</li>
+      <li>A platform that celebrates cricket culture and history</li>
+    </ul>
+
+    <h2>Join Our Community</h2>
+    <p>Connect with fellow cricket fans on our social platforms and stay updated with the latest challenges, tournaments, and cricket news. Follow us on Reddit and Discord to be part of the growing Crickingo family!</p>
+
+    <p>Thank you for being part of our journey. Let's celebrate cricket together! 🏏</p>
+  </div>
+</body>
+</html>

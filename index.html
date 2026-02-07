@@ -454,7 +454,7 @@
       }
 
       .footer-container {
-        padding: 0;
+        padding: 0 15px;
         max-width: 100%;
       }
 
@@ -473,6 +473,23 @@
       .footer-links {
         flex-direction: column;
         gap: 25px;
+      }
+
+      .footer-section ul {
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: center;
+      }
+
+      .footer-section ul li a {
+        font-size: 0.9em;
+        white-space: normal;
+        text-align: center;
+      }
+
+      .footer-bottom p {
+        font-size: 0.85em;
+        line-height: 1.5;
       }
     }
 
@@ -517,7 +534,7 @@
       }
 
       .footer-container {
-        padding: 0;
+        padding: 0 12px;
         max-width: 100%;
       }
 
@@ -526,6 +543,22 @@
         padding: 25px 15px;
         width: 100%;
         max-width: 100%;
+      }
+
+      .footer-section h3 {
+        font-size: 1.2em;
+      }
+
+      .footer-section h4 {
+        font-size: 1em;
+      }
+
+      .footer-section p {
+        font-size: 0.85em;
+      }
+
+      .footer-section ul li a {
+        font-size: 0.85em;
       }
     }
   </style>
@@ -542,7 +575,7 @@
       
       <div class="date-selector">
         <label><span class="game-icon">📅</span>Select Date:</label>
-        <input type="date" id="gameDate">
+        <input type="date" id="gameDate" min="2026-02-01">
         <p>Play today's puzzle or revisit previous days!</p>
       </div>
 
@@ -593,8 +626,8 @@
           <div class="footer-section">
             <h4>Quick Links</h4>
             <ul>
-              <li><a href="#about">About Us</a></li>
-              <li><a href="#how-to-play">How to Play</a></li>
+              <li><a href="about.html">About Us</a></li>
+              <li><a href="how-to-play.html">How to Play</a></li>
               <li><a href="https://reddit.com" target="_blank">Reddit</a></li>
               <li><a href="https://discord.com" target="_blank">Discord</a></li>
             </ul>
@@ -603,10 +636,9 @@
           <div class="footer-section">
             <h4>Legal</h4>
             <ul>
-              <li><a href="#terms">Terms & Conditions</a></li>
-              <li><a href="#privacy">Privacy Policy</a></li>
-              <li><a href="#cookies">Cookie Policy</a></li>
-              <li><a href="#disclaimer">Disclaimer</a></li>
+              <li><a href="terms.html">Terms & Conditions</a></li>
+              <li><a href="privacy.html">Privacy Policy</a></li>
+              <li><a href="/cdn-cgi/l/email-protection#e1929491918e9395a1829388828a888f868ecf828e8c">Contact Us</a></li>
             </ul>
           </div>
         </div>
@@ -615,7 +647,7 @@
       <div class="footer-bottom">
         <p>&copy; 2026 Crickingo. All rights reserved. Made with 🏏 for cricket fans.</p>
       </div>
-    </footer>
-  </div>
-</body>
-</html>
+      </footer>
+      </div>
+      </body>
+      </html>
