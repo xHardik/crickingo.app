@@ -117,6 +117,35 @@
             margin-top: 5px;
         }
 
+        /* Hint Display */
+        .hint-display {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.25) 0%, rgba(118, 75, 162, 0.25) 100%);
+            border: 2px solid rgba(102, 126, 234, 0.5);
+            border-radius: 15px;
+            color: white;
+            display: none;
+            animation: slideIn 0.4s ease;
+        }
+
+        .hint-display .hint-icon {
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        .hint-display .hint-text {
+            font-size: 1.05em;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .hint-display .hint-text strong {
+            color: #ffd700;
+            margin-right: 8px;
+        }
+
         .game-board {
             display: flex;
             flex-direction: column;
@@ -639,14 +668,21 @@
                 gap: 8px;
             }
 
+            .input-section {
+                flex-direction: column;
+                gap: 10px;
+            }
+
             input {
                 padding: 14px 16px;
                 font-size: 1em;
+                width: 100%;
             }
 
             button {
                 padding: 14px 24px;
                 font-size: 1em;
+                width: 100%;
             }
 
             .modal-content {
@@ -661,11 +697,25 @@
                 font-size: 1em;
                 padding: 15px 20px;
             }
+
+            .color-demo {
+                gap: 10px;
+            }
+
+            .demo-tile {
+                width: 45px;
+                height: 45px;
+                font-size: 1.3em;
+            }
         }
 
         @media (max-width: 400px) {
             h1 {
                 font-size: 2em;
+            }
+
+            .container {
+                padding: 25px 15px;
             }
 
             .tile {
@@ -674,12 +724,24 @@
                 font-size: 1.1em;
             }
 
+            .row {
+                gap: 5px;
+            }
+
             .input-section {
                 flex-direction: column;
+                gap: 8px;
+            }
+
+            input {
+                padding: 12px 14px;
+                font-size: 0.95em;
             }
 
             button {
                 width: 100%;
+                padding: 12px 20px;
+                font-size: 0.95em;
             }
 
             .modal-content {
@@ -694,6 +756,23 @@
             .btn-start {
                 padding: 15px 35px;
                 font-size: 1.1em;
+            }
+
+            .score-display {
+                padding: 12px;
+            }
+
+            .score-display .score-value {
+                font-size: 1.5em;
+            }
+
+            .hint-display {
+                padding: 12px 15px;
+                font-size: 0.9em;
+            }
+
+            .hint-display .hint-icon {
+                font-size: 1.5em;
             }
         }
     </style>
@@ -741,6 +820,10 @@
                 </li>
                 <li>
                     <span class="rule-icon">💡</span>
+                    <span class="rule-text">Get a <strong>country hint</strong> after your 3rd attempt and a <strong>position hint</strong> after your 4th attempt</span>
+                </li>
+                <li>
+                    <span class="rule-icon">🎯</span>
                     <span class="rule-text">Use the color clues strategically to narrow down your guesses</span>
                 </li>
             </ul>
@@ -787,6 +870,12 @@
         <div class="score-display" id="scoreDisplay">
             <div class="score-value">💰 0 pts</div>
             <div class="score-label">Current Score</div>
+        </div>
+
+        <!-- Hint Display -->
+        <div class="hint-display" id="hintDisplay" style="display: none;">
+            <div class="hint-icon">💡</div>
+            <div class="hint-text" id="hintText"></div>
         </div>
 
         <div class="message" id="message"></div>

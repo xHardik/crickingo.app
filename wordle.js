@@ -42,20 +42,17 @@ function closeRulesModal() {
 
 // ===== END TOURNAMENT INTEGRATION =====
 
-const PLAYERS = [
-    "KOHLI", "ROHIT", "DHONI", "BUMRAH", "SMITH", "ROOT", "STOKES",
-    "WARNER", "RAHUL", "PANT", "JADEJA", "ASHWIN", "SHAMI", "GAYLE",
-    "BUTLER", "BABAR", "WILLIAMSON", "BOULT", "STARC", "CUMMINS",
-    "RABADA", "ARCHER", "RASHID", "NARINE", "POLLARD", "RUSSELL",
-    "MAXWELL"
-];
-
+// Game data
+let wordleData = {};
 let targetPlayer = '';
 let currentAttempt = 0;
 let maxAttempts = 5;
 let gameOver = false;
 let guesses = [];
 let currentScore = 0;
+let selectedDate = null;
+let hintCountry = '';
+let hintPosition = '';
 
 // Scoring constants
 const SCORING = {
@@ -67,7 +64,30 @@ const SCORING = {
     FAILED: 0
 };
 
-function initGame() {
+// Load wordle data from JSON
+async function loadData() {
+    try {
+        const response = await fetch('./wordle.json');
+        if (!response.ok) {
+            throw new Error('Failed to load wordle.json');
+        }
+        wordleData = await response.json();
+    } catch (error) {
+        console.error('Error loading wordle data:', error);
+        alert('Error loading game data. Please refresh the page.');
+    }
+}
+
+// Get date from URL parameter or use current date
+function getDateFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('date') || new Date().toISOString().split('T')[0];
+}
+
+async function initGame() {
+    // Load data first
+    await loadData();
+    
     // Show rules modal first (only in non-tournament mode)
     if (!isInTournament) {
         showRulesModal();
@@ -78,7 +98,31 @@ function initGame() {
         showTournamentInfo();
     }
     
-    targetPlayer = PLAYERS[Math.floor(Math.random() * PLAYERS.length)];
+    // Get date and select player
+    selectedDate = getDateFromURL();
+    const gameKey = `wordle-${selectedDate}`;
+    const dailyGame = wordleData[gameKey];
+    
+    if (dailyGame) {
+        // Use date-specific player
+        targetPlayer = dailyGame.player;
+        hintCountry = dailyGame.hint_country || '';
+        hintPosition = dailyGame.hint_position || '';
+    } else {
+        // Fallback to first available player if no date match
+        const firstKey = Object.keys(wordleData)[0];
+        if (firstKey && wordleData[firstKey]) {
+            targetPlayer = wordleData[firstKey].player;
+            hintCountry = wordleData[firstKey].hint_country || '';
+            hintPosition = wordleData[firstKey].hint_position || '';
+        } else {
+            // Ultimate fallback
+            targetPlayer = "KOHLI";
+            hintCountry = "🇮🇳 India";
+            hintPosition = "🏏 Batsman";
+        }
+    }
+    
     currentAttempt = 0;
     gameOver = false;
     guesses = [];
@@ -88,6 +132,13 @@ function initGame() {
     updateStats();
     updateScoreDisplay();
     hideMessage();
+    
+    // Hide hint display
+    const hintDisplay = document.getElementById('hintDisplay');
+    if (hintDisplay) {
+        hintDisplay.style.display = 'none';
+    }
+    
     document.getElementById('guessInput').disabled = false;
     document.getElementById('submitBtn').disabled = false;
     
@@ -176,6 +227,13 @@ function submitGuess() {
     input.value = '';
     currentAttempt++;
     updateStats();
+    
+    // Show hints after 3rd and 4th attempts
+    if (!gameOver) {
+        setTimeout(() => {
+            showHint(currentAttempt);
+        }, 500);
+    }
     
     if (guess === targetPlayer) {
         gameOver = true;
@@ -316,6 +374,25 @@ function hideMessage() {
 
 function updateStats() {
     document.getElementById('stats').textContent = `Attempts: ${currentAttempt}/${maxAttempts}`;
+}
+
+function showHint(attemptNumber) {
+    const hintDisplay = document.getElementById('hintDisplay');
+    const hintText = document.getElementById('hintText');
+    
+    if (!hintDisplay || !hintText) return;
+    
+    if (attemptNumber === 3 && hintCountry) {
+        // Show country hint after 3rd attempt
+        hintText.innerHTML = `<strong>Hint:</strong> ${hintCountry}`;
+        hintDisplay.style.display = 'block';
+        hintDisplay.style.animation = 'slideIn 0.4s ease';
+    } else if (attemptNumber === 4 && hintPosition) {
+        // Show position hint after 4th attempt
+        hintText.innerHTML = `<strong>Hint:</strong> ${hintCountry} | ${hintPosition}`;
+        hintDisplay.style.display = 'block';
+        hintDisplay.style.animation = 'slideIn 0.4s ease';
+    }
 }
 
 function resetGame() {
