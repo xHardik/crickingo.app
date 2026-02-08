@@ -1,11 +1,8 @@
-// transfer.js - Script for Transfer History Game with Tournament Integration
+// transfer.js - Transfer History Game with Tournament Integration
 
 // ===== TOURNAMENT INTEGRATION =====
-
-// Simple tournament detection - just check the flag
 const isInTournament = localStorage.getItem('inTournamentGame') === 'true';
 
-// Show tournament banner
 function showTournamentInfo() {
     const infoDiv = document.createElement('div');
     infoDiv.id = 'tournamentInfo';
@@ -27,186 +24,177 @@ function showTournamentInfo() {
     infoDiv.innerHTML = `🏆 Tournament Mode - Play Your Best!`;
     document.body.insertBefore(infoDiv, document.body.firstChild);
 }
-
 // ===== END TOURNAMENT INTEGRATION =====
 
-const allIPLPlayers = [
-  "Virat Kohli", "MS Dhoni", "Rohit Sharma", "David Warner", "Ravindra Jadeja",
-  "KL Rahul", "Shreyas Iyer", "Rishabh Pant", "Hardik Pandya", "Jasprit Bumrah",
-  "Suresh Raina", "AB de Villiers", "Chris Gayle", "Kieron Pollard", "Andre Russell",
-  "Dwayne Bravo", "Lasith Malinga", "Yuzvendra Chahal", "Rashid Khan", "Shikhar Dhawan",
-  "Dinesh Karthik", "Gautam Gambhir", "Yusuf Pathan", "Shane Watson", "Faf du Plessis",
-  "Jos Buttler", "Ben Stokes", "Glenn Maxwell", "Kagiso Rabada", "Pat Cummins",
-  "Sunil Narine", "Mitchell Starc", "Trent Boult", "Mohammed Shami", "Bhuvneshwar Kumar",
-  "Shubman Gill", "Ishan Kishan", "Sanju Samson", "Quinton de Kock", "Ajinkya Rahane"
-].sort();
-
-let transfersData = {};
+// Game variables
+let gameData = {};
 let currentGame = null;
-let currentIndex = 0;
-let correctCount = 0;
+let currentPlayerIndex = 0;
+let currentSelectedPlayer = null;
+let totalScore = 0;
+let correctAnswers = 0;
+let currentStreak = 0;
 let gameActive = false;
-let transferAttempts = 0;
-let maxAttempts = 3;
-let selectedPlayer = '';
-let selectedDate = null;
 
-// Load transfer data from JSON
+// Scoring constants (Max 1000 points)
+const POINTS = {
+  FIRST: 250,      // 1st correct
+  SECOND: 300,     // 2nd correct (250 + 50 streak bonus)
+  THIRD: 350,      // 3rd correct (250 + 100 streak bonus)
+  COMPLETION: 100  // All 3 correct in order
+};
+
+// Load game data from JSON
 async function loadData() {
   try {
+    console.log('Loading transfers.json...');
     const response = await fetch('./transfers.json');
+    
     if (!response.ok) {
-      throw new Error('Failed to load transfers.json');
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-    transfersData = await response.json();
+    
+    gameData = await response.json();
+    console.log('✅ Game data loaded successfully');
+    
+    if (!gameData.allPlayers) {
+      throw new Error('Missing allPlayers in game data');
+    }
+    
+    console.log(`📋 ${gameData.allPlayers.length} players available`);
+    
   } catch (error) {
-    console.error('Error loading transfer data:', error);
-    alert('Error loading game data. Please refresh the page.');
+    console.error('❌ Error loading game data:', error);
+    alert(`Error loading game data: ${error.message}\n\nMake sure transfer.json is in the same folder!`);
   }
 }
 
-// Get date from URL parameter (only for non-tournament mode)
+// Get date from URL parameter
 function getDateFromURL() {
   const urlParams = new URLSearchParams(window.location.search);
   return urlParams.get('date') || new Date().toISOString().split('T')[0];
 }
 
-// Get random date key from available dates in transfersData
-function getRandomDateKey() {
-  const availableDates = Object.keys(transfersData);
-  if (availableDates.length === 0) return null;
-  const randomIndex = Math.floor(Math.random() * availableDates.length);
-  return availableDates[randomIndex];
-}
-
-// Setup search dropdown
-function setupSearchDropdown() {
-  const searchInput = document.getElementById('searchInput');
-  const dropdownList = document.getElementById('dropdownList');
-
-  if (!searchInput || !dropdownList) return;
-
-  searchInput.addEventListener('focus', () => {
-    showDropdownResults(allIPLPlayers);
-  });
-
-  searchInput.addEventListener('input', (e) => {
-    const searchTerm = e.target.value.toLowerCase();
-    if (searchTerm === '') {
-      showDropdownResults(allIPLPlayers);
-    } else {
-      const filtered = allIPLPlayers.filter(player => 
-        player.toLowerCase().includes(searchTerm)
-      );
-      showDropdownResults(filtered);
-    }
-  });
-
-  searchInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      const value = searchInput.value.trim();
-      if (value) {
-        submitGuess();
-      } else {
-        const firstItem = dropdownList.querySelector('.dropdown-item');
-        if (firstItem) {
-          firstItem.click();
-        }
-      }
-    }
-  });
-
-  document.addEventListener('click', (e) => {
-    if (!searchInput.contains(e.target) && !dropdownList.contains(e.target)) {
-      dropdownList.classList.remove('active');
-    }
-  });
-}
-
-function showDropdownResults(players) {
-  const dropdownList = document.getElementById('dropdownList');
-  if (!dropdownList) return;
-
-  dropdownList.innerHTML = '';
-
-  if (players.length === 0) {
-    dropdownList.innerHTML = '<div class="no-results">No players found</div>';
-    dropdownList.classList.add('active');
-    return;
+// Show rules modal
+function showRulesModal() {
+  const modal = document.getElementById('rulesModal');
+  if (modal) {
+    modal.style.display = 'flex';
   }
-
-  players.forEach(player => {
-    const item = document.createElement('div');
-    item.className = 'dropdown-item';
-    item.textContent = player;
-    item.addEventListener('click', () => {
-      document.getElementById('searchInput').value = player;
-      selectedPlayer = player;
-      dropdownList.classList.remove('active');
-    });
-    dropdownList.appendChild(item);
-  });
-
-  dropdownList.classList.add('active');
 }
 
-// Initialize the game
+// Close rules modal
+function closeRulesModal() {
+  const modal = document.getElementById('rulesModal');
+  if (modal) {
+    modal.style.display = 'none';
+  }
+}
+
+// Initialize game
 async function initGame() {
   await loadData();
+  
+  // Validate data
+  if (!gameData || !gameData.allPlayers) {
+    console.error('Invalid game data');
+    return;
+  }
+  
+  // Show rules modal first
+  showRulesModal();
   
   // Show tournament banner if in tournament mode
   if (isInTournament) {
     showTournamentInfo();
-    
-    // TOURNAMENT MODE: Use random date from available data
-    selectedDate = getRandomDateKey();
-    
-    if (!selectedDate || !transfersData[selectedDate]) {
-      alert('No Transfer History puzzle available. Returning to tournament.');
-      finishGame(0);
-      return;
-    }
-    
-    console.log(`🎲 Tournament mode: Using random date ${selectedDate}`);
-  } else {
-    // NORMAL MODE: Use date from URL parameter
-    selectedDate = getDateFromURL();
-    
-    if (!transfersData[selectedDate]) {
-      alert(`No Transfer History puzzle available for ${selectedDate}. Returning to menu.`);
-      backToMenu();
-      return;
-    }
-    
-    console.log(`📅 Normal mode: Using date ${selectedDate}`);
   }
   
-  currentGame = {
-    title: "🔄 Transfer History",
-    subtitle: "Guess the player from their IPL journey",
-    players: transfersData[selectedDate]
-  };
+  const selectedDate = getDateFromURL();
+  console.log('📅 Date:', selectedDate);
   
-  currentIndex = 0;
-  correctCount = 0;
+  // Try to load date-specific game, fall back to default
+  const gameKey = `transfer-${selectedDate}`;
+  currentGame = gameData[gameKey] || gameData['transfer'];
+  
+  if (!currentGame || !currentGame.players) {
+    alert('No transfer history available. Returning to menu.');
+    backToMenu();
+    return;
+  }
+  
+  console.log(`🎮 Loaded: ${currentGame.title}`);
+  console.log(`👥 ${currentGame.players.length} players to guess`);
+  
+  // Reset game state
+  currentPlayerIndex = 0;
+  currentSelectedPlayer = null;
+  totalScore = 0;
+  correctAnswers = 0;
+  currentStreak = 0;
   gameActive = true;
   
-  setupSearchDropdown();
-  showTransferPlayer();
+  // Update UI
+  document.querySelector('.game-info h2').innerText = currentGame.title;
+  document.querySelector('.game-info .subtitle').innerText = currentGame.subtitle;
+  
+  // Add score display
+  addScoreDisplay();
+  
+  showCurrentPlayer();
+  setupSearchInput();
+  updateScoreDisplay();
 }
 
-function showTransferPlayer() {
-  if (currentIndex >= currentGame.players.length) {
+// Add score display to UI
+function addScoreDisplay() {
+  const playerBox = document.querySelector('.player-box');
+  if (playerBox && !document.getElementById('currentScore')) {
+    const scoreDiv = document.createElement('div');
+    scoreDiv.id = 'currentScore';
+    scoreDiv.style.cssText = `
+      margin-top: 15px;
+      padding: 15px;
+      background: linear-gradient(135deg, rgba(255, 193, 7, 0.2) 0%, rgba(255, 152, 0, 0.2) 100%);
+      border: 2px solid rgba(255, 193, 7, 0.4);
+      border-radius: 15px;
+      text-align: center;
+    `;
+    playerBox.appendChild(scoreDiv);
+  }
+}
+
+// Update score display
+function updateScoreDisplay() {
+  const scoreDisplay = document.getElementById('currentScore');
+  if (scoreDisplay) {
+    scoreDisplay.innerHTML = `
+      <div style="font-size: 1.5em; font-weight: 900; color: #ffd700;">
+        💰 ${totalScore} pts
+      </div>
+      <div style="font-size: 0.9em; color: rgba(255,255,255,0.8); margin-top: 5px;">
+        ${currentStreak > 0 ? `🔥 ${currentStreak} Streak` : 'Build a streak!'}
+      </div>
+    `;
+  }
+}
+
+// Show current player's transfer history
+function showCurrentPlayer() {
+  if (currentPlayerIndex >= currentGame.players.length) {
     endGame();
     return;
   }
-
-  transferAttempts = 0;
-  selectedPlayer = '';
-  const player = currentGame.players[currentIndex];
+  
+  const player = currentGame.players[currentPlayerIndex];
+  
+  // Update player counter
+  document.getElementById('currentPlayer').innerText = `Player ${currentPlayerIndex + 1}`;
+  document.getElementById('playerCount').innerText = `Player ${currentPlayerIndex + 1} of ${currentGame.players.length}`;
+  
+  // Display transfer history
   const transferList = document.getElementById('transferList');
   transferList.innerHTML = '';
-
+  
   player.transfers.forEach(transfer => {
     const item = document.createElement('div');
     item.className = 'transfer-item';
@@ -216,101 +204,231 @@ function showTransferPlayer() {
     `;
     transferList.appendChild(item);
   });
-
-  document.getElementById('searchInput').value = '';
-  document.getElementById('searchInput').focus();
-  document.getElementById('dropdownList').classList.remove('active');
   
+  // Reset feedback
   const feedback = document.getElementById('feedback');
-  feedback.style.display = 'none';
   feedback.className = 'feedback';
+  feedback.style.display = 'none';
   
-  document.getElementById('currentPlayer').innerText = `Player ${currentIndex + 1}`;
-  document.getElementById('playerCount').innerText = `Player ${currentIndex + 1} of ${currentGame.players.length}`;
-  document.getElementById('attempts').textContent = `Attempts: ${transferAttempts} / ${maxAttempts}`;
+  // Reset search input
+  const searchInput = document.getElementById('searchInput');
+  searchInput.value = '';
+  currentSelectedPlayer = null;
+  
+  // Update attempts display
+  updateAttemptsDisplay();
 }
 
-function submitGuess() {
-  const guess = document.getElementById('searchInput').value.trim();
-  const correctAnswer = currentGame.players[currentIndex].name;
-  const feedback = document.getElementById('feedback');
+// Update attempts display
+function updateAttemptsDisplay() {
   const attemptsDiv = document.getElementById('attempts');
+  attemptsDiv.innerHTML = `Correct: ${correctAnswers} / ${currentGame.players.length}`;
+}
 
-  if (!guess) {
-    feedback.className = 'feedback wrong';
-    feedback.textContent = '⚠️ Please select a player';
-    feedback.style.display = 'block';
+// Setup search input and dropdown
+function setupSearchInput() {
+  const searchInput = document.getElementById('searchInput');
+  const dropdownList = document.getElementById('dropdownList');
+  
+  // Use shared allPlayers list
+  const allPlayers = gameData.allPlayers || [];
+  
+  searchInput.addEventListener('input', () => {
+    const query = searchInput.value.toLowerCase();
+    
+    if (query.length === 0) {
+      dropdownList.classList.remove('active');
+      return;
+    }
+    
+    const matches = allPlayers.filter(player => 
+      player.toLowerCase().includes(query)
+    );
+    
+    dropdownList.innerHTML = '';
+    
+    if (matches.length === 0) {
+      dropdownList.innerHTML = '<div class="no-results">No players found</div>';
+    } else {
+      matches.forEach(player => {
+        const item = document.createElement('div');
+        item.className = 'dropdown-item';
+        item.innerText = player;
+        item.addEventListener('click', () => {
+          searchInput.value = player;
+          currentSelectedPlayer = player;
+          dropdownList.classList.remove('active');
+        });
+        dropdownList.appendChild(item);
+      });
+    }
+    
+    dropdownList.classList.add('active');
+  });
+  
+  searchInput.addEventListener('focus', () => {
+    if (searchInput.value.length > 0) {
+      dropdownList.classList.add('active');
+    }
+  });
+  
+  searchInput.addEventListener('blur', () => {
+    setTimeout(() => {
+      dropdownList.classList.remove('active');
+    }, 200);
+  });
+}
+
+// Submit guess
+function submitGuess() {
+  if (!gameActive) return;
+  if (!currentSelectedPlayer) {
+    alert('Please select a player first!');
     return;
   }
-
-  transferAttempts++;
-  attemptsDiv.textContent = `Attempts: ${transferAttempts} / ${maxAttempts}`;
-
-  if (guess === correctAnswer) {
+  
+  const currentPlayer = currentGame.players[currentPlayerIndex];
+  const feedback = document.getElementById('feedback');
+  
+  if (currentSelectedPlayer === currentPlayer.name) {
+    // CORRECT ANSWER
+    correctAnswers++;
+    currentStreak++;
+    
+    // Calculate points based on streak
+    let pointsEarned = 0;
+    if (currentStreak === 1) {
+      pointsEarned = POINTS.FIRST;
+    } else if (currentStreak === 2) {
+      pointsEarned = POINTS.SECOND;
+    } else if (currentStreak === 3) {
+      pointsEarned = POINTS.THIRD;
+    }
+    
+    totalScore += pointsEarned;
+    
     feedback.className = 'feedback correct';
-    feedback.textContent = `✅ Correct! It's ${correctAnswer}!`;
+    feedback.innerText = `✅ Correct! +${pointsEarned} points`;
     feedback.style.display = 'block';
-    correctCount++;
+    
+    // Show streak notification
+    if (currentStreak === 2) {
+      showStreakNotification('🔥 Streak Started! +50 Bonus!');
+    } else if (currentStreak === 3) {
+      showStreakNotification('🔥🔥 Amazing Streak! +100 Bonus!');
+    }
+    
+    updateScoreDisplay();
     
     setTimeout(() => {
-      currentIndex++;
-      showTransferPlayer();
-    }, 2000);
+      currentPlayerIndex++;
+      showCurrentPlayer();
+    }, 1500);
+    
   } else {
-    if (transferAttempts >= maxAttempts) {
-      feedback.className = 'feedback wrong';
-      feedback.textContent = `❌ Wrong! The answer was ${correctAnswer}`;
-      feedback.style.display = 'block';
-      
-      setTimeout(() => {
-        currentIndex++;
-        showTransferPlayer();
-      }, 3000);
-    } else {
-      feedback.className = 'feedback wrong';
-      feedback.textContent = `❌ Wrong! You have ${maxAttempts - transferAttempts} attempts left`;
-      feedback.style.display = 'block';
-      
-      document.getElementById('searchInput').value = '';
-      document.getElementById('searchInput').focus();
-    }
+    // WRONG ANSWER
+    currentStreak = 0;
+    
+    feedback.className = 'feedback wrong';
+    feedback.innerText = `❌ Wrong! It was ${currentPlayer.name}`;
+    feedback.style.display = 'block';
+    
+    updateScoreDisplay();
+    
+    setTimeout(() => {
+      currentPlayerIndex++;
+      showCurrentPlayer();
+    }, 2000);
   }
 }
 
+// Show streak notification
+function showStreakNotification(message) {
+  const notification = document.createElement('div');
+  notification.style.cssText = `
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, #ff6b9d 0%, #ffa400 100%);
+    color: white;
+    padding: 30px 40px;
+    border-radius: 20px;
+    font-size: 1.5em;
+    font-weight: 900;
+    z-index: 2000;
+    box-shadow: 0 10px 40px rgba(255, 107, 157, 0.6);
+    text-align: center;
+    animation: pulse 0.5s ease;
+  `;
+  
+  notification.innerText = message;
+  document.body.appendChild(notification);
+  
+  setTimeout(() => {
+    notification.remove();
+  }, 1500);
+}
+
+// Skip current player
 function skipTransferPlayer() {
   if (!gameActive) return;
   
-  const correctAnswer = currentGame.players[currentIndex].name;
+  const currentPlayer = currentGame.players[currentPlayerIndex];
   const feedback = document.getElementById('feedback');
   
   feedback.className = 'feedback wrong';
-  feedback.textContent = `⏭️ Skipped! The answer was ${correctAnswer}`;
+  feedback.innerText = `⏭️ Skipped! It was ${currentPlayer.name}`;
   feedback.style.display = 'block';
   
+  currentStreak = 0;
+  updateScoreDisplay();
+  
   setTimeout(() => {
-    currentIndex++;
-    showTransferPlayer();
-  }, 2000);
+    currentPlayerIndex++;
+    showCurrentPlayer();
+  }, 1500);
 }
 
+// End game
 function endGame() {
   gameActive = false;
   
-  const total = currentGame.players.length;
-  const finalScore = correctCount;
-  const phrase = getResultPhrase(correctCount, total);
+  // Add completion bonus if all 3 correct
+  let completionBonus = 0;
+  if (correctAnswers === 3 && currentStreak === 3) {
+    completionBonus = POINTS.COMPLETION;
+    totalScore += completionBonus;
+  }
   
-  document.getElementById('scoreText').innerText = `${correctCount} / ${total}`;
-  document.getElementById('resultPhrase').innerText = phrase;
+  const finalScore = totalScore;
+  const phrase = getResultPhrase(correctAnswers);
+  
+  // Build score breakdown
+  const scoreBreakdown = `
+    <div style="text-align: left; margin: 20px auto; max-width: 400px; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px;">
+      <div style="font-size: 1.1em; font-weight: 700; margin-bottom: 15px; text-align: center;">📊 Score Breakdown</div>
+      <div style="margin: 8px 0;">✅ Correct Answers: <span style="float: right; color: #4caf50;">${correctAnswers} / 3</span></div>
+      ${correctAnswers >= 1 ? `<div style="margin: 8px 0;">1st Correct: <span style="float: right; color: #ffd700;">+250</span></div>` : ''}
+      ${correctAnswers >= 2 ? `<div style="margin: 8px 0;">2nd Correct (Streak): <span style="float: right; color: #ff9800;">+300</span></div>` : ''}
+      ${correctAnswers >= 3 ? `<div style="margin: 8px 0;">3rd Correct (Streak): <span style="float: right; color: #ff6b9d;">+350</span></div>` : ''}
+      ${completionBonus > 0 ? `<div style="margin: 8px 0;">🎯 Perfect Completion: <span style="float: right; color: #9c27b0;">+${completionBonus}</span></div>` : ''}
+      <hr style="border: 1px solid rgba(255,255,255,0.2); margin: 15px 0;">
+      <div style="font-size: 1.3em; font-weight: 900; margin-top: 10px;">Total: <span style="float: right; color: #ffd700;">${finalScore}</span></div>
+    </div>
+  `;
+  
+  document.getElementById('scoreText').innerText = `${finalScore} / 1000`;
+  document.getElementById('resultPhrase').innerHTML = phrase + scoreBreakdown;
+  
+  // Hide game area
+  document.querySelector('.transfer-layout').style.display = 'none';
+  document.querySelector('.game-info').style.display = 'none';
+  document.querySelector('.button-controls').style.display = 'none';
   
   const resultArea = document.getElementById('resultArea');
   
-  // Hide game elements
-  document.querySelector('.transfer-layout').style.display = 'none';
-  document.querySelector('.button-controls').style.display = 'none';
-  document.querySelector('.game-info').style.display = 'none';
-  
-  // Clear any existing tournament buttons
+  // Clear existing tournament buttons
   const existingTournamentBtns = document.getElementById('tournamentButtons');
   if (existingTournamentBtns) {
     existingTournamentBtns.remove();
@@ -318,13 +436,11 @@ function endGame() {
   
   if (isInTournament) {
     // TOURNAMENT MODE
-    // Hide normal buttons
     const restartBtn = resultArea.querySelector('.btn-restart');
-    const backBtn = resultArea.querySelector('.btn-back');
+    const backBtn = resultArea.querySelectorAll('.btn-back')[1];
     if (restartBtn) restartBtn.style.display = 'none';
     if (backBtn) backBtn.style.display = 'none';
     
-    // Add tournament completion message
     const tournamentBtnContainer = document.createElement('div');
     tournamentBtnContainer.id = 'tournamentButtons';
     tournamentBtnContainer.style.cssText = `
@@ -340,7 +456,7 @@ function endGame() {
         ✅ Score Submitted!
       </p>
       <p style="font-size: 2em; font-weight: 900; margin: 10px 0;">
-        ${finalScore} / ${total} Points
+        ${finalScore} Points
       </p>
       <p style="font-size: 0.9em; opacity: 0.9;">
         Returning to tournament...
@@ -348,16 +464,14 @@ function endGame() {
     `;
     resultArea.appendChild(tournamentBtnContainer);
     
-    // Auto-return to tournament after 2 seconds
     setTimeout(() => {
       finishGame(finalScore);
     }, 2000);
     
   } else {
-    // NORMAL MODE - standalone play
-    // Show normal buttons
+    // NORMAL MODE
     const restartBtn = resultArea.querySelector('.btn-restart');
-    const backBtn = resultArea.querySelector('.btn-back');
+    const backBtn = resultArea.querySelectorAll('.btn-back')[1];
     if (restartBtn) restartBtn.style.display = 'inline-block';
     if (backBtn) backBtn.style.display = 'inline-block';
   }
@@ -365,31 +479,37 @@ function endGame() {
   resultArea.style.display = 'block';
 }
 
-function getResultPhrase(score, total) {
-  const percentage = (score / total) * 100;
-  
-  if (percentage >= 90) return "🔥 Absolute Legend! You're a cricket genius!";
-  if (percentage >= 75) return "🏆 Outstanding! You really know your cricket!";
-  if (percentage >= 60) return "👏 Great job! Solid cricket knowledge!";
-  if (percentage >= 45) return "👍 Not bad! Keep watching more cricket!";
-  return "📺 Twitter expert! Time to watch some actual matches!";
+// Get result phrase
+function getResultPhrase(correct) {
+  if (correct === 3) return "🏆 Perfect! You know your IPL transfers!";
+  if (correct === 2) return "👏 Great job! Solid knowledge!";
+  if (correct === 1) return "👍 Not bad! Keep learning!";
+  return "📚 Time to study more transfers!";
 }
 
+// Restart game
 function restartGame() {
   location.reload();
 }
 
+// Back to menu
 function backToMenu() {
   window.location.href = 'index.html';
 }
 
+// Finish game (tournament mode)
 function finishGame(finalScore) {
-    // Clear the tournament flag
-    localStorage.removeItem('inTournamentGame');
-    
-    // Redirect back to tournament with score - game 2 is Transfer History
-    window.location.href = `tournament.html?score=${finalScore}&game=2`;
+  localStorage.removeItem('inTournamentGame');
+  window.location.href = `tournament.html?score=${finalScore}&game=2`;
 }
+
+// Make functions globally accessible
+window.submitGuess = submitGuess;
+window.skipTransferPlayer = skipTransferPlayer;
+window.restartGame = restartGame;
+window.backToMenu = backToMenu;
+window.finishGame = finishGame;
+window.closeRulesModal = closeRulesModal;
 
 // Initialize when DOM is loaded
 window.addEventListener('DOMContentLoaded', initGame);

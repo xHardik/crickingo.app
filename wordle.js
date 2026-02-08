@@ -1,7 +1,3 @@
-// Cricket Wordle with Tournament Integration
-
-// ===== TOURNAMENT INTEGRATION =====
-
 // Simple tournament detection - just check the flag
 const isInTournament = localStorage.getItem('inTournamentGame') === 'true';
 
@@ -28,6 +24,22 @@ function showTournamentInfo() {
     document.body.insertBefore(infoDiv, document.body.firstChild);
 }
 
+// Show rules modal on page load
+function showRulesModal() {
+    const modal = document.getElementById('rulesModal');
+    if (modal) {
+        modal.style.display = 'flex';
+    }
+}
+
+// Close rules modal
+function closeRulesModal() {
+    const modal = document.getElementById('rulesModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
 // ===== END TOURNAMENT INTEGRATION =====
 
 const PLAYERS = [
@@ -43,8 +55,24 @@ let currentAttempt = 0;
 let maxAttempts = 5;
 let gameOver = false;
 let guesses = [];
+let currentScore = 0;
+
+// Scoring constants
+const SCORING = {
+    ATTEMPT_1: 100,
+    ATTEMPT_2: 80,
+    ATTEMPT_3: 60,
+    ATTEMPT_4: 40,
+    ATTEMPT_5: 20,
+    FAILED: 0
+};
 
 function initGame() {
+    // Show rules modal first (only in non-tournament mode)
+    if (!isInTournament) {
+        showRulesModal();
+    }
+    
     // Show tournament banner if in tournament mode
     if (isInTournament && !document.getElementById('tournamentInfo')) {
         showTournamentInfo();
@@ -54,8 +82,11 @@ function initGame() {
     currentAttempt = 0;
     gameOver = false;
     guesses = [];
+    currentScore = 0;
+    
     createBoard();
     updateStats();
+    updateScoreDisplay();
     hideMessage();
     document.getElementById('guessInput').disabled = false;
     document.getElementById('submitBtn').disabled = false;
@@ -76,6 +107,27 @@ function updateButtonsForMode() {
         // In normal mode, show these buttons
         if (resetBtn) resetBtn.style.display = 'inline-block';
         if (backBtn) backBtn.style.display = 'inline-block';
+    }
+}
+
+function updateScoreDisplay() {
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    if (scoreDisplay) {
+        const scoreValue = scoreDisplay.querySelector('.score-value');
+        if (scoreValue) {
+            scoreValue.textContent = `💰 ${currentScore} pts`;
+        }
+    }
+}
+
+function calculateScore(attemptNumber) {
+    switch(attemptNumber) {
+        case 1: return SCORING.ATTEMPT_1;
+        case 2: return SCORING.ATTEMPT_2;
+        case 3: return SCORING.ATTEMPT_3;
+        case 4: return SCORING.ATTEMPT_4;
+        case 5: return SCORING.ATTEMPT_5;
+        default: return SCORING.FAILED;
     }
 }
 
@@ -127,19 +179,31 @@ function submitGuess() {
     
     if (guess === targetPlayer) {
         gameOver = true;
-        const score = (maxAttempts - currentAttempt + 1) * 20; // 100 for 1st try, 80 for 2nd, etc.
-        showMessage(`🎉 Correct! You guessed ${targetPlayer} in ${currentAttempt} ${currentAttempt === 1 ? 'try' : 'tries'}!`, 'success');
+        currentScore = calculateScore(currentAttempt);
+        updateScoreDisplay();
+        
+        const scoreBreakdown = `
+            <div style="text-align: center; margin: 20px auto; max-width: 400px; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px;">
+                <div style="font-size: 1.3em; font-weight: 900; color: #ffd700; margin-bottom: 10px;">🎉 Score: ${currentScore} Points!</div>
+                <div style="font-size: 1em; color: rgba(255,255,255,0.9);">Guessed in ${currentAttempt} ${currentAttempt === 1 ? 'try' : 'tries'}</div>
+            </div>
+        `;
+        
+        showMessage(`🎉 Correct! You guessed ${targetPlayer}!${scoreBreakdown}`, 'success');
         document.getElementById('guessInput').disabled = true;
         document.getElementById('submitBtn').disabled = true;
         
         if (isInTournament) {
-            showTournamentEndScreen(score, true);
+            showTournamentEndScreen(currentScore, true);
             setTimeout(() => {
-                finishGame(score);
+                finishGame(currentScore);
             }, 2000);
         }
     } else if (currentAttempt >= maxAttempts) {
         gameOver = true;
+        currentScore = SCORING.FAILED;
+        updateScoreDisplay();
+        
         showMessage(`😞 Game Over! The answer was ${targetPlayer}`, 'error');
         document.getElementById('guessInput').disabled = true;
         document.getElementById('submitBtn').disabled = true;
@@ -184,10 +248,10 @@ function showTournamentEndScreen(score, isWin) {
             ${score} Points
         </p>
         <p style="font-size: 0.9em; opacity: 0.9;">
-            ${isWin ? '🎉 All games complete!' : '📊 Tournament complete!'}
+            ${isWin ? '🎉 Well done!' : '📊 Better luck next time!'}
         </p>
         <p style="font-size: 0.9em; opacity: 0.9; margin-top: 10px;">
-            Showing final results...
+            Returning to tournament...
         </p>
     `;
     container.appendChild(tournamentDiv);
@@ -198,12 +262,14 @@ function displayGuess(guess) {
     const guessLetters = guess.split('');
     const letterCount = {};
     
+    // Count letters in target
     targetLetters.forEach(letter => {
         letterCount[letter] = (letterCount[letter] || 0) + 1;
     });
     
     const results = new Array(guess.length).fill('absent');
     
+    // First pass: mark correct positions
     guessLetters.forEach((letter, i) => {
         if (letter === targetLetters[i]) {
             results[i] = 'correct';
@@ -211,6 +277,7 @@ function displayGuess(guess) {
         }
     });
     
+    // Second pass: mark present letters
     guessLetters.forEach((letter, i) => {
         if (results[i] !== 'correct' && targetLetters.includes(letter) && letterCount[letter] > 0) {
             results[i] = 'present';
@@ -218,6 +285,7 @@ function displayGuess(guess) {
         }
     });
     
+    // Animate tiles
     guessLetters.forEach((letter, i) => {
         const tile = document.getElementById(`tile-${currentAttempt}-${i}`);
         tile.textContent = letter;
@@ -231,7 +299,7 @@ function displayGuess(guess) {
 
 function showMessage(text, type) {
     const msg = document.getElementById('message');
-    msg.textContent = text;
+    msg.innerHTML = text;
     msg.className = `message show ${type}`;
     
     setTimeout(() => {
@@ -269,11 +337,19 @@ function finishGame(finalScore) {
 window.submitGuess = submitGuess;
 window.resetGame = resetGame;
 window.finishGame = finishGame;
+window.closeRulesModal = closeRulesModal;
 
-document.getElementById('guessInput').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-        submitGuess();
+// Enter key support
+document.addEventListener('DOMContentLoaded', function() {
+    const guessInput = document.getElementById('guessInput');
+    if (guessInput) {
+        guessInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                submitGuess();
+            }
+        });
     }
 });
 
+// Initialize game
 initGame();

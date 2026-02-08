@@ -188,7 +188,7 @@ function renderGrid() {
   grid.innerHTML = '';
 
   // Only show first 16 categories for 4x4 grid
-  const categoriesToShow = currentGame.categories.slice(0, 16);
+  const categoriesToShow = currentGame.categories.slice(0, 15);
 
   categoriesToShow.forEach((cat, idx) => {
     const cell = document.createElement('div');
@@ -358,7 +358,7 @@ function endGame() {
   if (skipBtn) skipBtn.disabled = true;
   
   // Calculate final bonuses
-  const total = Math.min(currentGame.categories.length, 16);
+  const total = Math.min(currentGame.categories.length, 15);
   const accuracy = (correctCount / total) * 100;
   
   let accuracyBonus = 0;
@@ -375,7 +375,7 @@ function endGame() {
   
   // Perfect round bonus (all correct, no skips/wrongs)
   let perfectBonus = 0;
-  if (correctCount === 16 && wrongAnswers === 0 && skippedPlayers === 0) {
+  if (correctCount === 15 && wrongAnswers === 0 && skippedPlayers === 0) {
     perfectBonus = POINTS.PERFECT_ROUND;
     totalScore += perfectBonus;
   }

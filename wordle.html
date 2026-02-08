@@ -38,8 +38,8 @@
                 radial-gradient(circle at 40% 20%, rgba(138, 43, 226, 0.2) 0%, transparent 50%);
             animation: gradientShift ease infinite;
             z-index: -1;
-top: 0;
-      left: 0;
+            top: 0;
+            left: 0;
         }
 
         @keyframes gradientShift {
@@ -92,6 +92,29 @@ top: 0;
             margin-bottom: 35px;
             font-size: 1.05em;
             line-height: 1.5;
+        }
+
+        /* Score Display */
+        .score-display {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.2) 0%, rgba(255, 152, 0, 0.2) 100%);
+            border: 2px solid rgba(255, 193, 7, 0.4);
+            border-radius: 15px;
+        }
+
+        .score-display .score-value {
+            font-size: 1.8em;
+            font-weight: 900;
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+        }
+
+        .score-display .score-label {
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 5px;
         }
 
         .game-board {
@@ -330,6 +353,265 @@ top: 0;
             box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
         }
 
+        /* Rules Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            padding: 50px 45px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 
+                0 30px 90px rgba(0, 0, 0, 0.7),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                0 0 100px rgba(102, 126, 234, 0.3);
+            animation: modalSlideUp 0.5s ease;
+            position: relative;
+        }
+
+        @keyframes modalSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea 0%, #ff6b9d 50%, #ffa400 100%);
+            border-radius: 30px 30px 0 0;
+        }
+
+        .modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.6), rgba(118, 75, 162, 0.6));
+            border-radius: 10px;
+        }
+
+        .modal-title {
+            font-size: 2.8em;
+            font-weight: 900;
+            margin-bottom: 30px;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #ff6b9d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .rules-list {
+            list-style: none;
+            margin: 30px 0;
+            padding: 0;
+        }
+
+        .rules-list li {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px 25px;
+            margin-bottom: 15px;
+            color: white;
+            font-size: 1.1em;
+            line-height: 1.6;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rules-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: linear-gradient(180deg, #667eea 0%, #ff6b9d 100%);
+            transition: width 0.3s ease;
+        }
+
+        .rules-list li:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .rules-list li:hover::before {
+            width: 8px;
+        }
+
+        .rule-icon {
+            font-size: 1.4em;
+            margin-right: 12px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .rule-text {
+            display: inline-block;
+            vertical-align: middle;
+            width: calc(100% - 50px);
+        }
+
+        .color-demo {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .demo-tile {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: 900;
+            border-radius: 10px;
+            color: white;
+        }
+
+        .demo-tile.correct {
+            background: linear-gradient(135deg, #38ef7d 0%, #11998e 100%);
+            box-shadow: 0 4px 15px rgba(56, 239, 125, 0.5);
+        }
+
+        .demo-tile.present {
+            background: linear-gradient(135deg, #ffa400 0%, #ff6b00 100%);
+            box-shadow: 0 4px 15px rgba(255, 164, 0, 0.5);
+        }
+
+        .demo-tile.absent {
+            background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+            box-shadow: 0 4px 15px rgba(74, 85, 104, 0.4);
+        }
+
+        .scoring-box {
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.15) 0%, rgba(255, 152, 0, 0.15) 100%);
+            border: 2px solid rgba(255, 193, 7, 0.3);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 25px 0;
+            color: white;
+        }
+
+        .scoring-box h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #ffd700;
+            text-align: center;
+        }
+
+        .scoring-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .scoring-item:last-child {
+            border-bottom: none;
+        }
+
+        .scoring-label {
+            font-weight: 600;
+        }
+
+        .scoring-value {
+            font-weight: 900;
+            color: #ffd700;
+        }
+
+        .btn-start {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 18px 50px;
+            font-size: 1.3em;
+            border-radius: 18px;
+            border: none;
+            cursor: pointer;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.5);
+            transition: all 0.4s ease;
+            display: block;
+            margin: 30px auto 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-start::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-start:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        .btn-start:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 50px rgba(102, 126, 234, 0.7);
+        }
+
+        .btn-start span {
+            position: relative;
+            z-index: 1;
+        }
+
         @media (max-width: 600px) {
             .container {
                 padding: 35px 25px;
@@ -366,6 +648,19 @@ top: 0;
                 padding: 14px 24px;
                 font-size: 1em;
             }
+
+            .modal-content {
+                padding: 35px 25px;
+            }
+
+            .modal-title {
+                font-size: 2.2em;
+            }
+
+            .rules-list li {
+                font-size: 1em;
+                padding: 15px 20px;
+            }
         }
 
         @media (max-width: 400px) {
@@ -386,14 +681,114 @@ top: 0;
             button {
                 width: 100%;
             }
+
+            .modal-content {
+                padding: 30px 20px;
+                width: 95%;
+            }
+
+            .modal-title {
+                font-size: 1.8em;
+            }
+
+            .btn-start {
+                padding: 15px 35px;
+                font-size: 1.1em;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Rules Modal -->
+    <div id="rulesModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="modal-title">🏏 How to Play</h2>
+            
+            <ul class="rules-list">
+                <li>
+                    <span class="rule-icon">🎯</span>
+                    <span class="rule-text">Guess the cricket player's name in 5 attempts</span>
+                </li>
+                <li>
+                    <span class="rule-icon">🔤</span>
+                    <span class="rule-text">Each guess must be a valid cricket player name with the correct number of letters</span>
+                </li>
+                <li>
+                    <span class="rule-icon">🎨</span>
+                    <span class="rule-text">After each guess, tile colors will show how close you are:</span>
+                </li>
+            </ul>
+
+            <div class="color-demo">
+                <div style="text-align: center;">
+                    <div class="demo-tile correct">K</div>
+                    <p style="margin-top: 8px; font-size: 0.9em; color: #38ef7d; font-weight: 700;">Correct Position</p>
+                </div>
+                <div style="text-align: center;">
+                    <div class="demo-tile present">O</div>
+                    <p style="margin-top: 8px; font-size: 0.9em; color: #ffa400; font-weight: 700;">Wrong Position</p>
+                </div>
+                <div style="text-align: center;">
+                    <div class="demo-tile absent">X</div>
+                    <p style="margin-top: 8px; font-size: 0.9em; color: #9e9e9e; font-weight: 700;">Not in Name</p>
+                </div>
+            </div>
+
+            <ul class="rules-list">
+                <li>
+                    <span class="rule-icon">🏆</span>
+                    <span class="rule-text">Guess correctly to win! Earlier guesses earn more points</span>
+                </li>
+                <li>
+                    <span class="rule-icon">💡</span>
+                    <span class="rule-text">Use the color clues strategically to narrow down your guesses</span>
+                </li>
+            </ul>
+
+            <div class="scoring-box">
+                <h3>💰 Scoring System (Max: 100 pts)</h3>
+                <div class="scoring-item">
+                    <span class="scoring-label">Guess on 1st Try</span>
+                    <span class="scoring-value">100 pts</span>
+                </div>
+                <div class="scoring-item">
+                    <span class="scoring-label">Guess on 2nd Try</span>
+                    <span class="scoring-value">80 pts</span>
+                </div>
+                <div class="scoring-item">
+                    <span class="scoring-label">Guess on 3rd Try</span>
+                    <span class="scoring-value">60 pts</span>
+                </div>
+                <div class="scoring-item">
+                    <span class="scoring-label">Guess on 4th Try</span>
+                    <span class="scoring-value">40 pts</span>
+                </div>
+                <div class="scoring-item">
+                    <span class="scoring-label">Guess on 5th Try</span>
+                    <span class="scoring-value">20 pts</span>
+                </div>
+                <div class="scoring-item">
+                    <span class="scoring-label">Failed to Guess</span>
+                    <span class="scoring-value">0 pts</span>
+                </div>
+            </div>
+
+            <button class="btn-start" onclick="closeRulesModal()">
+                <span>🚀 Start Playing</span>
+            </button>
+        </div>
+    </div>
+
     <div class="container">
         <h1>🏏 Cricket Wordle</h1>
         <p class="subtitle">Guess the cricket player's name in 5 tries!</p>
         
+        <!-- Score Display -->
+        <div class="score-display" id="scoreDisplay">
+            <div class="score-value">💰 0 pts</div>
+            <div class="score-label">Current Score</div>
+        </div>
+
         <div class="message" id="message"></div>
         
         <div class="game-board" id="gameBoard"></div>

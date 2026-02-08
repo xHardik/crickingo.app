@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Transfer History - Crickingo</title>
   
-    <link rel="icon" type="image/png" href="logo.png">
+  <link rel="icon" type="image/png" href="logo.png">
   <style>
     * {
       box-sizing: border-box;
@@ -36,7 +36,6 @@
       padding: 20px;
       position: relative;
       overflow-x: hidden;
-      width:100%;
     }
 
     body::before {
@@ -50,8 +49,7 @@
         radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
         radial-gradient(circle at 80% 80%, rgba(138, 43, 226, 0.2) 0%, transparent 50%);
       pointer-events: none;
-      height : 100%;
-      width:100%;
+      z-index: 0;
     }
 
     .container {
@@ -465,6 +463,167 @@
       animation: fadeIn 0.6s ease-out 0.3s backwards;
     }
 
+    /* Rules Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(10px);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-content {
+      background: rgba(30, 30, 60, 0.95);
+      backdrop-filter: blur(30px);
+      border: 2px solid rgba(102, 126, 234, 0.4);
+      border-radius: 25px;
+      padding: 40px;
+      max-width: 550px;
+      width: 90%;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.7);
+      animation: slideIn 0.4s ease;
+      position: relative;
+    }
+
+    .modal-content::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      border-radius: 25px 25px 0 0;
+    }
+
+    .modal-title {
+      font-size: 2.3em;
+      font-weight: 900;
+      margin-bottom: 25px;
+      text-align: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .rules-list {
+      list-style: none;
+      margin: 25px 0;
+      padding: 0;
+    }
+
+    .rules-list li {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 12px;
+      color: white;
+      font-size: 1.05em;
+      line-height: 1.5;
+      transition: all 0.3s ease;
+      border-left: 4px solid #667eea;
+    }
+
+    .rules-list li:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateX(5px);
+    }
+
+    .rule-icon {
+      font-size: 1.3em;
+      margin-right: 10px;
+    }
+
+    .scoring-box {
+      background: linear-gradient(135deg, rgba(255, 193, 7, 0.15) 0%, rgba(255, 152, 0, 0.15) 100%);
+      border: 2px solid rgba(255, 193, 7, 0.3);
+      border-radius: 15px;
+      padding: 20px;
+      margin: 20px 0;
+      color: white;
+    }
+
+    .scoring-box h3 {
+      font-size: 1.4em;
+      margin-bottom: 12px;
+      color: #ffd700;
+      text-align: center;
+    }
+
+    .scoring-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .scoring-item:last-child {
+      border-bottom: none;
+    }
+
+    .scoring-value {
+      font-weight: 900;
+      color: #ffd700;
+    }
+
+    .btn-start {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 16px 45px;
+      font-size: 1.2em;
+      border-radius: 15px;
+      border: none;
+      cursor: pointer;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      box-shadow: 0 8px 30px rgba(102, 126, 234, 0.5);
+      transition: all 0.3s ease;
+      display: block;
+      margin: 25px auto 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-start::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .btn-start:hover::before {
+      width: 350px;
+      height: 350px;
+    }
+
+    .btn-start:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(102, 126, 234, 0.7);
+    }
+
+    .btn-start span {
+      position: relative;
+      z-index: 1;
+    }
+
     @media (max-width: 768px) {
       .transfer-layout {
         grid-template-columns: 1fr;
@@ -490,10 +649,76 @@
       .btn {
         width: 100%;
       }
+
+      .modal-content {
+        padding: 30px 25px;
+      }
+
+      .modal-title {
+        font-size: 1.9em;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- Rules Modal -->
+  <div id="rulesModal" class="modal-overlay">
+    <div class="modal-content">
+      <h2 class="modal-title">🔄 How to Play</h2>
+      
+      <ul class="rules-list">
+        <li>
+          <span class="rule-icon">📜</span>
+          Look at a player's IPL transfer history (teams & years)
+        </li>
+        <li>
+          <span class="rule-icon">🔍</span>
+          Search and select the player's name from the dropdown
+        </li>
+        <li>
+          <span class="rule-icon">✅</span>
+          Submit your guess to see if you're correct
+        </li>
+        <li>
+          <span class="rule-icon">🔥</span>
+          Build a streak by guessing correctly in a row for bonus points!
+        </li>
+        <li>
+          <span class="rule-icon">⏭️</span>
+          Skip if you don't know (but you'll lose your streak)
+        </li>
+        <li>
+          <span class="rule-icon">🏆</span>
+          Guess all 3 players correctly in order to maximize your score!
+        </li>
+      </ul>
+
+      <div class="scoring-box">
+        <h3>💰 Scoring System (Max: 1000 pts)</h3>
+        <div class="scoring-item">
+          <span>1st Correct Guess</span>
+          <span class="scoring-value">+250 pts</span>
+        </div>
+        <div class="scoring-item">
+          <span>2nd Correct (Streak Bonus)</span>
+          <span class="scoring-value">+300 pts</span>
+        </div>
+        <div class="scoring-item">
+          <span>3rd Correct (Streak Bonus)</span>
+          <span class="scoring-value">+350 pts</span>
+        </div>
+        <div class="scoring-item">
+          <span>Perfect Completion (3/3)</span>
+          <span class="scoring-value">+100 pts</span>
+        </div>
+      </div>
+
+      <button class="btn-start" onclick="closeRulesModal()">
+        <span>🚀 Start Playing</span>
+      </button>
+    </div>
+  </div>
+
   <div class="container">
     <div class="header">
       <h1>🏏 Crickingo</h1>
@@ -506,7 +731,7 @@
       
       <div class="player-box">
         <h3 id="currentPlayer">Loading...</h3>
-        <p id="playerCount">Player 1 of 5</p>
+        <p id="playerCount">Player 1 of 3</p>
       </div>
     </div>
 
