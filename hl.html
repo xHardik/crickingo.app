@@ -24,7 +24,6 @@ body {
     padding: 20px;
     position: relative;
     overflow-x: hidden;
-    width:100%;
 }
 
 body::before {
@@ -36,8 +35,9 @@ body::before {
         radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
         radial-gradient(circle at 80% 80%, rgba(255, 121, 63, 0.3) 0%, transparent 50%),
         radial-gradient(circle at 40% 20%, rgba(138, 43, 226, 0.2) 0%, transparent 50%);
-    animation: gradientShi ease infinite;
+    animation: gradientShift ease infinite;
     top: 0; left: 0;
+    z-index: -1;
 }
 
 @keyframes gradientShift {
@@ -463,6 +463,174 @@ h1 {
     50% { transform: scale(1.05); }
 }
 
+/* Rules Modal */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background: rgba(30, 30, 60, 0.95);
+    backdrop-filter: blur(30px);
+    border: 2px solid rgba(102, 126, 234, 0.4);
+    border-radius: 25px;
+    padding: 40px;
+    max-width: 550px;
+    width: 90%;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.7);
+    animation: slideUp 0.4s ease;
+    position: relative;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    border-radius: 25px 25px 0 0;
+}
+
+.modal-title {
+    font-size: 2.3em;
+    font-weight: 900;
+    margin-bottom: 25px;
+    text-align: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.rules-list {
+    list-style: none;
+    margin: 25px 0;
+    padding: 0;
+}
+
+.rules-list li {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    color: white;
+    font-size: 1.05em;
+    line-height: 1.5;
+    transition: all 0.3s ease;
+    border-left: 4px solid #667eea;
+}
+
+.rules-list li:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px);
+}
+
+.rule-icon {
+    font-size: 1.3em;
+    margin-right: 10px;
+}
+
+.scoring-box {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.15) 0%, rgba(255, 152, 0, 0.15) 100%);
+    border: 2px solid rgba(255, 193, 7, 0.3);
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px 0;
+    color: white;
+}
+
+.scoring-box h3 {
+    font-size: 1.4em;
+    margin-bottom: 12px;
+    color: #ffd700;
+    text-align: center;
+}
+
+.scoring-note {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.95em;
+    line-height: 1.6;
+    margin: 10px 0;
+}
+
+.btn-start {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 16px 45px;
+    font-size: 1.2em;
+    border-radius: 15px;
+    border: none;
+    cursor: pointer;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    box-shadow: 0 8px 30px rgba(102, 126, 234, 0.5);
+    transition: all 0.3s ease;
+    display: block;
+    margin: 25px auto 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-start::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn-start:hover::before {
+    width: 350px;
+    height: 350px;
+}
+
+.btn-start:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(102, 126, 234, 0.7);
+}
+
+.btn-start span {
+    position: relative;
+    z-index: 1;
+}
+
 @media (max-width: 968px) {
     .game-area {
         grid-template-columns: 1fr;
@@ -498,11 +666,77 @@ h1 {
     .btn {
         width: 100%;
     }
+    
+    .modal-content {
+        padding: 30px 25px;
+    }
+
+    .modal-title {
+        font-size: 1.9em;
+    }
 }
 </style>
 </head>
 <body>
-    <body>
+    <!-- Rules Modal -->
+    <div id="rulesModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="modal-title">⬆️⬇️ How to Play</h2>
+            
+            <ul class="rules-list">
+                <li>
+                    <span class="rule-icon">🎯</span>
+                    Compare cricket stats between two players
+                </li>
+                <li>
+                    <span class="rule-icon">👀</span>
+                    The left player's stat is shown
+                </li>
+                <li>
+                    <span class="rule-icon">🤔</span>
+                    Guess if the right player's stat is HIGHER or LOWER
+                </li>
+                <li>
+                    <span class="rule-icon">🔥</span>
+                    Build streaks for bonus points!
+                </li>
+                <li>
+                    <span class="rule-icon">❌</span>
+                    One wrong guess and it's game over
+                </li>
+                <li>
+                    <span class="rule-icon">🏆</span>
+                    Survive as long as possible to maximize your score
+                </li>
+            </ul>
+
+            <div class="scoring-box">
+                <h3>💰 Scoring System</h3>
+                <div class="scoring-note">
+                    • Base: <strong>100 points</strong> per correct answer
+                </div>
+                <div class="scoring-note">
+                    • Streak Bonus: <strong>+20% per consecutive correct</strong>
+                </div>
+                <div class="scoring-note" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2);">
+                    <strong>Examples:</strong><br>
+                    1st correct: 100 pts<br>
+                    2nd correct: 120 pts<br>
+                    3rd correct: 144 pts<br>
+                    4th correct: 173 pts<br>
+                    5th correct: 207 pts
+                </div>
+                <div class="scoring-note" style="margin-top: 10px; color: #ffd700; font-weight: 700;">
+                    Keep your streak alive for exponential growth!
+                </div>
+            </div>
+
+            <button class="btn-start" onclick="closeRulesModal()">
+                <span>🚀 Start Playing</span>
+            </button>
+        </div>
+    </div>
+
     <div class="container">
         <h1>🏏 Higher or Lower</h1>
         <p class="subtitle">Cricket Stats Edition</p>
@@ -549,15 +783,12 @@ h1 {
         <div class="game-over" id="gameOver">
             <div class="game-over-title">Game Over! 🏏</div>
             <div class="final-score" id="finalScore">0</div>
-            <p style="font-size: 1.2em; color: #666; margin-bottom: 10px;">
+            <p style="font-size: 1.2em; color: rgba(255,255,255,0.8); margin-bottom: 10px;">
                 <span id="gameOverMessage">Great effort!</span>
             </p>
             <button class="play-again-btn" id="tryAgainBtn" onclick="resetGame()">Play Again</button>
             <div id="tournamentButtons"></div>
         </div>
     </div>
-
-    <script src="hl.js"></script>
 </body>
-</html>
-</body>
+</html>6yh 

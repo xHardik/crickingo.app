@@ -1,47 +1,120 @@
 {
-  "players": [
-    {"name": "Sachin Tendulkar", "stat": "ODI Runs", "value": 18426, "image": "🏏"},
-    {"name": "Virat Kohli", "stat": "ODI Runs", "value": 13848, "image": "🏏"},
-    {"name": "Ricky Ponting", "stat": "ODI Runs", "value": 13704, "image": "🏏"},
-    {"name": "Kumar Sangakkara", "stat": "ODI Runs", "value": 14234, "image": "🏏"},
-    {"name": "MS Dhoni", "stat": "ODI Runs", "value": 10773, "image": "🏏"},
-    {"name": "Rohit Sharma", "stat": "ODI Runs", "value": 10866, "image": "🏏"},
-    {"name": "Jacques Kallis", "stat": "Test Runs", "value": 13289, "image": "🏏"},
-    {"name": "Ricky Ponting", "stat": "Test Runs", "value": 13378, "image": "🏏"},
-    {"name": "Sachin Tendulkar", "stat": "Test Runs", "value": 15921, "image": "🏏"},
-    {"name": "Steve Smith", "stat": "Test Runs", "value": 9685, "image": "🏏"},
-    {"name": "Virat Kohli", "stat": "Test Runs", "value": 8871, "image": "🏏"},
-    {"name": "Brian Lara", "stat": "Test Runs", "value": 11953, "image": "🏏"},
-    {"name": "Muttiah Muralitharan", "stat": "Test Wickets", "value": 800, "image": "🎳"},
-    {"name": "Shane Warne", "stat": "Test Wickets", "value": 708, "image": "🎳"},
-    {"name": "James Anderson", "stat": "Test Wickets", "value": 704, "image": "🎳"},
-    {"name": "Anil Kumble", "stat": "Test Wickets", "value": 619, "image": "🎳"},
-    {"name": "Glenn McGrath", "stat": "Test Wickets", "value": 563, "image": "🎳"},
-    {"name": "Jasprit Bumrah", "stat": "Test Wickets", "value": 173, "image": "🎳"},
-    {"name": "Wasim Akram", "stat": "ODI Wickets", "value": 502, "image": "🎳"},
-    {"name": "Muttiah Muralitharan", "stat": "ODI Wickets", "value": 534, "image": "🎳"},
-    {"name": "Lasith Malinga", "stat": "T20I Wickets", "value": 107, "image": "🎳"},
-    {"name": "Shahid Afridi", "stat": "T20I Wickets", "value": 98, "image": "🎳"},
-    {"name": "Rashid Khan", "stat": "T20I Wickets", "value": 148, "image": "🎳"},
-    {"name": "Chris Gayle", "stat": "T20I Runs", "value": 1899, "image": "🏏"},
-    {"name": "Virat Kohli", "stat": "T20I Runs", "value": 4188, "image": "🏏"},
-    {"name": "Rohit Sharma", "stat": "T20I Runs", "value": 4231, "image": "🏏"},
-    {"name": "Babar Azam", "stat": "T20I Runs", "value": 4192, "image": "🏏"},
-    {"name": "AB de Villiers", "stat": "T20I Runs", "value": 1672, "image": "🏏"},
-    {"name": "Virat Kohli", "stat": "IPL Runs", "value": 7263, "image": "🏏"},
-    {"name": "Rohit Sharma", "stat": "IPL Runs", "value": 6211, "image": "🏏"},
-    {"name": "David Warner", "stat": "IPL Runs", "value": 6397, "image": "🏏"},
-    {"name": "Suresh Raina", "stat": "IPL Runs", "value": 5528, "image": "🏏"},
-    {"name": "MS Dhoni", "stat": "IPL Runs", "value": 5243, "image": "🏏"},
-    {"name": "Chris Gayle", "stat": "T20 Sixes", "value": 1056, "image": "⚡"},
-    {"name": "Rohit Sharma", "stat": "ODI Sixes", "value": 311, "image": "⚡"},
-    {"name": "Shahid Afridi", "stat": "ODI Sixes", "value": 351, "image": "⚡"},
-    {"name": "Chris Gayle", "stat": "ODI Sixes", "value": 331, "image": "⚡"},
-    {"name": "MS Dhoni", "stat": "ODI Sixes", "value": 229, "image": "⚡"},
-    {"name": "Don Bradman", "stat": "Test Batting Average", "value": 99.94, "image": "📊"},
-    {"name": "Steve Smith", "stat": "Test Batting Average", "value": 58.47, "image": "📊"},
-    {"name": "Kane Williamson", "stat": "Test Batting Average", "value": 54.42, "image": "📊"},
-    {"name": "Virat Kohli", "stat": "Test Batting Average", "value": 48.85, "image": "📊"},
-    {"name": "Joe Root", "stat": "Test Batting Average", "value": 50.23, "image": "📊"}
-  ]
+  "day1": {
+    "date": "2026-02-08",
+    "theme": "IPL Legends",
+    "players": [
+      {"name": "Virat Kohli", "stat": "IPL Runs", "value": 7263, "image": "👑"},
+      {"name": "Rohit Sharma", "stat": "IPL Runs", "value": 6211, "image": "🏏"},
+      {"name": "David Warner", "stat": "IPL Runs", "value": 6397, "image": "⚡"},
+      {"name": "Suresh Raina", "stat": "IPL Runs", "value": 5528, "image": "🦁"},
+      {"name": "MS Dhoni", "stat": "IPL Runs", "value": 5243, "image": "🧤"},
+      {"name": "AB de Villiers", "stat": "IPL Runs", "value": 5162, "image": "🚀"},
+      {"name": "Shikhar Dhawan", "stat": "IPL Runs", "value": 6617, "image": "🏏"},
+      {"name": "KL Rahul", "stat": "IPL Runs", "value": 4163, "image": "🎯"},
+      {"name": "Chris Gayle", "stat": "IPL Runs", "value": 4965, "image": "💥"},
+      {"name": "Dinesh Karthik", "stat": "IPL Runs", "value": 4462, "image": "🧤"}
+    ]
+  },
+  
+  "day2": {
+    "date": "2026-02-09",
+    "theme": "ODI Run Machines",
+    "players": [
+      {"name": "Sachin Tendulkar", "stat": "ODI Runs", "value": 18426, "image": "🐐"},
+      {"name": "Kumar Sangakkara", "stat": "ODI Runs", "value": 14234, "image": "🏏"},
+      {"name": "Virat Kohli", "stat": "ODI Runs", "value": 13848, "image": "👑"},
+      {"name": "Ricky Ponting", "stat": "ODI Runs", "value": 13704, "image": "🏆"},
+      {"name": "Sanath Jayasuriya", "stat": "ODI Runs", "value": 13430, "image": "⚡"},
+      {"name": "Rohit Sharma", "stat": "ODI Runs", "value": 10866, "image": "🏏"},
+      {"name": "MS Dhoni", "stat": "ODI Runs", "value": 10773, "image": "🧤"},
+      {"name": "Jacques Kallis", "stat": "ODI Runs", "value": 11579, "image": "🎯"},
+      {"name": "Sourav Ganguly", "stat": "ODI Runs", "value": 11363, "image": "🦁"},
+      {"name": "Rahul Dravid", "stat": "ODI Runs", "value": 10889, "image": "🧱"}
+    ]
+  },
+  
+  "day3": {
+    "date": "2026-02-10",
+    "theme": "Test Cricket Giants",
+    "players": [
+      {"name": "Sachin Tendulkar", "stat": "Test Runs", "value": 15921, "image": "🐐"},
+      {"name": "Ricky Ponting", "stat": "Test Runs", "value": 13378, "image": "🏆"},
+      {"name": "Jacques Kallis", "stat": "Test Runs", "value": 13289, "image": "🎯"},
+      {"name": "Rahul Dravid", "stat": "Test Runs", "value": 13288, "image": "🧱"},
+      {"name": "Brian Lara", "stat": "Test Runs", "value": 11953, "image": "💎"},
+      {"name": "Steve Waugh", "stat": "Test Runs", "value": 10927, "image": "🏏"},
+      {"name": "Virat Kohli", "stat": "Test Runs", "value": 8871, "image": "👑"},
+      {"name": "Steve Smith", "stat": "Test Runs", "value": 9685, "image": "🦘"},
+      {"name": "Joe Root", "stat": "Test Runs", "value": 12377, "image": "🌹"},
+      {"name": "Kane Williamson", "stat": "Test Runs", "value": 8743, "image": "⭐"}
+    ]
+  },
+  
+  "day4": {
+    "date": "2026-02-11",
+    "theme": "Bowling Legends - Test Wickets",
+    "players": [
+      {"name": "Muttiah Muralitharan", "stat": "Test Wickets", "value": 800, "image": "🌀"},
+      {"name": "Shane Warne", "stat": "Test Wickets", "value": 708, "image": "🎯"},
+      {"name": "James Anderson", "stat": "Test Wickets", "value": 704, "image": "🏴󠁧󠁢󠁥󠁮󠁧󠁿"},
+      {"name": "Anil Kumble", "stat": "Test Wickets", "value": 619, "image": "🎳"},
+      {"name": "Glenn McGrath", "stat": "Test Wickets", "value": 563, "image": "🎯"},
+      {"name": "Courtney Walsh", "stat": "Test Wickets", "value": 519, "image": "⚡"},
+      {"name": "Stuart Broad", "stat": "Test Wickets", "value": 604, "image": "🏴󠁧󠁢󠁥󠁮󠁧󠁿"},
+      {"name": "Dale Steyn", "stat": "Test Wickets", "value": 439, "image": "🔥"},
+      {"name": "Kapil Dev", "stat": "Test Wickets", "value": 434, "image": "🏏"},
+      {"name": "Jasprit Bumrah", "stat": "Test Wickets", "value": 173, "image": "💥"}
+    ]
+  },
+  
+  "day5": {
+    "date": "2026-02-12",
+    "theme": "T20I Superstars",
+    "players": [
+      {"name": "Rohit Sharma", "stat": "T20I Runs", "value": 4231, "image": "🏏"},
+      {"name": "Virat Kohli", "stat": "T20I Runs", "value": 4188, "image": "👑"},
+      {"name": "Babar Azam", "stat": "T20I Runs", "value": 4192, "image": "🎯"},
+      {"name": "Martin Guptill", "stat": "T20I Runs", "value": 3531, "image": "🦘"},
+      {"name": "Paul Stirling", "stat": "T20I Runs", "value": 3538, "image": "☘️"},
+      {"name": "Chris Gayle", "stat": "T20I Runs", "value": 1899, "image": "💥"},
+      {"name": "AB de Villiers", "stat": "T20I Runs", "value": 1672, "image": "🚀"},
+      {"name": "David Warner", "stat": "T20I Runs", "value": 3155, "image": "⚡"},
+      {"name": "Aaron Finch", "stat": "T20I Runs", "value": 3120, "image": "🦘"},
+      {"name": "Brendon McCullum", "stat": "T20I Runs", "value": 2140, "image": "⭐"}
+    ]
+  },
+  
+  "day6": {
+    "date": "2026-02-13",
+    "theme": "Six Hitters",
+    "players": [
+      {"name": "Chris Gayle", "stat": "T20 Career Sixes", "value": 1056, "image": "💥"},
+      {"name": "Rohit Sharma", "stat": "ODI Sixes", "value": 311, "image": "🏏"},
+      {"name": "Shahid Afridi", "stat": "ODI Sixes", "value": 351, "image": "⚡"},
+      {"name": "Chris Gayle", "stat": "ODI Sixes", "value": 331, "image": "💥"},
+      {"name": "MS Dhoni", "stat": "ODI Sixes", "value": 229, "image": "🧤"},
+      {"name": "AB de Villiers", "stat": "ODI Sixes", "value": 204, "image": "🚀"},
+      {"name": "Brendon McCullum", "stat": "ODI Sixes", "value": 200, "image": "⭐"},
+      {"name": "Sanath Jayasuriya", "stat": "ODI Sixes", "value": 270, "image": "🏏"},
+      {"name": "Eoin Morgan", "stat": "ODI Sixes", "value": 225, "image": "🏴󠁧󠁢󠁥󠁮󠁧󠁿"},
+      {"name": "Ross Taylor", "stat": "ODI Sixes", "value": 200, "image": "🦘"}
+    ]
+  },
+  
+  "day7": {
+    "date": "2026-02-14",
+    "theme": "Batting Averages - The Elite",
+    "players": [
+      {"name": "Don Bradman", "stat": "Test Batting Average", "value": 99.94, "image": "🐐"},
+      {"name": "Steve Smith", "stat": "Test Batting Average", "value": 58.47, "image": "🦘"},
+      {"name": "Kane Williamson", "stat": "Test Batting Average", "value": 54.42, "image": "⭐"},
+      {"name": "Joe Root", "stat": "Test Batting Average", "value": 50.23, "image": "🌹"},
+      {"name": "Virat Kohli", "stat": "Test Batting Average", "value": 48.85, "image": "👑"},
+      {"name": "Jacques Kallis", "stat": "Test Batting Average", "value": 55.37, "image": "🎯"},
+      {"name": "Kumar Sangakkara", "stat": "Test Batting Average", "value": 57.40, "image": "🏏"},
+      {"name": "Brian Lara", "stat": "Test Batting Average", "value": 52.88, "image": "💎"},
+      {"name": "Sachin Tendulkar", "stat": "Test Batting Average", "value": 53.78, "image": "🏏"},
+      {"name": "Rahul Dravid", "stat": "Test Batting Average", "value": 52.31, "image": "🧱"}
+    ]
+  }
 }

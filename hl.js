@@ -28,6 +28,24 @@ function showTournamentInfo() {
 
 // ===== END TOURNAMENT INTEGRATION =====
 
+// ===== RULES MODAL =====
+// Show rules modal
+function showRulesModal() {
+    const modal = document.getElementById('rulesModal');
+    if (modal) {
+        modal.style.display = 'flex';
+    }
+}
+
+// Close rules modal
+function closeRulesModal() {
+    const modal = document.getElementById('rulesModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+// ===== END RULES MODAL =====
+
 // Game variables
 let currentScore = 0;
 let highScore = localStorage.getItem('cricketHigherLowerHighScore') || 0;
@@ -41,14 +59,45 @@ async function loadPlayers() {
     try {
         const response = await fetch('hl.json');
         const data = await response.json();
-        PLAYERS = data.players;
+        
+        // Get date from URL or use current date
+        const urlParams = new URLSearchParams(window.location.search);
+        const dateParam = urlParams.get('date');
+        
+        // Try to find matching day
+        let selectedDay = null;
+        if (dateParam) {
+            // Find day by date
+            for (const [key, value] of Object.entries(data)) {
+                if (value.date === dateParam) {
+                    selectedDay = value;
+                    break;
+                }
+            }
+        }
+        
+        // If no match, use day1 as default
+        if (!selectedDay) {
+            selectedDay = data.day1;
+        }
+        
+        PLAYERS = selectedDay.players;
+        console.log(`Loaded ${selectedDay.theme} with ${PLAYERS.length} players`);
+        
         init();
     } catch (error) {
         console.error('Error loading player data:', error);
+        alert('Error loading game data. Please make sure hl.json is in the same folder!');
     }
 }
 
 function init() {
+    // Show rules modal first (only if not already shown)
+    if (!sessionStorage.getItem('hlRulesShown')) {
+        showRulesModal();
+        sessionStorage.setItem('hlRulesShown', 'true');
+    }
+    
     document.getElementById('highScore').textContent = highScore;
     
     // Show tournament info if in tournament mode
@@ -239,6 +288,7 @@ function endGame() {
 }
 
 function resetGame() {
+    sessionStorage.removeItem('hlRulesShown'); // Allow rules to show again
     currentScore = 0;
     leftPlayer = null;
     rightPlayer = null;
@@ -255,14 +305,15 @@ function finishGame(finalScore) {
     // Clear the tournament flag
     localStorage.removeItem('inTournamentGame');
     
-    // Redirect back to tournament with score - game 0 is Higher or Lower
-    window.location.href = `tournament.html?score=${finalScore}&game=0`;
+    // Redirect back to tournament with score - game 4 is Higher or Lower (last game)
+    window.location.href = `tournament.html?score=${finalScore}&game=4`;
 }
 
 // Make functions globally accessible for HTML onclick attributes
 window.guess = guess;
 window.resetGame = resetGame;
 window.finishGame = finishGame;
+window.closeRulesModal = closeRulesModal;
 
 // Load players when the page loads
 loadPlayers();

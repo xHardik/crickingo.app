@@ -56,11 +56,11 @@ let hintPosition = '';
 
 // Scoring constants
 const SCORING = {
-    ATTEMPT_1: 100,
-    ATTEMPT_2: 80,
-    ATTEMPT_3: 60,
-    ATTEMPT_4: 40,
-    ATTEMPT_5: 20,
+    ATTEMPT_1: 1000,
+    ATTEMPT_2: 800,
+    ATTEMPT_3: 600,
+    ATTEMPT_4: 400,
+    ATTEMPT_5: 200,
     FAILED: 0
 };
 
