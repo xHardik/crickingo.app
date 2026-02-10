@@ -48,11 +48,17 @@ function closeRulesModal() {
 
 // Game variables
 let currentScore = 0;
+let roundsCompleted = 0; // Track number of rounds completed
 let highScore = localStorage.getItem('cricketHigherLowerHighScore') || 0;
 let leftPlayer = null;
 let rightPlayer = null;
 let usedPlayers = [];
 let PLAYERS = [];
+
+// Scoring constants
+const POINTS_PER_ROUND = 100;
+const MAX_ROUNDS = 10;
+const MAX_SCORE = 1000;
 
 // Load player data from JSON file
 async function loadPlayers() {
@@ -128,6 +134,12 @@ function init() {
 }
 
 function loadNewRound() {
+    // Check if max rounds reached
+    if (roundsCompleted >= MAX_ROUNDS) {
+        endGame(true); // Pass true to indicate perfect completion
+        return;
+    }
+    
     if (usedPlayers.length >= PLAYERS.length - 1) {
         usedPlayers = [];
     }
@@ -198,9 +210,16 @@ function guess(choice) {
     const resultMsg = document.getElementById('resultMessage');
     
     if (isCorrect) {
-        currentScore++;
+        // Add 100 points per correct answer
+        currentScore += POINTS_PER_ROUND;
+        roundsCompleted++;
+        
         document.getElementById('currentScore').textContent = currentScore;
-        resultMsg.textContent = '✅ Correct! Keep going!';
+        
+        // Show progress
+        const roundsLeft = MAX_ROUNDS - roundsCompleted;
+        const progressText = roundsLeft > 0 ? ` (${roundsLeft} rounds left!)` : ' 🎉 PERFECT!';
+        resultMsg.textContent = `✅ Correct! +${POINTS_PER_ROUND} points${progressText}`;
         resultMsg.className = 'result-message show correct';
         
         document.querySelector('.player-card:not(.left)').classList.add('pulse');
@@ -224,26 +243,26 @@ function guess(choice) {
         document.querySelector('.player-card:not(.left)').classList.add('shake');
         
         setTimeout(() => {
-            endGame();
+            endGame(false); // Pass false for wrong answer
         }, 2000);
     }
 }
 
-function endGame() {
+function endGame(isPerfect = false) {
     document.getElementById('gameArea').style.display = 'none';
     document.getElementById('finalScore').textContent = currentScore;
     
     let message = '';
-    if (currentScore === 0) {
-        message = 'Better luck next time!';
-    } else if (currentScore < 5) {
-        message = 'Not bad! Keep practicing!';
-    } else if (currentScore < 10) {
+    if (isPerfect && currentScore === MAX_SCORE) {
+        message = 'PERFECT SCORE! 🏆 You got all 10 rounds correct!';
+    } else if (currentScore >= 800) {
+        message = 'AMAZING! Cricket expert! 🔥';
+    } else if (currentScore >= 500) {
         message = 'Great job! You know your cricket!';
-    } else if (currentScore < 20) {
-        message = 'Amazing! Cricket expert! 🔥';
+    } else if (currentScore >= 300) {
+        message = 'Not bad! Keep practicing!';
     } else {
-        message = 'LEGENDARY! Are you a cricket encyclopedia? 🏆';
+        message = 'Better luck next time!';
     }
     
     document.getElementById('gameOverMessage').textContent = message;
@@ -281,6 +300,9 @@ function endGame() {
                 ${currentScore} Points
             </p>
             <p style="font-size: 0.9em; opacity: 0.9;">
+                ${roundsCompleted} / ${MAX_ROUNDS} rounds completed
+            </p>
+            <p style="font-size: 0.9em; opacity: 0.9; margin-top: 5px;">
                 Returning to tournament...
             </p>
         `;
@@ -309,6 +331,7 @@ function endGame() {
 function resetGame() {
     sessionStorage.removeItem('hlRulesShown'); // Allow rules to show again
     currentScore = 0;
+    roundsCompleted = 0;
     leftPlayer = null;
     rightPlayer = null;
     usedPlayers = [];
