@@ -84,6 +84,10 @@ function getDateFromURL() {
     return urlParams.get('date') || new Date().toISOString().split('T')[0];
 }
 
+function backToMenu() {
+    window.location.href = 'index.html';
+}
+
 async function initGame() {
     // Load data first
     await loadData();
@@ -98,13 +102,34 @@ async function initGame() {
         showTournamentInfo();
     }
     
-    // Get date and select player
-    selectedDate = getDateFromURL();
-    const gameKey = `wordle-${selectedDate}`;
-    const dailyGame = wordleData[gameKey];
+    // Select game based on mode
+    let dailyGame = null;
     
+    if (isInTournament) {
+        // TOURNAMENT MODE - randomly select from available games
+        const availableGames = Object.keys(wordleData).filter(key => key.startsWith('wordle'));
+        if (availableGames.length === 0) {
+            alert('No Wordle game available. Returning to menu.');
+            backToMenu();
+            return;
+        }
+        
+        // Pick a random game
+        const randomKey = availableGames[Math.floor(Math.random() * availableGames.length)];
+        dailyGame = wordleData[randomKey];
+        
+        console.log(`Tournament mode: Selected random game "${randomKey}"`);
+    } else {
+        // NORMAL MODE - use date from URL
+        selectedDate = getDateFromURL();
+        const gameKey = `wordle-${selectedDate}`;
+        dailyGame = wordleData[gameKey];
+        
+        console.log(`Normal mode: Using date-based game "${gameKey}"`);
+    }
+    
+    // Set player and hints
     if (dailyGame) {
-        // Use date-specific player
         targetPlayer = dailyGame.player;
         hintCountry = dailyGame.hint_country || '';
         hintPosition = dailyGame.hint_position || '';
@@ -402,12 +427,14 @@ function resetGame() {
 }
 
 function finishGame(finalScore) {
+    // Get the current game index from localStorage
+    const gameIndex = localStorage.getItem('currentGameIndex') || '3';
+    
     // Clear the tournament flag
     localStorage.removeItem('inTournamentGame');
     
-    // Redirect back to tournament with score - game 4 is Wordle (last game)
-    // This will trigger the final results display in tournament.js
-    window.location.href = `tournament.html?score=${finalScore}&game=4`;
+    // Redirect back to tournament with score and correct game index
+    window.location.href = `tournament.html?score=${finalScore}&game=${gameIndex}`;
 }
 
 // Make functions globally accessible

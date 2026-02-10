@@ -50,6 +50,12 @@ async function loadPlayersByDate(selectedDate) {
     }
 }
 
+// Get date from URL parameter
+function getDateFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('date') || '2026-01-15';
+}
+
 // Initialize the app
 async function init() {
     // Show tournament banner if in tournament mode
@@ -57,8 +63,38 @@ async function init() {
         showTournamentInfo();
     }
     
-    // Load players for the current date
-    PLAYERS = await loadPlayersByDate('2026-01-15');
+    let selectedDate;
+    
+    if (isInTournament) {
+        // TOURNAMENT MODE - randomly select from available datasets
+        try {
+            const response = await fetch('builder.json');
+            const data = await response.json();
+            const availableDates = Object.keys(data.datasets);
+            
+            if (availableDates.length === 0) {
+                alert('No game data available. Returning to menu.');
+                backToMenu();
+                return;
+            }
+            
+            // Pick a random date
+            selectedDate = availableDates[Math.floor(Math.random() * availableDates.length)];
+            console.log(`Tournament mode: Selected random dataset "${selectedDate}"`);
+            
+        } catch (error) {
+            console.error('Error loading datasets:', error);
+            alert('Failed to load game data.');
+            return;
+        }
+    } else {
+        // NORMAL MODE - use date from URL
+        selectedDate = getDateFromURL();
+        console.log(`Normal mode: Using date-based dataset "${selectedDate}"`);
+    }
+    
+    // Load players for the selected date
+    PLAYERS = await loadPlayersByDate(selectedDate);
     
     if (PLAYERS.length === 0) {
         document.getElementById('playersGrid').innerHTML = '<p>Failed to load players. Please refresh.</p>';
@@ -310,15 +346,22 @@ function resetTeam() {
     updateSelectedTeam();
 }
 
+function backToMenu() {
+    window.location.href = 'index.html';
+}
+
 function returnToTournament() {
+    // Get the current game index from localStorage
+    const gameIndex = localStorage.getItem('currentGameIndex') || '4';
+    
     // Clear the tournament flag
     localStorage.removeItem('inTournamentGame');
     
     // Get the final score (rating if passed, 0 if failed)
     const score = currentSessionScore || 0;
     
-    // Redirect back to tournament with score - game 3 is Build Your Team
-    window.location.href = `tournament.html?score=${score}&game=3`;
+    // Redirect back to tournament with score and correct game index
+    window.location.href = `tournament.html?score=${score}&game=${gameIndex}`;
 }
 
 async function submitScore() {
