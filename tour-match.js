@@ -276,7 +276,12 @@ async function startTournament() {
 
 function redirectToGame(gameIndex) {
   const gameUrl = GAMES[gameIndex].url;
+  
+  // IMPORTANT: Store the game index so the game knows which game it is
+  localStorage.setItem('currentGameIndex', gameIndex.toString());
   localStorage.setItem('inTournamentGame', 'true');
+  
+  console.log(`🎮 Redirecting to game ${gameIndex}: ${GAMES[gameIndex].name}`);
   window.location.href = gameUrl;
 }
 
@@ -361,6 +366,7 @@ async function resetTournament() {
   localStorage.removeItem('playerId');
   localStorage.removeItem('playerName');
   localStorage.removeItem('inTournamentGame');
+  localStorage.removeItem('currentGameIndex');
   
   document.getElementById('resultsScreen').classList.remove('active');
   document.getElementById('setupScreen').classList.add('active');
@@ -458,6 +464,7 @@ window.addEventListener('load', async () => {
   if (returnScore !== null && gameId !== null) {
     console.log(`🎮 Returning from game ${gameId} with score ${returnScore}`);
     
+    // Clear URL parameters
     window.history.replaceState({}, document.title, window.location.pathname);
     
     const code = localStorage.getItem('tournamentCode');
@@ -472,7 +479,7 @@ window.addEventListener('load', async () => {
       
       const tournamentRef = ref(db, `tournaments/${code}`);
       
-      // Submit score
+      // Submit score for the game that was just played
       const gameKey = `game${gameId}`;
       console.log(`💾 Submitting score for ${gameKey}:`, returnScore);
       
@@ -550,7 +557,7 @@ window.addEventListener('load', async () => {
         
         setTimeout(() => {
           redirectToGame(nextGameIndex);
-        }, 1500);
+        }, 2000);
         
       } else {
         // This player finished all games!

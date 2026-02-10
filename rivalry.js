@@ -501,11 +501,14 @@ function backToMenu() {
 }
 
 function finishGame(finalScore) {
+    // Get the current game index from localStorage
+    const gameIndex = localStorage.getItem('currentGameIndex') || '0';
+    
     // Clear the tournament flag
     localStorage.removeItem('inTournamentGame');
     
-    // Redirect back to tournament with score - game 1 is Cricket Bingo/Rivalry
-    window.location.href = `tournament.html?score=${finalScore}&game=1`;
+    // Redirect back to tournament with score and correct game index
+    window.location.href = `tournament.html?score=${finalScore}&game=${gameIndex}`;
 }
 
 // Make functions globally accessible
