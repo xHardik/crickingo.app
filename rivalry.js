@@ -126,11 +126,30 @@ async function initGame() {
     showTournamentInfo();
   }
   
-  selectedDate = getDateFromURL();
-  
-  // Try to load date-specific game, fall back to default
-  const gameKey = `rivalry-${selectedDate}`;
-  currentGame = gridData[gameKey] || gridData['rivalry'];
+  // Select game based on mode
+  if (isInTournament) {
+    // TOURNAMENT MODE - randomly select from available games
+    const availableGames = Object.keys(gridData).filter(key => key.startsWith('rivalry'));
+    if (availableGames.length === 0) {
+      alert(`No Rivalry Grid available. Returning to menu.`);
+      backToMenu();
+      return;
+    }
+    
+    // Pick a random game
+    const randomKey = availableGames[Math.floor(Math.random() * availableGames.length)];
+    currentGame = gridData[randomKey];
+    selectedDate = randomKey.replace('rivalry-', '') || 'default';
+    
+    console.log(`Tournament mode: Selected random game "${randomKey}"`);
+  } else {
+    // NORMAL MODE - use date from URL
+    selectedDate = getDateFromURL();
+    const gameKey = `rivalry-${selectedDate}`;
+    currentGame = gridData[gameKey] || gridData['rivalry'];
+    
+    console.log(`Normal mode: Using date-based game "${gameKey}"`);
+  }
   
   if (!currentGame) {
     alert(`No Rivalry Grid available. Returning to menu.`);
