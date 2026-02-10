@@ -60,25 +60,44 @@ async function loadPlayers() {
         const response = await fetch('hl.json');
         const data = await response.json();
         
-        // Get date from URL or use current date
-        const urlParams = new URLSearchParams(window.location.search);
-        const dateParam = urlParams.get('date');
-        
-        // Try to find matching day
         let selectedDay = null;
-        if (dateParam) {
-            // Find day by date
-            for (const [key, value] of Object.entries(data)) {
-                if (value.date === dateParam) {
-                    selectedDay = value;
-                    break;
+        
+        if (isInTournament) {
+            // TOURNAMENT MODE - randomly select from available days
+            const availableDays = Object.keys(data).filter(key => key.startsWith('day'));
+            if (availableDays.length === 0) {
+                alert('No game data available. Returning to menu.');
+                backToMenu();
+                return;
+            }
+            
+            // Pick a random day
+            const randomKey = availableDays[Math.floor(Math.random() * availableDays.length)];
+            selectedDay = data[randomKey];
+            
+            console.log(`Tournament mode: Selected random game "${randomKey}"`);
+        } else {
+            // NORMAL MODE - use date from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const dateParam = urlParams.get('date');
+            
+            // Try to find matching day
+            if (dateParam) {
+                // Find day by date
+                for (const [key, value] of Object.entries(data)) {
+                    if (value.date === dateParam) {
+                        selectedDay = value;
+                        break;
+                    }
                 }
             }
-        }
-        
-        // If no match, use day1 as default
-        if (!selectedDay) {
-            selectedDay = data.day1;
+            
+            // If no match, use day1 as default
+            if (!selectedDay) {
+                selectedDay = data.day1;
+            }
+            
+            console.log(`Normal mode: Using date-based game`);
         }
         
         PLAYERS = selectedDay.players;
@@ -301,12 +320,19 @@ function resetGame() {
     init();
 }
 
+function backToMenu() {
+    window.location.href = 'index.html';
+}
+
 function finishGame(finalScore) {
+    // Get the current game index from localStorage
+    const gameIndex = localStorage.getItem('currentGameIndex') || '0';
+
     // Clear the tournament flag
     localStorage.removeItem('inTournamentGame');
     
-    // Redirect back to tournament with score - game 4 is Higher or Lower (last game)
-    window.location.href = `tournament.html?score=${finalScore}&game=4`;
+    // Redirect back to tournament with score and correct game index
+    window.location.href = `tournament.html?score=${finalScore}&game=${gameIndex}`;
 }
 
 // Make functions globally accessible for HTML onclick attributes

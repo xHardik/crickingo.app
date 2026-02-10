@@ -519,7 +519,7 @@ function backToMenu() {
 // Finish game (tournament mode)
 function finishGame(finalScore) {
   // Get the current game index from localStorage
-  const gameIndex = localStorage.getItem('currentGameIndex') || '1';
+  const gameIndex = localStorage.getItem('currentGameIndex') || '2';
   
   // Clear the tournament flag
   localStorage.removeItem('inTournamentGame');

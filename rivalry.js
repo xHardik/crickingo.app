@@ -502,7 +502,7 @@ function backToMenu() {
 
 function finishGame(finalScore) {
     // Get the current game index from localStorage
-    const gameIndex = localStorage.getItem('currentGameIndex') || '0';
+    const gameIndex = localStorage.getItem('currentGameIndex') || '1';
     
     // Clear the tournament flag
     localStorage.removeItem('inTournamentGame');
