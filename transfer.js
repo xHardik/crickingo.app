@@ -109,12 +109,31 @@ async function initGame() {
     showTournamentInfo();
   }
   
-  const selectedDate = getDateFromURL();
-  console.log('📅 Date:', selectedDate);
-  
-  // Try to load date-specific game, fall back to default
-  const gameKey = `transfer-${selectedDate}`;
-  currentGame = gameData[gameKey] || gameData['transfer'];
+  // Select game based on mode
+  if (isInTournament) {
+    // TOURNAMENT MODE - randomly select from available games
+    const availableGames = Object.keys(gameData).filter(key => key.startsWith('transfer'));
+    if (availableGames.length === 0) {
+      alert('No transfer history available. Returning to menu.');
+      backToMenu();
+      return;
+    }
+    
+    // Pick a random game
+    const randomKey = availableGames[Math.floor(Math.random() * availableGames.length)];
+    currentGame = gameData[randomKey];
+    
+    console.log(`Tournament mode: Selected random game "${randomKey}"`);
+  } else {
+    // NORMAL MODE - use date from URL
+    const selectedDate = getDateFromURL();
+    console.log('📅 Date:', selectedDate);
+    
+    const gameKey = `transfer-${selectedDate}`;
+    currentGame = gameData[gameKey] || gameData['transfer'];
+    
+    console.log(`Normal mode: Using date-based game "${gameKey}"`);
+  }
   
   if (!currentGame || !currentGame.players) {
     alert('No transfer history available. Returning to menu.');
@@ -499,8 +518,14 @@ function backToMenu() {
 
 // Finish game (tournament mode)
 function finishGame(finalScore) {
+  // Get the current game index from localStorage
+  const gameIndex = localStorage.getItem('currentGameIndex') || '1';
+  
+  // Clear the tournament flag
   localStorage.removeItem('inTournamentGame');
-  window.location.href = `tournament.html?score=${finalScore}&game=2`;
+  
+  // Redirect back to tournament with score and correct game index
+  window.location.href = `tournament.html?score=${finalScore}&game=${gameIndex}`;
 }
 
 // Make functions globally accessible
