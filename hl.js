@@ -1,7 +1,9 @@
 // ===== TOURNAMENT INTEGRATION =====
 
-// Simple tournament detection - just check the flag
-const isInTournament = localStorage.getItem('inTournamentGame') === 'true';
+// Check both localStorage flag AND URL parameter for tournament mode
+const urlParams = new URLSearchParams(window.location.search);
+const isInTournament = localStorage.getItem('inTournamentGame') === 'true' && 
+                       urlParams.get('tournament') === 'true';
 
 // Show tournament banner
 function showTournamentInfo() {
@@ -62,6 +64,11 @@ const MAX_SCORE = 1000;
 
 // Load player data from JSON file
 async function loadPlayers() {
+    // Clear tournament flag if NOT coming from tournament mode
+    if (urlParams.get('tournament') !== 'true') {
+        localStorage.removeItem('inTournamentGame');
+    }
+    
     try {
         const response = await fetch('hl.json');
         const data = await response.json();
@@ -84,7 +91,6 @@ async function loadPlayers() {
             console.log(`Tournament mode: Selected random game "${randomKey}"`);
         } else {
             // NORMAL MODE - use date from URL
-            const urlParams = new URLSearchParams(window.location.search);
             const dateParam = urlParams.get('date');
             
             // Try to find matching day
@@ -363,6 +369,7 @@ window.guess = guess;
 window.resetGame = resetGame;
 window.finishGame = finishGame;
 window.closeRulesModal = closeRulesModal;
+window.backToMenu = backToMenu;
 
 // Load players when the page loads
 loadPlayers();
