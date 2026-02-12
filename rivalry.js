@@ -1,5 +1,7 @@
-// Simple tournament detection 
-const isInTournament = localStorage.getItem('inTournamentGame') === 'true';
+// Check both localStorage flag AND URL parameter for tournament mode
+const urlParams = new URLSearchParams(window.location.search);
+const isInTournament = localStorage.getItem('inTournamentGame') === 'true' && 
+                       urlParams.get('tournament') === 'true';
 
 // Show tournament banner
 function showTournamentInfo() {
@@ -70,7 +72,6 @@ async function loadData() {
 
 // Get date from URL parameter
 function getDateFromURL() {
-  const urlParams = new URLSearchParams(window.location.search);
   return urlParams.get('date') || new Date().toISOString().split('T')[0];
 }
 
@@ -117,6 +118,11 @@ function updateScoreDisplay() {
 // Initialize the game
 async function initGame() {
   await loadData();
+  
+  // Clear tournament flag if NOT coming from tournament mode
+  if (urlParams.get('tournament') !== 'true') {
+    localStorage.removeItem('inTournamentGame');
+  }
   
   // Show rules modal first
   showRulesModal();
@@ -409,8 +415,8 @@ function endGame() {
   const scoreBreakdown = `
     <div style="text-align: left; margin: 20px auto; max-width: 400px; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px;">
       <div style="font-size: 1.1em; font-weight: 700; margin-bottom: 15px; text-align: center;">📊 Score Breakdown</div>
-      <div style="margin: 8px 0;">✅ Correct (${correctCount} ): <span style="float: right; color: #4caf50;">+${correctCount * 50}</span></div>
-      <div style="margin: 8px 0;">❌ Wrong (${wrongAnswers} ): <span style="float: right; color: #f44336;">${wrongAnswers * POINTS.WRONG}</span></div>
+      <div style="margin: 8px 0;">✅ Correct (${correctCount}): <span style="float: right; color: #4caf50;">+${correctCount * 50}</span></div>
+      <div style="margin: 8px 0;">❌ Wrong (${wrongAnswers}): <span style="float: right; color: #f44336;">${wrongAnswers * POINTS.WRONG}</span></div>
       <div style="margin: 8px 0;">⏭️ Skipped: <span style="float: right; color: #9e9e9e;">${skippedPlayers}</span></div>
       <div style="margin: 8px 0;">🔥 Streak Bonuses: <span style="float: right; color: #ff9800;">+${streakBonusEarned}</span></div>
       ${accuracyBonus > 0 ? `<div style="margin: 8px 0;">🎯 Accuracy Bonus: <span style="float: right; color: #2196f3;">+${accuracyBonus}</span></div>` : ''}
