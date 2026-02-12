@@ -1,7 +1,9 @@
 // Build Your XI with Tournament Integration
 
-// Simple tournament detection - just check the flag
-const isInTournament = localStorage.getItem('inTournamentGame') === 'true';
+// Check both localStorage flag AND URL parameter for tournament mode
+const urlParams = new URLSearchParams(window.location.search);
+const isInTournament = localStorage.getItem('inTournamentGame') === 'true' && 
+                       urlParams.get('tournament') === 'true';
 
 // Global variables
 let PLAYERS = [];
@@ -52,12 +54,16 @@ async function loadPlayersByDate(selectedDate) {
 
 // Get date from URL parameter
 function getDateFromURL() {
-    const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get('date') || '2026-01-15';
 }
 
 // Initialize the app
 async function init() {
+    // Clear tournament flag if NOT coming from tournament mode
+    if (urlParams.get('tournament') !== 'true') {
+        localStorage.removeItem('inTournamentGame');
+    }
+    
     // Show tournament banner if in tournament mode
     if (isInTournament) {
         showTournamentInfo();
@@ -483,6 +489,7 @@ window.submitScore = submitScore;
 window.showLeaderboard = showLeaderboard;
 window.closeLeaderboard = closeLeaderboard;
 window.returnToTournament = returnToTournament;
+window.backToMenu = backToMenu;
 
 // Start the app when page loads
 init();
