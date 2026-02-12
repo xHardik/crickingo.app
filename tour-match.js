@@ -21,7 +21,7 @@ const GAMES = [
   { name: "Cricket Bingo", url: "https://crickingo.vercel.app/rivalry.html" },
   { name: "Transfer History", url: "https://crickingo.vercel.app/transfer.html" },
   { name: "Wordle", url: "https://crickingo.vercel.app/wordle.html" },
-   { name: "Build Your Team", url: "https://crickingo.vercel.app/builder.html" },
+  { name: "Build Your Team", url: "https://crickingo.vercel.app/builder.html" },
 ];
 
 let currentTournament = null;
@@ -277,12 +277,14 @@ async function startTournament() {
 function redirectToGame(gameIndex) {
   const gameUrl = GAMES[gameIndex].url;
   
-  // IMPORTANT: Store the game index so the game knows which game it is
+  // Store the game index so the game knows which game it is
   localStorage.setItem('currentGameIndex', gameIndex.toString());
   localStorage.setItem('inTournamentGame', 'true');
   
   console.log(`🎮 Redirecting to game ${gameIndex}: ${GAMES[gameIndex].name}`);
-  window.location.href = gameUrl;
+  
+  // **FIXED: Add tournament parameter to URL**
+  window.location.href = `${gameUrl}?tournament=true`;
 }
 
 function updateGameProgress(tournament) {

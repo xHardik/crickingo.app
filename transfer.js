@@ -1,7 +1,9 @@
 // transfer.js - Transfer History Game with Tournament Integration
 
 // ===== TOURNAMENT INTEGRATION =====
-const isInTournament = localStorage.getItem('inTournamentGame') === 'true';
+const urlParams = new URLSearchParams(window.location.search);
+const isInTournament = localStorage.getItem('inTournamentGame') === 'true' && 
+                       urlParams.get('tournament') === 'true';
 
 function showTournamentInfo() {
     const infoDiv = document.createElement('div');
@@ -71,7 +73,6 @@ async function loadData() {
 
 // Get date from URL parameter
 function getDateFromURL() {
-  const urlParams = new URLSearchParams(window.location.search);
   return urlParams.get('date') || new Date().toISOString().split('T')[0];
 }
 
@@ -94,6 +95,11 @@ function closeRulesModal() {
 // Initialize game
 async function initGame() {
   await loadData();
+  
+  // Clear tournament flag if NOT coming from tournament mode
+  if (urlParams.get('tournament') !== 'true') {
+    localStorage.removeItem('inTournamentGame');
+  }
   
   // Validate data
   if (!gameData || !gameData.allPlayers) {

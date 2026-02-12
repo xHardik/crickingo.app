@@ -1,5 +1,7 @@
-// Simple tournament detection - just check the flag
-const isInTournament = localStorage.getItem('inTournamentGame') === 'true';
+// Check both localStorage flag AND URL parameter for tournament mode
+const urlParams = new URLSearchParams(window.location.search);
+const isInTournament = localStorage.getItem('inTournamentGame') === 'true' && 
+                       urlParams.get('tournament') === 'true';
 
 // Show tournament banner
 function showTournamentInfo() {
@@ -80,7 +82,6 @@ async function loadData() {
 
 // Get date from URL parameter or use current date
 function getDateFromURL() {
-    const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get('date') || new Date().toISOString().split('T')[0];
 }
 
@@ -91,6 +92,11 @@ function backToMenu() {
 async function initGame() {
     // Load data first
     await loadData();
+    
+    // Clear tournament flag if NOT coming from tournament mode
+    if (urlParams.get('tournament') !== 'true') {
+        localStorage.removeItem('inTournamentGame');
+    }
     
     // Show rules modal first (only in non-tournament mode)
     if (!isInTournament) {
@@ -442,6 +448,7 @@ window.submitGuess = submitGuess;
 window.resetGame = resetGame;
 window.finishGame = finishGame;
 window.closeRulesModal = closeRulesModal;
+window.backToMenu = backToMenu;
 
 // Enter key support
 document.addEventListener('DOMContentLoaded', function() {
