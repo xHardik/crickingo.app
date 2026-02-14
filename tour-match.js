@@ -388,79 +388,32 @@ async function resetTournament() {
 function generateCode() {
   return Math.random().toString(36).substring(2, 8).toUpperCase();
 }
-
-// Helper function to check if all players finished
 async function checkAndFinishTournament(code, playerId) {
-  console.log('🔍 Checking if all players finished...');
-  
-  const tournamentRef = ref(db, `tournaments/${code}`);
-  const snapshot = await get(tournamentRef);
-  
-  if (!snapshot.exists()) {
-    console.error('❌ Tournament not found!');
-    return false;
-  }
-  
-  const tournament = snapshot.val();
-  const players = Object.keys(tournament.players);
-  const allScores = tournament.scores || {};
-  
-  console.log('👥 Total players:', players.length);
-  console.log('🎮 Total games:', GAMES.length);
-  console.log('📊 All scores:', JSON.stringify(allScores, null, 2));
-  
-  // Check if ALL players have completed ALL games
-  let allPlayersFinished = true;
-  let completionStatus = {};
-  
-  for (let pId of players) {
-    const pScores = allScores[pId] || {};
-    let playerGamesCompleted = 0;
+    // ... your existing code ...
     
-    for (let i = 0; i < GAMES.length; i++) {
-      const gameKey = `game${i}`;
-      if (pScores[gameKey] !== undefined) {
-        playerGamesCompleted++;
-      } else {
-        allPlayersFinished = false;
-      }
+    if (allPlayersFinished) {
+        console.log('✅✅✅ ALL PLAYERS FINISHED ALL GAMES! ✅✅✅');
+        
+        try {
+            // Clean up ALL game data for this tournament
+            await remove(ref(db, `tournaments/${code}/gameData`));
+            console.log('🧹 Cleaned up all game data');
+            
+            // Mark tournament as finished
+            await update(ref(db, `tournaments/${code}`), {
+                status: 'finished'
+            });
+            
+            console.log('✅ Tournament status updated to FINISHED');
+            window.location.href = 'tour-result.html';
+            return true;
+        } catch (error) {
+            console.error('❌ Error:', error);
+            window.location.href = 'tour-result.html';
+            return false;
+        }
     }
-    
-    completionStatus[pId] = `${playerGamesCompleted}/${GAMES.length}`;
-    console.log(`Player ${pId}: ${playerGamesCompleted}/${GAMES.length} games complete`);
-  }
-  
-  console.log('📊 Completion status:', completionStatus);
-  console.log('🔍 allPlayersFinished flag:', allPlayersFinished);
-  
-  if (allPlayersFinished) {
-    console.log('✅✅✅ ALL PLAYERS FINISHED ALL GAMES! ✅✅✅');
-    
-    try {
-      // Mark tournament as finished
-      await update(ref(db, `tournaments/${code}`), {
-        status: 'finished'
-      });
-      
-      console.log('✅ Tournament status updated to FINISHED in Firebase');
-      
-      // Redirect immediately
-      console.log('🚀 Redirecting to results page NOW!');
-      window.location.href = 'tour-result.html';
-      
-      return true;
-    } catch (error) {
-      console.error('❌ Error updating tournament status:', error);
-      // Still try to redirect even if update fails
-      window.location.href = 'tour-result.html';
-      return false;
-    }
-  } else {
-    console.log('⏳ Some players still playing...');
-    return false;
-  }
 }
-
 
 window.addEventListener('load', async () => {
   const urlParams = new URLSearchParams(window.location.search);

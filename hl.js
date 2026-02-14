@@ -436,20 +436,11 @@ function resetGame() {
 function backToMenu() {
     window.location.href = 'index.html';
 }
-
 async function finishGame(finalScore) {
     const gameIndex = localStorage.getItem('currentGameIndex') || '0';
-    const tournamentCode = localStorage.getItem('tournamentCode') || 'default';
     
-    // Clean up Firebase for this tournament's game data
-    try {
-        const firebasePath = `tournaments/${tournamentCode}/gameData/hl_day`;
-        const dayRef = ref(db, firebasePath);
-        await remove(dayRef);
-        console.log('🧹 Cleaned up Firebase data');
-    } catch (error) {
-        console.error('Error cleaning Firebase:', error);
-    }
+    // DON'T clean up Firebase here!
+    // Let the tournament page clean it up when tournament fully ends
     
     // Clear tournament flags
     localStorage.removeItem('inTournamentGame');
