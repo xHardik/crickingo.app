@@ -63,59 +63,86 @@ const MAX_ROUNDS = 10;
 const MAX_SCORE = 1000;
 
 // Load player data from JSON file
-// Load player data from JSON file
 async function loadPlayers() {
-    // Clear tournament flag if NOT coming from tournament mode
-    if (urlParams.get('tournament') !== 'true') {
-        localStorage.removeItem('inTournamentGame');
-        localStorage.removeItem('tournamentSelectedDay'); // Clear stored day
-    }
-    
     try {
         const response = await fetch('hl.json');
         const data = await response.json();
         
+        console.log('=== LOAD PLAYERS DEBUG ===');
+        console.log('Is in tournament:', isInTournament);
+        
         let selectedDay = null;
+        let selectedDayKey = null;
         
         if (isInTournament) {
-            // TOURNAMENT MODE - use shared day for both players
+            // TOURNAMENT MODE - use SHARED STORAGE for both players
+            const gameIndex = localStorage.getItem('currentGameIndex') || '0';
+            const storageKey = `tournament_hl_day_game${gameIndex}`;
             
-            // Check if day is already selected and stored
-            const storedDay = localStorage.getItem('tournamentSelectedDay');
+            console.log('Game Index:', gameIndex);
+            console.log('Shared Storage Key:', storageKey);
             
-            if (storedDay) {
-                // Use the previously selected day
-                selectedDay = data[storedDay];
-                console.log(`Tournament mode: Using stored game "${storedDay}"`);
-            } else {
-                // First player - randomly select and store the day
-                const availableDays = Object.keys(data).filter(key => key.startsWith('day'));
+            try {
+                // Try to get the stored day from shared storage
+                const storedData = await window.storage.get(storageKey, true);
                 
-                if (availableDays.length === 0) {
-                    alert('No game data available. Returning to menu.');
-                    backToMenu();
-                    return;
+                if (storedData && storedData.value) {
+                    // Player 2 (or later) - Use the previously selected day
+                    selectedDayKey = storedData.value;
+                    selectedDay = data[selectedDayKey];
+                    console.log('✅ PLAYER 2+: Using shared stored game key:', selectedDayKey);
+                    console.log('✅ Theme:', selectedDay.theme);
+                    console.log('✅ Date:', selectedDay.date);
+                } else {
+                    // Player 1 - Randomly select and store in SHARED storage
+                    const availableDays = Object.keys(data).filter(key => key.startsWith('day'));
+                    
+                    console.log('Available days:', availableDays);
+                    
+                    if (availableDays.length === 0) {
+                        alert('No game data available. Returning to menu.');
+                        backToMenu();
+                        return;
+                    }
+                    
+                    // Pick a random day
+                    selectedDayKey = availableDays[Math.floor(Math.random() * availableDays.length)];
+                    selectedDay = data[selectedDayKey];
+                    
+                    // Store it in SHARED storage for other players
+                    await window.storage.set(storageKey, selectedDayKey, true);
+                    
+                    console.log('🎲 PLAYER 1: Randomly selected game key:', selectedDayKey);
+                    console.log('🎲 Theme:', selectedDay.theme);
+                    console.log('🎲 Date:', selectedDay.date);
+                    console.log('💾 PLAYER 1: Stored in SHARED storage:', storageKey, '=', selectedDayKey);
+                    
+                    // Verify it was stored
+                    const verification = await window.storage.get(storageKey, true);
+                    console.log('✓ Verification - Read back from shared storage:', verification?.value);
                 }
-                
-                // Pick a random day
-                const randomKey = availableDays[Math.floor(Math.random() * availableDays.length)];
-                selectedDay = data[randomKey];
-                
-                // Store it for the second player
-                localStorage.setItem('tournamentSelectedDay', randomKey);
-                
-                console.log(`Tournament mode: Selected and stored random game "${randomKey}"`);
+            } catch (error) {
+                console.error('Storage error:', error);
+                // Fallback to random selection if storage fails
+                const availableDays = Object.keys(data).filter(key => key.startsWith('day'));
+                selectedDayKey = availableDays[Math.floor(Math.random() * availableDays.length)];
+                selectedDay = data[selectedDayKey];
+                console.log('⚠️ Storage failed, using random fallback:', selectedDayKey);
             }
         } else {
             // NORMAL MODE - use date from URL
+            localStorage.removeItem('inTournamentGame');
+            
             const dateParam = urlParams.get('date');
+            console.log('Normal mode - Date param:', dateParam);
             
             // Try to find matching day
             if (dateParam) {
-                // Find day by date
                 for (const [key, value] of Object.entries(data)) {
                     if (value.date === dateParam) {
+                        selectedDayKey = key;
                         selectedDay = value;
+                        console.log('Found matching day:', key, 'for date:', dateParam);
                         break;
                     }
                 }
@@ -123,14 +150,21 @@ async function loadPlayers() {
             
             // If no match, use day1 as default
             if (!selectedDay) {
+                selectedDayKey = 'day1';
                 selectedDay = data.day1;
+                console.log('Using default day1');
             }
-            
-            console.log(`Normal mode: Using date-based game`);
         }
         
         PLAYERS = selectedDay.players;
-        console.log(`Loaded ${selectedDay.theme} with ${PLAYERS.length} players`);
+        
+        console.log('=== FINAL SELECTION ===');
+        console.log('Selected Day Key:', selectedDayKey);
+        console.log('Theme:', selectedDay.theme);
+        console.log('Date:', selectedDay.date);
+        console.log('Total Players:', PLAYERS.length);
+        console.log('First 3 players:', PLAYERS.slice(0, 3).map(p => `${p.name} (${p.stat}: ${p.value})`));
+        console.log('======================');
         
         init();
     } catch (error) {
@@ -369,15 +403,21 @@ function resetGame() {
 function backToMenu() {
     window.location.href = 'index.html';
 }
-function finishGame(finalScore) {
-    // Get the current game index from localStorage
+async function finishGame(finalScore) {
     const gameIndex = localStorage.getItem('currentGameIndex') || '0';
-
-    // Clear the tournament flags AND the stored day
-    localStorage.removeItem('inTournamentGame');
-    localStorage.removeItem('tournamentSelectedDay'); // Clear for next tournament game
     
-    // Redirect back to tournament with score and correct game index
+    // Clean up the shared storage for this game
+    const storageKey = `tournament_hl_day_game${gameIndex}`;
+    try {
+        await window.storage.delete(storageKey, true);
+        console.log('🧹 Cleaned up shared storage:', storageKey);
+    } catch (error) {
+        console.error('Error cleaning storage:', error);
+    }
+    
+    // Clear tournament flags
+    localStorage.removeItem('inTournamentGame');
+    
     window.location.href = `tournament.html?score=${finalScore}&game=${gameIndex}`;
 }
 
