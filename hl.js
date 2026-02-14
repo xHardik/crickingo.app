@@ -63,6 +63,7 @@ const MAX_ROUNDS = 10;
 const MAX_SCORE = 1000;
 
 // Load player data from JSON file
+// Load player data from JSON file
 async function loadPlayers() {
     try {
         const response = await fetch('hl.json');
@@ -82,52 +83,62 @@ async function loadPlayers() {
             console.log('Game Index:', gameIndex);
             console.log('Shared Storage Key:', storageKey);
             
+            let storedDayKey = null;
+            
             try {
                 // Try to get the stored day from shared storage
                 const storedData = await window.storage.get(storageKey, true);
-                
-                if (storedData && storedData.value) {
-                    // Player 2 (or later) - Use the previously selected day
-                    selectedDayKey = storedData.value;
-                    selectedDay = data[selectedDayKey];
-                    console.log('✅ PLAYER 2+: Using shared stored game key:', selectedDayKey);
-                    console.log('✅ Theme:', selectedDay.theme);
-                    console.log('✅ Date:', selectedDay.date);
-                } else {
-                    // Player 1 - Randomly select and store in SHARED storage
-                    const availableDays = Object.keys(data).filter(key => key.startsWith('day'));
-                    
-                    console.log('Available days:', availableDays);
-                    
-                    if (availableDays.length === 0) {
-                        alert('No game data available. Returning to menu.');
-                        backToMenu();
-                        return;
-                    }
-                    
-                    // Pick a random day
-                    selectedDayKey = availableDays[Math.floor(Math.random() * availableDays.length)];
-                    selectedDay = data[selectedDayKey];
-                    
-                    // Store it in SHARED storage for other players
-                    await window.storage.set(storageKey, selectedDayKey, true);
-                    
-                    console.log('🎲 PLAYER 1: Randomly selected game key:', selectedDayKey);
-                    console.log('🎲 Theme:', selectedDay.theme);
-                    console.log('🎲 Date:', selectedDay.date);
-                    console.log('💾 PLAYER 1: Stored in SHARED storage:', storageKey, '=', selectedDayKey);
-                    
-                    // Verify it was stored
-                    const verification = await window.storage.get(storageKey, true);
-                    console.log('✓ Verification - Read back from shared storage:', verification?.value);
-                }
+                storedDayKey = storedData?.value || null;
+                console.log('Storage read result:', storedDayKey);
             } catch (error) {
-                console.error('Storage error:', error);
-                // Fallback to random selection if storage fails
+                // Key doesn't exist yet - this is Player 1
+                console.log('No stored data found (Player 1):', error.message);
+                storedDayKey = null;
+            }
+            
+            if (storedDayKey) {
+                // Player 2 (or later) - Use the previously selected day
+                selectedDayKey = storedDayKey;
+                selectedDay = data[selectedDayKey];
+                console.log('✅ PLAYER 2+: Using shared stored game key:', selectedDayKey);
+                console.log('✅ Theme:', selectedDay.theme);
+                console.log('✅ Date:', selectedDay.date);
+            } else {
+                // Player 1 - Randomly select and store in SHARED storage
                 const availableDays = Object.keys(data).filter(key => key.startsWith('day'));
+                
+                console.log('Available days:', availableDays);
+                
+                if (availableDays.length === 0) {
+                    alert('No game data available. Returning to menu.');
+                    backToMenu();
+                    return;
+                }
+                
+                // Pick a random day
                 selectedDayKey = availableDays[Math.floor(Math.random() * availableDays.length)];
                 selectedDay = data[selectedDayKey];
-                console.log('⚠️ Storage failed, using random fallback:', selectedDayKey);
+                
+                // Store it in SHARED storage for other players
+                try {
+                    const setResult = await window.storage.set(storageKey, selectedDayKey, true);
+                    console.log('💾 PLAYER 1: Stored in SHARED storage:', storageKey, '=', selectedDayKey);
+                    console.log('Set result:', setResult);
+                    
+                    // Verify it was stored
+                    try {
+                        const verification = await window.storage.get(storageKey, true);
+                        console.log('✓ Verification - Read back from shared storage:', verification?.value);
+                    } catch (verifyError) {
+                        console.error('❌ Verification failed:', verifyError);
+                    }
+                } catch (setError) {
+                    console.error('❌ Failed to store in shared storage:', setError);
+                }
+                
+                console.log('🎲 PLAYER 1: Randomly selected game key:', selectedDayKey);
+                console.log('🎲 Theme:', selectedDay.theme);
+                console.log('🎲 Date:', selectedDay.date);
             }
         } else {
             // NORMAL MODE - use date from URL
@@ -172,6 +183,8 @@ async function loadPlayers() {
         alert('Error loading game data. Please make sure hl.json is in the same folder!');
     }
 }
+
+
 
 function init() {
     // Show rules modal first (only if not already shown)
