@@ -1,3 +1,22 @@
+// ===== FIREBASE IMPORT =====
+import { getDatabase, ref, set, get, remove } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+
+// Initialize Firebase (same config as your tournament page)
+const firebaseConfig = {
+  apiKey: "AIzaSyC5nqnzG2jGtDcZlL6x9mg7r1xRrldyfpg",
+  authDomain: "ogcrickingo.firebaseapp.com",
+  databaseURL: "https://ogcrickingo-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "ogcrickingo",
+  storageBucket: "ogcrickingo.firebasestorage.app",
+  messagingSenderId: "672434440025",
+  appId: "1:672434440025:web:ba51a4b85b7cb78bfeee48",
+  measurementId: "G-LYH8BMVBFE"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
 // ===== TOURNAMENT INTEGRATION =====
 
 // Check both localStorage flag AND URL parameter for tournament mode
@@ -50,7 +69,7 @@ function closeRulesModal() {
 
 // Game variables
 let currentScore = 0;
-let roundsCompleted = 0; // Track number of rounds completed
+let roundsCompleted = 0;
 let highScore = localStorage.getItem('cricketHigherLowerHighScore') || 0;
 let leftPlayer = null;
 let rightPlayer = null;
@@ -62,7 +81,6 @@ const POINTS_PER_ROUND = 100;
 const MAX_ROUNDS = 10;
 const MAX_SCORE = 1000;
 
-// Load player data from JSON file
 // Load player data from JSON file
 async function loadPlayers() {
     try {
@@ -76,69 +94,65 @@ async function loadPlayers() {
         let selectedDayKey = null;
         
         if (isInTournament) {
-            // TOURNAMENT MODE - use SHARED STORAGE for both players
+            // TOURNAMENT MODE - use Firebase for shared storage
             const gameIndex = localStorage.getItem('currentGameIndex') || '0';
-            const storageKey = `tournament_hl_day_game${gameIndex}`;
+            const tournamentCode = localStorage.getItem('tournamentCode') || 'default';
+            const firebasePath = `tournaments/${tournamentCode}/gameData/hl_day`;
             
             console.log('Game Index:', gameIndex);
-            console.log('Shared Storage Key:', storageKey);
-            
-            let storedDayKey = null;
+            console.log('Tournament Code:', tournamentCode);
+            console.log('Firebase Path:', firebasePath);
             
             try {
-                // Try to get the stored day from shared storage
-                const storedData = await window.storage.get(storageKey, true);
-                storedDayKey = storedData?.value || null;
-                console.log('Storage read result:', storedDayKey);
-            } catch (error) {
-                // Key doesn't exist yet - this is Player 1
-                console.log('No stored data found (Player 1):', error.message);
-                storedDayKey = null;
-            }
-            
-            if (storedDayKey) {
-                // Player 2 (or later) - Use the previously selected day
-                selectedDayKey = storedDayKey;
-                selectedDay = data[selectedDayKey];
-                console.log('✅ PLAYER 2+: Using shared stored game key:', selectedDayKey);
-                console.log('✅ Theme:', selectedDay.theme);
-                console.log('✅ Date:', selectedDay.date);
-            } else {
-                // Player 1 - Randomly select and store in SHARED storage
-                const availableDays = Object.keys(data).filter(key => key.startsWith('day'));
+                // Try to get the stored day from Firebase
+                const dayRef = ref(db, firebasePath);
+                const snapshot = await get(dayRef);
+                const storedDayKey = snapshot.val();
                 
-                console.log('Available days:', availableDays);
+                console.log('Firebase read result:', storedDayKey);
                 
-                if (availableDays.length === 0) {
-                    alert('No game data available. Returning to menu.');
-                    backToMenu();
-                    return;
-                }
-                
-                // Pick a random day
-                selectedDayKey = availableDays[Math.floor(Math.random() * availableDays.length)];
-                selectedDay = data[selectedDayKey];
-                
-                // Store it in SHARED storage for other players
-                try {
-                    const setResult = await window.storage.set(storageKey, selectedDayKey, true);
-                    console.log('💾 PLAYER 1: Stored in SHARED storage:', storageKey, '=', selectedDayKey);
-                    console.log('Set result:', setResult);
+                if (storedDayKey) {
+                    // Player 2+ - Use the previously selected day
+                    selectedDayKey = storedDayKey;
+                    selectedDay = data[selectedDayKey];
+                    console.log('✅ PLAYER 2+: Using Firebase stored game key:', selectedDayKey);
+                    console.log('✅ Theme:', selectedDay.theme);
+                    console.log('✅ Date:', selectedDay.date);
+                } else {
+                    // Player 1 - Randomly select and store in Firebase
+                    const availableDays = Object.keys(data).filter(key => key.startsWith('day'));
+                    
+                    console.log('Available days:', availableDays);
+                    
+                    if (availableDays.length === 0) {
+                        alert('No game data available. Returning to menu.');
+                        backToMenu();
+                        return;
+                    }
+                    
+                    // Pick a random day
+                    selectedDayKey = availableDays[Math.floor(Math.random() * availableDays.length)];
+                    selectedDay = data[selectedDayKey];
+                    
+                    // Store it in Firebase for other players
+                    await set(dayRef, selectedDayKey);
+                    
+                    console.log('🎲 PLAYER 1: Randomly selected game key:', selectedDayKey);
+                    console.log('🎲 Theme:', selectedDay.theme);
+                    console.log('🎲 Date:', selectedDay.date);
+                    console.log('💾 PLAYER 1: Stored in Firebase:', selectedDayKey);
                     
                     // Verify it was stored
-                    try {
-                        const verification = await window.storage.get(storageKey, true);
-                        console.log('✓ Verification - Read back from shared storage:', verification?.value);
-                    } catch (verifyError) {
-                        console.error('❌ Verification failed:', verifyError);
-                    }
-                } catch (setError) {
-                    console.error('❌ Failed to store in shared storage:', setError);
+                    const verification = await get(dayRef);
+                    console.log('✓ Verification - Read back from Firebase:', verification.val());
                 }
-                
-                console.log('🎲 PLAYER 1: Randomly selected game key:', selectedDayKey);
-                console.log('🎲 Theme:', selectedDay.theme);
-                console.log('🎲 Date:', selectedDay.date);
+            } catch (error) {
+                console.error('❌ Firebase error:', error);
+                // Fallback to random selection if Firebase fails
+                const availableDays = Object.keys(data).filter(key => key.startsWith('day'));
+                selectedDayKey = availableDays[Math.floor(Math.random() * availableDays.length)];
+                selectedDay = data[selectedDayKey];
+                console.log('⚠️ Firebase failed, using random fallback:', selectedDayKey);
             }
         } else {
             // NORMAL MODE - use date from URL
@@ -184,8 +198,6 @@ async function loadPlayers() {
     }
 }
 
-
-
 function init() {
     // Show rules modal first (only if not already shown)
     if (!sessionStorage.getItem('hlRulesShown')) {
@@ -206,7 +218,7 @@ function init() {
 function loadNewRound() {
     // Check if max rounds reached
     if (roundsCompleted >= MAX_ROUNDS) {
-        endGame(true); // Pass true to indicate perfect completion
+        endGame(true);
         return;
     }
     
@@ -280,13 +292,11 @@ function guess(choice) {
     const resultMsg = document.getElementById('resultMessage');
     
     if (isCorrect) {
-        // Add 100 points per correct answer
         currentScore += POINTS_PER_ROUND;
         roundsCompleted++;
         
         document.getElementById('currentScore').textContent = currentScore;
         
-        // Show progress
         const roundsLeft = MAX_ROUNDS - roundsCompleted;
         const progressText = roundsLeft > 0 ? ` (${roundsLeft} rounds left!)` : ' 🎉 PERFECT!';
         resultMsg.textContent = `✅ Correct! +${POINTS_PER_ROUND} points${progressText}`;
@@ -313,7 +323,7 @@ function guess(choice) {
         document.querySelector('.player-card:not(.left)').classList.add('shake');
         
         setTimeout(() => {
-            endGame(false); // Pass false for wrong answer
+            endGame(false);
         }, 2000);
     }
 }
@@ -342,16 +352,13 @@ function endGame(isPerfect = false) {
     
     if (isInTournament) {
         // TOURNAMENT MODE
-        // Hide try again button
         if (tryAgainBtn) {
             tryAgainBtn.style.display = 'none';
         }
         
-        // Remove any existing tournament message
         const existingMsg = gameOverDiv.querySelector('#tournamentCompletionMsg');
         if (existingMsg) existingMsg.remove();
         
-        // Show tournament completion message
         const tournamentMsg = document.createElement('div');
         tournamentMsg.id = 'tournamentCompletionMsg';
         tournamentMsg.style.cssText = `
@@ -378,19 +385,15 @@ function endGame(isPerfect = false) {
         `;
         gameOverDiv.appendChild(tournamentMsg);
         
-        // Auto-return to tournament after 2 seconds
         setTimeout(() => {
             finishGame(currentScore);
         }, 2000);
         
     } else {
-        // NORMAL MODE - standalone play
-        // Show try again button
         if (tryAgainBtn) {
             tryAgainBtn.style.display = 'block';
         }
         
-        // Remove tournament message if exists
         const tournamentMsg = gameOverDiv.querySelector('#tournamentCompletionMsg');
         if (tournamentMsg) tournamentMsg.remove();
     }
@@ -399,7 +402,7 @@ function endGame(isPerfect = false) {
 }
 
 function resetGame() {
-    sessionStorage.removeItem('hlRulesShown'); // Allow rules to show again
+    sessionStorage.removeItem('hlRulesShown');
     currentScore = 0;
     roundsCompleted = 0;
     leftPlayer = null;
@@ -416,16 +419,19 @@ function resetGame() {
 function backToMenu() {
     window.location.href = 'index.html';
 }
+
 async function finishGame(finalScore) {
     const gameIndex = localStorage.getItem('currentGameIndex') || '0';
+    const tournamentCode = localStorage.getItem('tournamentCode') || 'default';
     
-    // Clean up the shared storage for this game
-    const storageKey = `tournament_hl_day_game${gameIndex}`;
+    // Clean up Firebase for this tournament's game data
     try {
-        await window.storage.delete(storageKey, true);
-        console.log('🧹 Cleaned up shared storage:', storageKey);
+        const firebasePath = `tournaments/${tournamentCode}/gameData/hl_day`;
+        const dayRef = ref(db, firebasePath);
+        await remove(dayRef);
+        console.log('🧹 Cleaned up Firebase data');
     } catch (error) {
-        console.error('Error cleaning storage:', error);
+        console.error('Error cleaning Firebase:', error);
     }
     
     // Clear tournament flags
@@ -434,7 +440,7 @@ async function finishGame(finalScore) {
     window.location.href = `tournament.html?score=${finalScore}&game=${gameIndex}`;
 }
 
-// Make functions globally accessible for HTML onclick attributes
+// Make functions globally accessible
 window.guess = guess;
 window.resetGame = resetGame;
 window.finishGame = finishGame;
