@@ -13,8 +13,51 @@ const MAX_PLAYERS = 11;
 
 let selectedTeam = [];
 let currentFilter = 'All';
-let playerName = localStorage.getItem('buildXIPlayerName') || '';
 let currentSessionScore = null;
+
+// ===== MODAL FUNCTIONS =====
+
+// Show rules modal on page load
+function showRulesModal() {
+    const modal = document.getElementById('rulesModal');
+    if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden'; // Prevent background scroll
+    }
+}
+
+// Close rules modal
+function closeRulesModal() {
+    const modal = document.getElementById('rulesModal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = ''; // Restore scroll
+    }
+}
+
+// ESC key support
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        const rulesModal = document.getElementById('rulesModal');
+        if (rulesModal && rulesModal.style.display === 'flex') {
+            closeRulesModal();
+        }
+    }
+});
+
+// Click outside to close
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('rulesModal');
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeRulesModal();
+            }
+        });
+    }
+});
+
+// ===== END MODAL FUNCTIONS =====
 
 // Show Tournament Banner
 function showTournamentInfo() {
@@ -43,11 +86,20 @@ function showTournamentInfo() {
 async function loadPlayersByDate(selectedDate) {
     try {
         const response = await fetch('builder.json');
+        if (!response.ok) {
+            throw new Error('Network error');
+        }
+        
         const data = await response.json();
-        return data.datasets[selectedDate].players;
+        
+        if (!data.datasets || !data.datasets[selectedDate]) {
+            throw new Error(`No data for date: ${selectedDate}`);
+        }
+        
+        return data.datasets[selectedDate].players || [];
     } catch (error) {
         console.error('Error loading players:', error);
-        alert('Failed to load player data. Please refresh the page.');
+        alert(`Failed to load player data: ${error.message}`);
         return [];
     }
 }
@@ -62,6 +114,11 @@ async function init() {
     // Clear tournament flag if NOT coming from tournament mode
     if (urlParams.get('tournament') !== 'true') {
         localStorage.removeItem('inTournamentGame');
+    }
+    
+    // Show rules modal first (only in non-tournament mode)
+    if (!isInTournament) {
+        showRulesModal();
     }
     
     // Show tournament banner if in tournament mode
@@ -149,17 +206,30 @@ function renderPlayers() {
     }).join('');
 }
 
-function filterPlayers(role) {
+function filterPlayers(role, event) {
     currentFilter = role;
+    
+    // Remove active from all buttons
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.classList.remove('active');
     });
-    event.target.classList.add('active');
+    
+    // Add active to clicked button
+    if (event && event.target) {
+        event.target.classList.add('active');
+    }
+    
     renderPlayers();
 }
 
 function togglePlayer(playerName) {
     const player = PLAYERS.find(p => p.name === playerName);
+    
+    if (!player) {
+        console.error('Player not found:', playerName);
+        return;
+    }
+    
     const index = selectedTeam.findIndex(p => p.name === playerName);
     
     if (index > -1) {
@@ -170,7 +240,7 @@ function togglePlayer(playerName) {
             return;
         }
         
-        const budgetUsed = selectedTeam.reduce((sum, p) => sum + p.price, 0);
+        const budgetUsed = selectedTeam.reduce((sum, p) => sum + (Number(p.price) || 0), 0);
         if (budgetUsed + player.price > TOTAL_BUDGET) {
             alert('Not enough budget!');
             return;
@@ -185,12 +255,14 @@ function togglePlayer(playerName) {
 }
 
 function updateStats() {
-    const budgetUsed = selectedTeam.reduce((sum, p) => sum + p.price, 0);
+    const budgetUsed = selectedTeam.reduce((sum, p) => sum + (Number(p.price) || 0), 0);
     const budgetLeft = TOTAL_BUDGET - budgetUsed;
     const teamRating = calculateTeamRating();
     
-    document.getElementById('budgetLeft').textContent = budgetLeft;
-    document.getElementById('budgetLeft').classList.toggle('over-budget', budgetLeft < 0);
+    const budgetElement = document.getElementById('budgetLeft');
+    budgetElement.textContent = budgetLeft;
+    budgetElement.classList.toggle('over-budget', budgetLeft < 0);
+    
     document.getElementById('playerCount').textContent = `${selectedTeam.length}/${MAX_PLAYERS}`;
     document.getElementById('teamRating').textContent = teamRating;
     
@@ -232,7 +304,10 @@ function updateSelectedTeam() {
 
 function calculateTeamRating() {
     return selectedTeam.reduce((total, player) => {
-        return total + player.batting + player.bowling + player.fielding;
+        const batting = Number(player.batting) || 0;
+        const bowling = Number(player.bowling) || 0;
+        const fielding = Number(player.fielding) || 0;
+        return total + batting + bowling + fielding;
     }, 0);
 }
 
@@ -370,126 +445,15 @@ function returnToTournament() {
     window.location.href = `tournament.html?score=${score}&game=${gameIndex}`;
 }
 
-async function submitScore() {
-    const name = playerName || document.getElementById('nameInput')?.value.trim();
-    
-    if (!name) {
-        alert('Please enter your name!');
-        return;
-    }
-    
-    if (!currentSessionScore) {
-        alert('No score to submit!');
-        return;
-    }
-    
-    playerName = name;
-    localStorage.setItem('buildXIPlayerName', name);
-    
-    try {
-        const scoreId = `buildxi_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-        await window.storage.set(scoreId, JSON.stringify({
-            name: name,
-            score: currentSessionScore,
-            date: new Date().toISOString(),
-            timestamp: Date.now()
-        }), true);
-        
-        alert(`Score saved! Your rating of ${currentSessionScore} is now on the leaderboard!`);
-        currentSessionScore = null;
-        showLeaderboard();
-    } catch (error) {
-        console.error('Error saving score:', error);
-        alert('Failed to save score. Please try again.');
-    }
-}
-
-async function showLeaderboard() {
-    const modal = document.getElementById('leaderboardModal');
-    const content = document.getElementById('leaderboardContent');
-    modal.classList.add('show');
-    
-    content.innerHTML = '<div class="loading">Loading scores...</div>';
-    
-    try {
-        const result = await window.storage.list('buildxi_', true);
-        
-        if (!result || !result.keys || result.keys.length === 0) {
-            content.innerHTML = `
-                <div class="empty-leaderboard">
-                    <h3>No scores yet!</h3>
-                    <p>Be the first to make the leaderboard!</p>
-                </div>
-            `;
-            return;
-        }
-        
-        const scores = [];
-        for (let key of result.keys) {
-            try {
-                const data = await window.storage.get(key, true);
-                if (data && data.value) {
-                    scores.push(JSON.parse(data.value));
-                }
-            } catch (e) {
-                console.error('Error loading score:', e);
-            }
-        }
-        
-        scores.sort((a, b) => b.score - a.score);
-        const top20 = scores.slice(0, 20);
-        
-        let html = '<div class="leaderboard-table">';
-        
-        top20.forEach((entry, index) => {
-            const rank = index + 1;
-            const isCurrentPlayer = entry.name === playerName;
-            const isTop3 = rank <= 3;
-            const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
-            const date = new Date(entry.date).toLocaleDateString();
-            
-            html += `
-                <div class="leaderboard-row ${isTop3 ? 'top-3' : ''} ${isCurrentPlayer ? 'you' : ''}">
-                    <div class="leaderboard-rank">
-                        ${medal ? `<span class="medal">${medal}</span>` : `#${rank}`}
-                    </div>
-                    <div class="leaderboard-info">
-                        <div class="leaderboard-name">${entry.name}${isCurrentPlayer ? ' (You)' : ''}</div>
-                        <div class="leaderboard-date">${date}</div>
-                    </div>
-                    <div class="leaderboard-score">${entry.score}</div>
-                </div>
-            `;
-        });
-        
-        html += '</div>';
-        content.innerHTML = html;
-        
-    } catch (error) {
-        console.error('Error loading leaderboard:', error);
-        content.innerHTML = `
-            <div class="empty-leaderboard">
-                <h3>Error loading leaderboard</h3>
-                <p>Please try again later.</p>
-            </div>
-        `;
-    }
-}
-
-function closeLeaderboard() {
-    document.getElementById('leaderboardModal').classList.remove('show');
-}
-
 // Make functions globally accessible
 window.filterPlayers = filterPlayers;
 window.togglePlayer = togglePlayer;
 window.checkTeam = checkTeam;
 window.resetTeam = resetTeam;
-window.submitScore = submitScore;
-window.showLeaderboard = showLeaderboard;
-window.closeLeaderboard = closeLeaderboard;
 window.returnToTournament = returnToTournament;
 window.backToMenu = backToMenu;
+window.showRulesModal = showRulesModal;
+window.closeRulesModal = closeRulesModal;
 
 // Start the app when page loads
 init();
