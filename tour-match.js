@@ -281,9 +281,15 @@ function redirectToGame(gameIndex) {
   localStorage.setItem('currentGameIndex', gameIndex.toString());
   localStorage.setItem('inTournamentGame', 'true');
   
-  console.log(`🎮 Redirecting to game ${gameIndex}: ${GAMES[gameIndex].name}`);
+  // ADD THESE DEBUG LOGS:
+  console.log('🎮🎮🎮 TOURNAMENT REDIRECT DEBUG 🎮🎮🎮');
+  console.log('Tournament Code:', localStorage.getItem('tournamentCode'));
+  console.log('Player ID:', localStorage.getItem('playerId'));
+  console.log('Game Index:', gameIndex);
+  console.log('inTournamentGame:', localStorage.getItem('inTournamentGame'));
+  console.log('Redirecting to:', `${gameUrl}?tournament=true`);
+  console.log('🎮🎮🎮 END REDIRECT DEBUG 🎮🎮🎮');
   
-  // **FIXED: Add tournament parameter to URL**
   window.location.href = `${gameUrl}?tournament=true`;
 }
 

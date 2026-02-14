@@ -83,120 +83,137 @@ const MAX_SCORE = 1000;
 
 // Load player data from JSON file
 async function loadPlayers() {
+    console.log('🚀🚀🚀 LOAD PLAYERS STARTED 🚀🚀🚀');
+    console.log('Current URL:', window.location.href);
+    console.log('URL Params:', urlParams.toString());
+    console.log('isInTournament:', isInTournament);
+    console.log('localStorage.inTournamentGame:', localStorage.getItem('inTournamentGame'));
+    console.log('urlParams.tournament:', urlParams.get('tournament'));
+    
     try {
         const response = await fetch('hl.json');
         const data = await response.json();
-        
-        console.log('=== LOAD PLAYERS DEBUG ===');
-        console.log('Is in tournament:', isInTournament);
         
         let selectedDay = null;
         let selectedDayKey = null;
         
         if (isInTournament) {
-            // TOURNAMENT MODE - use Firebase for shared storage
-            const gameIndex = localStorage.getItem('currentGameIndex') || '0';
-            const tournamentCode = localStorage.getItem('tournamentCode') || 'default';
-            const firebasePath = `tournaments/${tournamentCode}/gameData/hl_day`;
+            console.log('✅ CONFIRMED IN TOURNAMENT MODE');
             
-            console.log('Game Index:', gameIndex);
-            console.log('Tournament Code:', tournamentCode);
-            console.log('Firebase Path:', firebasePath);
+            const gameIndex = localStorage.getItem('currentGameIndex');
+            const tournamentCode = localStorage.getItem('tournamentCode');
+            const playerId = localStorage.getItem('playerId');
+            
+            console.log('📦 localStorage data:');
+            console.log('  - currentGameIndex:', gameIndex);
+            console.log('  - tournamentCode:', tournamentCode);
+            console.log('  - playerId:', playerId);
+            
+            const firebasePath = `tournaments/${tournamentCode}/gameData/hl_day`;
+            console.log('🔥 Firebase path:', firebasePath);
             
             try {
-                // Try to get the stored day from Firebase
                 const dayRef = ref(db, firebasePath);
+                console.log('🔍 Attempting to read from Firebase...');
+                
                 const snapshot = await get(dayRef);
                 const storedDayKey = snapshot.val();
                 
-                console.log('Firebase read result:', storedDayKey);
+                console.log('📖 Firebase read complete!');
+                console.log('  - snapshot.exists():', snapshot.exists());
+                console.log('  - snapshot.val():', storedDayKey);
                 
                 if (storedDayKey) {
-                    // Player 2+ - Use the previously selected day
                     selectedDayKey = storedDayKey;
                     selectedDay = data[selectedDayKey];
-                    console.log('✅ PLAYER 2+: Using Firebase stored game key:', selectedDayKey);
-                    console.log('✅ Theme:', selectedDay.theme);
-                    console.log('✅ Date:', selectedDay.date);
+                    
+                    console.log('✅✅✅ PLAYER 2+ PATH ✅✅✅');
+                    console.log('Using stored day:', selectedDayKey);
+                    console.log('Theme:', selectedDay.theme);
+                    console.log('Date:', selectedDay.date);
+                    console.log('First player:', selectedDay.players[0].name);
+                    
                 } else {
-                    // Player 1 - Randomly select and store in Firebase
                     const availableDays = Object.keys(data).filter(key => key.startsWith('day'));
-                    
-                    console.log('Available days:', availableDays);
-                    
-                    if (availableDays.length === 0) {
-                        alert('No game data available. Returning to menu.');
-                        backToMenu();
-                        return;
-                    }
-                    
-                    // Pick a random day
                     selectedDayKey = availableDays[Math.floor(Math.random() * availableDays.length)];
                     selectedDay = data[selectedDayKey];
                     
-                    // Store it in Firebase for other players
+                    console.log('🎲🎲🎲 PLAYER 1 PATH 🎲🎲🎲');
+                    console.log('No stored day found, selecting random:', selectedDayKey);
+                    console.log('Available days were:', availableDays);
+                    
+                    console.log('💾 Writing to Firebase...');
                     await set(dayRef, selectedDayKey);
+                    console.log('✅ Write complete!');
                     
-                    console.log('🎲 PLAYER 1: Randomly selected game key:', selectedDayKey);
-                    console.log('🎲 Theme:', selectedDay.theme);
-                    console.log('🎲 Date:', selectedDay.date);
-                    console.log('💾 PLAYER 1: Stored in Firebase:', selectedDayKey);
+                    // Immediate verification
+                    const verifySnapshot = await get(dayRef);
+                    console.log('🔍 Verification read:', verifySnapshot.val());
                     
-                    // Verify it was stored
-                    const verification = await get(dayRef);
-                    console.log('✓ Verification - Read back from Firebase:', verification.val());
+                    console.log('Theme:', selectedDay.theme);
+                    console.log('Date:', selectedDay.date);
+                    console.log('First player:', selectedDay.players[0].name);
                 }
-            } catch (error) {
-                console.error('❌ Firebase error:', error);
-                // Fallback to random selection if Firebase fails
+                
+            } catch (firebaseError) {
+                console.error('❌❌❌ FIREBASE ERROR ❌❌❌');
+                console.error('Error details:', firebaseError);
+                console.error('Error message:', firebaseError.message);
+                console.error('Error stack:', firebaseError.stack);
+                
+                // Fallback
                 const availableDays = Object.keys(data).filter(key => key.startsWith('day'));
                 selectedDayKey = availableDays[Math.floor(Math.random() * availableDays.length)];
                 selectedDay = data[selectedDayKey];
-                console.log('⚠️ Firebase failed, using random fallback:', selectedDayKey);
+                console.log('⚠️ Using fallback random selection:', selectedDayKey);
             }
+            
         } else {
-            // NORMAL MODE - use date from URL
+            console.log('❌ NOT in tournament mode');
             localStorage.removeItem('inTournamentGame');
             
             const dateParam = urlParams.get('date');
-            console.log('Normal mode - Date param:', dateParam);
             
-            // Try to find matching day
             if (dateParam) {
                 for (const [key, value] of Object.entries(data)) {
                     if (value.date === dateParam) {
                         selectedDayKey = key;
                         selectedDay = value;
-                        console.log('Found matching day:', key, 'for date:', dateParam);
                         break;
                     }
                 }
             }
             
-            // If no match, use day1 as default
             if (!selectedDay) {
                 selectedDayKey = 'day1';
                 selectedDay = data.day1;
-                console.log('Using default day1');
             }
+            
+            console.log('Normal mode - using:', selectedDayKey);
         }
         
         PLAYERS = selectedDay.players;
         
-        console.log('=== FINAL SELECTION ===');
-        console.log('Selected Day Key:', selectedDayKey);
+        console.log('🏁🏁🏁 FINAL RESULT 🏁🏁🏁');
+        console.log('Selected Day:', selectedDayKey);
         console.log('Theme:', selectedDay.theme);
         console.log('Date:', selectedDay.date);
         console.log('Total Players:', PLAYERS.length);
-        console.log('First 3 players:', PLAYERS.slice(0, 3).map(p => `${p.name} (${p.stat}: ${p.value})`));
-        console.log('======================');
+        console.log('First 3 players:');
+        PLAYERS.slice(0, 3).forEach((p, i) => {
+            console.log(`  ${i + 1}. ${p.name} - ${p.stat}: ${p.value}`);
+        });
+        console.log('🏁🏁🏁 END RESULT 🏁🏁🏁');
         
         init();
     } catch (error) {
-        console.error('Error loading player data:', error);
-        alert('Error loading game data. Please make sure hl.json is in the same folder!');
+        console.error('💥💥💥 FATAL ERROR 💥💥💥');
+        console.error('Error:', error);
+        alert('Error loading game data!');
     }
 }
+
+
 
 function init() {
     // Show rules modal first (only if not already shown)
