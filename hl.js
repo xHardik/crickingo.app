@@ -384,7 +384,7 @@ function backToMenu() {
 async function finishGame(finalScore) {
     const gameIndex = localStorage.getItem('currentGameIndex') || '0';
     localStorage.removeItem('inTournamentGame');
-    window.location.href = `tour-match.html?score=${finalScore}&game=${gameIndex}`;
+    window.location.href = `tournament.html?score=${finalScore}&game=${gameIndex}`;
 }
 
 // ===== GLOBAL EXPORTS =====
