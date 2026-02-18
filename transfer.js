@@ -55,8 +55,8 @@ const POINTS = {
 
 async function loadData() {
   try {
-    const response = await fetch('./rivalry.json');
-    if (!response.ok) throw new Error('Failed to load rivalry.json');
+    const response = await fetch('./transfers.json');
+    if (!response.ok) throw new Error('Failed to load transfers.json');
     gridData = await response.json();
   } catch (error) {
     console.error('Error loading grid data:', error);
