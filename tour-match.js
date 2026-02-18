@@ -1,5 +1,5 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-import { getDatabase, ref, set, onValue, update, get } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+import { getDatabase, ref, set, onValue, update, get, remove } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyC5nqnzG2jGtDcZlL6x9mg7r1xRrldyfpg",
@@ -15,7 +15,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// CONFIGURE YOUR GAME URLS HERE
 const GAMES = [
   { name: "Higher Or Lower", url: "https://crickingo.vercel.app/hl.html" },
   { name: "Cricket Bingo", url: "https://crickingo.vercel.app/rivalry.html" },
@@ -28,6 +27,7 @@ let currentTournament = null;
 let currentPlayer = null;
 let currentGameIndex = 0;
 
+// ===== CREATE TOURNAMENT =====
 async function createTournament() {
   const name = document.getElementById('tournamentName').value.trim();
   const playerCount = parseInt(document.getElementById('playerCount').value);
@@ -46,9 +46,7 @@ async function createTournament() {
       name,
       code,
       maxPlayers: playerCount,
-      players: {
-        [currentPlayer.id]: currentPlayer
-      },
+      players: { [currentPlayer.id]: currentPlayer },
       currentGame: 0,
       scores: {},
       status: 'waiting',
@@ -58,12 +56,11 @@ async function createTournament() {
 
     await set(ref(db, `tournaments/${code}`), tournament);
     currentTournament = code;
-    
-    // Store tournament data in localStorage for game pages
+
     localStorage.setItem('tournamentCode', code);
     localStorage.setItem('playerId', currentPlayer.id);
     localStorage.setItem('playerName', currentPlayer.name);
-    
+
     showLobby(code);
     listenToTournament(code);
   } catch (error) {
@@ -72,6 +69,7 @@ async function createTournament() {
   }
 }
 
+// ===== JOIN TOURNAMENT =====
 async function joinTournament() {
   const code = document.getElementById('joinCode').value.trim().toUpperCase();
   const name = document.getElementById('joinName').value.trim();
@@ -99,92 +97,72 @@ async function joinTournament() {
 
   currentPlayer = { name, id: Date.now().toString() };
   await update(ref(db, `tournaments/${code}/players/${currentPlayer.id}`), currentPlayer);
-  
+
   currentTournament = code;
-  
-  // Store tournament data in localStorage
+
   localStorage.setItem('tournamentCode', code);
   localStorage.setItem('playerId', currentPlayer.id);
   localStorage.setItem('playerName', name);
-  
+
   showLobby(code);
   listenToTournament(code);
 }
 
+// ===== LISTENER =====
 function listenToTournament(code) {
   const tournamentRef = ref(db, `tournaments/${code}`);
   onValue(tournamentRef, (snapshot) => {
-    if (!snapshot.exists()) {
-      console.log('❌ Tournament snapshot does not exist');
-      return;
-    }
-    
+    if (!snapshot.exists()) return;
+
     const tournament = snapshot.val();
-    
-    console.log('🔔 Listener triggered - Tournament status:', tournament.status);
-    console.log('🔔 Full tournament data:', tournament);
-    
+    console.log('🔔 Tournament status:', tournament.status);
+
     if (tournament.status === 'waiting') {
       updateLobby(tournament);
     } else if (tournament.status === 'playing') {
-      // Don't try to handle playing state if we're in waiting screen
       const lobbyScreen = document.getElementById('lobbyScreen');
       if (lobbyScreen && lobbyScreen.classList.contains('active')) {
         handlePlayingState(tournament);
       }
     } else if (tournament.status === 'finished') {
-      console.log('🏆 Status is FINISHED! Redirecting NOW...');
-      // Force immediate redirect
+      console.log('🏆 Tournament finished! Redirecting...');
       window.location.href = 'tour-result.html';
     }
   });
 }
 
-
+// ===== HANDLE PLAYING STATE =====
 function handlePlayingState(tournament) {
   document.getElementById('lobbyScreen').classList.remove('active');
-  
+
   const scores = tournament.scores || {};
   const playerScores = scores[currentPlayer.id] || {};
-  
-  // Find which game this player should play next
+
   let nextGameIndex = -1;
   for (let i = 0; i < GAMES.length; i++) {
-    const gameKey = `game${i}`;
-    if (playerScores[gameKey] === undefined) {
+    if (playerScores[`game${i}`] === undefined) {
       nextGameIndex = i;
       break;
     }
   }
-  
-  // If player has finished all games, show waiting screen
+
   if (nextGameIndex === -1) {
     showWaitingForOthers(tournament);
     return;
   }
-  
-  // Redirect to the next game the player needs to play
+
   currentGameIndex = nextGameIndex;
   redirectToGame(nextGameIndex);
 }
 
+// ===== WAITING SCREEN =====
 function showWaitingForOthers(tournament) {
-  console.log('⏳ Player finished all games, showing waiting screen...');
-  
-  // Show a simple waiting screen
-  document.getElementById('lobbyScreen').classList.remove('active');
-  document.getElementById('resultsScreen').classList.remove('active');
-  
   document.body.innerHTML = `
     <div style="
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-family: system-ui;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-family: system-ui;
     ">
       <div style="text-align: center; max-width: 500px; padding: 40px;">
         <div style="font-size: 4em; margin-bottom: 20px;">🎉</div>
@@ -192,39 +170,27 @@ function showWaitingForOthers(tournament) {
         <p style="font-size: 1.3em; margin-bottom: 30px; opacity: 0.9;">
           You've finished all ${GAMES.length} games!
         </p>
-        <div style="
-          background: rgba(255,255,255,0.2);
-          padding: 30px;
-          border-radius: 16px;
-          backdrop-filter: blur(10px);
-        ">
+        <div style="background: rgba(255,255,255,0.2); padding: 30px; border-radius: 16px;">
           <p style="font-size: 1.1em; margin-bottom: 15px;">⏳ Waiting for other players to finish...</p>
-          <div class="spinner" style="
+          <div style="
             border: 4px solid rgba(255,255,255,0.3);
             border-top: 4px solid white;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto 0;
+            border-radius: 50%; width: 50px; height: 50px;
+            animation: spin 1s linear infinite; margin: 20px auto 0;
           "></div>
           <p style="font-size: 0.9em; margin-top: 20px; opacity: 0.8;">
-            You'll be automatically redirected to results when everyone is done!
+            You'll be automatically redirected when everyone is done!
           </p>
         </div>
       </div>
     </div>
     <style>
-      @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-      }
+      @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
   `;
-  
-  // The listener is still active and will redirect when status changes to 'finished'
 }
 
+// ===== LOBBY =====
 function showLobby(code) {
   document.getElementById('setupScreen').classList.remove('active');
   document.getElementById('gameScreen').classList.remove('active');
@@ -236,7 +202,7 @@ function showLobby(code) {
 function updateLobby(tournament) {
   const playerList = document.getElementById('playerList');
   const players = Object.values(tournament.players || {});
-  
+
   playerList.innerHTML = '<h3 style="margin-bottom: 15px;">Players Joined:</h3>';
   players.forEach(player => {
     playerList.innerHTML += `
@@ -249,7 +215,7 @@ function updateLobby(tournament) {
 
   const startBtn = document.getElementById('startTournamentBtn');
   const infoText = document.querySelector('.info-text');
-  
+
   if (tournament.host === currentPlayer.id && players.length >= 2) {
     startBtn.style.display = 'block';
     infoText.textContent = `${players.length}/${tournament.maxPlayers} players ready. You can start now!`;
@@ -265,95 +231,103 @@ function updateLobby(tournament) {
   }
 }
 
+// ===== START TOURNAMENT =====
 async function startTournament() {
   if (!currentTournament) return;
 
-  // Pre-generate seeds for all games so all players get identical data
-  const seeds = {};
+  try {
+    // Pre-generate seeds for all games upfront
+    const seeds = {};
+    const shuffle = arr => {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    };
 
-  // Game 0: Higher or Lower — pick a random day key
-  const hlResponse = await fetch('https://crickingo.vercel.app/hl.json');
-  const hlData = await hlResponse.json();
-  const hlDays = Object.keys(hlData).filter(k => k.startsWith('day'));
-  const hlDayKey = hlDays[Math.floor(Math.random() * hlDays.length)];
-  const hlPlayers = hlData[hlDayKey].players;
+    // Game 0: Higher or Lower
+    const hlResponse = await fetch('https://crickingo.vercel.app/hl.json');
+    const hlData = await hlResponse.json();
+    const hlDays = Object.keys(hlData).filter(k => k.startsWith('day'));
+    const hlDayKey = hlDays[Math.floor(Math.random() * hlDays.length)];
+    const hlIndices = Array.from({ length: hlData[hlDayKey].players.length }, (_, i) => i);
+    let hlSeq = shuffle(hlIndices);
+    while (hlSeq.length < 11) hlSeq = hlSeq.concat(shuffle(hlIndices));
+    seeds['hl_day'] = hlDayKey;
+    seeds['hl_sequence'] = hlSeq.slice(0, 11);
 
-  // Build shared player sequence for hl
-  const hlIndices = Array.from({ length: hlPlayers.length }, (_, i) => i);
-  const shuffle = arr => {
-    const a = [...arr];
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  };
-  let hlSeq = shuffle(hlIndices);
-  while (hlSeq.length < 11) hlSeq = hlSeq.concat(shuffle(hlIndices));
-  
-  seeds['hl_day'] = hlDayKey;
-  seeds['hl_sequence'] = hlSeq.slice(0, 11);
+    // Add seeds for other games here as you fix them
+    // seeds['wordle_word'] = ...
+    // seeds['transfer_sequence'] = ...
 
-  // Write seeds + start tournament atomically
-  await update(ref(db, `tournaments/${currentTournament}/gameData`), seeds);
-  await update(ref(db, `tournaments/${currentTournament}`), {
-    status: 'playing',
-    currentGame: 0
-  });
+    await update(ref(db, `tournaments/${currentTournament}/gameData`), seeds);
+    await update(ref(db, `tournaments/${currentTournament}`), {
+      status: 'playing',
+      currentGame: 0
+    });
+
+    console.log('✅ Tournament started with seeds:', seeds);
+  } catch (error) {
+    console.error('Error starting tournament:', error);
+    alert('Error starting tournament: ' + error.message);
+  }
 }
 
+// ===== REDIRECT TO GAME =====
 function redirectToGame(gameIndex) {
   const gameUrl = GAMES[gameIndex].url;
-  
-  // Store the game index so the game knows which game it is
+
   localStorage.setItem('currentGameIndex', gameIndex.toString());
   localStorage.setItem('inTournamentGame', 'true');
-  
-  // ADD THESE DEBUG LOGS:
-  console.log('🎮🎮🎮 TOURNAMENT REDIRECT DEBUG 🎮🎮🎮');
-  console.log('Tournament Code:', localStorage.getItem('tournamentCode'));
-  console.log('Player ID:', localStorage.getItem('playerId'));
-  console.log('Game Index:', gameIndex);
-  console.log('inTournamentGame:', localStorage.getItem('inTournamentGame'));
-  console.log('Redirecting to:', `${gameUrl}?tournament=true`);
-  console.log('🎮🎮🎮 END REDIRECT DEBUG 🎮🎮🎮');
-  
+
+  console.log('🎮 Redirecting to game', gameIndex, ':', gameUrl);
   window.location.href = `${gameUrl}?tournament=true`;
 }
 
-function updateGameProgress(tournament) {
-  const progressDiv = document.getElementById('gameProgress');
-  progressDiv.innerHTML = '<h3 style="margin-bottom: 15px;">Tournament Progress:</h3>';
+// ===== CHECK AND FINISH TOURNAMENT =====
+async function checkAndFinishTournament(code, playerId) {
+  try {
+    const snapshot = await get(ref(db, `tournaments/${code}`));
+    if (!snapshot.exists()) return false;
 
-  const playerScores = tournament.scores?.[currentPlayer.id] || {};
+    const tournament = snapshot.val();
+    const players = Object.keys(tournament.players || {});
+    const scores = tournament.scores || {};
 
-  GAMES.forEach((game, index) => {
-    const gameKey = `game${index}`;
-    let status = 'pending';
-    let statusText = 'Pending';
-    let score = '';
+    // Check if EVERY player has a score for EVERY game
+    const allPlayersFinished = players.every(pid => {
+      const playerScores = scores[pid] || {};
+      return GAMES.every((_, i) => playerScores[`game${i}`] !== undefined);
+    });
 
-    if (playerScores[gameKey] !== undefined) {
-      status = 'completed';
-      statusText = 'Completed';
-      score = ` - ${playerScores[gameKey]} pts`;
-    } else if (index === currentGameIndex) {
-      status = 'active';
-      statusText = 'Playing Now';
+    console.log('🔍 All players finished?', allPlayersFinished);
+    console.log('Players:', players);
+    console.log('Scores:', scores);
+
+    if (allPlayersFinished) {
+      console.log('✅ ALL PLAYERS FINISHED! Ending tournament...');
+
+      // Clean up game seed data
+      await remove(ref(db, `tournaments/${code}/gameData`));
+
+      // Mark tournament as finished — this triggers all listeners to redirect
+      await update(ref(db, `tournaments/${code}`), { status: 'finished' });
+
+      console.log('✅ Tournament marked as finished');
+      window.location.href = 'tour-result.html';
+      return true;
     }
 
-    progressDiv.innerHTML += `
-      <div class="game-item ${status}">
-        <div class="game-number">${index + 1}</div>
-        <div class="game-info">
-          <div class="game-name">${game.name}${score}</div>
-          <div class="game-status">${statusText}</div>
-        </div>
-      </div>
-    `;
-  });
+    return false;
+  } catch (error) {
+    console.error('❌ Error in checkAndFinishTournament:', error);
+    return false;
+  }
 }
 
+// ===== RESULTS =====
 function showResults(tournament) {
   document.getElementById('gameScreen').classList.remove('active');
   document.getElementById('lobbyScreen').classList.remove('active');
@@ -365,11 +339,9 @@ function showResults(tournament) {
   const totals = players.map(player => {
     let total = 0;
     const playerScores = scores[player.id] || {};
-    
     for (let i = 0; i < GAMES.length; i++) {
       total += playerScores[`game${i}`] || 0;
     }
-
     return { player, total };
   });
 
@@ -393,20 +365,21 @@ function showResults(tournament) {
   });
 }
 
+// ===== RESET =====
 async function resetTournament() {
   currentTournament = null;
   currentPlayer = null;
   currentGameIndex = 0;
-  
+
   localStorage.removeItem('tournamentCode');
   localStorage.removeItem('playerId');
   localStorage.removeItem('playerName');
   localStorage.removeItem('inTournamentGame');
   localStorage.removeItem('currentGameIndex');
-  
+
   document.getElementById('resultsScreen').classList.remove('active');
   document.getElementById('setupScreen').classList.add('active');
-  
+
   document.getElementById('tournamentName').value = 'Epic Tournament';
   document.getElementById('hostName').value = '';
   document.getElementById('joinCode').value = '';
@@ -416,159 +389,120 @@ async function resetTournament() {
 function generateCode() {
   return Math.random().toString(36).substring(2, 8).toUpperCase();
 }
-async function checkAndFinishTournament(code, playerId) {
-    // ... your existing code ...
-    
-    if (allPlayersFinished) {
-        console.log('✅✅✅ ALL PLAYERS FINISHED ALL GAMES! ✅✅✅');
-        
-        try {
-            // Clean up ALL game data for this tournament
-            await remove(ref(db, `tournaments/${code}/gameData`));
-            console.log('🧹 Cleaned up all game data');
-            
-            // Mark tournament as finished
-            await update(ref(db, `tournaments/${code}`), {
-                status: 'finished'
-            });
-            
-            console.log('✅ Tournament status updated to FINISHED');
-            window.location.href = 'tour-result.html';
-            return true;
-        } catch (error) {
-            console.error('❌ Error:', error);
-            window.location.href = 'tour-result.html';
-            return false;
-        }
-    }
-}
 
+// ===== HANDLE RETURN FROM GAME =====
 window.addEventListener('load', async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const returnScore = urlParams.get('score');
   const gameId = urlParams.get('game');
-  
+
   console.log('🌐 Page loaded. Score:', returnScore, 'Game:', gameId);
-  
+
   if (returnScore !== null && gameId !== null) {
     console.log(`🎮 Returning from game ${gameId} with score ${returnScore}`);
-    
+
     // Clear URL parameters
     window.history.replaceState({}, document.title, window.location.pathname);
-    
+
     const code = localStorage.getItem('tournamentCode');
     const playerId = localStorage.getItem('playerId');
     const playerName = localStorage.getItem('playerName');
-    
-    console.log('💾 Retrieved from localStorage:', { code, playerId, playerName });
-    
-    if (code && playerId) {
-      currentTournament = code;
-      currentPlayer = { name: playerName, id: playerId };
-      
-      const tournamentRef = ref(db, `tournaments/${code}`);
-      
-      // Submit score for the game that was just played
-      const gameKey = `game${gameId}`;
-      console.log(`💾 Submitting score for ${gameKey}:`, returnScore);
-      
-      await update(ref(db, `tournaments/${code}/scores/${playerId}`), {
-        [gameKey]: parseInt(returnScore)
-      });
-      
-      console.log(`✅ Score ${returnScore} submitted for ${gameKey}`);
-      
-      // Wait for Firebase to sync
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Get FRESH tournament data
-      const updatedSnapshot = await get(tournamentRef);
-      const updatedTournament = updatedSnapshot.val();
-      const scores = updatedTournament.scores || {};
-      const playerScores = scores[playerId] || {};
-      
-      console.log('📊 Updated player scores:', playerScores);
-      
-      // Find next game for THIS player
-      let nextGameIndex = -1;
-      for (let i = 0; i < GAMES.length; i++) {
-        const nextGameKey = `game${i}`;
-        if (playerScores[nextGameKey] === undefined) {
-          nextGameIndex = i;
-          break;
-        }
+
+    console.log('💾 localStorage:', { code, playerId, playerName });
+
+    if (!code || !playerId) {
+      console.error('❌ Missing tournament data in localStorage!');
+      return;
+    }
+
+    currentTournament = code;
+    currentPlayer = { name: playerName, id: playerId };
+
+    // Submit score
+    const gameKey = `game${gameId}`;
+    console.log(`💾 Submitting score for ${gameKey}:`, returnScore);
+
+    await update(ref(db, `tournaments/${code}/scores/${playerId}`), {
+      [gameKey]: parseInt(returnScore)
+    });
+
+    console.log(`✅ Score submitted`);
+
+    // Wait for Firebase to sync
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    // Get fresh tournament data
+    const updatedSnapshot = await get(ref(db, `tournaments/${code}`));
+    const updatedTournament = updatedSnapshot.val();
+    const scores = updatedTournament.scores || {};
+    const playerScores = scores[playerId] || {};
+
+    console.log('📊 My scores so far:', playerScores);
+
+    // Find next game for this player
+    let nextGameIndex = -1;
+    for (let i = 0; i < GAMES.length; i++) {
+      if (playerScores[`game${i}`] === undefined) {
+        nextGameIndex = i;
+        break;
       }
-      
-      console.log('🎯 Next game index:', nextGameIndex);
-      
-      if (nextGameIndex !== -1) {
-        // More games to play - show transition and redirect
-        console.log(`➡️ Next game: ${GAMES[nextGameIndex].name}`);
-        
-        document.body.innerHTML = `
-          <div style="
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-family: system-ui;
-          ">
-            <div style="text-align: center;">
-              <div style="font-size: 3em; margin-bottom: 20px;">✅</div>
-              <h2 style="font-size: 2em; margin-bottom: 10px;">Score Saved!</h2>
-              <p style="font-size: 1.3em; margin-bottom: 5px;">${returnScore} points</p>
-              <p style="font-size: 1.1em; opacity: 0.9; margin-top: 20px;">
-                Next: <strong>${GAMES[nextGameIndex].name}</strong>
-              </p>
-              <div style="margin-top: 30px;">
-                <div class="spinner" style="
-                  border: 4px solid rgba(255,255,255,0.3);
-                  border-top: 4px solid white;
-                  border-radius: 50%;
-                  width: 40px;
-                  height: 40px;
-                  animation: spin 1s linear infinite;
-                  margin: 0 auto;
-                "></div>
-              </div>
+    }
+
+    console.log('🎯 Next game index:', nextGameIndex);
+
+    if (nextGameIndex !== -1) {
+      // Show transition screen then go to next game
+      console.log(`➡️ Next: ${GAMES[nextGameIndex].name}`);
+
+      document.body.innerHTML = `
+        <div style="
+          position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          display: flex; align-items: center; justify-content: center;
+          color: white; font-family: system-ui;
+        ">
+          <div style="text-align: center;">
+            <div style="font-size: 3em; margin-bottom: 20px;">✅</div>
+            <h2 style="font-size: 2em; margin-bottom: 10px;">Score Saved!</h2>
+            <p style="font-size: 1.3em; margin-bottom: 5px;">${returnScore} points</p>
+            <p style="font-size: 1.1em; opacity: 0.9; margin-top: 20px;">
+              Next: <strong>${GAMES[nextGameIndex].name}</strong>
+            </p>
+            <div style="margin-top: 30px;">
+              <div style="
+                border: 4px solid rgba(255,255,255,0.3);
+                border-top: 4px solid white;
+                border-radius: 50%; width: 40px; height: 40px;
+                animation: spin 1s linear infinite; margin: 0 auto;
+              "></div>
             </div>
           </div>
-          <style>
-            @keyframes spin {
-              0% { transform: rotate(0deg); }
-              100% { transform: rotate(360deg); }
-            }
-          </style>
-        `;
-        
-        setTimeout(() => {
-          redirectToGame(nextGameIndex);
-        }, 2000);
-        
-      } else {
-        // This player finished all games!
-        console.log('🎉🎉🎉 THIS PLAYER FINISHED ALL GAMES! 🎉🎉🎉');
-        
-        // Show waiting screen FIRST
-        showWaitingForOthers(updatedTournament);
-        
-        // Start listener to catch status changes
-        console.log('👂 Starting listener...');
-        listenToTournament(code);
-        
-        // Wait a moment, then check if all players are done
-        setTimeout(async () => {
-          console.log('⏰ Now checking if ALL players finished...');
-          await checkAndFinishTournament(code, playerId);
-        }, 1000);
-      }
+        </div>
+        <style>
+          @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        </style>
+      `;
+
+      setTimeout(() => redirectToGame(nextGameIndex), 2000);
+
+    } else {
+      // This player finished all games
+      console.log('🎉 THIS PLAYER FINISHED ALL GAMES!');
+
+      showWaitingForOthers(updatedTournament);
+
+      // Keep listening for tournament to finish
+      listenToTournament(code);
+
+      // Check if everyone is done
+      setTimeout(async () => {
+        await checkAndFinishTournament(code, playerId);
+      }, 1000);
     }
   }
 });
 
+// ===== EVENT LISTENERS =====
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('createTournamentBtn').addEventListener('click', createTournament);
   document.getElementById('joinTournamentBtn').addEventListener('click', joinTournament);
