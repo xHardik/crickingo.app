@@ -267,7 +267,35 @@ function updateLobby(tournament) {
 
 async function startTournament() {
   if (!currentTournament) return;
+
+  // Pre-generate seeds for all games so all players get identical data
+  const seeds = {};
+
+  // Game 0: Higher or Lower — pick a random day key
+  const hlResponse = await fetch('https://crickingo.vercel.app/hl.json');
+  const hlData = await hlResponse.json();
+  const hlDays = Object.keys(hlData).filter(k => k.startsWith('day'));
+  const hlDayKey = hlDays[Math.floor(Math.random() * hlDays.length)];
+  const hlPlayers = hlData[hlDayKey].players;
+
+  // Build shared player sequence for hl
+  const hlIndices = Array.from({ length: hlPlayers.length }, (_, i) => i);
+  const shuffle = arr => {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  };
+  let hlSeq = shuffle(hlIndices);
+  while (hlSeq.length < 11) hlSeq = hlSeq.concat(shuffle(hlIndices));
   
+  seeds['hl_day'] = hlDayKey;
+  seeds['hl_sequence'] = hlSeq.slice(0, 11);
+
+  // Write seeds + start tournament atomically
+  await update(ref(db, `tournaments/${currentTournament}/gameData`), seeds);
   await update(ref(db, `tournaments/${currentTournament}`), {
     status: 'playing',
     currentGame: 0
