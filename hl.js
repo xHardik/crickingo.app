@@ -1,8 +1,7 @@
 // ==== FIREBASE IMPORT =====
-import { getDatabase, ref, set, get, remove } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+import { getDatabase, ref, set, get } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 
-// Initialize Firebase (same config as your tournament page)
 const firebaseConfig = {
   apiKey: "AIzaSyC5nqnzG2jGtDcZlL6x9mg7r1xRrldyfpg",
   authDomain: "ogcrickingo.firebaseapp.com",
@@ -18,13 +17,10 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 // ===== TOURNAMENT INTEGRATION =====
-
-// Check both localStorage flag AND URL parameter for tournament mode
 const urlParams = new URLSearchParams(window.location.search);
-const isInTournament = localStorage.getItem('inTournamentGame') === 'true' && 
+const isInTournament = localStorage.getItem('inTournamentGame') === 'true' &&
                        urlParams.get('tournament') === 'true';
 
-// Show tournament banner
 function showTournamentInfo() {
     const infoDiv = document.createElement('div');
     infoDiv.id = 'tournamentInfo';
@@ -47,133 +43,100 @@ function showTournamentInfo() {
     document.body.insertBefore(infoDiv, document.body.firstChild);
 }
 
-// ===== END TOURNAMENT INTEGRATION =====
-
 // ===== RULES MODAL =====
-// Show rules modal
 function showRulesModal() {
     const modal = document.getElementById('rulesModal');
-    if (modal) {
-        modal.style.display = 'flex';
-    }
+    if (modal) modal.style.display = 'flex';
 }
 
-// Close rules modal
 function closeRulesModal() {
     const modal = document.getElementById('rulesModal');
-    if (modal) {
-        modal.style.display = 'none';
-    }
+    if (modal) modal.style.display = 'none';
 }
-// ===== END RULES MODAL =====
 
-// Game variables
+// ===== GAME VARIABLES =====
 let currentScore = 0;
 let roundsCompleted = 0;
 let highScore = localStorage.getItem('cricketHigherLowerHighScore') || 0;
 let leftPlayer = null;
 let rightPlayer = null;
-let usedPlayers = [];
 let PLAYERS = [];
 
-// Scoring constants
+// *** NEW: shared sequence for tournament mode ***
+let playerSequence = [];   // pre-shuffled indices, used in tournament
+let sequenceIndex = 0;     // pointer into the sequence
+
 const POINTS_PER_ROUND = 100;
 const MAX_ROUNDS = 10;
 const MAX_SCORE = 1000;
 
-// Load player data from JSON file
+// ===== Fisher-Yates shuffle (seeded via stored array, not Math.random) =====
+function shuffleArray(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+// ===== LOAD PLAYERS =====
 async function loadPlayers() {
-    console.log('🚀🚀🚀 LOAD PLAYERS STARTED 🚀🚀🚀');
-    console.log('Current URL:', window.location.href);
-    console.log('URL Params:', urlParams.toString());
-    console.log('isInTournament:', isInTournament);
-    console.log('localStorage.inTournamentGame:', localStorage.getItem('inTournamentGame'));
-    console.log('urlParams.tournament:', urlParams.get('tournament'));
-    
+    console.log('🚀 loadPlayers() - isInTournament:', isInTournament);
+
     try {
         const response = await fetch('hl.json');
         const data = await response.json();
-        
+
         let selectedDay = null;
         let selectedDayKey = null;
-        
+
         if (isInTournament) {
-            console.log('✅ CONFIRMED IN TOURNAMENT MODE');
-            
-            const gameIndex = localStorage.getItem('currentGameIndex');
             const tournamentCode = localStorage.getItem('tournamentCode');
-            const playerId = localStorage.getItem('playerId');
-            
-            console.log('📦 localStorage data:');
-            console.log('  - currentGameIndex:', gameIndex);
-            console.log('  - tournamentCode:', tournamentCode);
-            console.log('  - playerId:', playerId);
-            
-            const firebasePath = `tournaments/${tournamentCode}/gameData/hl_day`;
-            console.log('🔥 Firebase path:', firebasePath);
-            
-            try {
-                const dayRef = ref(db, firebasePath);
-                console.log('🔍 Attempting to read from Firebase...');
-                
-                const snapshot = await get(dayRef);
-                const storedDayKey = snapshot.val();
-                
-                console.log('📖 Firebase read complete!');
-                console.log('  - snapshot.exists():', snapshot.exists());
-                console.log('  - snapshot.val():', storedDayKey);
-                
-                if (storedDayKey) {
-                    selectedDayKey = storedDayKey;
-                    selectedDay = data[selectedDayKey];
-                    
-                    console.log('✅✅✅ PLAYER 2+ PATH ✅✅✅');
-                    console.log('Using stored day:', selectedDayKey);
-                    console.log('Theme:', selectedDay.theme);
-                    console.log('Date:', selectedDay.date);
-                    console.log('First player:', selectedDay.players[0].name);
-                    
-                } else {
-                    const availableDays = Object.keys(data).filter(key => key.startsWith('day'));
-                    selectedDayKey = availableDays[Math.floor(Math.random() * availableDays.length)];
-                    selectedDay = data[selectedDayKey];
-                    
-                    console.log('🎲🎲🎲 PLAYER 1 PATH 🎲🎲🎲');
-                    console.log('No stored day found, selecting random:', selectedDayKey);
-                    console.log('Available days were:', availableDays);
-                    
-                    console.log('💾 Writing to Firebase...');
-                    await set(dayRef, selectedDayKey);
-                    console.log('✅ Write complete!');
-                    
-                    // Immediate verification
-                    const verifySnapshot = await get(dayRef);
-                    console.log('🔍 Verification read:', verifySnapshot.val());
-                    
-                    console.log('Theme:', selectedDay.theme);
-                    console.log('Date:', selectedDay.date);
-                    console.log('First player:', selectedDay.players[0].name);
-                }
-                
-            } catch (firebaseError) {
-                console.error('❌❌❌ FIREBASE ERROR ❌❌❌');
-                console.error('Error details:', firebaseError);
-                console.error('Error message:', firebaseError.message);
-                console.error('Error stack:', firebaseError.stack);
-                
-                // Fallback
-                const availableDays = Object.keys(data).filter(key => key.startsWith('day'));
+            const dayPath = `tournaments/${tournamentCode}/gameData/hl_day`;
+            const seqPath = `tournaments/${tournamentCode}/gameData/hl_sequence`;
+
+            const [daySnap, seqSnap] = await Promise.all([
+                get(ref(db, dayPath)),
+                get(ref(db, seqPath))
+            ]);
+
+            if (daySnap.exists()) {
+                // ✅ Player 2+ : read existing day AND sequence
+                selectedDayKey = daySnap.val();
+                selectedDay = data[selectedDayKey];
+                playerSequence = seqSnap.val(); // array of indices already stored
+
+                console.log('✅ Read existing seed - day:', selectedDayKey, '| sequence:', playerSequence);
+            } else {
+                // 🎲 Player 1 (host): pick day, build sequence, write both to Firebase
+                const availableDays = Object.keys(data).filter(k => k.startsWith('day'));
                 selectedDayKey = availableDays[Math.floor(Math.random() * availableDays.length)];
                 selectedDay = data[selectedDayKey];
-                console.log('⚠️ Using fallback random selection:', selectedDayKey);
+
+                // Build a long enough sequence for MAX_ROUNDS + 1 slots
+                // Each round needs 2 players; generate indices with no adjacent repeats
+                const indices = Array.from({ length: selectedDay.players.length }, (_, i) => i);
+                // Shuffle twice to get a long sequence (repeat if needed)
+                let seq = shuffleArray(indices);
+                while (seq.length < MAX_ROUNDS + 1) {
+                    seq = seq.concat(shuffleArray(indices));
+                }
+                playerSequence = seq.slice(0, MAX_ROUNDS + 1);
+
+                await Promise.all([
+                    set(ref(db, dayPath), selectedDayKey),
+                    set(ref(db, seqPath), playerSequence)
+                ]);
+
+                console.log('🎲 Wrote new seed - day:', selectedDayKey, '| sequence:', playerSequence);
             }
-            
+
         } else {
-            console.log('❌ NOT in tournament mode');
+            // Normal solo mode
             localStorage.removeItem('inTournamentGame');
-            
             const dateParam = urlParams.get('date');
-            
+
             if (dateParam) {
                 for (const [key, value] of Object.entries(data)) {
                     if (value.date === dateParam) {
@@ -183,75 +146,70 @@ async function loadPlayers() {
                     }
                 }
             }
-            
+
             if (!selectedDay) {
                 selectedDayKey = 'day1';
                 selectedDay = data.day1;
             }
-            
-            console.log('Normal mode - using:', selectedDayKey);
+
+            // In solo mode, just shuffle randomly — no Firebase needed
+            const indices = Array.from({ length: selectedDay.players.length }, (_, i) => i);
+            let seq = shuffleArray(indices);
+            while (seq.length < MAX_ROUNDS + 1) seq = seq.concat(shuffleArray(indices));
+            playerSequence = seq.slice(0, MAX_ROUNDS + 1);
+
+            console.log('Solo mode - day:', selectedDayKey);
         }
-        
+
         PLAYERS = selectedDay.players;
-        
-        console.log('🏁🏁🏁 FINAL RESULT 🏁🏁🏁');
-        console.log('Selected Day:', selectedDayKey);
-        console.log('Theme:', selectedDay.theme);
-        console.log('Date:', selectedDay.date);
-        console.log('Total Players:', PLAYERS.length);
-        console.log('First 3 players:');
-        PLAYERS.slice(0, 3).forEach((p, i) => {
-            console.log(`  ${i + 1}. ${p.name} - ${p.stat}: ${p.value}`);
-        });
-        console.log('🏁🏁🏁 END RESULT 🏁🏁🏁');
-        
+        sequenceIndex = 0;
+
+        console.log('Players loaded:', PLAYERS.length, '| Sequence:', playerSequence);
         init();
+
     } catch (error) {
-        console.error('💥💥💥 FATAL ERROR 💥💥💥');
-        console.error('Error:', error);
+        console.error('💥 Fatal error loading players:', error);
         alert('Error loading game data!');
     }
 }
 
-
-
+// ===== INIT =====
 function init() {
-    // Show rules modal first (only if not already shown)
     if (!sessionStorage.getItem('hlRulesShown')) {
         showRulesModal();
         sessionStorage.setItem('hlRulesShown', 'true');
     }
-    
+
     document.getElementById('highScore').textContent = highScore;
-    
-    // Show tournament info if in tournament mode
-    if (isInTournament) {
-        showTournamentInfo();
-    }
-    
+
+    if (isInTournament) showTournamentInfo();
+
     loadNewRound();
 }
 
+// ===== ROUND LOGIC =====
 function loadNewRound() {
-    // Check if max rounds reached
     if (roundsCompleted >= MAX_ROUNDS) {
         endGame(true);
         return;
     }
-    
-    if (usedPlayers.length >= PLAYERS.length - 1) {
-        usedPlayers = [];
-    }
 
     if (!leftPlayer) {
-        leftPlayer = getRandomPlayer();
-        usedPlayers.push(leftPlayer);
+        leftPlayer = getNextPlayer();
     }
 
-    rightPlayer = getRandomPlayer();
-    while (rightPlayer === leftPlayer || usedPlayers.includes(rightPlayer) || !areComparable(leftPlayer, rightPlayer)) {
-        rightPlayer = getRandomPlayer();
-    }
+    // Get a right player that's different from left
+    let attempts = 0;
+    do {
+        rightPlayer = getNextPlayer();
+        attempts++;
+        // Safety: if sequence is exhausted or stuck, just pick any different player
+        if (attempts > 5) {
+            const others = PLAYERS.filter(p => p !== leftPlayer);
+            rightPlayer = others[Math.floor(Math.random() * others.length)];
+            break;
+        }
+    } while (rightPlayer === leftPlayer || !areComparable(leftPlayer, rightPlayer));
 
     displayPlayers();
     document.getElementById('higherBtn').disabled = false;
@@ -259,10 +217,18 @@ function loadNewRound() {
     document.getElementById('resultMessage').classList.remove('show');
 }
 
+// *** KEY CHANGE: use sequence index instead of Math.random() ***
+function getNextPlayer() {
+    if (sequenceIndex >= playerSequence.length) {
+        sequenceIndex = 0; // wrap around (shouldn't happen with MAX_ROUNDS limit)
+    }
+    const player = PLAYERS[playerSequence[sequenceIndex]];
+    sequenceIndex++;
+    return player;
+}
+
 function areComparable(player1, player2) {
-    const statType1 = getStatCategory(player1.stat);
-    const statType2 = getStatCategory(player2.stat);
-    return statType1 === statType2;
+    return getStatCategory(player1.stat) === getStatCategory(player2.stat);
 }
 
 function getStatCategory(stat) {
@@ -271,10 +237,6 @@ function getStatCategory(stat) {
     if (stat.includes('Sixes')) return 'sixes';
     if (stat.includes('Average')) return 'average';
     return 'other';
-}
-
-function getRandomPlayer() {
-    return PLAYERS[Math.floor(Math.random() * PLAYERS.length)];
 }
 
 function displayPlayers() {
@@ -290,12 +252,10 @@ function displayPlayers() {
 }
 
 function formatValue(value) {
-    if (value >= 1000) {
-        return value.toLocaleString();
-    }
-    return value;
+    return value >= 1000 ? value.toLocaleString() : value;
 }
 
+// ===== GUESS =====
 function guess(choice) {
     document.getElementById('higherBtn').disabled = true;
     document.getElementById('lowerBtn').disabled = true;
@@ -307,24 +267,23 @@ function guess(choice) {
     document.getElementById('rightValue').className = 'player-value';
 
     const resultMsg = document.getElementById('resultMessage');
-    
+
     if (isCorrect) {
         currentScore += POINTS_PER_ROUND;
         roundsCompleted++;
-        
+
         document.getElementById('currentScore').textContent = currentScore;
-        
+
         const roundsLeft = MAX_ROUNDS - roundsCompleted;
         const progressText = roundsLeft > 0 ? ` (${roundsLeft} rounds left!)` : ' 🎉 PERFECT!';
         resultMsg.textContent = `✅ Correct! +${POINTS_PER_ROUND} points${progressText}`;
         resultMsg.className = 'result-message show correct';
-        
+
         document.querySelector('.player-card:not(.left)').classList.add('pulse');
-        
+
         setTimeout(() => {
             document.querySelector('.player-card:not(.left)').classList.remove('pulse');
-            leftPlayer = rightPlayer;
-            usedPlayers.push(leftPlayer);
+            leftPlayer = rightPlayer; // carry right → left (same for all players)
             loadNewRound();
         }, 1500);
 
@@ -336,19 +295,20 @@ function guess(choice) {
     } else {
         resultMsg.textContent = `❌ Wrong! It was ${rightPlayer.value > leftPlayer.value ? 'HIGHER' : 'LOWER'}`;
         resultMsg.className = 'result-message show wrong';
-        
+
         document.querySelector('.player-card:not(.left)').classList.add('shake');
-        
+
         setTimeout(() => {
             endGame(false);
         }, 2000);
     }
 }
 
+// ===== END GAME =====
 function endGame(isPerfect = false) {
     document.getElementById('gameArea').style.display = 'none';
     document.getElementById('finalScore').textContent = currentScore;
-    
+
     let message = '';
     if (isPerfect && currentScore === MAX_SCORE) {
         message = 'PERFECT SCORE! 🏆 You got all 10 rounds correct!';
@@ -361,21 +321,18 @@ function endGame(isPerfect = false) {
     } else {
         message = 'Better luck next time!';
     }
-    
+
     document.getElementById('gameOverMessage').textContent = message;
-    
+
     const gameOverDiv = document.getElementById('gameOver');
     const tryAgainBtn = document.getElementById('tryAgainBtn');
-    
+
     if (isInTournament) {
-        // TOURNAMENT MODE
-        if (tryAgainBtn) {
-            tryAgainBtn.style.display = 'none';
-        }
-        
+        if (tryAgainBtn) tryAgainBtn.style.display = 'none';
+
         const existingMsg = gameOverDiv.querySelector('#tournamentCompletionMsg');
         if (existingMsg) existingMsg.remove();
-        
+
         const tournamentMsg = document.createElement('div');
         tournamentMsg.id = 'tournamentCompletionMsg';
         tournamentMsg.style.cssText = `
@@ -387,73 +344,55 @@ function endGame(isPerfect = false) {
             color: white;
         `;
         tournamentMsg.innerHTML = `
-            <p style="font-size: 1.2em; font-weight: 700; margin-bottom: 10px;">
-                ✅ Score Submitted!
-            </p>
-            <p style="font-size: 2em; font-weight: 900; margin: 10px 0;">
-                ${currentScore} Points
-            </p>
-            <p style="font-size: 0.9em; opacity: 0.9;">
-                ${roundsCompleted} / ${MAX_ROUNDS} rounds completed
-            </p>
-            <p style="font-size: 0.9em; opacity: 0.9; margin-top: 5px;">
-                Returning to tournament...
-            </p>
+            <p style="font-size: 1.2em; font-weight: 700; margin-bottom: 10px;">✅ Score Submitted!</p>
+            <p style="font-size: 2em; font-weight: 900; margin: 10px 0;">${currentScore} Points</p>
+            <p style="font-size: 0.9em; opacity: 0.9;">${roundsCompleted} / ${MAX_ROUNDS} rounds completed</p>
+            <p style="font-size: 0.9em; opacity: 0.9; margin-top: 5px;">Returning to tournament...</p>
         `;
         gameOverDiv.appendChild(tournamentMsg);
-        
-        setTimeout(() => {
-            finishGame(currentScore);
-        }, 2000);
-        
+
+        setTimeout(() => finishGame(currentScore), 2000);
     } else {
-        if (tryAgainBtn) {
-            tryAgainBtn.style.display = 'block';
-        }
-        
+        if (tryAgainBtn) tryAgainBtn.style.display = 'block';
         const tournamentMsg = gameOverDiv.querySelector('#tournamentCompletionMsg');
         if (tournamentMsg) tournamentMsg.remove();
     }
-    
+
     gameOverDiv.classList.add('show');
 }
 
+// ===== RESET =====
 function resetGame() {
     sessionStorage.removeItem('hlRulesShown');
     currentScore = 0;
     roundsCompleted = 0;
     leftPlayer = null;
     rightPlayer = null;
-    usedPlayers = [];
-    
+    sequenceIndex = 0;
+
     document.getElementById('currentScore').textContent = 0;
     document.getElementById('gameArea').style.display = 'block';
     document.getElementById('gameOver').classList.remove('show');
-    
+
     init();
 }
 
 function backToMenu() {
     window.location.href = 'index.html';
 }
+
 async function finishGame(finalScore) {
     const gameIndex = localStorage.getItem('currentGameIndex') || '0';
-    
-    // DON'T clean up Firebase here!
-    // Let the tournament page clean it up when tournament fully ends
-    
-    // Clear tournament flags
     localStorage.removeItem('inTournamentGame');
-    
-    window.location.href = `tournament.html?score=${finalScore}&game=${gameIndex}`;
+    window.location.href = `tour-match.html?score=${finalScore}&game=${gameIndex}`;
 }
 
-// Make functions globally accessible
+// ===== GLOBAL EXPORTS =====
 window.guess = guess;
 window.resetGame = resetGame;
 window.finishGame = finishGame;
 window.closeRulesModal = closeRulesModal;
 window.backToMenu = backToMenu;
 
-// Load players when the page loads
+// ===== BOOT =====
 loadPlayers();
