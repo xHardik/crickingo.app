@@ -138,8 +138,8 @@ async function initGame() {
       currentGame = gridData[randomKey];
     }
   } else {
-    const today = new Date().toISOString().split('T')[0];
-    const gameKey = `rivalry-${today}`;
+    const selectedDate = getDateFromURL(); // reads ?date= param from URL, falls back to today
+    const gameKey = `rivalry-${selectedDate}`;
     const availableKeys = Object.keys(gridData).filter(k => k.startsWith('rivalry')).sort();
     currentGame = gridData[gameKey] || gridData[availableKeys[availableKeys.length - 1]];
     if (!gridData[gameKey]) console.log('No data for today, using latest:', availableKeys[availableKeys.length - 1]);

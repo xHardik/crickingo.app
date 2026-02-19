@@ -18,15 +18,15 @@ window.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('selectedDate', this.value);
   });
 
-  // rivalry and transfer pick date automatically — no date param needed
+  // Navigate to game with selected date as URL param
   document.getElementById('rivalryBtn').addEventListener('click', function(e) {
     e.preventDefault();
-    window.location.href = 'rivalry.html';
+    window.location.href = 'rivalry.html?date=' + dateInput.value;
   });
 
   document.getElementById('transferBtn').addEventListener('click', function(e) {
     e.preventDefault();
-    window.location.href = 'transfer.html';
+    window.location.href = 'transfer.html?date=' + dateInput.value;
   });
 
 });

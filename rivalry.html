@@ -356,7 +356,6 @@
       position: relative; overflow: hidden;
     }
 
-    /* shimmer sweep on idle cells */
     .cell::after {
       content: '';
       position: absolute;
@@ -402,14 +401,13 @@
       position: relative; z-index: 1;
     }
 
-    /* ── CORRECT — liquid fill upward ── */
+    /* ── CORRECT ── */
     .cell.correct {
       border-color: #3DD68C;
       box-shadow: 0 8px 24px rgba(61,214,140,0.25);
       overflow: hidden;
     }
 
-    /* The liquid fill layer */
     .cell.correct::before {
       content: '';
       position: absolute; inset: 0;
@@ -418,7 +416,6 @@
         rgba(61,214,140,0.08) 100%
       );
       opacity: 1;
-      /* Start clipped to bottom, rise to full height */
       clip-path: inset(100% 0 0 0);
       animation: liquidFill 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
       pointer-events: none;
@@ -430,7 +427,6 @@
       100% { clip-path: inset(0% 0 0 0); }
     }
 
-    /* Slight bounce on the cell itself */
     .cell.correct {
       animation: correctBounce 0.5s cubic-bezier(0.4,0,0.2,1) forwards;
     }
@@ -441,7 +437,6 @@
       100% { transform: scale(1); }
     }
 
-    /* tick icon flash on correct */
     .cell.correct::after {
       content: '✓';
       position: absolute;
@@ -459,7 +454,7 @@
       100% { opacity: 1; transform: scale(1) rotate(0deg); }
     }
 
-    /* ── VICTORY RIPPLE — triggered via JS adding .ripple class ── */
+    /* ── VICTORY RIPPLE ── */
     .cell.ripple {
       animation: victoryRipple 0.6s cubic-bezier(0.4,0,0.2,1) both;
     }
@@ -472,7 +467,6 @@
       100% { transform: scale(1);    box-shadow: 0 0 0 36px rgba(61,214,140,0); }
     }
 
-    /* golden shimmer overlay during ripple */
     .cell.ripple::before {
       animation: rippleShimmer 0.6s ease both !important;
       clip-path: inset(0% 0 0 0) !important;
@@ -506,7 +500,6 @@
       100% { transform: translateX(0)    rotate(0deg); }
     }
 
-    /* X icon flash on wrong */
     .cell.wrong::after {
       content: '✕';
       position: absolute;
@@ -650,7 +643,6 @@
     .scoring-item:last-child { border-bottom: none; }
     .scoring-value { color: var(--accent); font-weight: 700; }
 
-
     /* ── BOTTOM DASHBOARD ── */
     .bottom-dashboard {
       display: grid;
@@ -688,23 +680,40 @@
       color: var(--accent);
     }
 
-    /* ── STREAK DOTS ── */
+    /* ── STREAK CALENDAR — 7 cols × 4 rows ── */
+    .streak-calendar {
+      margin-bottom: 14px;
+    }
+
+    /* Day-of-week headers hidden for 10x3 layout */
+    .streak-dow-row { display: none; }
+
+    /* Dot grid */
     .streak-dots {
-      display: flex; gap: 8px; align-items: center;
-      margin-bottom: 14px; flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 4px;
+      margin-bottom: 14px;
     }
 
     .streak-dot {
-      width: 36px; height: 36px;
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.65rem; font-weight: 700;
-      letter-spacing: 0.3px;
-      flex-direction: column; gap: 2px;
+      width: 100%; aspect-ratio: 1;
+      border-radius: 5px;
+      display: flex;
+      align-items: center; justify-content: center;
+      font-size: 0;
       position: relative;
-      transition: transform 0.2s;
+      transition: transform 0.15s;
+      cursor: default;
     }
     .streak-dot:hover { transform: translateY(-2px); }
+
+    /* Empty placeholder — fills gap before first real dot */
+    .streak-dot.empty {
+      background: transparent;
+      border: none;
+      pointer-events: none;
+    }
 
     .streak-dot.win {
       background: rgba(61,214,140,0.15);
@@ -722,7 +731,7 @@
       background: rgba(247,195,68,0.15);
       border: 2px solid var(--accent);
       color: var(--accent);
-      box-shadow: 0 0 12px rgba(247,195,68,0.2);
+      box-shadow: 0 0 10px rgba(247,195,68,0.25);
     }
 
     .streak-dot.today-pending {
@@ -731,15 +740,10 @@
       color: #4F8EF7;
     }
 
-    .dot-day {
-      font-size: 0.58rem;
-      opacity: 0.7;
-      text-transform: uppercase;
-    }
-
     .dot-score {
-      font-size: 0.62rem;
+      font-size: 0.46rem;
       font-weight: 800;
+      line-height: 1;
     }
 
     .streak-legend {
@@ -799,40 +803,32 @@
     }
 
     /* ── RESPONSIVE ── */
-
-    /* Tablet */
     @media (max-width: 768px) {
       nav { padding: 0 16px; }
       .nav-center { display: none; }
       .page { padding: 20px 16px 60px; }
 
-      /* Header */
       .page-header { margin-bottom: 18px; }
       .page-header h1 { font-size: 1.8rem; }
       .page-header p { font-size: 0.82rem; }
 
-      /* Puzzle bar */
       .puzzle-bar { flex-wrap: wrap; gap: 8px; padding: 8px 14px; }
       .puzzle-bar-item { font-size: 0.74rem; }
 
-      /* Player box */
       .player-box { padding: 16px 18px; }
       .player-avatar { width: 44px; height: 44px; font-size: 1.3rem; }
       .player-name { font-size: 1.4rem; }
       .player-count { font-size: 0.72rem; }
       .player-info-row { gap: 12px; }
 
-      /* Controls — stack buttons */
       .controls { margin-top: 12px; gap: 8px; }
       .btn { flex: 1; justify-content: center; padding: 10px 12px; font-size: 0.78rem; }
 
-      /* Grid */
       .grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
       .cell { min-height: 100px; padding: 10px; gap: 7px; border-radius: 12px; }
       .cell-image { width: 38px; height: 38px; }
       .cell-text { font-size: 0.68rem; }
 
-      /* Result card */
       .result-card { padding: 28px 18px; border-radius: 16px; }
       .result-title { font-size: 2rem; }
       .result-score { font-size: 3.2rem; }
@@ -840,61 +836,55 @@
       .result-actions { gap: 8px; }
       .result-actions .btn { font-size: 0.78rem; padding: 10px 14px; }
 
-      /* Modal */
       .modal-box { padding: 28px 18px; border-radius: 18px; }
       .modal-title { font-size: 1.7rem; }
       .rules-list li { font-size: 0.85rem; padding: 12px 14px; }
       .scoring-item { font-size: 0.82rem; }
 
-      /* Dashboard */
       .bottom-dashboard { grid-template-columns: 1fr; gap: 12px; margin-top: 28px; }
       .dashboard-card { padding: 18px 16px; }
       .dashboard-label { font-size: 1rem; }
-      .streak-dots { gap: 7px; }
-      .streak-dot { width: 38px; height: 38px; }
+      /* 30-day calendar on tablet */
+      .streak-dots { gap: 3px; }
+      .streak-dow-row { gap: 3px; }
+      .streak-dot { border-radius: 6px; }
       .stats-grid { gap: 10px; }
       .stat-value { font-size: 1.6rem; }
       .stat-item { padding: 12px 10px; }
     }
 
-    /* Large phone */
     @media (max-width: 480px) {
       .page { padding: 16px 12px 56px; }
 
-      /* Grid — stay 3 col but tighter */
       .grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
       .cell { min-height: 90px; padding: 8px; gap: 6px; border-radius: 10px; }
       .cell-image { width: 32px; height: 32px; }
       .cell-text { font-size: 0.62rem; line-height: 1.25; }
 
-      /* Player box */
       .player-name { font-size: 1.25rem; }
       .player-avatar { width: 40px; height: 40px; font-size: 1.1rem; }
 
-      /* Controls — two rows: skip full width, restart+home side by side */
       .controls { display: grid; grid-template-columns: 1fr; gap: 7px; }
       #skipBtn { grid-column: 1 / -1; }
       .controls .btn-restart,
       .controls .btn-back { flex: 1; }
       .controls { display: flex; flex-wrap: wrap; }
 
-      /* Result actions — stack vertically */
       .result-actions { flex-direction: column; align-items: stretch; }
       .result-actions .btn { width: 100%; justify-content: center; }
 
-      /* Streak dots — fill row evenly */
-      .streak-dots { justify-content: space-between; }
-      .streak-dot { flex: 1; max-width: 42px; }
+      /* 30-day calendar on phone */
+      .streak-dots { gap: 2px; }
+      .streak-dow-row { gap: 2px; }
+      .streak-dow { font-size: 0.5rem; }
+      .dot-score { font-size: 0.4rem; }
 
-      /* Stats */
       .stat-value { font-size: 1.5rem; }
       .stat-name { font-size: 0.62rem; }
 
-      /* Puzzle bar */
       .puzzle-bar { width: 100%; justify-content: space-between; }
     }
 
-    /* Small phone */
     @media (max-width: 380px) {
       .grid { gap: 5px; }
       .cell { min-height: 82px; padding: 6px; }
@@ -902,11 +892,9 @@
       .cell-text { font-size: 0.58rem; }
       .player-name { font-size: 1.1rem; }
       .btn { font-size: 0.74rem; padding: 9px 10px; }
-      .streak-dot { height: 34px; }
-      .dot-score { font-size: 0.56rem; }
+      .streak-dot { width: 17px; height: 17px; }
     }
 
-    /* Tiny (SE, Galaxy fold outer) */
     @media (max-width: 320px) {
       .grid { grid-template-columns: repeat(2, 1fr); }
       .cell { min-height: 90px; }
@@ -959,7 +947,6 @@
   <main class="page">
 
     <div class="page-header">
-      <!-- Rivalry badge removed -->
       <h1 id="gridTitle">Rivalry Grid</h1>
       <p id="gridSubtitle">CSK vs MI — the ultimate IPL rivalry showdown</p>
     </div>
@@ -1014,13 +1001,26 @@
     <!-- ── BOTTOM DASHBOARD ── -->
     <div class="bottom-dashboard" id="bottomDashboard">
 
-      <!-- Last 7 Days -->
+      <!-- Last 30 Days -->
       <div class="dashboard-card">
         <div class="dashboard-card-header">
           <span class="dashboard-icon">📅</span>
-          <span class="dashboard-label">Last 7 Days</span>
+          <span class="dashboard-label">Last 30 Days</span>
         </div>
-        <div class="streak-dots" id="streakDots"></div>
+        <div class="streak-calendar">
+          <!-- Day-of-week headers -->
+          <div class="streak-dow-row">
+            <div class="streak-dow">Su</div>
+            <div class="streak-dow">Mo</div>
+            <div class="streak-dow">Tu</div>
+            <div class="streak-dow">We</div>
+            <div class="streak-dow">Th</div>
+            <div class="streak-dow">Fr</div>
+            <div class="streak-dow">Sa</div>
+          </div>
+          <!-- Dot grid — filled by JS -->
+          <div class="streak-dots" id="streakDots"></div>
+        </div>
         <div class="streak-legend">
           <span><span class="dot-sample dot-win"></span> Played</span>
           <span><span class="dot-sample dot-miss"></span> Missed</span>
@@ -1064,7 +1064,10 @@
     const HISTORY_KEY  = 'crickingo_rivalry_history';
 
     function getTodayKey() {
-      return new Date().toISOString().split('T')[0]; // "2026-02-19"
+      // Use the ?date= param if present so the dashboard "today" matches the puzzle date
+      const urlParams = new URLSearchParams(window.location.search);
+      const dateParam = urlParams.get('date');
+      return dateParam || new Date().toISOString().split('T')[0];
     }
 
     function loadStats() {
@@ -1107,7 +1110,6 @@
       localStorage.setItem(STATS_KEY, JSON.stringify(stats));
       localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
 
-      // Refresh dashboard immediately after save
       renderDashboard();
     };
 
@@ -1123,39 +1125,33 @@
       set('statAvg',    stats.avg     ?? '—');
       set('statStreak', stats.streak != null ? stats.streak + (stats.streak === 1 ? ' day' : ' days') : '—');
 
-      // ── Last 7 days dots ──
+      // ── Last 30 days — 10×3 grid ──
       const dotsEl = document.getElementById('streakDots');
       if (!dotsEl) return;
       dotsEl.innerHTML = '';
 
-      const days    = ['Su','Mo','Tu','We','Th','Fr','Sa'];
-      const now     = new Date();
+      const now = new Date();
 
-      for (let i = 6; i >= 0; i--) {
-        const d    = new Date(now);
+      for (let i = 29; i >= 0; i--) {
+        const d     = new Date(now);
         d.setDate(d.getDate() - i);
-        const key  = d.toISOString().split('T')[0];
-        const day  = days[d.getDay()];
+        const key   = d.toISOString().split('T')[0];
         const entry = history[key];
         const isToday = key === today;
 
-        const dot  = document.createElement('div');
+        const dot = document.createElement('div');
 
         if (isToday && entry) {
           dot.className = 'streak-dot today-played';
-          dot.innerHTML = `<span class="dot-day">${day}</span><span class="dot-score">${entry.score}</span>`;
           dot.title = `Today · ${entry.score} pts`;
         } else if (isToday) {
           dot.className = 'streak-dot today-pending';
-          dot.innerHTML = `<span class="dot-day">${day}</span><span class="dot-score">?</span>`;
           dot.title = 'Today — not played yet';
         } else if (entry) {
           dot.className = 'streak-dot win';
-          dot.innerHTML = `<span class="dot-day">${day}</span><span class="dot-score">${entry.score}</span>`;
           dot.title = `${key} · ${entry.score} pts`;
         } else {
           dot.className = 'streak-dot miss';
-          dot.innerHTML = `<span class="dot-day">${day}</span><span class="dot-score">—</span>`;
           dot.title = `${key} — missed`;
         }
 
@@ -1164,13 +1160,17 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      const today = new Date();
-      const dateStr = today.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+      // ── Puzzle bar: read ?date= from URL, fall back to today ──
+      const urlParams = new URLSearchParams(window.location.search);
+      const dateParam = urlParams.get('date');
+      const puzzleDate = dateParam ? new Date(dateParam + 'T00:00:00') : new Date();
+
+      const dateStr = puzzleDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
       const el = document.getElementById('puzzleDate');
       if (el) el.textContent = dateStr;
 
-      const launch = new Date('2026-02-01');
-      const diff = Math.floor((today - launch) / (1000 * 60 * 60 * 24)) + 1;
+      const launch = new Date('2026-02-01T00:00:00');
+      const diff = Math.floor((puzzleDate - launch) / (1000 * 60 * 60 * 24)) + 1;
       const numEl = document.getElementById('puzzleNumber');
       if (numEl) numEl.textContent = '#' + diff;
 
@@ -1179,35 +1179,30 @@
     });
 
     window.shareScore = async function() {
-      const shareBtn   = document.getElementById('shareBtn');
+      const shareBtn    = document.getElementById('shareBtn');
       const shareCopied = document.getElementById('shareCopied');
-      const resultArea = document.getElementById('resultArea');
-      const actions    = resultArea.querySelector('.result-actions');
+      const resultArea  = document.getElementById('resultArea');
+      const actions     = resultArea.querySelector('.result-actions');
 
-      // Show loading state
       if (shareBtn) shareBtn.style.opacity = '0.6';
-
-      // Temporarily hide buttons so they don't appear in screenshot
       if (actions) actions.style.visibility = 'hidden';
 
       try {
         const canvas = await html2canvas(resultArea, {
           backgroundColor: '#060810',
-          scale: 2,            // retina / crisp on all screens
-          useCORS: true,       // needed if cell images are cross-origin
+          scale: 2,
+          useCORS: true,
           logging: false,
           windowWidth: resultArea.scrollWidth,
           windowHeight: resultArea.scrollHeight
         });
 
-        // Restore buttons
         if (actions) actions.style.visibility = 'visible';
         if (shareBtn) shareBtn.style.opacity = '1';
 
         canvas.toBlob(async (blob) => {
           const file = new File([blob], 'crickingo-score.png', { type: 'image/png' });
 
-          // Mobile: use native share sheet (WhatsApp, Instagram, etc.)
           if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
             try {
               await navigator.share({
@@ -1217,12 +1212,10 @@
               });
               return;
             } catch (shareErr) {
-              // User cancelled or share failed — fall through to download
               if (shareErr.name === 'AbortError') return;
             }
           }
 
-          // Desktop fallback: download the image
           const url = URL.createObjectURL(blob);
           const a   = document.createElement('a');
           a.href     = url;
@@ -1232,7 +1225,6 @@
           document.body.removeChild(a);
           URL.revokeObjectURL(url);
 
-          // Show "Saved!" feedback on desktop
           if (shareCopied) {
             shareCopied.textContent = '✓ Saved!';
             shareCopied.classList.add('show');
@@ -1248,7 +1240,6 @@
         if (actions) actions.style.visibility = 'visible';
         if (shareBtn) shareBtn.style.opacity = '1';
 
-        // Fallback to text copy if html2canvas fails for some reason
         const scoreEl = document.getElementById('scoreText');
         const score   = scoreEl ? scoreEl.textContent.trim() : '—';
         const dateEl  = document.getElementById('puzzleDate');
@@ -1264,12 +1255,6 @@
     };
   </script>
   <script>
-    /**
-     * Call this from rivalry.js when the board is complete:
-     *   window.triggerVictoryRipple();
-     *
-     * Ripples outward from the last-filled cell using Manhattan distance.
-     */
     window.triggerVictoryRipple = function(originIndex) {
       const allCells = Array.from(document.querySelectorAll('#gameGrid .cell'));
       const filled = allCells.filter(c => c.dataset.filled === 'true');
@@ -1292,7 +1277,7 @@
 
         setTimeout(() => {
           cell.classList.remove('ripple');
-          void cell.offsetWidth; // force reflow
+          void cell.offsetWidth;
           cell.classList.add('ripple');
           cell.addEventListener('animationend', () => cell.classList.remove('ripple'), { once: true });
         }, delay);
