@@ -46,6 +46,7 @@ let currentStreak = 0;
 let wrongAnswers = 0;
 let skippedPlayers = 0;
 let streakBonusEarned = 0;
+let lastFilledCellIndex = 0; // track last filled cell for ripple origin
 
 const POINTS = {
   CORRECT: 50, WRONG: -10, SKIP: 0,
@@ -118,13 +119,11 @@ async function initGame() {
       const snapshot = await get(ref(db, seedPath));
 
       if (snapshot.exists()) {
-        // Player 2+: read stored key
         const storedKey = snapshot.val();
         currentGame = gridData[storedKey];
         selectedDate = storedKey.replace('rivalry-', '') || 'default';
         console.log('✅ Read existing rivalry seed:', storedKey);
       } else {
-        // Player 1 (host): pick random and store
         const availableGames = Object.keys(gridData).filter(k => k.startsWith('rivalry'));
         const randomKey = availableGames[Math.floor(Math.random() * availableGames.length)];
         currentGame = gridData[randomKey];
@@ -139,9 +138,11 @@ async function initGame() {
       currentGame = gridData[randomKey];
     }
   } else {
-    selectedDate = getDateFromURL();
-    const gameKey = `rivalry-${selectedDate}`;
-    currentGame = gridData[gameKey] || gridData['rivalry'];
+    const today = new Date().toISOString().split('T')[0];
+    const gameKey = `rivalry-${today}`;
+    const availableKeys = Object.keys(gridData).filter(k => k.startsWith('rivalry')).sort();
+    currentGame = gridData[gameKey] || gridData[availableKeys[availableKeys.length - 1]];
+    if (!gridData[gameKey]) console.log('No data for today, using latest:', availableKeys[availableKeys.length - 1]);
     console.log('Normal mode:', gameKey);
   }
   // ===== END SEED LOGIC =====
@@ -153,7 +154,8 @@ async function initGame() {
   }
 
   currentIndex = 0; correctCount = 0; totalScore = 0;
-  currentStreak = 0; wrongAnswers = 0; skippedPlayers = 0; streakBonusEarned = 0;
+  currentStreak = 0; wrongAnswers = 0; skippedPlayers = 0;
+  streakBonusEarned = 0; lastFilledCellIndex = 0;
   gameActive = true;
 
   document.getElementById('gridTitle').innerText = currentGame.title;
@@ -250,6 +252,7 @@ function assignPlayerToCell(cell) {
   }
 
   cell.dataset.filled = "true";
+  lastFilledCellIndex = parseInt(cell.dataset.index, 10); // track for ripple
   updateScoreDisplay();
 
   const allFilled = Array.from(document.querySelectorAll('.cell')).every(c => c.dataset.filled === "true");
@@ -287,6 +290,17 @@ function endGame() {
   const skipBtn = document.getElementById('skipBtn');
   if (skipBtn) skipBtn.disabled = true;
 
+  // ── Fire the victory ripple before hiding the grid ──
+  if (typeof window.triggerVictoryRipple === 'function') {
+    window.triggerVictoryRipple(lastFilledCellIndex);
+  }
+
+  // Delay UI transition so the ripple plays out (~800ms covers a full 5-col spread)
+  const RIPPLE_DURATION = 800;
+  setTimeout(() => _showEndScreen(), RIPPLE_DURATION);
+}
+
+function _showEndScreen() {
   const total = Math.min(currentGame.categories.length, 15);
   const accuracy = (correctCount / total) * 100;
   let accuracyBonus = 0;
@@ -327,10 +341,8 @@ function endGame() {
   if (existingBtns) existingBtns.remove();
 
   if (isInTournament) {
-    const restartBtn = resultArea.querySelector('.btn-restart');
-    const backBtn = resultArea.querySelector('.btn-back');
-    if (restartBtn) restartBtn.style.display = 'none';
-    if (backBtn) backBtn.style.display = 'none';
+    // Hide all result action buttons — restart, back, share
+    resultArea.querySelectorAll('.btn-restart, .btn-back, .btn-share').forEach(b => b.style.display = 'none');
 
     const container = document.createElement('div');
     container.id = 'tournamentButtons';
@@ -343,13 +355,16 @@ function endGame() {
     resultArea.appendChild(container);
     setTimeout(() => finishGame(finalScore), 2000);
   } else {
-    const restartBtn = resultArea.querySelector('.btn-restart');
-    const backBtn = resultArea.querySelector('.btn-back');
-    if (restartBtn) restartBtn.style.display = 'inline-block';
-    if (backBtn) backBtn.style.display = 'inline-block';
+    // Restore all result action buttons
+    resultArea.querySelectorAll('.btn-restart, .btn-back, .btn-share').forEach(b => b.style.display = 'inline-flex');
   }
 
   resultArea.style.display = 'block';
+
+  // ── Save result to localStorage for dashboard (non-tournament only) ──
+  if (!isInTournament && typeof window.saveGameResult === 'function') {
+    window.saveGameResult(finalScore, correctCount, wrongAnswers);
+  }
 }
 
 function getResultPhrase(accuracy) {

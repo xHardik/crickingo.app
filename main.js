@@ -18,47 +18,15 @@ window.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('selectedDate', this.value);
   });
 
-  // Add date parameter to game links
+  // rivalry and transfer pick date automatically — no date param needed
   document.getElementById('rivalryBtn').addEventListener('click', function(e) {
     e.preventDefault();
-    const date = dateInput.value;
-    localStorage.setItem('selectedDate', date);
-    window.location.href = `rivalry.html?date=${date}`;
+    window.location.href = 'rivalry.html';
   });
 
   document.getElementById('transferBtn').addEventListener('click', function(e) {
     e.preventDefault();
-    const date = dateInput.value;
-    localStorage.setItem('selectedDate', date);
-    window.location.href = `transfer.html?date=${date}`;
-
-   // Create Supabase client
-const supabaseUrl = 'https://hpmnpvwteqrtrcudflyf.supabase.co'  // paste from Supabase dashboard
-const supabaseKey = 'sb_publishable_RgqM7ZgUJ9rR_ek_rVXSeQ_SubOJzC-'  // paste from Supabase dashboard
-
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey)
-
-// Now you can use it!
-// Example: Save a score
-async function saveScore(playerName, score) {
-  const { data, error } = await supabase
-    .from('scores')  // your table name
-    .insert([
-      { player: playerName, score: score }
-    ])
-  
-  if (error) console.error('Error:', error)
-  else console.log('Saved!', data)
-}
-
-// Example: Get all scores
-async function getScores() {
-  const { data, error } = await supabase
-    .from('scores')
-    .select('*')
-  
-  if (error) console.error('Error:', error)
-  else console.log('Scores:', data)
-} 
+    window.location.href = 'transfer.html';
   });
+
 });
