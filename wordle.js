@@ -101,12 +101,10 @@ async function initGame() {
             const snapshot = await get(ref(db, seedPath));
 
             if (snapshot.exists()) {
-                // Player 2+: read stored key
                 const storedKey = snapshot.val();
                 dailyGame = wordleData[storedKey];
                 console.log('✅ Read existing wordle seed:', storedKey);
             } else {
-                // Player 1: pick random and store
                 const availableGames = Object.keys(wordleData).filter(k => k.startsWith('wordle'));
                 const randomKey = availableGames[Math.floor(Math.random() * availableGames.length)];
                 dailyGame = wordleData[randomKey];
@@ -161,23 +159,24 @@ async function initGame() {
 }
 
 function updateButtonsForMode() {
-    const resetBtn = document.querySelector('.reset-btn');
-    const backBtn = document.querySelector('.back-btn');
+    const resetBtn = document.querySelector('.btn-restart');
+    const backBtn  = document.querySelector('.btn-back');
     if (isInTournament) {
         if (resetBtn) resetBtn.style.display = 'none';
-        if (backBtn) backBtn.style.display = 'none';
+        if (backBtn)  backBtn.style.display  = 'none';
     } else {
-        if (resetBtn) resetBtn.style.display = 'inline-block';
-        if (backBtn) backBtn.style.display = 'inline-block';
+        if (resetBtn) resetBtn.style.display = '';
+        if (backBtn)  backBtn.style.display  = '';
     }
 }
 
 function updateScoreDisplay() {
-    const scoreDisplay = document.getElementById('scoreDisplay');
-    if (scoreDisplay) {
-        const scoreValue = scoreDisplay.querySelector('.score-value');
-        if (scoreValue) scoreValue.textContent = `💰 ${currentScore} pts`;
-    }
+    // Support both old (.score-value) and new (#scoreValue) HTML
+    const byId  = document.getElementById('scoreValue');
+    const byClass = document.querySelector('.score-value');
+    const text = `${currentScore} pts`;
+    if (byId)    byId.textContent    = text;
+    if (byClass) byClass.textContent = `💰 ${text}`;
 }
 
 function calculateScore(attemptNumber) {
@@ -227,6 +226,12 @@ function submitGuess() {
         gameOver = true;
         currentScore = calculateScore(currentAttempt);
         updateScoreDisplay();
+
+        // ── Save to localStorage so dashboard & stats update ──
+        if (!isInTournament && typeof window.saveGameResult === 'function') {
+            window.saveGameResult(currentScore);
+        }
+
         const scoreBreakdown = `
             <div style="text-align: center; margin: 20px auto; max-width: 400px; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px;">
                 <div style="font-size: 1.3em; font-weight: 900; color: #ffd700; margin-bottom: 10px;">🎉 Score: ${currentScore} Points!</div>
@@ -236,17 +241,26 @@ function submitGuess() {
         showMessage(`🎉 Correct! You guessed ${targetPlayer}!${scoreBreakdown}`, 'success');
         document.getElementById('guessInput').disabled = true;
         document.getElementById('submitBtn').disabled = true;
+
         if (isInTournament) {
             showTournamentEndScreen(currentScore, true);
             setTimeout(() => finishGame(currentScore), 2000);
         }
+
     } else if (currentAttempt >= maxAttempts) {
         gameOver = true;
         currentScore = SCORING.FAILED;
         updateScoreDisplay();
+
+        // ── Save 0 pts so the day still gets marked as played ──
+        if (!isInTournament && typeof window.saveGameResult === 'function') {
+            window.saveGameResult(0);
+        }
+
         showMessage(`😞 Game Over! The answer was ${targetPlayer}`, 'error');
         document.getElementById('guessInput').disabled = true;
         document.getElementById('submitBtn').disabled = true;
+
         if (isInTournament) {
             showTournamentEndScreen(0, false);
             setTimeout(() => finishGame(0), 2000);
@@ -255,15 +269,15 @@ function submitGuess() {
 }
 
 function showTournamentEndScreen(score, isWin) {
-    const resetBtn = document.querySelector('.reset-btn');
-    const backBtn = document.querySelector('.back-btn');
+    const resetBtn = document.querySelector('.btn-restart');
+    const backBtn  = document.querySelector('.btn-back');
     if (resetBtn) resetBtn.style.display = 'none';
-    if (backBtn) backBtn.style.display = 'none';
+    if (backBtn)  backBtn.style.display  = 'none';
 
     const existing = document.getElementById('tournamentButtons');
     if (existing) existing.remove();
 
-    const container = document.querySelector('.container');
+    const container = document.querySelector('.page') || document.querySelector('.container');
     const tournamentDiv = document.createElement('div');
     tournamentDiv.id = 'tournamentButtons';
     tournamentDiv.style.cssText = `margin-top: 30px; text-align: center; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; color: white;`;
@@ -278,8 +292,8 @@ function showTournamentEndScreen(score, isWin) {
 
 function displayGuess(guess) {
     const targetLetters = targetPlayer.split('');
-    const guessLetters = guess.split('');
-    const letterCount = {};
+    const guessLetters  = guess.split('');
+    const letterCount   = {};
     targetLetters.forEach(letter => { letterCount[letter] = (letterCount[letter] || 0) + 1; });
 
     const results = new Array(guess.length).fill('absent');
@@ -313,26 +327,27 @@ function hideMessage() {
 }
 
 function updateStats() {
-    document.getElementById('stats').textContent = `Attempts: ${currentAttempt}/${maxAttempts}`;
+    const el = document.getElementById('stats');
+    if (el) el.textContent = `Attempts: ${currentAttempt} / ${maxAttempts}`;
 }
 
 function showHint(attemptNumber) {
     const hintDisplay = document.getElementById('hintDisplay');
-    const hintText = document.getElementById('hintText');
+    const hintText    = document.getElementById('hintText');
     if (!hintDisplay || !hintText) return;
     if (attemptNumber === 3 && hintCountry) {
         hintText.innerHTML = `<strong>Hint:</strong> ${hintCountry}`;
-        hintDisplay.style.display = 'block';
+        hintDisplay.classList.add('show');
     } else if (attemptNumber === 4 && hintPosition) {
         hintText.innerHTML = `<strong>Hint:</strong> ${hintCountry} | ${hintPosition}`;
-        hintDisplay.style.display = 'block';
+        hintDisplay.classList.add('show');
     }
 }
 
 function resetGame() {
     initGame();
-    document.getElementById('guessInput').value = '';
-    document.getElementById('guessInput').focus();
+    const input = document.getElementById('guessInput');
+    if (input) { input.value = ''; input.focus(); }
 }
 
 function finishGame(finalScore) {
@@ -341,11 +356,11 @@ function finishGame(finalScore) {
     window.location.href = `tournament.html?score=${finalScore}&game=${gameIndex}`;
 }
 
-window.submitGuess = submitGuess;
-window.resetGame = resetGame;
-window.finishGame = finishGame;
+window.submitGuess  = submitGuess;
+window.resetGame    = resetGame;
+window.finishGame   = finishGame;
 window.closeRulesModal = closeRulesModal;
-window.backToMenu = backToMenu;
+window.backToMenu   = backToMenu;
 
 document.addEventListener('DOMContentLoaded', function() {
     const guessInput = document.getElementById('guessInput');
