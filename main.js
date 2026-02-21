@@ -29,4 +29,9 @@ window.addEventListener('DOMContentLoaded', () => {
     window.location.href = 'transfer.html?date=' + dateInput.value;
   });
 
+  document.getElementById('wordleBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    window.location.href = 'wordle.html?date=' + dateInput.value;
+  });
+
 });
