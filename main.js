@@ -33,5 +33,12 @@ window.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     window.location.href = 'wordle.html?date=' + dateInput.value;
   });
-
+  document.getElementById('wordleBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    window.location.href = 'hl.html?date=' + dateInput.value;
+  });
+  document.getElementById('wordleBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    window.location.href = 'builder.html?date=' + dateInput.value;
+  });
 });

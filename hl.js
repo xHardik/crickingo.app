@@ -25,19 +25,12 @@ function showTournamentInfo() {
     const infoDiv = document.createElement('div');
     infoDiv.id = 'tournamentInfo';
     infoDiv.style.cssText = `
-        position: fixed;
-        top: 10px;
-        left: 50%;
-        transform: translateX(-50%);
+        position: fixed; top: 10px; left: 50%; transform: translateX(-50%);
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 12px 25px;
-        border-radius: 25px;
-        font-weight: 700;
-        z-index: 1000;
+        color: white; padding: 12px 25px; border-radius: 25px;
+        font-weight: 700; z-index: 1000;
         box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        text-align: center;
-        font-size: 0.9em;
+        text-align: center; font-size: 0.9em;
     `;
     infoDiv.innerHTML = `🏆 Tournament Mode - Play Your Best!`;
     document.body.insertBefore(infoDiv, document.body.firstChild);
@@ -57,20 +50,18 @@ function closeRulesModal() {
 // ===== GAME VARIABLES =====
 let currentScore = 0;
 let roundsCompleted = 0;
-let highScore = localStorage.getItem('cricketHigherLowerHighScore') || 0;
 let leftPlayer = null;
 let rightPlayer = null;
 let PLAYERS = [];
 
-// *** NEW: shared sequence for tournament mode ***
-let playerSequence = [];   // pre-shuffled indices, used in tournament
-let sequenceIndex = 0;     // pointer into the sequence
+let playerSequence = [];
+let sequenceIndex = 0;
 
 const POINTS_PER_ROUND = 100;
 const MAX_ROUNDS = 10;
 const MAX_SCORE = 1000;
 
-// ===== Fisher-Yates shuffle (seeded via stored array, not Math.random) =====
+// ===== Fisher-Yates shuffle =====
 function shuffleArray(arr) {
     const a = [...arr];
     for (let i = a.length - 1; i > 0; i--) {
@@ -82,8 +73,6 @@ function shuffleArray(arr) {
 
 // ===== LOAD PLAYERS =====
 async function loadPlayers() {
-    console.log('🚀 loadPlayers() - isInTournament:', isInTournament);
-
     try {
         const response = await fetch('hl.json');
         const data = await response.json();
@@ -102,38 +91,25 @@ async function loadPlayers() {
             ]);
 
             if (daySnap.exists()) {
-                // ✅ Player 2+ : read existing day AND sequence
                 selectedDayKey = daySnap.val();
                 selectedDay = data[selectedDayKey];
-                playerSequence = seqSnap.val(); // array of indices already stored
-
-                console.log('✅ Read existing seed - day:', selectedDayKey, '| sequence:', playerSequence);
+                playerSequence = seqSnap.val();
             } else {
-                // 🎲 Player 1 (host): pick day, build sequence, write both to Firebase
                 const availableDays = Object.keys(data).filter(k => k.startsWith('day'));
                 selectedDayKey = availableDays[Math.floor(Math.random() * availableDays.length)];
                 selectedDay = data[selectedDayKey];
 
-                // Build a long enough sequence for MAX_ROUNDS + 1 slots
-                // Each round needs 2 players; generate indices with no adjacent repeats
                 const indices = Array.from({ length: selectedDay.players.length }, (_, i) => i);
-                // Shuffle twice to get a long sequence (repeat if needed)
                 let seq = shuffleArray(indices);
-                while (seq.length < MAX_ROUNDS + 1) {
-                    seq = seq.concat(shuffleArray(indices));
-                }
+                while (seq.length < MAX_ROUNDS + 1) seq = seq.concat(shuffleArray(indices));
                 playerSequence = seq.slice(0, MAX_ROUNDS + 1);
 
                 await Promise.all([
                     set(ref(db, dayPath), selectedDayKey),
                     set(ref(db, seqPath), playerSequence)
                 ]);
-
-                console.log('🎲 Wrote new seed - day:', selectedDayKey, '| sequence:', playerSequence);
             }
-
         } else {
-            // Normal solo mode
             localStorage.removeItem('inTournamentGame');
             const dateParam = urlParams.get('date');
 
@@ -152,23 +128,19 @@ async function loadPlayers() {
                 selectedDay = data.day1;
             }
 
-            // In solo mode, just shuffle randomly — no Firebase needed
             const indices = Array.from({ length: selectedDay.players.length }, (_, i) => i);
             let seq = shuffleArray(indices);
             while (seq.length < MAX_ROUNDS + 1) seq = seq.concat(shuffleArray(indices));
             playerSequence = seq.slice(0, MAX_ROUNDS + 1);
-
-            console.log('Solo mode - day:', selectedDayKey);
         }
 
         PLAYERS = selectedDay.players;
         sequenceIndex = 0;
 
-        console.log('Players loaded:', PLAYERS.length, '| Sequence:', playerSequence);
         init();
 
     } catch (error) {
-        console.error('💥 Fatal error loading players:', error);
+        console.error('Fatal error loading players:', error);
         alert('Error loading game data!');
     }
 }
@@ -180,11 +152,16 @@ function init() {
         sessionStorage.setItem('hlRulesShown', 'true');
     }
 
-    document.getElementById('highScore').textContent = highScore;
-
     if (isInTournament) showTournamentInfo();
 
+    updateScoreDisplay();
     loadNewRound();
+}
+
+// ===== UPDATE SCORE DISPLAY =====
+function updateScoreDisplay() {
+    const el = document.getElementById('currentScore');
+    if (el) el.textContent = currentScore + ' pts';
 }
 
 // ===== ROUND LOGIC =====
@@ -198,12 +175,10 @@ function loadNewRound() {
         leftPlayer = getNextPlayer();
     }
 
-    // Get a right player that's different from left
     let attempts = 0;
     do {
         rightPlayer = getNextPlayer();
         attempts++;
-        // Safety: if sequence is exhausted or stuck, just pick any different player
         if (attempts > 5) {
             const others = PLAYERS.filter(p => p !== leftPlayer);
             rightPlayer = others[Math.floor(Math.random() * others.length)];
@@ -213,15 +188,18 @@ function loadNewRound() {
 
     displayPlayers();
     document.getElementById('higherBtn').disabled = false;
-    document.getElementById('lowerBtn').disabled = false;
-    document.getElementById('resultMessage').classList.remove('show');
+    document.getElementById('lowerBtn').disabled  = false;
+
+    const resultMsg = document.getElementById('resultMessage');
+    if (resultMsg) { resultMsg.classList.remove('show'); resultMsg.className = 'result-message'; }
+
+    // Remove card state classes
+    document.getElementById('leftCard')?.classList.remove('correct', 'wrong');
+    document.getElementById('rightCard')?.classList.remove('correct', 'wrong');
 }
 
-// *** KEY CHANGE: use sequence index instead of Math.random() ***
 function getNextPlayer() {
-    if (sequenceIndex >= playerSequence.length) {
-        sequenceIndex = 0; // wrap around (shouldn't happen with MAX_ROUNDS limit)
-    }
+    if (sequenceIndex >= playerSequence.length) sequenceIndex = 0;
     const player = PLAYERS[playerSequence[sequenceIndex]];
     sequenceIndex++;
     return player;
@@ -240,15 +218,17 @@ function getStatCategory(stat) {
 }
 
 function displayPlayers() {
-    document.getElementById('leftEmoji').textContent = leftPlayer.image;
-    document.getElementById('leftName').textContent = leftPlayer.name;
-    document.getElementById('leftStat').textContent = leftPlayer.stat;
-    document.getElementById('leftValue').textContent = formatValue(leftPlayer.value);
+    document.getElementById('leftEmoji').textContent  = leftPlayer.image;
+    document.getElementById('leftName').textContent   = leftPlayer.name;
+    document.getElementById('leftStat').textContent   = leftPlayer.stat;
+    document.getElementById('leftValue').textContent  = formatValue(leftPlayer.value);
+    document.getElementById('leftValue').className    = 'player-value';
 
     document.getElementById('rightEmoji').textContent = rightPlayer.image;
-    document.getElementById('rightName').textContent = rightPlayer.name;
-    document.getElementById('rightStat').textContent = rightPlayer.stat;
+    document.getElementById('rightName').textContent  = rightPlayer.name;
+    document.getElementById('rightStat').textContent  = rightPlayer.stat;
     document.getElementById('rightValue').textContent = '???';
+    document.getElementById('rightValue').className   = 'hidden-value';
 }
 
 function formatValue(value) {
@@ -258,107 +238,93 @@ function formatValue(value) {
 // ===== GUESS =====
 function guess(choice) {
     document.getElementById('higherBtn').disabled = true;
-    document.getElementById('lowerBtn').disabled = true;
+    document.getElementById('lowerBtn').disabled  = true;
 
-    const isHigher = rightPlayer.value > leftPlayer.value;
+    const isHigher  = rightPlayer.value > leftPlayer.value;
     const isCorrect = (choice === 'higher' && isHigher) || (choice === 'lower' && !isHigher);
 
+    // Reveal right value
     document.getElementById('rightValue').textContent = formatValue(rightPlayer.value);
-    document.getElementById('rightValue').className = 'player-value';
+    document.getElementById('rightValue').className   = 'player-value';
 
     const resultMsg = document.getElementById('resultMessage');
+    const rightCard = document.getElementById('rightCard');
 
     if (isCorrect) {
         currentScore += POINTS_PER_ROUND;
         roundsCompleted++;
+        updateScoreDisplay();
 
-        document.getElementById('currentScore').textContent = currentScore;
+        rightCard?.classList.add('correct');
 
         const roundsLeft = MAX_ROUNDS - roundsCompleted;
-        const progressText = roundsLeft > 0 ? ` (${roundsLeft} rounds left!)` : ' 🎉 PERFECT!';
-        resultMsg.textContent = `✅ Correct! +${POINTS_PER_ROUND} points${progressText}`;
-        resultMsg.className = 'result-message show correct';
-
-        document.querySelector('.player-card:not(.left)').classList.add('pulse');
+        const progressText = roundsLeft > 0 ? ` (${roundsLeft} left)` : ' 🎉 Perfect!';
+        if (resultMsg) {
+            resultMsg.textContent = `✅ Correct! +${POINTS_PER_ROUND} pts${progressText}`;
+            resultMsg.className = 'result-message show correct';
+        }
 
         setTimeout(() => {
-            document.querySelector('.player-card:not(.left)').classList.remove('pulse');
-            leftPlayer = rightPlayer; // carry right → left (same for all players)
+            leftPlayer = rightPlayer;
             loadNewRound();
         }, 1500);
 
-        if (currentScore > highScore) {
-            highScore = currentScore;
-            localStorage.setItem('cricketHigherLowerHighScore', highScore);
-            document.getElementById('highScore').textContent = highScore;
-        }
     } else {
-        resultMsg.textContent = `❌ Wrong! It was ${rightPlayer.value > leftPlayer.value ? 'HIGHER' : 'LOWER'}`;
-        resultMsg.className = 'result-message show wrong';
+        rightCard?.classList.add('wrong');
 
-        document.querySelector('.player-card:not(.left)').classList.add('shake');
+        if (resultMsg) {
+            resultMsg.textContent = `❌ Wrong! It was ${rightPlayer.value > leftPlayer.value ? 'HIGHER' : 'LOWER'}`;
+            resultMsg.className = 'result-message show wrong';
+        }
 
-        setTimeout(() => {
-            endGame(false);
-        }, 2000);
+        setTimeout(() => { endGame(false); }, 2000);
     }
 }
 
 // ===== END GAME =====
 function endGame(isPerfect = false) {
     document.getElementById('gameArea').style.display = 'none';
-    document.getElementById('finalScore').textContent = currentScore;
 
-    let message = '';
-    if (isPerfect && currentScore === MAX_SCORE) {
-        message = 'PERFECT SCORE! 🏆 You got all 10 rounds correct!';
-    } else if (currentScore >= 800) {
-        message = 'AMAZING! Cricket expert! 🔥';
-    } else if (currentScore >= 500) {
-        message = 'Great job! You know your cricket!';
-    } else if (currentScore >= 300) {
-        message = 'Not bad! Keep practicing!';
-    } else {
-        message = 'Better luck next time!';
+    // ── Persist to localStorage so dashboard updates ──
+    if (!isInTournament && typeof window.saveGameResult === 'function') {
+        window.saveGameResult(currentScore);
     }
 
-    document.getElementById('gameOverMessage').textContent = message;
+    const scoreTextEl = document.getElementById('scoreText');
+    if (scoreTextEl) scoreTextEl.textContent = currentScore + ' pts';
 
-    const gameOverDiv = document.getElementById('gameOver');
+    let message = '';
+    if (isPerfect && currentScore === MAX_SCORE) message = '🏆 Perfect Score! You got all 10 rounds!';
+    else if (currentScore >= 800) message = '🔥 Amazing! Cricket expert!';
+    else if (currentScore >= 500) message = '👏 Great job! You know your cricket!';
+    else if (currentScore >= 300) message = 'Not bad! Keep practicing!';
+    else message = 'Better luck next time!';
+
+    const phraseEl = document.getElementById('resultPhrase');
+    if (phraseEl) phraseEl.textContent = message;
+
+    const resultArea = document.getElementById('resultArea');
     const tryAgainBtn = document.getElementById('tryAgainBtn');
 
     if (isInTournament) {
         if (tryAgainBtn) tryAgainBtn.style.display = 'none';
 
-        const existingMsg = gameOverDiv.querySelector('#tournamentCompletionMsg');
-        if (existingMsg) existingMsg.remove();
-
-        const tournamentMsg = document.createElement('div');
-        tournamentMsg.id = 'tournamentCompletionMsg';
-        tournamentMsg.style.cssText = `
-            text-align: center;
-            margin-top: 20px;
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 15px;
-            color: white;
-        `;
-        tournamentMsg.innerHTML = `
-            <p style="font-size: 1.2em; font-weight: 700; margin-bottom: 10px;">✅ Score Submitted!</p>
-            <p style="font-size: 2em; font-weight: 900; margin: 10px 0;">${currentScore} Points</p>
-            <p style="font-size: 0.9em; opacity: 0.9;">${roundsCompleted} / ${MAX_ROUNDS} rounds completed</p>
-            <p style="font-size: 0.9em; opacity: 0.9; margin-top: 5px;">Returning to tournament...</p>
-        `;
-        gameOverDiv.appendChild(tournamentMsg);
-
+        const tournamentDiv = document.getElementById('tournamentButtons');
+        if (tournamentDiv) {
+            tournamentDiv.innerHTML = `
+                <div style="margin-top:20px;padding:20px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:14px;color:white;text-align:center;">
+                    <p style="font-size:1.1em;font-weight:700;margin-bottom:8px;">✅ Score Submitted!</p>
+                    <p style="font-size:2em;font-weight:900;margin:8px 0;">${currentScore} pts</p>
+                    <p style="font-size:0.85em;opacity:0.9;">${roundsCompleted} / ${MAX_ROUNDS} rounds · Returning…</p>
+                </div>
+            `;
+        }
         setTimeout(() => finishGame(currentScore), 2000);
     } else {
-        if (tryAgainBtn) tryAgainBtn.style.display = 'block';
-        const tournamentMsg = gameOverDiv.querySelector('#tournamentCompletionMsg');
-        if (tournamentMsg) tournamentMsg.remove();
+        if (tryAgainBtn) tryAgainBtn.style.display = '';
     }
 
-    gameOverDiv.classList.add('show');
+    if (resultArea) resultArea.style.display = 'block';
 }
 
 // ===== RESET =====
@@ -370,10 +336,13 @@ function resetGame() {
     rightPlayer = null;
     sequenceIndex = 0;
 
-    document.getElementById('currentScore').textContent = 0;
-    document.getElementById('gameArea').style.display = 'block';
-    document.getElementById('gameOver').classList.remove('show');
+    const resultArea = document.getElementById('resultArea');
+    if (resultArea) resultArea.style.display = 'none';
 
+    const gameArea = document.getElementById('gameArea');
+    if (gameArea) gameArea.style.display = 'block';
+
+    updateScoreDisplay();
     init();
 }
 
@@ -388,11 +357,11 @@ async function finishGame(finalScore) {
 }
 
 // ===== GLOBAL EXPORTS =====
-window.guess = guess;
-window.resetGame = resetGame;
-window.finishGame = finishGame;
+window.guess           = guess;
+window.resetGame       = resetGame;
+window.finishGame      = finishGame;
 window.closeRulesModal = closeRulesModal;
-window.backToMenu = backToMenu;
+window.backToMenu      = backToMenu;
 
 // ===== BOOT =====
 loadPlayers();
