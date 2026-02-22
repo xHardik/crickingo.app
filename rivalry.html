@@ -692,7 +692,7 @@
     .streak-dots {
       display: grid;
       grid-template-columns: repeat(10, 1fr);
-      grid-template-rows: repeat(3, 38px);
+      grid-template-rows: repeat(3, 44px);
       gap: 4px;
       margin-bottom: 14px;
     }
@@ -713,20 +713,14 @@
       background: #3DD68C; flex-shrink: 0;
     }
     .streak-dot .dot-score-val {
-      font-size: 0.52rem; font-weight: 700; line-height: 1;
+      font-size: 0.52rem; font-weight: 800; line-height: 1;
       color: #3DD68C; letter-spacing: 0;
     }
-    .streak-dot.miss .dot-pip,
-    .streak-dot.miss .dot-score-val,
-    .streak-dot.empty .dot-pip,
-    .streak-dot.empty .dot-score-val,
-    .streak-dot.today-pending .dot-pip,
-    .streak-dot.today-pending .dot-score-val { display: none; }
-    .streak-dot.today-played .dot-pip   { background: var(--accent); }
-    .streak-dot.today-played .dot-score-val { color: var(--accent); }
-    .streak-dot:hover { transform: translateY(-2px); }
+    .streak-dot .dot-pip { display: none; }
+.streak-dot.miss .dot-score-val,
+.streak-dot.empty .dot-score-val,
+.streak-dot.today-pending .dot-score-val { display: none; }
 
-    /* Empty placeholder — fills gap before first real dot */
     .streak-dot.empty {
       background: transparent;
       border: none;
