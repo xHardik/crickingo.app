@@ -155,38 +155,63 @@ function handlePlayingState(tournament) {
   redirectToGame(nextGameIndex);
 }
 
-// ===== WAITING SCREEN =====
+// ===== WAITING SCREEN — all 5 games done =====
 function showWaitingForOthers(tournament) {
   document.body.innerHTML = `
-    <div style="
-      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      display: flex; align-items: center; justify-content: center;
-      color: white; font-family: system-ui;
-    ">
-      <div style="text-align: center; max-width: 500px; padding: 40px;">
-        <div style="font-size: 4em; margin-bottom: 20px;">🎉</div>
-        <h1 style="font-size: 2.5em; margin-bottom: 20px;">All Games Complete!</h1>
-        <p style="font-size: 1.3em; margin-bottom: 30px; opacity: 0.9;">
-          You've finished all ${GAMES.length} games!
-        </p>
-        <div style="background: rgba(255,255,255,0.2); padding: 30px; border-radius: 16px;">
-          <p style="font-size: 1.1em; margin-bottom: 15px;">⏳ Waiting for other players to finish...</p>
-          <div style="
-            border: 4px solid rgba(255,255,255,0.3);
-            border-top: 4px solid white;
-            border-radius: 50%; width: 50px; height: 50px;
-            animation: spin 1s linear infinite; margin: 20px auto 0;
-          "></div>
-          <p style="font-size: 0.9em; margin-top: 20px; opacity: 0.8;">
-            You'll be automatically redirected when everyone is done!
-          </p>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;700&display=swap');
+      *{margin:0;padding:0;box-sizing:border-box}
+      body{font-family:'DM Sans',sans-serif;background:#060810;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+      body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(61,214,140,0.13) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 90% 80%,rgba(79,142,247,0.07) 0%,transparent 60%);pointer-events:none;z-index:0}
+      body::after{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(-45deg,transparent,transparent 40px,rgba(255,255,255,0.009) 40px,rgba(255,255,255,0.009) 41px);pointer-events:none;z-index:0}
+      .card{position:relative;z-index:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:48px 40px;max-width:460px;width:100%;text-align:center;overflow:hidden;animation:riseIn .5s cubic-bezier(.4,0,.2,1) both}
+      .card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#3DD68C,#4F8EF7,#3DD68C);border-radius:24px 24px 0 0}
+      @keyframes riseIn{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+      .emoji{font-size:3.8rem;display:block;margin-bottom:18px;animation:float 2.6s ease-in-out infinite;filter:drop-shadow(0 0 24px rgba(61,214,140,.5))}
+      @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+      h1{font-family:'Bebas Neue',sans-serif;font-size:2.6rem;letter-spacing:3px;background:linear-gradient(135deg,#3DD68C,#fff 60%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
+      .sub{color:rgba(242,242,242,.45);font-size:.86rem;margin-bottom:28px}
+      .games-list{display:flex;flex-direction:column;gap:8px;margin-bottom:28px;text-align:left}
+      .game-row{display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(61,214,140,.07);border:1px solid rgba(61,214,140,.2);border-radius:10px;font-size:.84rem;color:rgba(242,242,242,.8);font-weight:500;animation:fadeUp .4s ease both}
+      .game-row:nth-child(1){animation-delay:.05s}
+      .game-row:nth-child(2){animation-delay:.10s}
+      .game-row:nth-child(3){animation-delay:.15s}
+      .game-row:nth-child(4){animation-delay:.20s}
+      .game-row:nth-child(5){animation-delay:.25s}
+      @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+      .check{width:26px;height:26px;border-radius:50%;background:rgba(61,214,140,.15);border:1px solid rgba(61,214,140,.4);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.9rem}
+      .status-box{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:20px}
+      .status-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:rgba(242,242,242,.35);margin-bottom:14px}
+      .dots{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:12px}
+      .dot{width:8px;height:8px;border-radius:50%;animation:blink 1.2s ease-in-out infinite}
+      .dot:nth-child(1){background:#3DD68C}
+      .dot:nth-child(2){background:#4F8EF7;animation-delay:.2s}
+      .dot:nth-child(3){background:#F7C344;animation-delay:.4s}
+      @keyframes blink{0%,100%{opacity:.2;transform:scale(.7)}50%{opacity:1;transform:scale(1.3)}}
+      .hint{font-size:.72rem;color:rgba(242,242,242,.3);font-weight:500}
+    </style>
+    <div class="card">
+      <span class="emoji">🎉</span>
+      <h1>All Done!</h1>
+      <p class="sub">You've completed all ${GAMES.length} games</p>
+      <div class="games-list">
+        ${GAMES.map(g => `
+          <div class="game-row">
+            <div class="check">✓</div>
+            ${g.name}
+          </div>
+        `).join('')}
+      </div>
+      <div class="status-box">
+        <div class="status-label">Waiting for other players</div>
+        <div class="dots">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
         </div>
+        <div class="hint">You'll be redirected automatically when everyone finishes</div>
       </div>
     </div>
-    <style>
-      @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    </style>
   `;
 }
 
@@ -455,32 +480,40 @@ window.addEventListener('load', async () => {
       console.log(`➡️ Next: ${GAMES[nextGameIndex].name}`);
 
       document.body.innerHTML = `
-        <div style="
-          position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          display: flex; align-items: center; justify-content: center;
-          color: white; font-family: system-ui;
-        ">
-          <div style="text-align: center;">
-            <div style="font-size: 3em; margin-bottom: 20px;">✅</div>
-            <h2 style="font-size: 2em; margin-bottom: 10px;">Score Saved!</h2>
-            <p style="font-size: 1.3em; margin-bottom: 5px;">${returnScore} points</p>
-            <p style="font-size: 1.1em; opacity: 0.9; margin-top: 20px;">
-              Next: <strong>${GAMES[nextGameIndex].name}</strong>
-            </p>
-            <div style="margin-top: 30px;">
-              <div style="
-                border: 4px solid rgba(255,255,255,0.3);
-                border-top: 4px solid white;
-                border-radius: 50%; width: 40px; height: 40px;
-                animation: spin 1s linear infinite; margin: 0 auto;
-              "></div>
-            </div>
-          </div>
-        </div>
         <style>
-          @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+          @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;700&display=swap');
+          *{margin:0;padding:0;box-sizing:border-box}
+          body{font-family:'DM Sans',sans-serif;background:#060810;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+          body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(247,195,68,0.12) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 90% 80%,rgba(79,142,247,0.07) 0%,transparent 60%);pointer-events:none;z-index:0}
+          body::after{content:'';position:fixed;inset:0;background-image:repeating-linear-gradient(-45deg,transparent,transparent 40px,rgba(255,255,255,0.009) 40px,rgba(255,255,255,0.009) 41px);pointer-events:none;z-index:0}
+          .card{position:relative;z-index:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:48px 40px;max-width:420px;width:100%;text-align:center;overflow:hidden;animation:riseIn .5s cubic-bezier(.4,0,.2,1) both}
+          .card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#F7C344,#E84040,#4F8EF7);border-radius:24px 24px 0 0}
+          @keyframes riseIn{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+          .check{font-size:3.2rem;display:block;margin-bottom:18px;animation:popIn .4s cubic-bezier(.4,0,.2,1) .2s both;filter:drop-shadow(0 0 20px rgba(61,214,140,.5))}
+          @keyframes popIn{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
+          h2{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;letter-spacing:3px;background:linear-gradient(135deg,#3DD68C,#fff 60%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px}
+          .score-pill{display:inline-flex;align-items:baseline;gap:5px;background:rgba(247,195,68,.10);border:1px solid rgba(247,195,68,.25);border-radius:100px;padding:6px 20px;margin-bottom:28px}
+          .score-val{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:2px;color:#F7C344}
+          .score-lbl{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(242,242,242,.45)}
+          .divider{height:1px;background:rgba(255,255,255,.07);margin-bottom:22px}
+          .next-lbl{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:rgba(242,242,242,.35);margin-bottom:8px}
+          .next-name{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:2px;color:#F2F2F2;margin-bottom:22px}
+          .bar{height:3px;background:rgba(255,255,255,.07);border-radius:100px;overflow:hidden}
+          .bar-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,#F7C344,#4F8EF7);animation:fillBar 2s linear both}
+          @keyframes fillBar{from{width:0%}to{width:100%}}
         </style>
+        <div class="card">
+          <span class="check">✅</span>
+          <h2>Score Saved!</h2>
+          <div class="score-pill">
+            <span class="score-val">${returnScore}</span>
+            <span class="score-lbl">pts</span>
+          </div>
+          <div class="divider"></div>
+          <div class="next-lbl">Up next</div>
+          <div class="next-name">${GAMES[nextGameIndex].name}</div>
+          <div class="bar"><div class="bar-fill"></div></div>
+        </div>
       `;
 
       setTimeout(() => redirectToGame(nextGameIndex), 2000);
