@@ -854,67 +854,119 @@
       renderDashboard();
     });
 
+    window._shareData = {};
+
     window.shareScore = async function() {
       const shareBtn    = document.getElementById('shareBtn');
       const shareCopied = document.getElementById('shareCopied');
-      const resultArea  = document.getElementById('resultArea');
-      const actions     = resultArea.querySelector('.result-actions');
-
       if (shareBtn) shareBtn.style.opacity = '0.6';
-      // Hide buttons, show share footer for screenshot
-      if (actions) actions.style.display = 'none';
-      const shareFooter = document.getElementById('shareFooter');
-      if (shareFooter) shareFooter.style.display = 'block';
-      // Force solid bg so screenshot isn't washed out
-      const origBg = resultArea.style.background;
-      resultArea.style.background = '#0d1120';
 
-      try {
-        const canvas = await html2canvas(resultArea, {
-          backgroundColor: '#0d1120', scale: 2, useCORS: true,
-          logging: false, windowWidth: resultArea.scrollWidth, windowHeight: resultArea.scrollHeight
-        });
+      const d = window._shareData || {};
+      const score     = d.score     || '0 / 1000';
+      const phrase    = d.phrase    || '';
+      const breakdown = d.breakdown || [];
+      const tomorrow  = d.tomorrow  || '';
+      const isGold    = d.gold;
 
-        // Restore
-        if (actions) actions.style.display = 'flex';
-        if (shareFooter) shareFooter.style.display = 'none';
-        resultArea.style.background = origBg;
-        if (shareBtn) shareBtn.style.opacity = '1';
+      const accent = isGold ? '#F7C344' : '#4F8EF7';
+      const W = 600, pad = 44;
+      let H = 420 + breakdown.length * 36 + (tomorrow ? 80 : 0);
+      const canvas = document.createElement('canvas');
+      canvas.width  = W * 2; canvas.height = H * 2;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(2, 2);
 
-        canvas.toBlob(async (blob) => {
-          const file = new File([blob], 'crickingo-score.png', { type: 'image/png' });
+      // BG
+      ctx.fillStyle = '#060810';
+      ctx.fillRect(0, 0, W, H);
 
-          // Try native share (mobile) — image only, message is baked in
-          if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-            try {
-              await navigator.share({ files: [file], text: 'Can you beat me at Crickingo? 🏏\ncrickingo.vercel.app' });
-              return;
-            } catch (shareErr) {
-              if (shareErr.name === 'AbortError') return;
-            }
-          }
+      // Top bar
+      const grad = ctx.createLinearGradient(0, 0, W, 0);
+      grad.addColorStop(0, '#4F8EF7'); grad.addColorStop(0.5, '#F7C344'); grad.addColorStop(1, '#E84040');
+      ctx.fillStyle = grad; ctx.fillRect(0, 0, W, 3);
 
-          // Fallback: download the image
-          const url = URL.createObjectURL(blob);
-          const a   = document.createElement('a');
-          a.href = url; a.download = 'crickingo-score.png';
-          document.body.appendChild(a); a.click();
-          document.body.removeChild(a); URL.revokeObjectURL(url);
+      let y = pad + 16;
 
-          if (shareCopied) {
-            shareCopied.classList.add('show');
-            setTimeout(() => shareCopied.classList.remove('show'), 2000);
-          }
-        }, 'image/png');
+      // GAME OVER
+      ctx.font = 'bold 34px Arial'; ctx.fillStyle = '#F2F2F2'; ctx.textAlign = 'center';
+      ctx.fillText('GAME OVER!', W/2, y); y += 46;
 
-      } catch (err) {
-        console.error('Screenshot failed:', err);
-        if (actions) actions.style.display = 'flex';
-        if (shareFooter) shareFooter.style.display = 'none';
-        resultArea.style.background = origBg;
-        if (shareBtn) shareBtn.style.opacity = '1';
+      // Score box
+      ctx.fillStyle = isGold ? 'rgba(247,195,68,0.2)' : 'rgba(79,142,247,0.2)';
+      rr(ctx, pad, y, W - pad*2, 66, 12);
+      ctx.fillStyle = accent; ctx.font = 'bold 38px Arial';
+      ctx.fillText(score, W/2, y + 46); y += 82;
+
+      // Phrase
+      ctx.font = '15px Arial'; ctx.fillStyle = 'rgba(242,242,242,0.6)';
+      ctx.fillText(phrase, W/2, y); y += 38;
+
+      // Breakdown box
+      const bH = 40 + breakdown.length * 34 + 48;
+      ctx.fillStyle = 'rgba(255,255,255,0.05)'; rr(ctx, pad, y, W - pad*2, bH, 12);
+      ctx.font = 'bold 14px Arial'; ctx.fillStyle = '#F2F2F2';
+      ctx.fillText('📊 Score Breakdown', W/2, y + 26); y += 44;
+
+      breakdown.forEach(row => {
+        ctx.textAlign = 'left'; ctx.font = '13px Arial';
+        ctx.fillStyle = 'rgba(242,242,242,0.8)';
+        ctx.fillText(row.label, pad + 16, y + 14);
+        if (row.value) {
+          ctx.textAlign = 'right'; ctx.fillStyle = row.color || accent;
+          ctx.fillText(row.value, W - pad - 16, y + 14);
+        }
+        y += 34;
+      });
+
+      ctx.strokeStyle = 'rgba(255,255,255,0.12)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(pad + 16, y); ctx.lineTo(W - pad - 16, y); ctx.stroke();
+      y += 20;
+      ctx.textAlign = 'left'; ctx.font = 'bold 17px Arial'; ctx.fillStyle = '#F2F2F2';
+      ctx.fillText('Total:', pad + 16, y + 4);
+      ctx.textAlign = 'right'; ctx.fillStyle = accent;
+      ctx.fillText(score.split('/')[0].trim(), W - pad - 16, y + 4); y += 44;
+
+      // Tomorrow
+      if (tomorrow) {
+        ctx.fillStyle = 'rgba(79,142,247,0.1)'; rr(ctx, pad, y, W - pad*2, 58, 12);
+        ctx.textAlign = 'center'; ctx.font = '12px Arial'; ctx.fillStyle = 'rgba(242,242,242,0.5)';
+        ctx.fillText('📅 Next Puzzle', W/2, y + 20);
+        ctx.font = 'bold 14px Arial'; ctx.fillStyle = '#4F8EF7';
+        ctx.fillText('Come back tomorrow · ' + tomorrow, W/2, y + 42); y += 66;
       }
+
+      // CTA
+      ctx.fillStyle = isGold ? 'rgba(247,195,68,0.1)' : 'rgba(79,142,247,0.1)';
+      rr(ctx, pad, y, W - pad*2, 58, 12);
+      ctx.textAlign = 'center'; ctx.font = 'bold 15px Arial'; ctx.fillStyle = accent;
+      ctx.fillText('🏏 Can you beat me at Crickingo?', W/2, y + 24);
+      ctx.font = '12px Arial'; ctx.fillStyle = 'rgba(242,242,242,0.4)';
+      ctx.fillText('crickingo.vercel.app', W/2, y + 44);
+
+      if (shareBtn) shareBtn.style.opacity = '1';
+
+      canvas.toBlob(async (blob) => {
+        const file = new File([blob], 'crickingo-score.png', { type: 'image/png' });
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          try { await navigator.share({ files: [file], text: 'Can you beat me at Crickingo? 🏏\ncrickingo.vercel.app' }); return; }
+          catch (e) { if (e.name === 'AbortError') return; }
+        }
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'crickingo-score.png';
+        document.body.appendChild(a); a.click();
+        document.body.removeChild(a); URL.revokeObjectURL(url);
+        if (shareCopied) { shareCopied.classList.add('show'); setTimeout(() => shareCopied.classList.remove('show'), 2000); }
+      }, 'image/png');
     };
+
+    function rr(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+      ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+      ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+      ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath(); ctx.fill();
+    }
   </script>
 
   <script>

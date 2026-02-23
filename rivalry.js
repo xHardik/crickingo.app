@@ -492,6 +492,26 @@ function _showEndScreen() {
   `;
 
   document.getElementById('scoreText').innerText       = `${finalScore} / 1000`;
+
+  // Store data for canvas share card
+  const puzzleDateShare = getDateFromURL();
+  const dTomorrowShare  = new Date(puzzleDateShare + 'T00:00:00');
+  dTomorrowShare.setDate(dTomorrowShare.getDate() + 1);
+  const tomorrowShareStr = dTomorrowShare.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  const bkd = [];
+  bkd.push({ label: `✅ Correct (${correctCount})`,   value: `+${correctCount * 50}`,      color: '#4caf50' });
+  bkd.push({ label: `❌ Wrong (${wrongAnswers})`,      value: `${wrongAnswers * POINTS.WRONG}`, color: '#f44336' });
+  bkd.push({ label: `⏭️ Skipped`,                     value: String(skippedPlayers),        color: '#9e9e9e' });
+  bkd.push({ label: `🔥 Streak Bonuses`,               value: `+${streakBonusEarned}`,       color: '#ff9800' });
+  if (accuracyBonus > 0) bkd.push({ label: '🎯 Accuracy Bonus', value: `+${accuracyBonus}`, color: '#2196f3' });
+  if (perfectBonus  > 0) bkd.push({ label: '⚡ Perfect Round',  value: `+${perfectBonus}`,  color: '#9c27b0' });
+  window._shareData = {
+    score:     `${finalScore} / 1000`,
+    phrase:    getResultPhrase(accuracy),
+    breakdown: bkd,
+    tomorrow:  tomorrowShareStr,
+    gold: true
+  };
   document.getElementById('resultPhrase').innerHTML    = phrase + scoreBreakdown + getTomorrowMessage();
 
   const resultArea = document.getElementById('resultArea');
