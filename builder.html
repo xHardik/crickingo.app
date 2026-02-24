@@ -23,7 +23,11 @@
       --card-radius: 16px;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
       font-family: 'DM Sans', sans-serif;
@@ -35,15 +39,20 @@
 
     /* ── BACKGROUND ── */
     .bg-layer {
-      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
       background:
-        radial-gradient(ellipse 80% 60% at 10% 0%, rgba(247,195,68,0.1) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 50% at 90% 100%, rgba(232,64,64,0.08) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 40% at 50% 50%, rgba(79,142,247,0.05) 0%, transparent 70%);
+        radial-gradient(ellipse 80% 60% at 10% 0%,  rgba(247,195,68,0.1)  0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 90% 100%, rgba(232,64,64,0.08)  0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 50% 50%,  rgba(79,142,247,0.05) 0%, transparent 70%);
     }
+
     .bg-layer::after {
       content: '';
-      position: absolute; inset: 0;
+      position: absolute;
+      inset: 0;
       background-image: repeating-linear-gradient(
         -45deg, transparent, transparent 40px,
         rgba(255,255,255,0.012) 40px, rgba(255,255,255,0.012) 41px
@@ -52,9 +61,14 @@
 
     /* ── NAV ── */
     nav {
-      position: sticky; top: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 40px; height: 64px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 64px;
       background: rgba(6,8,16,0.85);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
@@ -63,41 +77,58 @@
 
     .nav-logo {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.8rem; letter-spacing: 2px;
+      font-size: 1.8rem;
+      letter-spacing: 2px;
       background: linear-gradient(90deg, var(--accent), #fff 60%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
       text-decoration: none;
     }
 
     .nav-center {
-      display: flex; align-items: center; gap: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .nav-game-tag {
-      font-size: 0.72rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 2px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
       color: var(--teal);
       background: rgba(45,212,191,0.1);
       border: 1px solid rgba(45,212,191,0.25);
-      padding: 4px 12px; border-radius: 100px;
+      padding: 4px 12px;
+      border-radius: 100px;
     }
 
     .nav-back {
-      display: flex; align-items: center; gap: 6px;
-      color: var(--muted); text-decoration: none;
-      font-size: 0.88rem; font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
       transition: color 0.2s, transform 0.2s;
     }
-    .nav-back:hover { color: var(--text); transform: translateX(-3px); }
+
+    .nav-back:hover {
+      color: var(--text);
+      transform: translateX(-3px);
+    }
 
     /* ── PAGE ── */
     .page {
-      position: relative; z-index: 1;
-      max-width: 1400px; margin: 0 auto;
+      position: relative;
+      z-index: 1;
+      max-width: 1400px;
+      margin: 0 auto;
       padding: 40px 40px 80px;
     }
 
-    /* ── PAGE HEADER ── */
     .page-header {
       margin-bottom: 32px;
       animation: fadeUp 0.6s ease both;
@@ -106,34 +137,67 @@
     .page-header h1 {
       font-family: 'Bebas Neue', sans-serif;
       font-size: clamp(2rem, 5vw, 3rem);
-      letter-spacing: 1px; line-height: 1;
+      letter-spacing: 1px;
+      line-height: 1;
       margin-bottom: 6px;
     }
 
-    .page-header p { color: var(--muted); font-size: 0.9rem; }
+    .page-header p {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
 
-    /* ── TWO-COLUMN LAYOUT ── */
+    /* ── PUZZLE BAR ── */
+    .puzzle-bar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+      padding: 10px 18px;
+      background: rgba(45,212,191,0.05);
+      border: 1px solid rgba(45,212,191,0.12);
+      border-radius: 12px;
+      width: fit-content;
+      animation: fadeUp 0.6s ease 0.05s both;
+    }
+
+    .puzzle-bar-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .puzzle-bar-item strong {
+      color: var(--teal);
+      font-weight: 700;
+    }
+
+    .puzzle-bar-sep {
+      width: 1px;
+      height: 14px;
+      background: var(--border);
+    }
+
+    /* ── GAME LAYOUT ── */
     .game-layout {
       display: grid;
       grid-template-columns: 1fr 380px;
       gap: 24px;
       animation: fadeUp 0.6s ease 0.1s both;
-      /* stretch both columns to same height */
       align-items: start;
     }
 
-    /* ── GLASS PANEL ── */
     .glass-panel {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 20px;
       padding: 28px;
-      /* flex column so grid can fill remaining space */
       display: flex;
       flex-direction: column;
     }
 
-    /* ── TEAM SIDEBAR ── */
     .team-section {
       position: sticky;
       top: 80px;
@@ -159,27 +223,36 @@
     }
 
     .stat-cell-label {
-      font-size: 0.68rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 1.5px;
-      color: var(--muted); margin-bottom: 6px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      margin-bottom: 6px;
     }
 
     .stat-cell-value {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.6rem; letter-spacing: 1px; line-height: 1;
+      font-size: 1.6rem;
+      letter-spacing: 1px;
+      line-height: 1;
       background: linear-gradient(135deg, var(--accent), #fff 80%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .stat-cell-value.over-budget {
       background: linear-gradient(135deg, var(--accent2), #ff8080);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
       animation: pulse 1s ease-in-out infinite;
     }
 
     @keyframes pulse {
       0%,100% { transform: scale(1); }
-      50% { transform: scale(1.06); }
+      50%      { transform: scale(1.06); }
     }
 
     /* ── PROGRESS BAR ── */
@@ -187,7 +260,8 @@
       background: rgba(255,255,255,0.06);
       border: 1px solid var(--border);
       border-radius: 100px;
-      height: 8px; overflow: hidden;
+      height: 8px;
+      overflow: hidden;
       margin-bottom: 20px;
       position: relative;
     }
@@ -208,13 +282,17 @@
     /* ── SECTION TITLE ── */
     .section-title {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.4rem; letter-spacing: 2px;
-      color: var(--accent); margin-bottom: 20px;
+      font-size: 1.4rem;
+      letter-spacing: 2px;
+      color: var(--accent);
+      margin-bottom: 20px;
     }
 
     /* ── FILTERS ── */
     .filters {
-      display: flex; gap: 8px; flex-wrap: wrap;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
       margin-bottom: 20px;
     }
 
@@ -225,8 +303,10 @@
       background: var(--surface);
       color: var(--muted);
       font-family: 'DM Sans', sans-serif;
-      font-size: 0.8rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 1px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
       cursor: pointer;
       transition: all 0.2s ease;
     }
@@ -247,17 +327,15 @@
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
       gap: 14px;
-      flex: 1;               /* fill all remaining panel height */
-      min-height: 400px;     /* sensible floor */
-      max-height: 72vh;      /* cap so it doesn't blow past screen */
+      flex: 1;
+      min-height: 400px;
+      max-height: 72vh;
       overflow-y: auto;
       padding-right: 6px;
     }
 
     .players-grid::-webkit-scrollbar { width: 4px; }
-    .players-grid::-webkit-scrollbar-thumb {
-      background: rgba(247,195,68,0.3); border-radius: 4px;
-    }
+    .players-grid::-webkit-scrollbar-thumb { background: rgba(247,195,68,0.3); border-radius: 4px; }
 
     /* ── PLAYER CARD ── */
     .player-card {
@@ -267,14 +345,18 @@
       padding: 18px;
       cursor: pointer;
       transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
-      position: relative; overflow: hidden;
+      position: relative;
+      overflow: hidden;
     }
 
     .player-card::before {
       content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
       background: linear-gradient(90deg, var(--accent), var(--teal));
-      transform: scaleX(0); transform-origin: left;
+      transform: scaleX(0);
+      transform-origin: left;
       transition: transform 0.3s ease;
     }
 
@@ -305,27 +387,35 @@
 
     .disabled-reason {
       margin-top: 8px;
-      font-size: 0.68rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.8px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
       color: var(--accent2);
       opacity: 0.8;
     }
 
     .player-header {
-      display: flex; justify-content: space-between;
-      align-items: flex-start; gap: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
       margin-bottom: 10px;
     }
 
     .player-name {
-      font-weight: 700; font-size: 0.95rem;
-      color: var(--text); line-height: 1.3;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text);
+      line-height: 1.3;
     }
 
     .player-price {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 1rem; letter-spacing: 1px;
-      padding: 4px 12px; border-radius: 8px;
+      font-size: 1rem;
+      letter-spacing: 1px;
+      padding: 4px 12px;
+      border-radius: 8px;
       flex-shrink: 0;
       background: rgba(247,195,68,0.15);
       border: 1px solid rgba(247,195,68,0.3);
@@ -338,43 +428,56 @@
       color: var(--teal);
     }
 
-    /* ── ROLE BADGES ── */
     .player-role {
       display: inline-block;
-      padding: 3px 10px; border-radius: 100px;
-      font-size: 0.7rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 1px;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
       margin-bottom: 12px;
     }
 
-    .role-batsman      { background: rgba(52,152,219,0.15); color: #5bb3f0; border: 1px solid rgba(52,152,219,0.3); }
-    .role-bowler       { background: rgba(232,64,64,0.15);  color: #f07070; border: 1px solid rgba(232,64,64,0.3); }
-    .role-all-rounder  { background: rgba(247,195,68,0.15); color: var(--accent); border: 1px solid rgba(247,195,68,0.3); }
-    .role-wicket-keeper{ background: rgba(168,85,247,0.15); color: #c084fc; border: 1px solid rgba(168,85,247,0.3); }
+    .role-batsman       { background: rgba(52,152,219,0.15); color: #5bb3f0; border: 1px solid rgba(52,152,219,0.3); }
+    .role-bowler        { background: rgba(232,64,64,0.15);  color: #f07070; border: 1px solid rgba(232,64,64,0.3); }
+    .role-all-rounder   { background: rgba(247,195,68,0.15); color: var(--accent); border: 1px solid rgba(247,195,68,0.3); }
+    .role-wicket-keeper { background: rgba(168,85,247,0.15); color: #c084fc; border: 1px solid rgba(168,85,247,0.3); }
 
-    /* ── PLAYER STATS — mini bar chart ── */
+    /* ── STAT BARS ── */
     .player-stats {
-      display: flex; flex-direction: column; gap: 5px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
     }
 
     .stat-bar-row {
-      display: flex; align-items: center; gap: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .stat-bar-label {
-      font-size: 0.62rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.8px;
-      color: var(--muted); width: 26px; flex-shrink: 0;
+      font-size: 0.62rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--muted);
+      width: 26px;
+      flex-shrink: 0;
     }
 
     .stat-bar-track {
-      flex: 1; height: 5px;
+      flex: 1;
+      height: 5px;
       background: rgba(255,255,255,0.07);
-      border-radius: 100px; overflow: hidden;
+      border-radius: 100px;
+      overflow: hidden;
     }
 
     .stat-bar-fill {
-      height: 100%; border-radius: 100px;
+      height: 100%;
+      border-radius: 100px;
       transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
     }
 
@@ -384,54 +487,52 @@
 
     .stat-bar-val {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 0.85rem; letter-spacing: 0.5px;
-      color: var(--text); width: 22px;
-      text-align: right; flex-shrink: 0;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+      color: var(--text);
+      width: 22px;
+      text-align: right;
+      flex-shrink: 0;
     }
 
     /* ── ROLE REQUIREMENTS ── */
     .role-requirements {
-      display: flex; flex-wrap: wrap; gap: 6px;
-      margin-bottom: 14px; min-height: 26px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 14px;
+      min-height: 26px;
     }
 
     .role-req {
-      font-size: 0.68rem; font-weight: 700;
-      padding: 4px 10px; border-radius: 100px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 100px;
       letter-spacing: 0.5px;
       transition: all 0.2s;
     }
 
-    .role-req.req-pending {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.12);
-      color: var(--muted);
-    }
+    .role-req.req-pending { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); color: var(--muted); }
+    .role-req.req-ok      { background: rgba(61,214,140,0.12);  border: 1px solid rgba(61,214,140,0.35); color: var(--green); }
+    .role-req.req-over    { background: rgba(232,64,64,0.12);   border: 1px solid rgba(232,64,64,0.35);  color: var(--accent2); }
 
-    .role-req.req-ok {
-      background: rgba(61,214,140,0.12);
-      border: 1px solid rgba(61,214,140,0.35);
-      color: var(--green);
-    }
-
-    .role-req.req-over {
-      background: rgba(232,64,64,0.12);
-      border: 1px solid rgba(232,64,64,0.35);
-      color: var(--accent2);
-    }
-
-    /* ── TEAM LIST ── */
+    /* ── SELECTED TEAM ── */
     .team-title {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 1rem; letter-spacing: 2px;
+      font-size: 1rem;
+      letter-spacing: 2px;
       color: var(--muted);
       text-transform: uppercase;
       margin-bottom: 12px;
     }
 
     .selected-player {
-      display: flex; align-items: center; gap: 10px;
-      padding: 10px 14px; margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      margin-bottom: 8px;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 12px;
@@ -446,33 +547,44 @@
     .selected-player-info { flex: 1; min-width: 0; }
 
     .selected-player-name {
-      font-weight: 700; font-size: 0.85rem;
-      color: var(--text); white-space: nowrap;
-      overflow: hidden; text-overflow: ellipsis;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .selected-player-role {
-      font-size: 0.68rem; font-weight: 600;
-      text-transform: uppercase; letter-spacing: 1px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
       color: var(--muted);
     }
 
     .selected-player-price {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 1rem; letter-spacing: 1px;
-      color: var(--accent); flex-shrink: 0;
+      font-size: 1rem;
+      letter-spacing: 1px;
+      color: var(--accent);
+      flex-shrink: 0;
     }
 
     .remove-btn {
       background: rgba(232,64,64,0.12);
       color: var(--accent2);
       border: 1px solid rgba(232,64,64,0.25);
-      padding: 4px 10px; border-radius: 8px;
-      cursor: pointer; font-size: 0.75rem; font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-weight: 700;
       font-family: 'DM Sans', sans-serif;
       transition: all 0.2s;
       flex-shrink: 0;
     }
+
     .remove-btn:hover {
       background: rgba(232,64,64,0.22);
       border-color: var(--accent2);
@@ -485,32 +597,45 @@
       border: 1px dashed rgba(255,255,255,0.1);
       border-radius: 12px;
       margin-bottom: 8px;
-      font-size: 0.78rem; font-weight: 600;
-      text-transform: uppercase; letter-spacing: 1px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
-    /* ── ACTION BUTTONS ── */
+    /* ── BUTTONS ── */
     .btn {
-      display: flex; align-items: center; justify-content: center; gap: 6px;
-      width: 100%; padding: 14px 20px;
-      border: none; border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 12px;
       font-family: 'DM Sans', sans-serif;
-      font-size: 0.9rem; font-weight: 800;
-      cursor: pointer; transition: all 0.25s ease;
-      text-transform: uppercase; letter-spacing: 0.5px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
       margin-bottom: 10px;
       text-decoration: none;
     }
 
     .btn-check {
-      background: var(--teal); color: #000;
+      background: var(--teal);
+      color: #000;
       box-shadow: 0 6px 20px rgba(45,212,191,0.25);
     }
+
     .btn-check:hover:not(:disabled) {
       background: #4de8d4;
       transform: translateY(-2px);
       box-shadow: 0 10px 28px rgba(45,212,191,0.35);
     }
+
     .btn-check:disabled {
       background: rgba(255,255,255,0.08);
       color: var(--muted);
@@ -523,6 +648,7 @@
       color: var(--accent2);
       border: 1px solid rgba(232,64,64,0.25);
     }
+
     .btn-reset:hover {
       background: rgba(232,64,64,0.2);
       border-color: var(--accent2);
@@ -534,6 +660,7 @@
       color: var(--muted);
       border: 1px solid var(--border);
     }
+
     .btn-home:hover {
       color: var(--text);
       border-color: rgba(255,255,255,0.2);
@@ -550,19 +677,13 @@
       animation: fadeUp 0.4s ease;
     }
 
-    .result-box.success {
-      background: rgba(45,212,191,0.08);
-      border-color: rgba(45,212,191,0.3);
-    }
-
-    .result-box.failure {
-      background: rgba(232,64,64,0.08);
-      border-color: rgba(232,64,64,0.25);
-    }
+    .result-box.success { background: rgba(45,212,191,0.08); border-color: rgba(45,212,191,0.3); }
+    .result-box.failure { background: rgba(232,64,64,0.08);  border-color: rgba(232,64,64,0.25); }
 
     .result-box-title {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.6rem; letter-spacing: 2px;
+      font-size: 1.6rem;
+      letter-spacing: 2px;
       margin-bottom: 6px;
     }
 
@@ -570,28 +691,42 @@
     .result-box.failure .result-box-title { color: var(--accent2); }
 
     .result-box-msg {
-      font-size: 0.88rem; color: var(--muted); line-height: 1.5;
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.5;
     }
 
     /* ── MODAL ── */
     .modal-overlay {
-      display: none; position: fixed; inset: 0; z-index: 9999;
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
       background: rgba(0,0,0,0.8);
       backdrop-filter: blur(12px);
-      justify-content: center; align-items: center;
+      justify-content: center;
+      align-items: center;
       padding: 24px 20px;
       overflow: hidden;
     }
-    .modal-overlay.active { display: flex; animation: fadeIn 0.25s ease; }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .modal-overlay.active {
+      display: flex;
+      animation: fadeIn 0.25s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
 
     .modal-box {
       background: #0d1120;
       border: 1px solid rgba(247,195,68,0.2);
       border-radius: 24px;
       padding: 40px;
-      max-width: 640px; width: 100%;
-      /* ── scrollbar lives on the box itself ── */
+      max-width: 640px;
+      width: 100%;
       max-height: calc(100vh - 48px);
       overflow-y: auto;
       position: relative;
@@ -600,7 +735,9 @@
 
     .modal-box::before {
       content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
       background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
       border-radius: 24px 24px 0 0;
       z-index: 2;
@@ -608,7 +745,7 @@
 
     .modal-rainbow-bar {
       position: sticky;
-      top: -40px;        /* offset matches modal padding-top */
+      top: -40px;
       left: 0; right: 0;
       height: 3px;
       margin: -40px -40px 36px;
@@ -630,11 +767,19 @@
 
     .modal-title {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 2.4rem; letter-spacing: 2px;
-      text-align: center; margin-bottom: 28px;
+      font-size: 2.4rem;
+      letter-spacing: 2px;
+      text-align: center;
+      margin-bottom: 28px;
     }
 
-    .rules-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+    .rules-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
 
     .rules-list li {
       background: var(--surface);
@@ -642,19 +787,29 @@
       border-left: 3px solid rgba(247,195,68,0.5);
       border-radius: 12px;
       padding: 14px 18px;
-      font-size: 0.9rem; line-height: 1.6; color: var(--text);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--text);
       transition: border-color 0.2s, transform 0.2s;
     }
-    .rules-list li:hover { border-left-color: var(--accent); transform: translateX(4px); }
+
+    .rules-list li:hover {
+      border-left-color: var(--accent);
+      transform: translateX(4px);
+    }
+
     .rule-icon { margin-right: 10px; }
 
-    /* ── STATS DEMO ── */
     .stats-demo {
-      display: flex; gap: 12px; margin: 20px 0; flex-wrap: wrap;
+      display: flex;
+      gap: 12px;
+      margin: 20px 0;
+      flex-wrap: wrap;
     }
 
     .demo-card {
-      flex: 1; min-width: 130px;
+      flex: 1;
+      min-width: 130px;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 12px;
@@ -662,35 +817,45 @@
       text-align: center;
       transition: border-color 0.2s, transform 0.2s;
     }
+
     .demo-card:hover {
       border-color: rgba(247,195,68,0.3);
       transform: translateY(-3px);
     }
 
     .demo-icon { font-size: 2rem; margin-bottom: 8px; }
+
     .demo-label {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 1rem; letter-spacing: 1px;
-      color: var(--text); margin-bottom: 4px;
+      font-size: 1rem;
+      letter-spacing: 1px;
+      color: var(--text);
+      margin-bottom: 4px;
     }
+
     .demo-desc { font-size: 0.75rem; color: var(--muted); font-weight: 500; }
 
-    /* ── SCORING BOX (strategy) ── */
     .scoring-box {
       background: rgba(247,195,68,0.06);
       border: 1px solid rgba(247,195,68,0.2);
-      border-radius: 14px; padding: 20px;
+      border-radius: 14px;
+      padding: 20px;
       margin-bottom: 24px;
     }
 
     .scoring-box h3 {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.3rem; letter-spacing: 1px;
-      color: var(--accent); margin-bottom: 14px; text-align: center;
+      font-size: 1.3rem;
+      letter-spacing: 1px;
+      color: var(--accent);
+      margin-bottom: 14px;
+      text-align: center;
     }
 
     .strategy-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
     }
 
     .strategy-item {
@@ -700,34 +865,35 @@
       padding: 12px;
       transition: border-color 0.2s;
     }
+
     .strategy-item:hover { border-color: rgba(247,195,68,0.25); }
 
-    .strategy-label {
-      font-weight: 700; font-size: 0.85rem;
-      color: var(--accent); margin-bottom: 4px;
-    }
-
-    .strategy-value {
-      font-size: 0.78rem; color: var(--muted);
-    }
+    .strategy-label { font-weight: 700; font-size: 0.85rem; color: var(--accent); margin-bottom: 4px; }
+    .strategy-value { font-size: 0.78rem; color: var(--muted); }
 
     .modal-start-btn {
-      width: 100%; padding: 14px 20px;
-      background: var(--accent); color: #000;
-      border: none; border-radius: 12px;
+      width: 100%;
+      padding: 14px 20px;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 12px;
       font-family: 'DM Sans', sans-serif;
-      font-size: 0.95rem; font-weight: 800;
-      cursor: pointer; letter-spacing: 0.5px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      letter-spacing: 0.5px;
       text-transform: uppercase;
       transition: all 0.25s ease;
     }
+
     .modal-start-btn:hover {
       background: #ffd060;
       transform: translateY(-2px);
       box-shadow: 0 8px 24px rgba(247,195,68,0.3);
     }
 
-    /* ── DASHBOARD — full width row below game layout ── */
+    /* ── DASHBOARD ── */
     .left-dashboard {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -735,29 +901,27 @@
       margin-top: 24px;
     }
 
-    /* ── BOTTOM DASHBOARD ── */
-    .sidebar-dashboard {
-      margin-top: 20px;
-      display: flex; flex-direction: column; gap: 14px;
-    }
-
     .dashboard-card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--card-radius);
       padding: 18px 20px;
-      position: relative; overflow: hidden;
+      position: relative;
+      overflow: hidden;
     }
 
     .dashboard-card::before {
       content: '';
-      position: absolute; inset: 0;
+      position: absolute;
+      inset: 0;
       background: linear-gradient(135deg, rgba(247,195,68,0.04), transparent 60%);
       pointer-events: none;
     }
 
     .dashboard-card-header {
-      display: flex; align-items: center; gap: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
       margin-bottom: 14px;
     }
 
@@ -765,104 +929,137 @@
 
     .dashboard-label {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 1rem; letter-spacing: 2px;
+      font-size: 1rem;
+      letter-spacing: 2px;
       color: var(--accent);
     }
 
+    /* ── STREAK DOTS — score value instead of pip ── */
     .streak-dots {
       display: grid;
       grid-template-columns: repeat(10, 1fr);
-      grid-template-rows: repeat(3, 28px);
+      grid-template-rows: repeat(3, 36px);
       gap: 3px;
       margin-bottom: 10px;
     }
 
     .streak-dot {
-      width: 100%; height: 28px;
+      width: 100%;
+      height: 36px;
       border-radius: 4px;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 2px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1px;
       transition: transform 0.15s;
       cursor: default;
     }
 
-    .streak-dot .dot-pip {
-      width: 5px; height: 5px; border-radius: 50%;
-      background: var(--green); flex-shrink: 0;
-    }
-    .streak-dot.miss .dot-pip,
-    .streak-dot.today-pending .dot-pip { display: none; }
-    .streak-dot.today-played .dot-pip { background: var(--accent); }
     .streak-dot:hover { transform: translateY(-2px); }
+
+    .streak-dot .dot-score-val {
+      font-size: 0.56rem;
+      font-weight: 900;
+      line-height: 1;
+      color: #fff;
+      letter-spacing: 0;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    }
+
+    .streak-dot.miss .dot-score-val,
+    .streak-dot.today-pending .dot-score-val { display: none; }
+
+    .streak-dot.today-played .dot-score-val { color: #fff; }
 
     .streak-dot.win {
       background: rgba(61,214,140,0.15);
       border: 1px solid rgba(61,214,140,0.35);
     }
+
     .streak-dot.miss {
       background: rgba(255,255,255,0.03);
       border: 1px solid rgba(255,255,255,0.07);
     }
+
     .streak-dot.today-played {
       background: rgba(247,195,68,0.15);
       border: 2px solid var(--accent);
       box-shadow: 0 0 8px rgba(247,195,68,0.2);
     }
+
     .streak-dot.today-pending {
       background: rgba(79,142,247,0.1);
       border: 2px dashed rgba(79,142,247,0.35);
     }
 
     .streak-legend {
-      display: flex; gap: 12px;
-      font-size: 0.68rem; color: var(--muted);
+      display: flex;
+      gap: 12px;
+      font-size: 0.68rem;
+      color: var(--muted);
       align-items: center;
     }
 
     .dot-sample {
       display: inline-block;
-      width: 9px; height: 9px;
-      border-radius: 2px; margin-right: 3px;
+      width: 9px;
+      height: 9px;
+      border-radius: 2px;
+      margin-right: 3px;
       vertical-align: middle;
     }
-    .dot-sample.dot-win  { background: rgba(61,214,140,0.5); border: 1px solid var(--green); }
-    .dot-sample.dot-miss { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); }
-    .dot-sample.dot-today { background: rgba(247,195,68,0.3); border: 1px solid var(--accent); }
 
+    .dot-sample.dot-win   { background: rgba(61,214,140,0.5);  border: 1px solid var(--green); }
+    .dot-sample.dot-miss  { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); }
+    .dot-sample.dot-today { background: rgba(247,195,68,0.3);   border: 1px solid var(--accent); }
+
+    /* ── MINI STATS ── */
     .mini-stats-row {
-      display: grid; grid-template-columns: 1fr 1fr;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 8px;
     }
 
     .mini-stat {
       background: rgba(255,255,255,0.03);
       border: 1px solid var(--border);
-      border-radius: 10px; padding: 12px 10px;
+      border-radius: 10px;
+      padding: 12px 10px;
       text-align: center;
       transition: border-color 0.2s;
     }
+
     .mini-stat:hover { border-color: rgba(247,195,68,0.2); }
 
     .mini-stat-value {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.5rem; letter-spacing: 1px;
+      font-size: 1.5rem;
+      letter-spacing: 1px;
       background: linear-gradient(135deg, var(--accent), #fff 80%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      line-height: 1; margin-bottom: 3px;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin-bottom: 3px;
     }
 
     .mini-stat-name {
-      font-size: 0.62rem; font-weight: 600;
-      text-transform: uppercase; letter-spacing: 1px;
+      font-size: 0.62rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
       color: var(--muted);
     }
+
+    /* ── SELECTED TEAM LIST ── */
     .selected-team-list {
       max-height: 340px;
       overflow-y: auto;
       padding-right: 2px;
       margin-bottom: 16px;
     }
+
     .selected-team-list::-webkit-scrollbar { width: 3px; }
     .selected-team-list::-webkit-scrollbar-thumb { background: rgba(247,195,68,0.2); border-radius: 3px; }
 
@@ -914,78 +1111,36 @@
       <ul class="rules-list">
         <li><span class="rule-icon">👥</span>Select exactly <strong>11 players</strong> to form your dream cricket team</li>
         <li><span class="rule-icon">💰</span>Stay within your <strong>$100 budget</strong> — each player is priced by skill</li>
-        <li><span class="rule-icon">📊</span>Each player has three stats — Batting, Bowling & Fielding</li>
+        <li><span class="rule-icon">📊</span>Each player has three stats — Batting, Bowling &amp; Fielding</li>
       </ul>
-
       <div class="stats-demo">
-        <div class="demo-card">
-          <div class="demo-icon">🏏</div>
-          <div class="demo-label">Batting</div>
-          <div class="demo-desc">Runs & strike rate</div>
-        </div>
-        <div class="demo-card">
-          <div class="demo-icon">🎯</div>
-          <div class="demo-label">Bowling</div>
-          <div class="demo-desc">Wickets & economy</div>
-        </div>
-        <div class="demo-card">
-          <div class="demo-icon">🧤</div>
-          <div class="demo-label">Fielding</div>
-          <div class="demo-desc">Catches & agility</div>
-        </div>
+        <div class="demo-card"><div class="demo-icon">🏏</div><div class="demo-label">Batting</div><div class="demo-desc">Runs &amp; strike rate</div></div>
+        <div class="demo-card"><div class="demo-icon">🎯</div><div class="demo-label">Bowling</div><div class="demo-desc">Wickets &amp; economy</div></div>
+        <div class="demo-card"><div class="demo-icon">🧤</div><div class="demo-label">Fielding</div><div class="demo-desc">Catches &amp; agility</div></div>
       </div>
-
-      <!-- Role requirements -->
       <div class="scoring-box" style="margin-bottom:18px;">
         <h3>🧩 Team Composition Rules</h3>
         <div class="strategy-grid">
-          <div class="strategy-item">
-            <div class="strategy-label">🏏 Batsmen</div>
-            <div class="strategy-value">Minimum 3 · Maximum 5</div>
-          </div>
-          <div class="strategy-item">
-            <div class="strategy-label">🎯 Bowlers</div>
-            <div class="strategy-value">Minimum 3 · Maximum 5</div>
-          </div>
-          <div class="strategy-item">
-            <div class="strategy-label">⚡ All-Rounders</div>
-            <div class="strategy-value">Minimum 3 · Maximum 5</div>
-          </div>
-          <div class="strategy-item">
-            <div class="strategy-label">🧤 Wicket-Keeper</div>
-            <div class="strategy-value">Minimum 1 · Maximum 2</div>
-          </div>
+          <div class="strategy-item"><div class="strategy-label">🏏 Batsmen</div><div class="strategy-value">Minimum 3 · Maximum 5</div></div>
+          <div class="strategy-item"><div class="strategy-label">🎯 Bowlers</div><div class="strategy-value">Minimum 3 · Maximum 5</div></div>
+          <div class="strategy-item"><div class="strategy-label">⚡ All-Rounders</div><div class="strategy-value">Minimum 3 · Maximum 5</div></div>
+          <div class="strategy-item"><div class="strategy-label">🧤 Wicket-Keeper</div><div class="strategy-value">Minimum 1 · Maximum 2</div></div>
         </div>
       </div>
-
       <ul class="rules-list">
         <li><span class="rule-icon">🏆</span><strong>Win Condition:</strong> Reach a team rating of <span style="color:var(--accent);font-weight:800;">1850+</span> with a valid composition to win!</li>
         <li><span class="rule-icon">🔄</span>Use role filters to browse and plan your team</li>
         <li><span class="rule-icon">💡</span><strong>Pro Tip:</strong> All-Rounders contribute to all three stats — great value picks!</li>
       </ul>
-
       <div class="scoring-box">
         <h3>💎 Strategy Tips</h3>
         <div class="strategy-grid">
-          <div class="strategy-item">
-            <div class="strategy-label">⚖️ Composition</div>
-            <div class="strategy-value">Meet role minimums first</div>
-          </div>
-          <div class="strategy-item">
-            <div class="strategy-label">💰 Budget</div>
-            <div class="strategy-value">Spread spend across roles</div>
-          </div>
-          <div class="strategy-item">
-            <div class="strategy-label">📈 Rating</div>
-            <div class="strategy-value">Target 1850+ total</div>
-          </div>
-          <div class="strategy-item">
-            <div class="strategy-label">⚡ Value</div>
-            <div class="strategy-value">All-rounders = 3-stat boost</div>
-          </div>
+          <div class="strategy-item"><div class="strategy-label">⚖️ Composition</div><div class="strategy-value">Meet role minimums first</div></div>
+          <div class="strategy-item"><div class="strategy-label">💰 Budget</div><div class="strategy-value">Spread spend across roles</div></div>
+          <div class="strategy-item"><div class="strategy-label">📈 Rating</div><div class="strategy-value">Target 1850+ total</div></div>
+          <div class="strategy-item"><div class="strategy-label">⚡ Value</div><div class="strategy-value">All-rounders = 3-stat boost</div></div>
         </div>
       </div>
-
       <button class="modal-start-btn" onclick="closeRulesModal()">🚀 Start Building</button>
     </div>
   </div>
@@ -993,9 +1148,7 @@
   <!-- ── NAV ── -->
   <nav>
     <a href="index.html" class="nav-logo">🏏 Crickingo</a>
-    <div class="nav-center">
-      <span class="nav-game-tag">🧩 Build Your XI</span>
-    </div>
+    <div class="nav-center"><span class="nav-game-tag">🧩 Build Your XI</span></div>
     <a href="index.html" class="nav-back">← Home</a>
   </nav>
 
@@ -1007,12 +1160,17 @@
       <p>Pick 11 players within budget — hit 1850+ team rating to win</p>
     </div>
 
+    <div class="puzzle-bar">
+      <div class="puzzle-bar-item">📅 <strong id="puzzleDate">—</strong></div>
+      <div class="puzzle-bar-sep"></div>
+      <div class="puzzle-bar-item">🧩 Puzzle <strong id="puzzleNumber">#—</strong></div>
+    </div>
+
     <div class="game-layout">
 
       <!-- LEFT — players pool -->
       <div class="glass-panel players-section">
         <div class="section-title">Available Players</div>
-
         <div class="filters">
           <button class="filter-btn active" onclick="filterPlayers('All', event)">All</button>
           <button class="filter-btn" onclick="filterPlayers('Batsman', event)">Batsmen</button>
@@ -1020,19 +1178,15 @@
           <button class="filter-btn" onclick="filterPlayers('All-Rounder', event)">All-Rounders</button>
           <button class="filter-btn" onclick="filterPlayers('Wicket-Keeper', event)">Keepers</button>
         </div>
-
         <div class="players-grid" id="playersGrid"></div>
-
       </div>
 
       <!-- RIGHT — team sidebar -->
       <div class="team-section">
-
-        <!-- Stats bar -->
         <div class="stats-bar">
           <div class="stat-cell">
             <div class="stat-cell-label">Budget Left</div>
-            <div class="stat-cell-value" id="budgetLeft">100</div>
+            <div class="stat-cell-value" id="budgetLeft">$100</div>
           </div>
           <div class="stat-cell">
             <div class="stat-cell-label">Players</div>
@@ -1043,34 +1197,22 @@
             <div class="stat-cell-value" id="teamRating">0</div>
           </div>
         </div>
-
-        <!-- Progress bar -->
         <div class="progress-wrap">
           <div class="progress-fill" id="ratingProgress" style="width:0%"></div>
         </div>
-
-        <!-- Role requirements -->
         <div id="roleRequirements" class="role-requirements"></div>
-
-        <!-- Team list -->
         <div class="team-title">Your Team</div>
         <div class="selected-team-list" id="selectedPlayers"></div>
-
-        <!-- Actions -->
         <button class="btn btn-check" id="checkBtn" onclick="checkTeam()" disabled>✓ Check Team</button>
         <button class="btn btn-reset" onclick="resetTeam()">↺ Reset Team</button>
         <a href="index.html" class="btn btn-home">← Back to Home</a>
-
-        <!-- Result -->
         <div id="result"></div>
-
       </div>
+
     </div>
 
-    <!-- ── DASHBOARD — full width below game layout ── -->
+    <!-- ── DASHBOARD ── -->
     <div class="left-dashboard">
-
-      <!-- Last 30 Days -->
       <div class="dashboard-card">
         <div class="dashboard-card-header">
           <span class="dashboard-icon">📅</span>
@@ -1083,8 +1225,6 @@
           <span><span class="dot-sample dot-today"></span>Today</span>
         </div>
       </div>
-
-      <!-- Your Stats -->
       <div class="dashboard-card">
         <div class="dashboard-card-header">
           <span class="dashboard-icon">📊</span>
@@ -1109,7 +1249,6 @@
           </div>
         </div>
       </div>
-
     </div>
 
   </main>
