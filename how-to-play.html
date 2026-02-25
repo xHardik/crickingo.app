@@ -29,7 +29,6 @@
       overflow-x: hidden;
     }
 
-    /* ── BACKGROUND ── */
     .bg-layer {
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
       background:
@@ -38,15 +37,13 @@
         radial-gradient(ellipse 50% 40% at 50% 50%, rgba(79,142,247,0.06) 0%, transparent 70%);
     }
     .bg-layer::after {
-      content: '';
-      position: absolute; inset: 0;
+      content: ''; position: absolute; inset: 0;
       background-image: repeating-linear-gradient(
         -45deg, transparent, transparent 40px,
         rgba(255,255,255,0.012) 40px, rgba(255,255,255,0.012) 41px
       );
     }
 
-    /* ── NAV ── */
     nav {
       position: sticky; top: 0; z-index: 100;
       display: flex; align-items: center; justify-content: space-between;
@@ -54,14 +51,10 @@
       background: rgba(6,8,16,0.85);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
-      box-shadow:
-        0 0 40px rgba(247,195,68,0.15),
-        0 0 80px rgba(247,195,68,0.08),
-        0 0 120px rgba(247,195,68,0.05);
+      box-shadow: 0 0 40px rgba(247,195,68,0.15), 0 0 80px rgba(247,195,68,0.08), 0 0 120px rgba(247,195,68,0.05);
     }
     .nav-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.8rem; letter-spacing: 2px;
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 2px;
       background: linear-gradient(90deg, var(--accent), #fff 60%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
       text-decoration: none;
@@ -78,7 +71,6 @@
       font-size: 0.75rem; padding: 4px 12px; border-radius: 100px; letter-spacing: 0.5px;
     }
 
-    /* ── PAGE LAYOUT ── */
     .page-wrap {
       position: relative; z-index: 1;
       max-width: 820px; margin: 0 auto;
@@ -90,31 +82,24 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ── BACK LINK ── */
     .back-btn {
       display: inline-flex; align-items: center; gap: 8px;
       color: var(--muted); text-decoration: none;
       font-size: 0.85rem; font-weight: 600; letter-spacing: 0.5px;
-      transition: color 0.2s, transform 0.2s;
-      margin-bottom: 40px;
+      transition: color 0.2s, transform 0.2s; margin-bottom: 40px;
     }
     .back-btn:hover { color: var(--accent); transform: translateX(-4px); }
 
-    /* ── PAGE HEADER ── */
     .page-header {
-      margin-bottom: 52px;
-      padding-bottom: 32px;
+      margin-bottom: 52px; padding-bottom: 32px;
       border-bottom: 1px solid var(--border);
     }
     .page-eyebrow {
       display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(247,195,68,0.1);
-      border: 1px solid rgba(247,195,68,0.25);
-      color: var(--accent);
-      font-size: 0.72rem; font-weight: 700;
+      background: rgba(247,195,68,0.1); border: 1px solid rgba(247,195,68,0.25);
+      color: var(--accent); font-size: 0.72rem; font-weight: 700;
       letter-spacing: 2px; text-transform: uppercase;
-      padding: 5px 13px; border-radius: 100px;
-      margin-bottom: 18px;
+      padding: 5px 13px; border-radius: 100px; margin-bottom: 18px;
     }
     .page-eyebrow span {
       width: 5px; height: 5px; border-radius: 50%;
@@ -129,62 +114,32 @@
     }
     .page-header h1 em {
       font-style: normal;
-      -webkit-text-stroke: 1.5px var(--accent);
-      color: transparent;
+      -webkit-text-stroke: 1.5px var(--accent); color: transparent;
     }
-    .page-header .lead {
-      color: var(--muted); font-size: 1.05rem; line-height: 1.7; max-width: 560px;
-    }
+    .page-header .lead { color: var(--muted); font-size: 1.05rem; line-height: 1.7; max-width: 560px; }
 
-    /* ── SECTIONS ── */
     .section { margin-bottom: 48px; }
-    .section-heading {
-      display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
-    }
-    .section-heading-line {
-      width: 28px; height: 2px; background: var(--accent); border-radius: 2px; flex-shrink: 0;
-    }
-    .section-heading h2 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.5rem; letter-spacing: 1.5px; color: var(--text); line-height: 1;
-    }
-    .section p {
-      color: var(--muted); font-size: 0.97rem; line-height: 1.8; margin-bottom: 12px;
-    }
+    .section-heading { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .section-heading-line { width: 28px; height: 2px; background: var(--accent); border-radius: 2px; flex-shrink: 0; }
+    .section-heading h2 { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 1.5px; color: var(--text); line-height: 1; }
+    .section p { color: var(--muted); font-size: 0.97rem; line-height: 1.8; margin-bottom: 12px; }
 
-    /* ── GETTING STARTED STEPS ── */
-    .start-steps {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-top: 4px;
-    }
+    .start-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 4px; }
     .start-step {
-      padding: 18px 16px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      text-align: center;
+      padding: 18px 16px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: 12px; text-align: center;
       transition: background 0.2s, transform 0.2s;
     }
     .start-step:hover { background: rgba(247,195,68,0.06); transform: translateY(-2px); }
     .start-step-num {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 2rem; color: rgba(247,195,68,0.3);
-      line-height: 1; margin-bottom: 8px;
-      transition: color 0.2s;
+      font-family: 'Bebas Neue', sans-serif; font-size: 2rem;
+      color: rgba(247,195,68,0.3); line-height: 1; margin-bottom: 8px; transition: color 0.2s;
     }
     .start-step:hover .start-step-num { color: var(--accent); }
     .start-step-text { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
 
-    /* ── GAME CARDS ── */
-    .games-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+    .games-grid { display: flex; flex-direction: column; gap: 12px; }
 
-    /* accent per game */
     .gc-fire   { --gc: #F7C344; }
     .gc-blue   { --gc: #4F8EF7; }
     .gc-purple { --gc: #A855F7; }
@@ -193,98 +148,53 @@
     .gc-teal   { --gc: #06B6D4; }
 
     .game-card {
-      padding: 22px 24px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--gc, var(--accent));
-      border-radius: 14px;
-      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+      padding: 22px 24px; background: var(--surface);
+      border: 1px solid var(--border); border-left: 3px solid var(--gc, var(--accent));
+      border-radius: 14px; transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
     }
     .game-card:hover {
-      transform: translateX(5px);
-      background: rgba(255,255,255,0.06);
+      transform: translateX(5px); background: rgba(255,255,255,0.06);
       box-shadow: 0 6px 24px rgba(0,0,0,0.3), -3px 0 0 var(--gc, var(--accent));
     }
-    .game-card-header {
-      display: flex; align-items: center; gap: 12px; margin-bottom: 10px;
-    }
+    .game-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
     .game-card-icon {
-      font-size: 1.3rem; flex-shrink: 0;
-      width: 40px; height: 40px;
+      font-size: 1.3rem; flex-shrink: 0; width: 40px; height: 40px;
       display: flex; align-items: center; justify-content: center;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid var(--border);
-      border-radius: 10px;
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 10px;
     }
-    .game-card-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.25rem; letter-spacing: 1px; line-height: 1;
-    }
+    .game-card-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.25rem; letter-spacing: 1px; line-height: 1; }
     .game-card-tag {
-      margin-left: auto;
-      font-size: 0.6rem; font-weight: 700;
+      margin-left: auto; font-size: 0.6rem; font-weight: 700;
       text-transform: uppercase; letter-spacing: 1.5px;
       padding: 3px 9px; border-radius: 100px;
-      color: var(--gc, var(--accent));
-      border: 1px solid currentColor;
+      color: var(--gc, var(--accent)); border: 1px solid currentColor;
       opacity: 0.8; white-space: nowrap;
     }
-    .game-card-objective {
-      font-size: 0.85rem; color: var(--muted);
-      line-height: 1.5; margin-bottom: 14px;
-    }
+    .game-card-objective { font-size: 0.85rem; color: var(--muted); line-height: 1.5; margin-bottom: 14px; }
     .game-card-objective strong { color: var(--gc, var(--accent)); font-weight: 700; }
-    .game-rules {
-      display: flex; flex-direction: column; gap: 6px;
-    }
-    .rule {
-      display: flex; align-items: flex-start; gap: 10px;
-      font-size: 0.83rem; color: var(--muted); line-height: 1.5;
-    }
-    .rule-dot {
-      width: 5px; height: 5px; border-radius: 50%;
-      background: var(--gc, var(--accent));
-      flex-shrink: 0; margin-top: 6px; opacity: 0.7;
-    }
+    .game-rules { display: flex; flex-direction: column; gap: 6px; }
+    .rule { display: flex; align-items: flex-start; gap: 10px; font-size: 0.83rem; color: var(--muted); line-height: 1.5; }
+    .rule-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gc, var(--accent)); flex-shrink: 0; margin-top: 6px; opacity: 0.7; }
 
-    /* ── TIPS GRID ── */
-    .tips-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: 4px;
-    }
+    .tips-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 4px; }
     .tip {
-      display: flex; align-items: flex-start; gap: 12px;
-      padding: 14px 16px; height: 100%;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
+      display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; height: 100%;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
       transition: background 0.2s, transform 0.2s;
     }
     .tip:hover { background: rgba(247,195,68,0.06); transform: translateY(-2px); }
     .tip-icon {
-      font-size: 1.2rem; flex-shrink: 0;
-      width: 36px; height: 36px;
+      font-size: 1.2rem; flex-shrink: 0; width: 36px; height: 36px;
       display: flex; align-items: center; justify-content: center;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid var(--border); border-radius: 9px;
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 9px;
     }
     .tip-text { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
     .tip-text strong { color: var(--text); display: block; margin-bottom: 2px; font-size: 0.85rem; }
 
-    /* ── SCORING ── */
-    .scoring-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px; margin-top: 4px;
-    }
+    .scoring-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 4px; }
     .score-pill {
-      padding: 18px 16px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      text-align: center;
+      padding: 18px 16px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: 12px; text-align: center;
       transition: background 0.2s, transform 0.2s;
     }
     .score-pill:hover { background: rgba(247,195,68,0.06); transform: translateY(-2px); }
@@ -292,105 +202,46 @@
     .score-pill-title { font-weight: 700; font-size: 0.9rem; color: var(--text); margin-bottom: 4px; }
     .score-pill-desc { font-size: 0.77rem; color: var(--muted); line-height: 1.4; }
 
-    /* ── CTA ── */
     .cta-banner {
-      margin-top: 48px;
-      padding: 28px;
+      margin-top: 48px; padding: 28px;
       background: linear-gradient(135deg, rgba(247,195,68,0.08), rgba(79,142,247,0.06));
-      border: 1px solid rgba(247,195,68,0.2);
-      border-radius: 16px;
+      border: 1px solid rgba(247,195,68,0.2); border-radius: 16px;
       display: flex; align-items: center; justify-content: space-between;
       gap: 20px; flex-wrap: wrap;
     }
-    .cta-text h3 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.4rem; letter-spacing: 1px; margin-bottom: 4px;
-    }
+    .cta-text h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 1px; margin-bottom: 4px; }
     .cta-text p { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
     .cta-btn {
       display: inline-flex; align-items: center; gap: 8px;
-      padding: 11px 24px;
-      background: var(--accent); color: #000;
+      padding: 11px 24px; background: var(--accent); color: #000;
       font-weight: 700; font-size: 0.88rem; letter-spacing: 0.5px;
       border-radius: 100px; text-decoration: none;
-      transition: transform 0.2s, box-shadow 0.2s;
-      flex-shrink: 0;
+      transition: transform 0.2s, box-shadow 0.2s; flex-shrink: 0;
     }
     .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(247,195,68,0.35); }
 
-    /* ── FOOTER ── */
-    footer {
-      position: relative; z-index: 1;
-      border-top: 1px solid var(--border);
-      padding: 40px;
-      max-width: 1100px; margin: 0 auto;
-    }
-    .footer-inner {
-      display: flex; justify-content: space-between; align-items: flex-start;
-      gap: 40px; flex-wrap: wrap; margin-bottom: 32px;
-    }
-    .footer-brand h3 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.8rem; letter-spacing: 2px;
-      background: linear-gradient(90deg, var(--accent), #fff);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      margin-bottom: 8px;
-    }
-    .footer-brand p { color: var(--muted); font-size: 0.85rem; line-height: 1.6; max-width: 280px; }
-    .footer-col h4 {
-      font-size: 0.72rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 2px;
-      color: var(--muted); margin-bottom: 14px;
-    }
-    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-    .footer-col ul a {
-      color: rgba(242,242,242,0.6); text-decoration: none;
-      font-size: 0.88rem; transition: color 0.2s, transform 0.2s; display: inline-block;
-    }
-    .footer-col ul a:hover { color: var(--text); transform: scale(1.08); }
-    .footer-bottom {
-      display: flex; justify-content: space-between; align-items: center;
-      border-top: 1px solid var(--border); padding-top: 24px;
-      flex-wrap: wrap; gap: 12px;
-    }
-    .footer-bottom p { color: var(--muted); font-size: 0.8rem; }
-
-    /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
       .start-steps { grid-template-columns: repeat(2, 1fr); }
       .tips-grid { grid-template-columns: repeat(2, 1fr); }
-      .scoring-row { grid-template-columns: repeat(3, 1fr); }
     }
-
     @media (max-width: 640px) {
       nav { padding: 0 18px; height: 56px; }
       .nav-links { display: none; }
       .nav-logo { font-size: 1.5rem; }
       .nav-badge { font-size: 0.65rem; padding: 3px 10px; }
-
       .page-wrap { padding: 32px 18px 48px; }
       .page-header h1 { font-size: 2.6rem; }
-
       .start-steps { grid-template-columns: repeat(2, 1fr); }
       .tips-grid { grid-template-columns: repeat(2, 1fr); }
-      .scoring-row { grid-template-columns: repeat(1, 1fr); }
-
+      .scoring-row { grid-template-columns: 1fr; }
       .game-card { padding: 16px 18px; }
       .game-card-tag { display: none; }
-
       .cta-banner { flex-direction: column; align-items: flex-start; }
       .cta-btn { width: 100%; justify-content: center; }
-
-      footer { padding: 28px 18px; }
-      .footer-inner { flex-direction: column; gap: 24px; }
-      .footer-col ul { flex-direction: row; flex-wrap: wrap; gap: 8px 16px; }
-      .footer-bottom { flex-direction: column; align-items: flex-start; gap: 6px; padding-top: 18px; }
     }
-
     @media (max-width: 380px) {
       .start-steps { grid-template-columns: 1fr; }
       .tips-grid { grid-template-columns: 1fr; }
-      .scoring-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -398,7 +249,6 @@
 
   <div class="bg-layer"></div>
 
-  <!-- NAV -->
   <nav>
     <a href="index.html" class="nav-logo">🏏 Crickingo</a>
     <ul class="nav-links">
@@ -410,19 +260,16 @@
     <span class="nav-badge">Daily Puzzle Live</span>
   </nav>
 
-  <!-- PAGE CONTENT -->
   <div class="page-wrap">
 
     <a href="index.html" class="back-btn">← Back to Home</a>
 
-    <!-- Header -->
     <div class="page-header">
       <div class="page-eyebrow"><span></span> Guide</div>
       <h1>HOW TO<br><em>PLAY</em></h1>
       <p class="lead">Everything you need to know to get started, score big, and outsmart your friends on Crickingo.</p>
     </div>
 
-    <!-- Getting Started -->
     <div class="section">
       <div class="section-heading">
         <div class="section-heading-line"></div>
@@ -448,7 +295,6 @@
       </div>
     </div>
 
-    <!-- Game Guides -->
     <div class="section">
       <div class="section-heading">
         <div class="section-heading-line"></div>
@@ -490,7 +336,7 @@
             <div class="game-card-title">Player Wordle</div>
             <span class="game-card-tag">Word Game</span>
           </div>
-          <p class="game-card-objective"><strong>Objective:</strong> Guess the cricket player's name in 6 attempts.</p>
+          <p class="game-card-objective"><strong>Objective:</strong> Guess the cricket player's name in 5 attempts.</p>
           <div class="game-rules">
             <div class="rule"><div class="rule-dot"></div><span>Enter a player name to begin</span></div>
             <div class="rule"><div class="rule-dot"></div><span>🟩 Green — correct letter, right position</span></div>
@@ -544,7 +390,6 @@
       </div>
     </div>
 
-    <!-- Tips -->
     <div class="section">
       <div class="section-heading">
         <div class="section-heading-line"></div>
@@ -578,7 +423,6 @@
       </div>
     </div>
 
-    <!-- Scoring -->
     <div class="section">
       <div class="section-heading">
         <div class="section-heading-line"></div>
@@ -604,7 +448,6 @@
       </div>
     </div>
 
-    <!-- CTA -->
     <div class="cta-banner">
       <div class="cta-text">
         <h3>Ready to Play?</h3>
@@ -614,46 +457,6 @@
     </div>
 
   </div>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <h3>🏏 Crickingo</h3>
-        <p>Test your cricket knowledge with daily puzzles and challenges. Play solo or compete with friends!</p>
-      </div>
-      <div class="footer-col">
-        <h4>Play</h4>
-        <ul>
-          <li><a href="rivalry.html">Cricket Bingo</a></li>
-          <li><a href="transfer.html">Transfer History</a></li>
-          <li><a href="wordle.html">Player Wordle</a></li>
-          <li><a href="hl.html">Higher or Lower</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Company</h4>
-        <ul>
-          <li><a href="about.html">About Us</a></li>
-          <li><a href="how-to-play.html">How to Play</a></li>
-          <li><a href="https://reddit.com" target="_blank">Reddit</a></li>
-          <li><a href="https://discord.com" target="_blank">Discord</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Legal</h4>
-        <ul>
-          <li><a href="terms.html">Terms & Conditions</a></li>
-          <li><a href="privacy.html">Privacy Policy</a></li>
-          <li><a href="mailto:contact@crickingo.com">Contact Us</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>&copy; 2026 Crickingo. All rights reserved.</p>
-      <p>Made with 🏏 for cricket fans.</p>
-    </div>
-  </footer>
 
 </body>
 </html>

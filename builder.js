@@ -33,18 +33,25 @@ let currentSessionScore = null;
 const STATS_KEY   = 'crickingo_builder_stats';
 const HISTORY_KEY = 'crickingo_builder_history';
 
-function getRealTodayKey() { return new Date().toISOString().split('T')[0]; }
-function getTodayKey()     { return getRealTodayKey(); }
+// ── Always real today for final saves, URL date for live saves ──
+function getRealTodayKey() {
+  return new Date().toISOString().split('T')[0];
+}
+function getDateKey() {
+  return urlParams.get('date') || getRealTodayKey();
+}
 
-function loadStats()   { try { return JSON.parse(localStorage.getItem(STATS_KEY))   || {}; } catch { return {}; } }
-function loadHistory() { try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || {}; } catch { return {}; } }
+// ── Rivalry-pattern: save result + pass data directly to renderDashboard ──
+function saveAndRenderResult(rating, won) {
+  const today = getRealTodayKey();
+  let stats   = {};
+  let history = {};
+  try { stats   = JSON.parse(localStorage.getItem(STATS_KEY))   || {}; } catch { stats   = {}; }
+  try { history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || {}; } catch { history = {}; }
 
-function saveGameResult(rating, won) {
-  const today   = getRealTodayKey();
-  const stats   = loadStats();
-  const history = loadHistory();
-
-  history[today] = { rating, won: !!won };
+  if (!history[today] || rating > (history[today].rating || 0)) {
+    history[today] = { rating, won: !!won };
+  }
 
   const entries = Object.values(history);
   stats.played  = entries.length;
@@ -63,57 +70,60 @@ function saveGameResult(rating, won) {
   localStorage.setItem(STATS_KEY,   JSON.stringify(stats));
   localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
 
-  // Pass fresh data directly — no re-read from localStorage
+  console.log('✅ [Builder] Saved:', today, '→', history[today]);
+
+  // Pass data directly — no re-read from localStorage
   renderDashboard(stats, history, today);
 }
 
-// ── Update today's dot immediately after save ──
+// ── Update today's dot live (same pattern as rivalry) ──
 function updateTodayDot(rating) {
-  const realToday = getRealTodayKey();   // dots are always keyed by real calendar date
-  const dotsEl    = document.getElementById('streakDots');
+  const puzzleDate = getDateKey();
+  const dotsEl     = document.getElementById('streakDots');
   if (!dotsEl) return;
 
-  const dot = dotsEl.querySelector(`[data-dot-date="${realToday}"]`);
-  if (!dot) return;
+  let targetDot = null;
+  dotsEl.querySelectorAll('.streak-dot').forEach(dot => {
+    if (dot.dataset.dotDate === puzzleDate) targetDot = dot;
+  });
+  if (!targetDot) targetDot = dotsEl.querySelectorAll('.streak-dot')[29]; // fallback: last dot
+  if (!targetDot) return;
 
-  dot.className = 'streak-dot today-played';
-  dot.title     = `Today · Rating ${rating}`;
+  targetDot.className = 'streak-dot today-played';
+  targetDot.title     = `${puzzleDate} · Rating ${rating}`;
 
-  let sc = dot.querySelector('.dot-score-val');
+  let sc = targetDot.querySelector('.dot-score-val');
   if (!sc) {
     sc           = document.createElement('div');
     sc.className = 'dot-score-val';
-    dot.appendChild(sc);
+    targetDot.appendChild(sc);
   }
   sc.textContent = rating;
 }
 
+// ── Rivalry-pattern renderDashboard: receives data directly ──
 function renderDashboard(stats, history, today) {
-  if (!stats)   stats   = loadStats();
-  if (!history) history = loadHistory();
-  if (!today)   today   = getRealTodayKey();
-
-  const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val ?? '—'; };
-  setEl('statPlayed', stats.played ?? '—');
-  setEl('statWins',   stats.wins   ?? '—');
-  setEl('statAvg',    stats.avg    ?? '—');
+  const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = (val != null) ? val : '—'; };
+  setEl('statPlayed', stats.played);
+  setEl('statWins',   stats.wins);
+  setEl('statAvg',    stats.avg);
   setEl('statStreak', stats.streak != null
-    ? stats.streak + (stats.streak === 1 ? ' day' : ' days') : '—');
+    ? stats.streak + (stats.streak === 1 ? ' day' : ' days') : null);
 
   const dotsEl = document.getElementById('streakDots');
   if (!dotsEl) return;
   dotsEl.innerHTML = '';
 
-  const now = new Date(today + 'T00:00:00');
+  const base = new Date(today + 'T00:00:00');
   for (let i = 29; i >= 0; i--) {
-    const d       = new Date(now);
+    const d       = new Date(base);
     d.setDate(d.getDate() - i);
     const key     = d.toISOString().split('T')[0];
     const entry   = history[key];
     const isToday = key === today;
 
-    const dot               = document.createElement('div');
-    dot.dataset.dotDate     = key;   // ← data-dot-date for updateTodayDot lookup
+    const dot           = document.createElement('div');
+    dot.dataset.dotDate = key;
 
     if (isToday && entry) {
       dot.className = 'streak-dot today-played';
@@ -156,7 +166,13 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeRules
 document.addEventListener('DOMContentLoaded', () => {
   const modal = document.getElementById('rulesModal');
   if (modal) modal.addEventListener('click', (e) => { if (e.target === modal) closeRulesModal(); });
-  renderDashboard();
+  // Initial render with whatever history exists
+  const today = getRealTodayKey();
+  let stats   = {};
+  let history = {};
+  try { stats   = JSON.parse(localStorage.getItem(STATS_KEY))   || {}; } catch {}
+  try { history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || {}; } catch {}
+  renderDashboard(stats, history, today);
 });
 
 // ── Tournament banner ──
@@ -462,7 +478,7 @@ function checkTeam() {
   const rating = calculateTeamRating();
   const isWin  = rating >= TARGET_RATING;
 
-  // Build share data
+  // Build share data BEFORE saving so it's always ready
   const today     = getRealTodayKey();
   const dTomorrow = new Date(today + 'T00:00:00');
   dTomorrow.setDate(dTomorrow.getDate() + 1);
@@ -477,19 +493,20 @@ function checkTeam() {
       ? `Built a winning XI! 🏆 Team rated ${rating}`
       : `Team rated ${rating} — need ${TARGET_RATING - rating} more`,
     breakdown: [
-      { label: `${isWin ? '🏆' : '📊'} Team Rating`,  value: String(rating),                   color: isWin ? '#3DD68C' : '#ff8080' },
+      { label: `${isWin ? '🏆' : '📊'} Team Rating`,  value: String(rating),           color: isWin ? '#3DD68C' : '#ff8080' },
       { label: '💰 Budget Used',                        value: `$${budgetUsed} / $${TOTAL_BUDGET}`, color: '#F7C344' },
-      { label: '🏏 Batsmen',                            value: String(counts['Batsman']),           color: '#4F8EF7'  },
-      { label: '🎯 Bowlers',                            value: String(counts['Bowler']),            color: '#E84040'  },
-      { label: '⚡ All-Rounders',                       value: String(counts['All-Rounder']),       color: '#F7C344'  },
-      { label: '🧤 Keeper',                             value: String(counts['Wicket-Keeper']),     color: '#A855F7'  },
+      { label: '🏏 Batsmen',                            value: String(counts['Batsman']),       color: '#4F8EF7'  },
+      { label: '🎯 Bowlers',                            value: String(counts['Bowler']),        color: '#E84040'  },
+      { label: '⚡ All-Rounders',                       value: String(counts['All-Rounder']),   color: '#F7C344'  },
+      { label: '🧤 Keeper',                             value: String(counts['Wicket-Keeper']), color: '#A855F7'  },
     ],
     tomorrow: tomorrowStr
   };
 
-  // Save result and re-render dashboard with fresh data
+  // Save + update dot
   if (!isInTournament) {
-    saveGameResult(rating, isWin);
+    saveAndRenderResult(rating, isWin);
+    updateTodayDot(rating);
   }
 
   currentSessionScore = rating;
@@ -622,7 +639,7 @@ window.shareScore = async function () {
   ctx.fillStyle = '#0d1120';
   ctx.fillRect(0, 0, W, H);
 
-  // Top gradient bar
+  // Top gradient bar — teal/gold/red builder theme
   const grad = ctx.createLinearGradient(0, 0, W, 0);
   grad.addColorStop(0,   '#2DD4BF');
   grad.addColorStop(0.5, '#F7C344');

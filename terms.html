@@ -5,200 +5,432 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Terms & Conditions - Crickingo</title>
   <link rel="icon" type="image/png" href="logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    :root {
+      --bg: #060810;
+      --surface: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08);
+      --accent: #F7C344;
+      --accent2: #E84040;
+      --accent3: #4F8EF7;
+      --green: #3DD68C;
+      --text: #F2F2F2;
+      --muted: rgba(242,242,242,0.5);
     }
 
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #0a0e27;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
       min-height: 100vh;
-      padding: 20px;
-      color: white;
-      position: relative;
       overflow-x: hidden;
     }
 
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 120%;
-      background: 
-        radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(255, 121, 63, 0.3) 0%, transparent 50%),
-        radial-gradient(circle at 40% 20%, rgba(138, 43, 226, 0.2) 0%, transparent 50%);
-      animation: gradientShift ease infinite;
-      z-index: -1;
+    /* ── BACKGROUND ── */
+    .bg-layer {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 60% at 10% 0%,  rgba(247,195,68,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 90% 100%, rgba(232,64,64,0.10) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 50% 50%,  rgba(79,142,247,0.06) 0%, transparent 70%);
+    }
+    .bg-layer::after {
+      content: ''; position: absolute; inset: 0;
+      background-image: repeating-linear-gradient(
+        -45deg, transparent, transparent 40px,
+        rgba(255,255,255,0.012) 40px, rgba(255,255,255,0.012) 41px
+      );
     }
 
-    @keyframes gradientShift {
-      0%, 100% { 
-        transform: translate(0, 0) scale(1.2);
-      }
-      50% { 
-        transform: translate(-30px, -30px) scale(1.2);
-      }
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      background: rgba(255, 255, 255, 0.05);
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; height: 64px;
+      background: rgba(6,8,16,0.85);
       backdrop-filter: blur(20px);
-      border: 2px solid rgba(255, 255, 255, 0.1);
-      border-radius: 30px;
-      padding: 50px;
-      box-shadow: 
-        0 20px 60px rgba(0, 0, 0, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 0 40px rgba(247,195,68,0.15), 0 0 80px rgba(247,195,68,0.08);
     }
-
-    .back-btn {
-      display: inline-block;
-      margin-bottom: 30px;
-      color: #667eea;
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 2px;
+      background: linear-gradient(90deg, var(--accent), #fff 60%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
       text-decoration: none;
-      font-weight: 600;
-      transition: all 0.3s ease;
+    }
+    .nav-back {
+      display: flex; align-items: center; gap: 6px; color: var(--muted);
+      text-decoration: none; font-size: 0.85rem; font-weight: 600;
+      padding: 6px 14px; border-radius: 8px;
+      border: 1px solid var(--border); background: var(--surface);
+      transition: color 0.2s, background 0.2s, border-color 0.2s, transform 0.2s;
+    }
+    .nav-back:hover { color: var(--text); background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15); transform: translateX(-2px); }
+
+    /* ── PAGE ── */
+    .page {
+      position: relative; z-index: 1;
+      max-width: 860px; margin: 0 auto;
+      padding: 48px 40px 80px;
+      animation: fadeUp 0.6s ease both;
     }
 
-    .back-btn:hover {
-      color: #ff6b9d;
-      transform: translateX(-5px);
+    /* ── PAGE HEADER ── */
+    .page-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(247,195,68,0.1); border: 1px solid rgba(247,195,68,0.25);
+      color: var(--accent); font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      padding: 5px 12px; border-radius: 100px; margin-bottom: 16px;
     }
 
-    h1 {
-      font-size: 3em;
-      margin-bottom: 20px;
-      background: linear-gradient(135deg, #667eea 0%, #ff6b9d 50%, #ffa400 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      font-weight: 900;
+    .page-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.4rem, 5vw, 3.6rem);
+      letter-spacing: 2px; line-height: 0.95; margin-bottom: 10px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2) 50%, var(--accent3) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
 
-    h2 {
-      font-size: 1.8em;
-      margin-top: 30px;
-      margin-bottom: 15px;
-      color: #667eea;
+    .page-date {
+      font-size: 0.8rem; color: var(--muted); margin-bottom: 36px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .page-date::before { content: ''; display: inline-block; width: 24px; height: 1px; background: rgba(247,195,68,0.3); }
+
+    /* ── INTRO CARD ── */
+    .intro-card {
+      background: rgba(247,195,68,0.05);
+      border: 1px solid rgba(247,195,68,0.15);
+      border-left: 3px solid var(--accent);
+      border-radius: 14px; padding: 18px 22px;
+      margin-bottom: 24px;
+      font-size: 0.93rem; color: var(--muted); line-height: 1.7;
     }
 
-    p {
-      line-height: 1.8;
-      margin-bottom: 15px;
-      color: rgba(255, 255, 255, 0.85);
-      font-size: 1.05em;
+    /* ── QUICK FACTS PILLS ── */
+    .highlights {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      margin-bottom: 32px;
+    }
+    .pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 100px;
+      font-size: 0.78rem; font-weight: 700;
+    }
+    .pill-green  { background: rgba(61,214,140,0.1);  border: 1px solid rgba(61,214,140,0.3);  color: var(--green); }
+    .pill-yellow { background: rgba(247,195,68,0.1);  border: 1px solid rgba(247,195,68,0.3);  color: var(--accent); }
+    .pill-blue   { background: rgba(79,142,247,0.1);  border: 1px solid rgba(79,142,247,0.3);  color: var(--accent3); }
+    .pill-red    { background: rgba(232,64,64,0.1);   border: 1px solid rgba(232,64,64,0.3);   color: var(--accent2); }
+
+    /* ── SECTIONS ── */
+    .section {
+      margin-bottom: 10px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-left: 3px solid rgba(247,195,68,0.3);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .section:hover { border-left-color: var(--accent); }
+
+    .section-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 18px 22px;
     }
 
-    ul {
-      margin-left: 20px;
-      margin-bottom: 15px;
+    .section-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem; letter-spacing: 1px;
+      color: var(--accent); opacity: 0.7;
+      width: 28px; flex-shrink: 0;
     }
 
-    ul li {
-      line-height: 1.8;
-      color: rgba(255, 255, 255, 0.85);
+    .section-title-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.25rem; letter-spacing: 1px;
+      color: var(--text); flex: 1;
+    }
+
+    .section-body {
+      padding: 0 22px 20px 62px;
+      font-size: 0.9rem; color: var(--muted); line-height: 1.8;
+    }
+
+    .section-body p { margin-bottom: 10px; }
+    .section-body p:last-child { margin-bottom: 0; }
+
+    .section-body ul {
+      list-style: none; display: flex; flex-direction: column; gap: 7px;
       margin-bottom: 10px;
     }
-
-    .date {
-      color: rgba(255, 255, 255, 0.6);
-      font-size: 0.95em;
-      margin-bottom: 20px;
+    .section-body ul li {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 8px;
+      font-size: 0.87rem; color: var(--muted); line-height: 1.6;
     }
+    .section-body ul li::before {
+      content: '→';
+      color: var(--accent); opacity: 0.6; flex-shrink: 0; margin-top: 1px;
+    }
+    .section-body strong { color: var(--text); }
 
+    .section-body a {
+      color: var(--accent3); text-decoration: none;
+      border-bottom: 1px solid rgba(79,142,247,0.3);
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .section-body a:hover { color: #7ab4ff; border-color: #7ab4ff; }
+
+    /* ── CONTACT CARD ── */
+    .contact-card {
+      margin-top: 32px;
+      background: rgba(79,142,247,0.06);
+      border: 1px solid rgba(79,142,247,0.2);
+      border-radius: 14px; padding: 22px 24px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .contact-icon { font-size: 1.8rem; flex-shrink: 0; }
+    .contact-body h4 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem; letter-spacing: 1px; color: var(--accent3); margin-bottom: 4px;
+    }
+    .contact-body p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+    .contact-body a { color: var(--accent3); text-decoration: none; font-weight: 700; }
+    .contact-body a:hover { text-decoration: underline; }
+
+    /* ── AGREEMENT FOOTER ── */
+    .agreement-footer {
+      margin-top: 28px;
+      padding: 18px 22px;
+      background: rgba(61,214,140,0.05);
+      border: 1px solid rgba(61,214,140,0.15);
+      border-radius: 14px;
+      font-size: 0.85rem; color: var(--muted); line-height: 1.7; text-align: center;
+    }
+    .agreement-footer strong { color: var(--green); }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+    /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
-      .container {
-        padding: 30px 20px;
-        border-radius: 20px;
-      }
-
-      h1 {
-        font-size: 2.2em;
-      }
-
-      h2 {
-        font-size: 1.5em;
-      }
+      nav { padding: 0 18px; }
+      .page { padding: 28px 18px 60px; }
+      .section-body { padding-left: 22px; }
+      .highlights { gap: 8px; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <a href="index.html" class="back-btn">← Back to Home</a>
-    
-    <h1>📜 Terms & Conditions</h1>
-    <p class="date">Last updated: February 5, 2026</p>
-    
-    <p>Welcome to Crickingo. By accessing or using our website and services, you agree to be bound by these Terms and Conditions. Please read them carefully.</p>
 
-    <h2>1. Acceptance of Terms</h2>
-    <p>By accessing and using Crickingo, you accept and agree to be bound by the terms and provisions of this agreement. If you do not agree to these terms, please do not use our services.</p>
+  <div class="bg-layer"></div>
 
-    <h2>2. Use of Service</h2>
-    <p>Crickingo provides cricket-themed puzzle games and challenges. You agree to use the service only for lawful purposes and in accordance with these Terms.</p>
-    <ul>
-      <li>You must be at least 13 years old to use this service</li>
-      <li>You are responsible for maintaining the confidentiality of your account</li>
-      <li>You agree not to use the service for any illegal or unauthorized purpose</li>
-      <li>You will not interfere with or disrupt the service or servers</li>
-    </ul>
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo">🏏 Crickingo</a>
+    <a href="index.html" class="nav-back">← Back to Home</a>
+  </nav>
 
-    <h2>3. User Accounts</h2>
-    <p>When you create an account with us, you must provide accurate, complete, and current information. Failure to do so constitutes a breach of the Terms.</p>
+  <!-- PAGE -->
+  <main class="page">
 
-    <h2>4. Intellectual Property</h2>
-    <p>The service and its original content, features, and functionality are owned by Crickingo and are protected by international copyright, trademark, patent, trade secret, and other intellectual property laws.</p>
+    <div class="page-eyebrow">📜 Legal</div>
+    <h1 class="page-title">Terms &amp; Conditions</h1>
+    <p class="page-date">Last updated: February 5, 2026</p>
 
-    <h2>5. User Content</h2>
-    <p>Users may post, upload, or submit content through our service. You retain ownership of your content, but grant us a license to use, modify, and display it in connection with the service.</p>
+    <div class="intro-card">
+      Welcome to Crickingo — a free, browser-based collection of cricket puzzle mini-games. No account or login is ever required to play. By visiting or using our website, you agree to these Terms and Conditions. If you disagree with any part, please stop using the site.
+    </div>
 
-    <h2>6. Prohibited Activities</h2>
-    <p>You agree not to engage in any of the following activities:</p>
-    <ul>
-      <li>Cheating, hacking, or using automated tools to play games</li>
-      <li>Harassing, threatening, or abusing other users</li>
-      <li>Posting offensive, inappropriate, or illegal content</li>
-      <li>Attempting to gain unauthorized access to the service</li>
-      <li>Impersonating another person or entity</li>
-    </ul>
+    <!-- Quick facts — at a glance -->
+    <div class="highlights">
+      <span class="pill pill-green">✅ No login or account needed</span>
+      <span class="pill pill-green">✅ Free to play, always</span>
+      <span class="pill pill-yellow">💾 Scores saved locally in your browser only</span>
+      <span class="pill pill-blue">🏏 Cricket stats used for entertainment only</span>
+      <span class="pill pill-red">🚫 No bots or cheating tools</span>
+    </div>
 
-    <h2>7. Privacy Policy</h2>
-    <p>Your use of the service is also governed by our Privacy Policy. Please review our Privacy Policy to understand our practices.</p>
+    <!-- 01 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <span class="section-title-text">Acceptance of Terms</span>
+      </div>
+      <div class="section-body">
+        <p>By accessing and playing Crickingo, you accept and agree to be bound by these Terms. We may update them at any time — your continued use of the site after changes are posted means you accept the updated Terms.</p>
+      </div>
+    </div>
 
-    <h2>8. Disclaimer of Warranties</h2>
-    <p>The service is provided "as is" and "as available" without warranties of any kind, either express or implied. We do not guarantee that the service will be uninterrupted, secure, or error-free.</p>
+    <!-- 02 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <span class="section-title-text">Who Can Use Crickingo</span>
+      </div>
+      <div class="section-body">
+        <p>Crickingo is open to anyone aged 13 or older. No registration, account, or personal information is required to play. You agree to use the site only for lawful purposes and not to interfere with or disrupt the service or its servers.</p>
+      </div>
+    </div>
 
-    <h2>9. Limitation of Liability</h2>
-    <p>In no event shall Crickingo, its directors, employees, or agents be liable for any indirect, incidental, special, consequential, or punitive damages arising out of your use of the service.</p>
+    <!-- 03 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <span class="section-title-text">The Games &amp; How They Work</span>
+      </div>
+      <div class="section-body">
+        <p>Crickingo hosts daily cricket-themed mini-games including Wordle, Higher or Lower, Transfer History, and Tournaments. All games are free, reset daily, and are identical for every player on a given date.</p>
+        <ul>
+          <li>Daily puzzles are seeded by date — everyone gets the same challenge each day</li>
+          <li>Tournament mode uses a shared seed stored temporarily in Firebase Realtime Database so all participants in a tournament get the same puzzle — no personal data is stored there</li>
+          <li>Your scores and streaks are saved in your own browser's <strong>localStorage</strong> — clearing your browser data will erase them, and we cannot recover them</li>
+          <li>Cricket statistics and player data used in the games are compiled for entertainment only and may not always reflect fully accurate or up-to-date official records</li>
+        </ul>
+      </div>
+    </div>
 
-    <h2>10. Game Rules and Fair Play</h2>
-    <p>All games must be played fairly. Use of bots, scripts, or any automated methods is strictly prohibited and may result in account suspension or termination.</p>
+    <!-- 04 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <span class="section-title-text">Fair Play</span>
+      </div>
+      <div class="section-body">
+        <p>All games must be played honestly. You agree not to:</p>
+        <ul>
+          <li>Use bots, scripts, browser extensions, or any automated tools to play or manipulate scores</li>
+          <li>Exploit bugs or glitches to gain an unfair advantage, especially in tournaments</li>
+          <li>Manually edit localStorage or Firebase data to falsify your scores</li>
+          <li>Share daily puzzle answers publicly before the day has ended in a way that spoils the experience for others</li>
+        </ul>
+        <p>We reserve the right to disqualify any player from tournaments where we detect unfair play.</p>
+      </div>
+    </div>
 
-    <h2>11. Modifications to Service</h2>
-    <p>We reserve the right to modify or discontinue the service at any time, with or without notice. We shall not be liable to you or any third party for any modification, suspension, or discontinuance of the service.</p>
+    <!-- 05 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <span class="section-title-text">Intellectual Property</span>
+      </div>
+      <div class="section-body">
+        <p>All game designs, puzzles, code, graphics, and branding on Crickingo are owned by us and protected by applicable intellectual property laws. You may not copy, reproduce, or redistribute any part of the site without our written permission.</p>
+        <p>Crickingo is an independent fan project and is not affiliated with, endorsed by, or licensed by the BCCI, IPL, ICC, or any cricket board or franchise. Cricketer names and statistics are referenced for educational and entertainment purposes only.</p>
+      </div>
+    </div>
 
-    <h2>12. Changes to Terms</h2>
-    <p>We reserve the right to update or change these Terms at any time. Your continued use of the service after we post any modifications constitutes acceptance of those changes.</p>
+    <!-- 06 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <span class="section-title-text">Data &amp; Privacy</span>
+      </div>
+      <div class="section-body">
+        <p>Crickingo does not collect or store any personal data. The only data involved is:</p>
+        <ul>
+          <li><strong>localStorage</strong> — your scores, streaks, and game history, stored entirely on your own device and never sent to us</li>
+          <li><strong>Firebase Realtime Database</strong> — tournament puzzle seeds only (which game is active for a tournament). No names, emails, or personal identifiers are stored</li>
+        </ul>
+        <p>We do not use advertising networks, tracking cookies, or sell any data. See our <a href="privacy.html">Privacy Policy</a> for full details.</p>
+      </div>
+    </div>
 
-    <h2>13. Termination</h2>
-    <p>We may terminate or suspend your account and access to the service immediately, without prior notice, for any reason, including breach of these Terms.</p>
+    <!-- 07 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <span class="section-title-text">Prohibited Use</span>
+      </div>
+      <div class="section-body">
+        <p>You agree not to use Crickingo to:</p>
+        <ul>
+          <li>Attempt to gain unauthorized access to our Firebase database or any backend systems</li>
+          <li>Launch denial-of-service attacks or otherwise flood or overload our servers</li>
+          <li>Scrape, mirror, or redistribute our puzzles or game content without permission</li>
+          <li>Use the site for any unlawful purpose under applicable law</li>
+        </ul>
+      </div>
+    </div>
 
-    <h2>14. Governing Law</h2>
-    <p>These Terms shall be governed by and construed in accordance with applicable laws, without regard to its conflict of law provisions.</p>
+    <!-- 08 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <span class="section-title-text">Disclaimer of Warranties</span>
+      </div>
+      <div class="section-body">
+        <p>Crickingo is provided "as is" and "as available" with no warranties of any kind. We do not guarantee that the service will always be uninterrupted, error-free, or that your browser-stored game data will always be preserved. Cricket statistics used in-game are for entertainment and may not reflect official or real-time records.</p>
+      </div>
+    </div>
 
-    <h2>15. Contact Information</h2>
-    <p>If you have any questions about these Terms, please contact us at:</p>
-    <p>Email: <a href="mailto:support@crickingo.com" style="color: #667eea;">support@crickingo.com</a></p>
+    <!-- 09 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <span class="section-title-text">Limitation of Liability</span>
+      </div>
+      <div class="section-body">
+        <p>To the fullest extent permitted by law, Crickingo and its creators shall not be liable for any indirect, incidental, or consequential damages arising from your use of the site — including loss of game progress, score history, or tournament results due to browser data being cleared or service downtime.</p>
+      </div>
+    </div>
 
-    <p style="margin-top: 30px;">By using Crickingo, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions.</p>
-  </div>
+    <!-- 10 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <span class="section-title-text">Modifications to the Service</span>
+      </div>
+      <div class="section-body">
+        <p>We may add, remove, or modify games, puzzles, and features at any time without notice. Daily puzzles may be corrected if errors are found. We are not liable for any disruption caused by updates or maintenance.</p>
+      </div>
+    </div>
+
+    <!-- 11 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <span class="section-title-text">Changes to These Terms</span>
+      </div>
+      <div class="section-body">
+        <p>We reserve the right to update these Terms at any time. The "Last updated" date at the top of this page will reflect when changes were made. Continued use of Crickingo after any update means you accept the revised Terms.</p>
+      </div>
+    </div>
+
+    <!-- 12 -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <span class="section-title-text">Governing Law</span>
+      </div>
+      <div class="section-body">
+        <p>These Terms are governed by the laws of India. Any disputes arising from your use of Crickingo shall be subject to the jurisdiction of the courts of India.</p>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="contact-card">
+      <div class="contact-icon">✉️</div>
+      <div class="contact-body">
+        <h4>Questions About These Terms?</h4>
+        <p>Reach out anytime at <a href="mailto:support@crickingo.com">support@crickingo.com</a> and we'll get back to you as soon as we can.</p>
+      </div>
+    </div>
+
+    <!-- Agreement footer -->
+    <div class="agreement-footer">
+      By playing Crickingo, you confirm that you have read, understood, and agreed to these <strong>Terms &amp; Conditions</strong>. Thanks for playing fair — and good luck! 🏏
+    </div>
+
+  </main>
+
 </body>
 </html>
