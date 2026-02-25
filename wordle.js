@@ -31,6 +31,13 @@ function getDateFromURL() {
 }
 
 function populatePuzzleBar(puzzleDate) {
+  // ✅ Hide puzzle bar in tournament mode
+  if (isInTournament) {
+    const puzzleBar = document.querySelector('.puzzle-bar');
+    if (puzzleBar) puzzleBar.style.display = 'none';
+    return;
+  }
+
   const d       = new Date(puzzleDate + 'T00:00:00');
   const dateStr = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
   const dateEl  = document.getElementById('puzzleDate');
@@ -43,6 +50,9 @@ function populatePuzzleBar(puzzleDate) {
 }
 
 function saveGameResult(score) {
+  // ✅ Never save in tournament mode
+  if (isInTournament) return;
+
   const puzzleDate = getDateFromURL();
   const today      = getRealTodayKey();
   let stats   = {};
@@ -75,6 +85,9 @@ function saveGameResult(score) {
 }
 
 function updateTodayDot(score) {
+  // ✅ Never update dots in tournament mode
+  if (isInTournament) return;
+
   const puzzleDate = getDateFromURL();
   const dotsEl     = document.getElementById('streakDots');
   if (!dotsEl) return;
@@ -91,6 +104,13 @@ function updateTodayDot(score) {
 }
 
 function renderDashboard(stats, history, today) {
+  // ✅ In tournament mode, hide the entire dashboard
+  if (isInTournament) {
+    const dashboard = document.getElementById('bottomDashboard');
+    if (dashboard) dashboard.style.display = 'none';
+    return;
+  }
+
   const setEl = (id, val) => {
     const el = document.getElementById(id);
     if (el) el.textContent = (val !== null && val !== undefined) ? String(val) : '—';
@@ -127,6 +147,7 @@ function renderDashboard(stats, history, today) {
 }
 
 function initDashboard() {
+  // Will auto-hide if tournament mode via renderDashboard
   const today = getRealTodayKey();
   let stats   = {};
   let history = {};
@@ -242,7 +263,6 @@ async function initGame() {
   guesses        = [];
   currentScore   = 0;
 
-  // Reset UI
   document.getElementById('resultArea').style.display = 'none';
   document.getElementById('guessInput').disabled      = false;
   document.getElementById('submitBtn').disabled        = false;
@@ -363,7 +383,6 @@ function submitGuess() {
   }
 }
 
-// ── Show result card (replaces inline showMessage for end state) ──
 function showResultCard(title, score, phrase) {
   const resultArea  = document.getElementById('resultArea');
   const titleEl     = resultArea.querySelector('.result-title');
@@ -378,7 +397,6 @@ function showResultCard(title, score, phrase) {
 
   resultArea.style.display = 'block';
 
-  // Move dashboard below result card then scroll
   const dashboard = document.getElementById('bottomDashboard');
   if (dashboard && resultArea) {
     resultArea.parentNode.insertBefore(dashboard, resultArea.nextSibling);

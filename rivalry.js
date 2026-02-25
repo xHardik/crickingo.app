@@ -16,7 +16,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-const urlParams = new URLSearchParams(window.location.search);
+const urlParams      = new URLSearchParams(window.location.search);
 const isInTournament = localStorage.getItem('inTournamentGame') === 'true' &&
                        urlParams.get('tournament') === 'true';
 
@@ -24,7 +24,7 @@ const isInTournament = localStorage.getItem('inTournamentGame') === 'true' &&
 const STATS_KEY   = 'crickingo_rivalry_stats';
 const HISTORY_KEY = 'crickingo_rivalry_history';
 
-// ── Always real today, never the ?date= param ──
+// ── Always real today, never the ?date= URL param ──
 function getRealTodayKey() {
   return new Date().toISOString().split('T')[0];
 }
@@ -41,18 +41,15 @@ function saveAndRenderResult(score, correct, wrong) {
   try { stats   = JSON.parse(localStorage.getItem(STATS_KEY))   || {}; } catch { stats   = {}; }
   try { history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || {}; } catch { history = {}; }
 
-  // Save best score for today only
   if (!history[today] || score > history[today].score) {
     history[today] = { score, correct, wrong };
   }
 
-  // Rebuild aggregate stats
   const allEntries = Object.values(history);
   stats.played = allEntries.length;
   stats.best   = Math.max(...allEntries.map(e => e.score));
   stats.avg    = Math.round(allEntries.reduce((s, e) => s + e.score, 0) / allEntries.length);
 
-  // Day streak: consecutive days ending today
   let streak = 0;
   const check = new Date(today + 'T00:00:00');
   while (true) {
@@ -72,62 +69,18 @@ function saveAndRenderResult(score, correct, wrong) {
 
 // ── Render last-30-days dots + stat numbers ──
 function renderDashboard(stats, history, today) {
+  // ✅ In tournament mode, hide the entire dashboard
+  if (isInTournament) {
+    const dashboard = document.getElementById('bottomDashboard');
+    if (dashboard) dashboard.style.display = 'none';
+    return;
+  }
+
   const setEl = (id, val) => {
     const el = document.getElementById(id);
     if (el) el.textContent = (val != null) ? val : '—';
   };
 
-  // ✅ In tournament mode, show "??" for all stats
-  if (isInTournament) {
-    setEl('statPlayed', '??');
-    setEl('statBest',   '??');
-    setEl('statAvg',    '??');
-    setEl('statStreak', '??');
-
-    const dotsEl = document.getElementById('streakDots');
-    if (!dotsEl) return;
-    dotsEl.innerHTML = '';
-
-    // Render 30 "??" dots instead of real history
-    for (let i = 0; i < 30; i++) {
-      const dot = document.createElement('div');
-      dot.className = 'streak-dot tournament-hidden';
-      dot.title = 'Stats hidden in Tournament Mode';
-      dot.style.cssText = `
-        opacity: 0.35;
-        background: rgba(255,255,255,0.1);
-        border: 1px dashed rgba(255,255,255,0.2);
-      `;
-
-      const label = document.createElement('div');
-      label.className   = 'dot-score-val';
-      label.textContent = '??';
-      label.style.cssText = 'font-size: 0.55rem; color: rgba(255,255,255,0.4);';
-      dot.appendChild(label);
-
-      dotsEl.appendChild(dot);
-    }
-
-    // Also show a small notice under the dots
-    const dotsParent = dotsEl.parentNode;
-    if (dotsParent && !dotsParent.querySelector('.tournament-dots-notice')) {
-      const notice = document.createElement('div');
-      notice.className = 'tournament-dots-notice';
-      notice.style.cssText = `
-        text-align: center;
-        font-size: 0.75rem;
-        color: rgba(255,255,255,0.4);
-        margin-top: 8px;
-        font-style: italic;
-      `;
-      notice.textContent = '🏆 Stats & streaks are not tracked in Tournament Mode';
-      dotsParent.appendChild(notice);
-    }
-
-    return; // skip normal rendering
-  }
-
-  // Normal mode rendering below
   setEl('statPlayed', stats.played);
   setEl('statBest',   stats.best);
   setEl('statAvg',    stats.avg);
@@ -267,6 +220,7 @@ async function initGame() {
   }
 
   showRulesModal();
+
   if (isInTournament) {
     showTournamentInfo();
     // Hide restart and home buttons in game-info controls, keep skip
@@ -274,6 +228,9 @@ async function initGame() {
     const backBtn    = document.querySelector('.controls .btn-back');
     if (restartBtn) restartBtn.style.display = 'none';
     if (backBtn)    backBtn.style.display    = 'none';
+    // Hide puzzle date/number bar in tournament mode
+    const puzzleBar = document.querySelector('.puzzle-bar');
+    if (puzzleBar) puzzleBar.style.display = 'none';
   }
 
   // ===== TOURNAMENT SEED LOGIC =====
@@ -333,8 +290,7 @@ async function initGame() {
   showPlayer();
   updateScoreDisplay();
 
-  // Render dashboard on page load with whatever history already exists
-  // In tournament mode this will show ?? dots automatically
+  // Render dashboard on page load (will auto-hide if tournament)
   const today = getRealTodayKey();
   let stats   = {};
   let history = {};
@@ -446,7 +402,6 @@ function saveLiveScore(score) {
   let history = {};
   try { history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || {}; } catch { history = {}; }
 
-  // Only write if better than existing or not yet saved
   if (!history[puzzleDate] || score > history[puzzleDate].score) {
     history[puzzleDate] = { score, correct: correctCount, wrong: wrongAnswers, live: true };
     localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
@@ -556,7 +511,6 @@ function _showEndScreen() {
 
   document.getElementById('scoreText').innerText = `${finalScore} / 1000`;
 
-  // Store data for canvas share card
   const puzzleDateShare = getDateFromURL();
   const dTomorrowShare  = new Date(puzzleDateShare + 'T00:00:00');
   dTomorrowShare.setDate(dTomorrowShare.getDate() + 1);
@@ -585,7 +539,6 @@ function _showEndScreen() {
   if (existingBtns) existingBtns.remove();
 
   if (isInTournament) {
-    // Hide entire actions row — no replay, home, or share in tournament
     const actionsRow = resultArea.querySelector('.result-actions');
     if (actionsRow) actionsRow.style.display = 'none';
     const container = document.createElement('div');
@@ -599,7 +552,6 @@ function _showEndScreen() {
     resultArea.appendChild(container);
     setTimeout(() => finishGame(finalScore), 2000);
   } else {
-    // Restore actions row for normal mode
     const actionsRow = resultArea.querySelector('.result-actions');
     if (actionsRow) actionsRow.style.display = 'flex';
   }
@@ -610,7 +562,6 @@ function _showEndScreen() {
   if (!isInTournament) {
     saveAndRenderResult(finalScore, correctCount, wrongAnswers);
 
-    // Move bottomDashboard right after resultArea so it's visible
     const dashboard = document.getElementById('bottomDashboard');
     if (dashboard && resultArea) {
       resultArea.parentNode.insertBefore(dashboard, resultArea.nextSibling);

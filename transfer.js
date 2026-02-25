@@ -37,6 +37,9 @@ function getDateFromURL() {
 
 // ── Self-contained: save result + re-render dashboard ──
 function saveAndRenderResult(score, correct) {
+  // ✅ Never save in tournament mode
+  if (isInTournament) return;
+
   const today = getRealTodayKey();
   let stats   = {};
   let history = {};
@@ -71,6 +74,9 @@ function saveAndRenderResult(score, correct) {
 
 // ── Save live score on every guess ──
 function saveLiveScore(score, correct) {
+  // ✅ Never save in tournament mode
+  if (isInTournament) return;
+
   const puzzleDate = getDateFromURL();
   let history = {};
   try { history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || {}; } catch { history = {}; }
@@ -85,6 +91,9 @@ function saveLiveScore(score, correct) {
 
 // ── Update today's dot live as score changes ──
 function updateTodayDot(score) {
+  // ✅ Never update dots in tournament mode
+  if (isInTournament) return;
+
   const puzzleDate = getDateFromURL();
   const dotsEl = document.getElementById('streakDots');
   if (!dotsEl) return;
@@ -112,6 +121,13 @@ function updateTodayDot(score) {
 
 // ── Render dashboard ──
 function renderDashboard(stats, history, today) {
+  // ✅ In tournament mode, hide the entire dashboard
+  if (isInTournament) {
+    const dashboard = document.getElementById('bottomDashboard');
+    if (dashboard) dashboard.style.display = 'none';
+    return;
+  }
+
   const setEl = (id, val) => {
     const el = document.getElementById(id);
     if (el) el.textContent = (val !== null && val !== undefined) ? String(val) : '—';
@@ -222,10 +238,12 @@ async function initGame() {
 
   if (isInTournament) {
     showTournamentInfo();
-    // Hide restart and home in controls, keep skip
     // Hide restart and home in gameControls, keep only skip
     document.querySelectorAll('#gameControls .btn-restart, #gameControls .btn-back')
       .forEach(b => b.style.display = 'none');
+    // Hide puzzle date/number bar in tournament mode
+    const puzzleBar = document.querySelector('.puzzle-bar');
+    if (puzzleBar) puzzleBar.style.display = 'none';
   }
 
   // ===== TOURNAMENT SEED LOGIC =====
@@ -283,7 +301,7 @@ async function initGame() {
   setupSearchInput();
   updateScoreDisplay();
 
-  // Render dashboard on load with existing data
+  // Render dashboard on load (will auto-hide if tournament)
   const today = getRealTodayKey();
   let stats   = {};
   let history = {};
@@ -492,7 +510,6 @@ function endGame() {
   document.getElementById('scoreText').innerText    = finalScore + ' / 1000';
   document.getElementById('resultPhrase').innerHTML = getResultPhrase(correctAnswers) + scoreBreakdown + getTomorrowMessage();
 
-  // Store data for canvas-based share card
   const puzzleDate = getDateFromURL();
   const dTomorrow  = new Date(puzzleDate + 'T00:00:00');
   dTomorrow.setDate(dTomorrow.getDate() + 1);
@@ -544,11 +561,10 @@ function endGame() {
 
   resultArea.style.display = 'block';
 
-  // Save + re-render dashboard
+  // Save + re-render dashboard only in normal mode
   if (!isInTournament) {
     saveAndRenderResult(finalScore, correctAnswers);
 
-    // Move dashboard below result card
     const dashboard = document.getElementById('bottomDashboard');
     if (dashboard && resultArea) {
       resultArea.parentNode.insertBefore(dashboard, resultArea.nextSibling);

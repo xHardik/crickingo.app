@@ -40,6 +40,9 @@ function getDateFromURL() {
 // ─────────────────────────────────────────
 
 function saveAndRenderResult(score) {
+  // ✅ Never save in tournament mode
+  if (isInTournament) return;
+
   const today = getRealTodayKey();
   let stats   = {};
   let history = {};
@@ -73,6 +76,9 @@ function saveAndRenderResult(score) {
 }
 
 function saveLiveScore(score) {
+  // ✅ Never save in tournament mode
+  if (isInTournament) return;
+
   const puzzleDate = getDateFromURL();
   let history = {};
   try { history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || {}; } catch { history = {}; }
@@ -90,6 +96,9 @@ function saveLiveScore(score) {
 // ─────────────────────────────────────────
 
 function updateTodayDot(score) {
+  // ✅ Never update dots in tournament mode
+  if (isInTournament) return;
+
   const puzzleDate = getDateFromURL();
   const dotsEl = document.getElementById('streakDots');
   if (!dotsEl) return;
@@ -114,6 +123,13 @@ function updateTodayDot(score) {
 }
 
 function renderDashboard(stats, history, today) {
+  // ✅ In tournament mode, hide the entire dashboard
+  if (isInTournament) {
+    const dashboard = document.getElementById('bottomDashboard');
+    if (dashboard) dashboard.style.display = 'none';
+    return;
+  }
+
   const setEl = (id, val) => {
     const el = document.getElementById(id);
     if (el) el.textContent = (val !== null && val !== undefined) ? String(val) : '—';
@@ -170,6 +186,13 @@ function renderDashboard(stats, history, today) {
 }
 
 function populatePuzzleBar(puzzleDate) {
+  // ✅ Hide puzzle bar in tournament mode
+  if (isInTournament) {
+    const puzzleBar = document.querySelector('.puzzle-bar');
+    if (puzzleBar) puzzleBar.style.display = 'none';
+    return;
+  }
+
   const d       = new Date(puzzleDate + 'T00:00:00');
   const dateStr = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 
@@ -617,11 +640,9 @@ window.shareScore = async function () {
   const ctx     = canvas.getContext('2d');
   ctx.scale(2, 2);
 
-  // Background
   ctx.fillStyle = '#0d1120';
   ctx.fillRect(0, 0, W, H);
 
-  // Top gradient bar
   const grad = ctx.createLinearGradient(0, 0, W, 0);
   grad.addColorStop(0,   '#E84040');
   grad.addColorStop(0.5, '#F7C344');
@@ -629,20 +650,17 @@ window.shareScore = async function () {
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, W, 3);
 
-  // Card body tint
   ctx.fillStyle = 'rgba(255,255,255,0.06)';
   roundRect(ctx, 0, 3, W, H - 3, 0);
 
   let y = pad + 16;
 
-  // Heading
   ctx.font      = 'bold 36px "Arial Black", Arial';
   ctx.fillStyle = '#F2F2F2';
   ctx.textAlign = 'center';
   ctx.fillText('GAME OVER!', W / 2, y);
   y += 44;
 
-  // Score box
   ctx.fillStyle = 'rgba(232,64,64,0.25)';
   roundRect(ctx, pad, y, W - pad * 2, 64, 12);
   ctx.fillStyle = '#E84040';
@@ -650,13 +668,11 @@ window.shareScore = async function () {
   ctx.fillText(score, W / 2, y + 44);
   y += 80;
 
-  // Phrase
   ctx.font      = '16px Arial';
   ctx.fillStyle = 'rgba(242,242,242,0.6)';
   ctx.fillText(phrase, W / 2, y);
   y += 36;
 
-  // Breakdown box
   const bH = 40 + breakdown.length * 34 + 54;
   ctx.fillStyle = 'rgba(255,255,255,0.06)';
   roundRect(ctx, pad, y, W - pad * 2, bH, 12);
@@ -678,7 +694,6 @@ window.shareScore = async function () {
     y += 34;
   });
 
-  // Divider + total
   ctx.strokeStyle = 'rgba(255,255,255,0.15)';
   ctx.lineWidth   = 1;
   ctx.beginPath();
@@ -696,7 +711,6 @@ window.shareScore = async function () {
   ctx.fillText(d.score || '0', W - pad - 16, y + 4);
   y += 40;
 
-  // Tomorrow box
   if (tomorrow) {
     ctx.fillStyle = 'rgba(79,142,247,0.1)';
     roundRect(ctx, pad, y, W - pad * 2, 58, 12);
@@ -710,7 +724,6 @@ window.shareScore = async function () {
     y += 66;
   }
 
-  // CTA footer
   ctx.fillStyle = 'rgba(232,64,64,0.12)';
   roundRect(ctx, pad, y, W - pad * 2, 58, 12);
   ctx.textAlign = 'center';

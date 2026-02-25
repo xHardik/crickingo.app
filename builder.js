@@ -33,7 +33,6 @@ let currentSessionScore = null;
 const STATS_KEY   = 'crickingo_builder_stats';
 const HISTORY_KEY = 'crickingo_builder_history';
 
-// ── Always real today for final saves, URL date for live saves ──
 function getRealTodayKey() {
   return new Date().toISOString().split('T')[0];
 }
@@ -41,8 +40,10 @@ function getDateKey() {
   return urlParams.get('date') || getRealTodayKey();
 }
 
-// ── Rivalry-pattern: save result + pass data directly to renderDashboard ──
 function saveAndRenderResult(rating, won) {
+  // ✅ Never save in tournament mode
+  if (isInTournament) return;
+
   const today = getRealTodayKey();
   let stats   = {};
   let history = {};
@@ -71,13 +72,13 @@ function saveAndRenderResult(rating, won) {
   localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
 
   console.log('✅ [Builder] Saved:', today, '→', history[today]);
-
-  // Pass data directly — no re-read from localStorage
   renderDashboard(stats, history, today);
 }
 
-// ── Update today's dot live (same pattern as rivalry) ──
 function updateTodayDot(rating) {
+  // ✅ Never update dots in tournament mode
+  if (isInTournament) return;
+
   const puzzleDate = getDateKey();
   const dotsEl     = document.getElementById('streakDots');
   if (!dotsEl) return;
@@ -86,7 +87,7 @@ function updateTodayDot(rating) {
   dotsEl.querySelectorAll('.streak-dot').forEach(dot => {
     if (dot.dataset.dotDate === puzzleDate) targetDot = dot;
   });
-  if (!targetDot) targetDot = dotsEl.querySelectorAll('.streak-dot')[29]; // fallback: last dot
+  if (!targetDot) targetDot = dotsEl.querySelectorAll('.streak-dot')[29];
   if (!targetDot) return;
 
   targetDot.className = 'streak-dot today-played';
@@ -101,8 +102,14 @@ function updateTodayDot(rating) {
   sc.textContent = rating;
 }
 
-// ── Rivalry-pattern renderDashboard: receives data directly ──
 function renderDashboard(stats, history, today) {
+  // ✅ In tournament mode, hide the entire dashboard
+  if (isInTournament) {
+    const dashboard = document.getElementById('bottomDashboard');
+    if (dashboard) dashboard.style.display = 'none';
+    return;
+  }
+
   const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = (val != null) ? val : '—'; };
   setEl('statPlayed', stats.played);
   setEl('statWins',   stats.wins);
@@ -166,7 +173,7 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeRules
 document.addEventListener('DOMContentLoaded', () => {
   const modal = document.getElementById('rulesModal');
   if (modal) modal.addEventListener('click', (e) => { if (e.target === modal) closeRulesModal(); });
-  // Initial render with whatever history exists
+  // Initial render with whatever history exists (auto-hides if tournament)
   const today = getRealTodayKey();
   let stats   = {};
   let history = {};
@@ -209,11 +216,17 @@ async function loadPlayersByDate(selectedDate) {
 }
 
 function populatePuzzleBar(dateStr) {
+  // ✅ Hide puzzle bar in tournament mode
+  if (isInTournament) {
+    const puzzleBar = document.querySelector('.puzzle-bar');
+    if (puzzleBar) puzzleBar.style.display = 'none';
+    return;
+  }
+
   const d       = new Date(dateStr + 'T00:00:00');
   const display = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
   const dateEl  = document.getElementById('puzzleDate');
   if (dateEl) dateEl.textContent = display;
-  // Builder launched 2026-01-15 = puzzle #1
   const launch = new Date('2026-01-15T00:00:00');
   const diff   = Math.floor((d - launch) / (1000 * 60 * 60 * 24)) + 1;
   const numEl  = document.getElementById('puzzleNumber');
@@ -478,7 +491,6 @@ function checkTeam() {
   const rating = calculateTeamRating();
   const isWin  = rating >= TARGET_RATING;
 
-  // Build share data BEFORE saving so it's always ready
   const today     = getRealTodayKey();
   const dTomorrow = new Date(today + 'T00:00:00');
   dTomorrow.setDate(dTomorrow.getDate() + 1);
@@ -503,7 +515,7 @@ function checkTeam() {
     tomorrow: tomorrowStr
   };
 
-  // Save + update dot
+  // ✅ Only save and update dot in normal mode
   if (!isInTournament) {
     saveAndRenderResult(rating, isWin);
     updateTodayDot(rating);
@@ -635,11 +647,9 @@ window.shareScore = async function () {
   const ctx     = canvas.getContext('2d');
   ctx.scale(2, 2);
 
-  // Background
   ctx.fillStyle = '#0d1120';
   ctx.fillRect(0, 0, W, H);
 
-  // Top gradient bar — teal/gold/red builder theme
   const grad = ctx.createLinearGradient(0, 0, W, 0);
   grad.addColorStop(0,   '#2DD4BF');
   grad.addColorStop(0.5, '#F7C344');
@@ -652,14 +662,12 @@ window.shareScore = async function () {
 
   let y = pad + 16;
 
-  // Heading
   ctx.font = 'bold 28px "Arial Black", Arial';
   ctx.fillStyle = 'rgba(242,242,242,0.5)';
   ctx.textAlign = 'center';
   ctx.fillText('BUILD YOUR XI', W / 2, y);
   y += 36;
 
-  // Score box
   ctx.fillStyle = 'rgba(45,212,191,0.25)';
   roundRect(ctx, pad, y, W - pad * 2, 64, 12);
   ctx.fillStyle = '#2DD4BF';
@@ -667,13 +675,11 @@ window.shareScore = async function () {
   ctx.fillText(score, W / 2, y + 44);
   y += 80;
 
-  // Phrase
   ctx.font      = '16px Arial';
   ctx.fillStyle = 'rgba(242,242,242,0.6)';
   ctx.fillText(phrase, W / 2, y);
   y += 36;
 
-  // Breakdown box
   const bH = 40 + breakdown.length * 34 + 54;
   ctx.fillStyle = 'rgba(255,255,255,0.06)';
   roundRect(ctx, pad, y, W - pad * 2, bH, 12);
@@ -695,7 +701,6 @@ window.shareScore = async function () {
     y += 34;
   });
 
-  // Divider + total
   ctx.strokeStyle = 'rgba(255,255,255,0.15)';
   ctx.lineWidth   = 1;
   ctx.beginPath(); ctx.moveTo(pad + 16, y); ctx.lineTo(W - pad - 16, y); ctx.stroke();
@@ -706,7 +711,6 @@ window.shareScore = async function () {
   ctx.fillText(d.score || '0', W - pad - 16, y + 4);
   y += 40;
 
-  // Tomorrow box
   if (tomorrow) {
     ctx.fillStyle = 'rgba(45,212,191,0.1)';
     roundRect(ctx, pad, y, W - pad * 2, 58, 12);
@@ -718,7 +722,6 @@ window.shareScore = async function () {
     y += 66;
   }
 
-  // CTA footer
   ctx.fillStyle = 'rgba(45,212,191,0.12)';
   roundRect(ctx, pad, y, W - pad * 2, 58, 12);
   ctx.textAlign = 'center';
@@ -737,7 +740,6 @@ window.shareScore = async function () {
         return;
       } catch (e) { if (e.name === 'AbortError') return; }
     }
-    // Fallback: download
     const url = URL.createObjectURL(blob);
     const a   = document.createElement('a');
     a.href = url; a.download = 'crickingo-builder.png';
