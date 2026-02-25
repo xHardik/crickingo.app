@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transfer History - Crickingo</title>
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #060810;
+      --surface: rgba(255,255,255,0.04);
+      --surface-raised: rgba(255,255,255,0.07);
+      --border: rgba(255,255,255,0.08);
+      --border-raised: rgba(255,255,255,0.11);
+      --accent: #F7C344;
+      --accent2: #E84040;
+      --accent3: #4F8EF7;
+      --text: #F2F2F2;
+      --muted: rgba(242,242,242,0.5);
+      --card-radius: 16px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .bg-layer {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 60% at 10% 0%,  rgba(247,195,68,0.08)  0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 90% 100%, rgba(79,142,247,0.07)  0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 50% 50%,  rgba(232,64,64,0.04)   0%, transparent 70%);
+    }
+    .bg-layer::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: repeating-linear-gradient(
+        -45deg, transparent, transparent 40px,
+        rgba(255,255,255,0.012) 40px, rgba(255,255,255,0.012) 41px
+      );
+    }
+
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; height: 64px;
+      background: rgba(6,8,16,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 0 40px rgba(79,142,247,0.15), 0 0 80px rgba(79,142,247,0.08);
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem; letter-spacing: 2px;
+      background: linear-gradient(90deg, var(--accent), #fff 60%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      text-decoration: none;
+    }
+
+    .nav-game-tag {
+      font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 2px;
+      color: var(--accent3);
+      background: rgba(79,142,247,0.1);
+      border: 1px solid rgba(79,142,247,0.25);
+      padding: 4px 12px; border-radius: 100px;
+    }
+
+    .nav-back {
+      display: flex; align-items: center; gap: 6px;
+      color: var(--muted); text-decoration: none;
+      font-size: 0.88rem; font-weight: 500;
+      transition: color 0.2s, transform 0.2s;
+    }
+    .nav-back:hover { color: var(--text); transform: translateX(-3px); }
+
+    .page {
+      position: relative; z-index: 1;
+      max-width: 1000px; margin: 0 auto;
+      padding: 40px 40px 80px;
+    }
+
+    .page-header { margin-bottom: 28px; animation: fadeUp 0.6s ease both; }
+    .page-header h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      letter-spacing: 1px; line-height: 1; margin-bottom: 6px;
+    }
+    .page-header p { color: var(--muted); font-size: 0.9rem; }
+
+    .puzzle-bar {
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 28px; padding: 10px 18px;
+      background: rgba(79,142,247,0.05);
+      border: 1px solid rgba(79,142,247,0.12);
+      border-radius: 12px; width: fit-content;
+      animation: fadeUp 0.6s ease 0.05s both;
+    }
+    .puzzle-bar-item { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: var(--muted); }
+    .puzzle-bar-item strong { color: var(--accent3); font-weight: 700; }
+    .puzzle-bar-sep { width: 1px; height: 14px; background: var(--border); }
+
+    .game-info { margin-bottom: 20px; animation: fadeUp 0.6s ease 0.1s both; }
+
+    .player-box {
+      background: var(--surface-raised); border: 1px solid var(--border-raised);
+      border-left: 3px solid var(--accent3); border-radius: var(--card-radius);
+      padding: 20px 24px; position: relative; overflow: hidden;
+    }
+    .player-box::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(90deg, rgba(79,142,247,0.06), transparent 60%);
+      pointer-events: none;
+    }
+
+    .player-info-row { display: flex; align-items: center; gap: 16px; }
+    .player-avatar {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: rgba(79,142,247,0.15); border: 2px solid rgba(79,142,247,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; flex-shrink: 0;
+    }
+    .player-info { flex: 1; min-width: 0; }
+    .player-name {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 1px;
+      line-height: 1; margin-bottom: 4px; position: relative; z-index: 1;
+    }
+    .player-count { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; position: relative; z-index: 1; }
+
+    .transfer-layout {
+      display: grid; grid-template-columns: 300px 1fr;
+      gap: 20px; margin-bottom: 20px;
+      animation: fadeUp 0.6s ease 0.15s both;
+      position: relative; z-index: 10;
+    }
+
+    .transfer-history {
+      background: var(--surface-raised); border: 1px solid var(--border-raised);
+      border-radius: var(--card-radius); padding: 22px;
+      max-height: 460px; overflow-y: auto;
+    }
+    .transfer-history::-webkit-scrollbar { width: 6px; }
+    .transfer-history::-webkit-scrollbar-thumb { background: rgba(79,142,247,0.3); border-radius: 6px; }
+    .transfer-history h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; color: var(--accent3); margin-bottom: 16px; }
+
+    .transfer-item {
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+      border-left: 3px solid rgba(79,142,247,0.5); border-radius: 12px;
+      padding: 14px 16px; margin-bottom: 10px;
+      transition: border-color 0.2s, transform 0.2s, background 0.2s;
+      animation: fadeUp 0.3s ease both;
+    }
+    .transfer-item:hover { border-left-color: var(--accent3); background: rgba(79,142,247,0.07); transform: translateX(4px); }
+    .transfer-item .year { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 1px; color: var(--accent); margin-bottom: 4px; }
+    .transfer-item .team { font-size: 0.88rem; color: var(--text); }
+
+    .guess-area {
+      background: var(--surface-raised); border: 1px solid var(--border-raised);
+      border-radius: var(--card-radius); padding: 28px;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      min-height: 460px; position: relative; overflow: visible;
+    }
+    .guess-area::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(79,142,247,0.04), transparent 60%);
+      pointer-events: none; border-radius: var(--card-radius);
+      z-index: 0;
+    }
+    .guess-area h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; color: var(--text); margin-bottom: 22px; position: relative; z-index: 1; }
+
+    .search-wrapper { width: 100%; max-width: 420px; position: relative; z-index: 9999; isolation: isolate; }
+    .search-input {
+      width: 100%; padding: 14px 18px;
+      font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
+      background: rgba(255,255,255,0.06); border: 1px solid var(--border-raised);
+      border-radius: var(--card-radius); color: var(--text);
+      transition: border-color 0.2s, box-shadow 0.2s; margin-bottom: 16px;
+    }
+    .search-input::placeholder { color: var(--muted); }
+    .search-input:focus { outline: none; border-color: var(--accent3); box-shadow: 0 0 0 3px rgba(79,142,247,0.12); }
+
+    .dropdown-list {
+      position: absolute; width: 100%;
+      max-height: 260px; overflow-y: auto;
+      background: #0b0e1a;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      border: 1px solid rgba(79,142,247,0.4);
+      border-radius: var(--card-radius);
+      box-shadow: 0 20px 60px rgba(0,0,0,1), 0 0 0 1px rgba(79,142,247,0.15);
+      z-index: 99999; display: none; top: 60px;
+    }
+    .dropdown-list::-webkit-scrollbar { width: 6px; }
+    .dropdown-list::-webkit-scrollbar-thumb { background: rgba(79,142,247,0.3); border-radius: 6px; }
+    .dropdown-list.active { display: block; animation: dropDown 0.2s ease; }
+    @keyframes dropDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+    .dropdown-item { padding: 12px 16px; cursor: pointer; color: var(--text); font-size: 0.9rem; border-bottom: 1px solid rgba(255,255,255,0.06); transition: background 0.15s, padding-left 0.15s; background: #0b0e1a; }
+    .dropdown-item:hover { background: #131b36; padding-left: 20px; }
+    .dropdown-item:last-child { border-bottom: none; }
+    .no-results { padding: 14px 16px; color: var(--muted); font-size: 0.88rem; text-align: center; background: #0b0e1a; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 20px; border: none; border-radius: 10px;
+      font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 700;
+      cursor: pointer; transition: all 0.25s ease;
+      text-transform: uppercase; letter-spacing: 0.5px; text-decoration: none;
+    }
+
+    .guess-btn {
+      background: var(--accent3); color: #fff; font-weight: 800;
+      font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
+      padding: 14px 40px; border: none; border-radius: 12px;
+      cursor: pointer; transition: all 0.25s ease;
+      position: relative; overflow: hidden; z-index: 0;
+      box-shadow: 0 6px 20px rgba(79,142,247,0.3);
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+    .guess-btn:hover { background: #70a8ff; transform: translateY(-2px); box-shadow: 0 10px 28px rgba(79,142,247,0.45); }
+
+    .btn-skip { background: rgba(247,195,68,0.15); color: var(--accent); border: 1px solid rgba(247,195,68,0.3); }
+    .btn-skip:hover { background: rgba(247,195,68,0.25); border-color: rgba(247,195,68,0.5); transform: translateY(-2px); }
+    .btn-restart { background: rgba(61,214,140,0.15); color: #3DD68C; border: 1px solid rgba(61,214,140,0.3); }
+    .btn-restart:hover { background: rgba(61,214,140,0.25); transform: translateY(-2px); }
+    .btn-back { background: var(--surface); color: var(--muted); border: 1px solid var(--border); }
+    .btn-back:hover { color: var(--text); border-color: rgba(255,255,255,0.2); transform: translateY(-2px); }
+
+    .btn-share {
+      background: linear-gradient(135deg, rgba(79,142,247,0.2), rgba(168,85,247,0.2));
+      color: var(--accent3); border: 1px solid rgba(79,142,247,0.35);
+      position: relative; overflow: hidden;
+    }
+    .btn-share:hover {
+      background: linear-gradient(135deg, rgba(79,142,247,0.3), rgba(168,85,247,0.3));
+      border-color: rgba(79,142,247,0.6); transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(79,142,247,0.2);
+    }
+    .share-copied {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(61,214,140,0.9); color: #000; font-weight: 800; font-size: 0.8rem;
+      border-radius: 10px; opacity: 0; pointer-events: none; transition: opacity 0.2s;
+    }
+    .share-copied.show { opacity: 1; }
+
+    .button-controls {
+      display: flex; gap: 14px; flex-wrap: wrap;
+      justify-content: center; margin-bottom: 20px;
+      animation: fadeUp 0.6s ease 0.2s both;
+      position: relative; z-index: 0;
+    }
+    .button-controls .btn { padding: 14px 32px; font-size: 0.95rem; border-radius: 12px; min-width: 160px; justify-content: center; }
+
+    .feedback {
+      margin-top: 20px; padding: 14px 20px; border-radius: 12px;
+      font-size: 0.95rem; font-weight: 700; text-align: center;
+      display: none; animation: fadeUp 0.3s ease; position: relative; z-index: 1;
+    }
+    .feedback.correct { display: block; background: rgba(61,214,140,0.1); color: #3DD68C; border: 1px solid rgba(61,214,140,0.4); }
+    .feedback.wrong   { display: block; background: rgba(232,64,64,0.1); color: #ff8080; border: 1px solid rgba(232,64,64,0.4); }
+
+    .attempts { margin-top: 12px; color: var(--muted); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 1px; position: relative; z-index: 1; }
+
+    .result-card {
+      display: none; background: var(--surface-raised); border: 1px solid var(--border-raised);
+      border-radius: 20px; padding: 48px 40px; text-align: center;
+      animation: fadeUp 0.5s ease; position: relative; overflow: hidden; margin-top: 20px;
+    }
+    .result-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--accent3), var(--accent), var(--accent2));
+    }
+    .result-title { font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem; letter-spacing: 2px; margin-bottom: 8px; }
+    .result-score {
+      font-family: 'Bebas Neue', sans-serif; font-size: 5rem; letter-spacing: 2px;
+      background: linear-gradient(135deg, var(--accent3), #a0d0ff);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      line-height: 1; margin: 16px 0;
+      filter: drop-shadow(0 0 20px rgba(79,142,247,0.4));
+      animation: scorePulse 2s ease-in-out infinite;
+    }
+    @keyframes scorePulse {
+      0%,100% { filter: drop-shadow(0 0 20px rgba(79,142,247,0.4)); }
+      50%      { filter: drop-shadow(0 0 40px rgba(79,142,247,0.7)); }
+    }
+    .result-phrase { color: var(--muted); font-size: 1rem; margin-bottom: 32px; }
+    .result-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+    .modal-overlay { display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.8); backdrop-filter: blur(12px); justify-content: center; align-items: center; }
+    .modal-overlay.active { display: flex; }
+    .modal-box {
+      background: #0d1120; border: 1px solid rgba(79,142,247,0.2);
+      border-radius: 24px; padding: 48px 40px;
+      max-width: 560px; width: 90%; max-height: 88vh; overflow-y: auto;
+      position: relative; animation: modalUp 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+    .modal-box::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--accent3), var(--accent), var(--accent2));
+      border-radius: 24px 24px 0 0;
+    }
+    @keyframes modalUp { from { opacity: 0; transform: translateY(32px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    .modal-box::-webkit-scrollbar { width: 6px; }
+    .modal-box::-webkit-scrollbar-thumb { background: rgba(79,142,247,0.3); border-radius: 6px; }
+    .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 2.4rem; letter-spacing: 2px; text-align: center; margin-bottom: 28px; }
+    .rules-list { list-style: none; margin-bottom: 24px; display: flex; flex-direction: column; gap: 10px; }
+    .rules-list li { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid rgba(79,142,247,0.5); border-radius: 12px; padding: 14px 18px; font-size: 0.92rem; line-height: 1.6; color: var(--text); transition: border-color 0.2s, transform 0.2s; }
+    .rules-list li:hover { border-left-color: var(--accent3); transform: translateX(4px); }
+    .rule-icon { margin-right: 10px; }
+    .scoring-box { background: rgba(79,142,247,0.06); border: 1px solid rgba(79,142,247,0.2); border-radius: 14px; padding: 20px; margin-bottom: 24px; }
+    .scoring-box h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 1px; color: var(--accent3); margin-bottom: 14px; text-align: center; }
+    .scoring-item { display: flex; justify-content: space-between; padding: 8px 0; font-size: 0.88rem; border-bottom: 1px solid var(--border); }
+    .scoring-item:last-child { border-bottom: none; }
+    .scoring-value { color: var(--accent3); font-weight: 700; }
+    .btn-primary { background: var(--accent3); color: #fff; font-weight: 800; width: 100%; justify-content: center; padding: 14px 20px; font-size: 0.95rem; border-radius: 12px; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; text-transform: uppercase; letter-spacing: 1px; transition: all 0.25s ease; display: flex; align-items: center; }
+    .btn-primary:hover { background: #70a8ff; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(79,142,247,0.3); }
+
+    /* ── BOTTOM DASHBOARD ── */
+    .bottom-dashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 40px; animation: fadeUp 0.6s ease 0.3s both; }
+    .dashboard-card { background: var(--surface-raised); border: 1px solid var(--border-raised); border-radius: var(--card-radius); padding: 22px 24px; position: relative; overflow: hidden; }
+    .dashboard-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(79,142,247,0.04), transparent 60%); pointer-events: none; }
+    .dashboard-card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 18px; }
+    .dashboard-icon { font-size: 1.1rem; }
+    .dashboard-label { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; color: var(--accent3); }
+
+    .streak-dots {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      grid-template-rows: repeat(3, 44px);
+      gap: 5px; margin-bottom: 14px;
+    }
+    .streak-dot {
+      width: 100%; height: 44px; border-radius: 7px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 2px; position: relative;
+      transition: transform 0.15s; cursor: default;
+    }
+    .streak-dot:hover { transform: translateY(-2px); }
+    .streak-dot .dot-pip { display: none; }
+    .streak-dot .dot-score-val {
+      font-size: 0.65rem; font-weight: 800; line-height: 1;
+      color: #3DD68C; letter-spacing: 0;
+    }
+    .streak-dot.miss .dot-score-val,
+    .streak-dot.today-pending .dot-score-val { display: none; }
+    .streak-dot.today-played .dot-score-val { color: var(--accent3); }
+
+    .streak-dot.win          { background: rgba(61,214,140,0.2);  border: 1px solid rgba(61,214,140,0.45); }
+    .streak-dot.miss         { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); }
+    .streak-dot.today-played { background: rgba(79,142,247,0.2);  border: 2px solid var(--accent3); box-shadow: 0 0 8px rgba(79,142,247,0.3); }
+    .streak-dot.today-pending{ background: rgba(247,195,68,0.08); border: 2px dashed rgba(247,195,68,0.35); }
+
+    .streak-legend { display: flex; gap: 14px; font-size: 0.72rem; color: var(--muted); align-items: center; flex-wrap: wrap; }
+    .dot-sample { display: inline-block; width: 10px; height: 6px; border-radius: 2px; margin-right: 4px; vertical-align: middle; }
+    .dot-sample.dot-win   { background: rgba(61,214,140,0.5);  border: 1px solid #3DD68C; }
+    .dot-sample.dot-miss  { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); }
+    .dot-sample.dot-today { background: rgba(79,142,247,0.4);   border: 1px solid var(--accent3); }
+
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .stat-item { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; padding: 14px 12px; text-align: center; transition: border-color 0.2s, background 0.2s; }
+    .stat-item:hover { border-color: rgba(79,142,247,0.25); background: rgba(79,142,247,0.04); }
+    .stat-value { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 1px; background: linear-gradient(135deg, var(--accent3), #a0d0ff 80%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; margin-bottom: 4px; }
+    .stat-name { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 0 16px; }
+      .nav-back { display: none; } /* hidden on mobile */
+      .page { padding: 20px 16px 60px; }
+      .page-header h1 { font-size: 1.8rem; }
+      .puzzle-bar { flex-wrap: wrap; gap: 8px; padding: 8px 14px; }
+      .player-box { padding: 16px 18px; }
+      .player-name { font-size: 1.4rem; }
+      .transfer-layout { grid-template-columns: 1fr; gap: 12px; }
+      .transfer-history { max-height: 260px; padding: 18px; }
+      .guess-area { min-height: auto; padding: 22px 18px; }
+      .button-controls { gap: 8px; }
+      .button-controls .btn { flex: 1; justify-content: center; }
+      .result-card { padding: 28px 18px; }
+      .result-title { font-size: 2rem; }
+      .result-score { font-size: 3.2rem; }
+      .result-actions { gap: 8px; }
+      .modal-box { padding: 28px 18px; }
+      .modal-title { font-size: 1.8rem; }
+      .bottom-dashboard { grid-template-columns: 1fr; gap: 12px; }
+      .streak-dots { gap: 3px; }
+      .streak-dot { height: 40px; }
+    }
+
+    @media (max-width: 480px) {
+      .page { padding: 14px 12px 56px; }
+      .player-name { font-size: 1.2rem; }
+      .player-avatar { width: 44px; height: 44px; font-size: 1.2rem; }
+      .guess-area { padding: 18px 14px; }
+      .guess-area h3 { font-size: 1.1rem; margin-bottom: 16px; }
+      .guess-btn { width: 100%; padding: 14px 20px; }
+      .result-actions { flex-direction: column; align-items: stretch; }
+      .result-actions .btn { width: 100%; justify-content: center; }
+      .button-controls { flex-direction: column; align-items: stretch; }
+      .button-controls .btn { width: 100%; min-width: unset; padding: 14px 20px; }
+      .transfer-item { padding: 12px 14px; }
+      .transfer-item .year { font-size: 1rem; }
+      .transfer-item .team { font-size: 0.82rem; }
+      .streak-dots { gap: 2px; }
+      .streak-dot { height: 36px; }
+      .streak-dot .dot-score-val { font-size: 0.55rem; }
+      .stat-value { font-size: 1.5rem; }
+    }
+
+    @media (max-width: 380px) {
+      .player-name { font-size: 1.1rem; }
+      .result-score { font-size: 2.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-layer"></div>
+
+  <!-- MODAL -->
+  <div id="rulesModal" class="modal-overlay" style="display:none;">
+    <div class="modal-box">
+      <h2 class="modal-title">🔄 How to Play</h2>
+      <ul class="rules-list">
+        <li><span class="rule-icon">📜</span>Look at a player's IPL transfer history (teams &amp; years)</li>
+        <li><span class="rule-icon">🔍</span>Search and select the player's name from the dropdown</li>
+        <li><span class="rule-icon">✅</span>Submit your guess to see if you're correct</li>
+        <li><span class="rule-icon">🔥</span>Build a streak by guessing correctly in a row for bonus points!</li>
+        <li><span class="rule-icon">⏭️</span>Skip if you don't know (but you'll lose your streak)</li>
+        <li><span class="rule-icon">🏆</span>Guess all 3 players correctly to maximise your score!</li>
+      </ul>
+      <div class="scoring-box">
+        <h3>💰 Scoring System (Max: 1000 pts)</h3>
+        <div class="scoring-item"><span>1st Correct Guess</span><span class="scoring-value">+250 pts</span></div>
+        <div class="scoring-item"><span>2nd Correct (Streak Bonus)</span><span class="scoring-value">+300 pts</span></div>
+        <div class="scoring-item"><span>3rd Correct (Streak Bonus)</span><span class="scoring-value">+350 pts</span></div>
+        <div class="scoring-item"><span>Perfect Completion (3/3)</span><span class="scoring-value">+100 pts</span></div>
+      </div>
+      <button class="btn-primary" onclick="closeRulesModal()">🚀 Start Playing</button>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo">🏏 Crickingo</a>
+    <span class="nav-game-tag">🔄 Transfer History</span>
+  </nav>
+
+  <!-- PAGE -->
+  <main class="page">
+
+    <div class="page-header">
+      <h1 id="gameTitle">Transfer History</h1>
+      <p id="gameSubtitle">Guess the player from their IPL journey</p>
+    </div>
+
+    <div class="puzzle-bar">
+      <div class="puzzle-bar-item">📅 <strong id="puzzleDate">—</strong></div>
+      <div class="puzzle-bar-sep"></div>
+      <div class="puzzle-bar-item">🧩 Puzzle <strong id="puzzleNumber">#—</strong></div>
+    </div>
+
+    <div class="game-info">
+      <div class="player-box">
+        <div class="player-info-row">
+          <div class="player-avatar">🔄</div>
+          <div class="player-info">
+            <div class="player-name" id="currentPlayer">Loading...</div>
+            <div class="player-count" id="playerCount">Player 1 of 3</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="transfer-layout">
+      <div class="transfer-history">
+        <h3>📋 Transfer History</h3>
+        <div id="transferList"></div>
+      </div>
+      <div class="guess-area">
+        <h3>Who is this player?</h3>
+        <div class="search-wrapper">
+          <input type="text" id="searchInput" class="search-input" placeholder="🔍 Type to search player..." autocomplete="off">
+          <div id="dropdownList" class="dropdown-list"></div>
+        </div>
+        <button class="guess-btn" onclick="submitGuess()">Submit Guess</button>
+        <div id="feedback" class="feedback"></div>
+        <div id="attempts" class="attempts"></div>
+      </div>
+    </div>
+
+    <div class="button-controls" id="gameControls">
+      <button class="btn btn-skip" onclick="skipTransferPlayer()">⏭ Skip Player</button>
+      <button class="btn btn-restart" onclick="restartGame()">↺ Restart</button>
+      <button class="btn btn-back" onclick="backToMenu()">← Home</button>
+    </div>
+
+    <div id="resultArea" class="result-card" style="display:none;">
+      <div class="result-title">Game Over!</div>
+      <div class="result-score" id="scoreText"></div>
+      <div class="result-phrase" id="resultPhrase"></div>
+      <div id="shareFooter" style="display:none; margin: 16px 0 8px; padding: 16px 20px; background: rgba(79,142,247,0.08); border: 1px solid rgba(79,142,247,0.2); border-radius: 12px; text-align: center;">
+        <div style="font-size: 1rem; font-weight: 700; color: #4F8EF7; margin-bottom: 4px;">🏏 Can you beat me at Crickingo?</div>
+        <div style="font-size: 0.85rem; color: rgba(242,242,242,0.6); letter-spacing: 0.5px;">crickingo.vercel.app</div>
+      </div>
+      <div class="result-actions">
+        <button class="btn btn-restart" onclick="restartGame()">↺ Play Again</button>
+        <button class="btn btn-share" onclick="shareScore()" id="shareBtn">
+          📤 Share Score
+          <span class="share-copied" id="shareCopied">✓ Saved!</span>
+        </button>
+        <button class="btn btn-back" onclick="backToMenu()">← Home</button>
+      </div>
+    </div>
+
+    <!-- BOTTOM DASHBOARD -->
+    <div class="bottom-dashboard" id="bottomDashboard">
+      <div class="dashboard-card">
+        <div class="dashboard-card-header">
+          <span class="dashboard-icon">📅</span>
+          <span class="dashboard-label">Last 30 Days</span>
+        </div>
+        <div class="streak-dots" id="streakDots"></div>
+        <div class="streak-legend">
+          <span><span class="dot-sample dot-win"></span> Played</span>
+          <span><span class="dot-sample dot-miss"></span> Missed</span>
+          <span><span class="dot-sample dot-today"></span> Today</span>
+        </div>
+      </div>
+      <div class="dashboard-card">
+        <div class="dashboard-card-header">
+          <span class="dashboard-icon">📊</span>
+          <span class="dashboard-label">Your Stats</span>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-item"><div class="stat-value" id="statPlayed">—</div><div class="stat-name">Played</div></div>
+          <div class="stat-item"><div class="stat-value" id="statBest">—</div><div class="stat-name">Best Score</div></div>
+          <div class="stat-item"><div class="stat-value" id="statAvg">—</div><div class="stat-name">Avg Score</div></div>
+          <div class="stat-item"><div class="stat-value" id="statStreak">—</div><div class="stat-name">Day Streak</div></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams  = new URLSearchParams(window.location.search);
+      const dateParam  = urlParams.get('date');
+      const puzzleDate = dateParam ? new Date(dateParam + 'T00:00:00') : new Date();
+      const dateStr = puzzleDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+      const dateEl  = document.getElementById('puzzleDate');
+      if (dateEl) dateEl.textContent = dateStr;
+      const launch = new Date('2026-02-01T00:00:00');
+      const diff   = Math.floor((puzzleDate - launch) / (1000 * 60 * 60 * 24)) + 1;
+      const numEl  = document.getElementById('puzzleNumber');
+      if (numEl) numEl.textContent = '#' + diff;
+    });
+
+    window._shareData = {};
+
+    window.shareScore = async function() {
+      const shareBtn    = document.getElementById('shareBtn');
+      const shareCopied = document.getElementById('shareCopied');
+      if (shareBtn) shareBtn.style.opacity = '0.6';
+      const d = window._shareData || {};
+      const score     = d.score     || document.getElementById('scoreText')?.innerText || '0 / 1000';
+      const phrase    = d.phrase    || '';
+      const breakdown = d.breakdown || [];
+      const tomorrow  = d.tomorrow  || '';
+      const W = 600, pad = 44;
+      let H = 560 + breakdown.length * 36 + (tomorrow ? 80 : 0);
+      const canvas = document.createElement('canvas');
+      canvas.width  = W * 2; canvas.height = H * 2;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(2, 2);
+      ctx.fillStyle = '#0d1120';
+      ctx.fillRect(0, 0, W, H);
+      const grad = ctx.createLinearGradient(0, 0, W, 0);
+      grad.addColorStop(0,   '#4F8EF7');
+      grad.addColorStop(0.5, '#F7C344');
+      grad.addColorStop(1,   '#E84040');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, W, 3);
+      ctx.fillStyle = 'rgba(255,255,255,0.06)';
+      roundRect(ctx, 0, 3, W, H - 3, 0);
+      let y = pad + 16;
+      ctx.font = 'bold 36px "Arial Black", Arial';
+      ctx.fillStyle = '#F2F2F2';
+      ctx.textAlign = 'center';
+      ctx.fillText('GAME OVER!', W/2, y); y += 44;
+      ctx.fillStyle = 'rgba(79,142,247,0.25)';
+      roundRect(ctx, pad, y, W - pad*2, 64, 12);
+      ctx.fillStyle = '#4F8EF7';
+      ctx.font = 'bold 40px "Arial Black", Arial';
+      ctx.fillText(score, W/2, y + 44); y += 80;
+      ctx.font = '16px Arial';
+      ctx.fillStyle = 'rgba(242,242,242,0.6)';
+      ctx.fillText(phrase, W/2, y); y += 36;
+      ctx.fillStyle = 'rgba(255,255,255,0.06)';
+      const bH = 40 + breakdown.length * 34 + 54;
+      roundRect(ctx, pad, y, W - pad*2, bH, 12);
+      ctx.font = 'bold 15px Arial';
+      ctx.fillStyle = '#F2F2F2';
+      ctx.fillText('📊 Score Breakdown', W/2, y + 28); y += 44;
+      breakdown.forEach(row => {
+        ctx.textAlign = 'left'; ctx.font = '14px Arial'; ctx.fillStyle = 'rgba(242,242,242,0.8)';
+        ctx.fillText(row.label, pad + 16, y + 16);
+        ctx.textAlign = 'right'; ctx.fillStyle = row.color || '#4F8EF7';
+        ctx.fillText(row.value, W - pad - 16, y + 16); y += 34;
+      });
+      ctx.strokeStyle = 'rgba(255,255,255,0.15)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(pad + 16, y); ctx.lineTo(W - pad - 16, y); ctx.stroke();
+      y += 20;
+      ctx.textAlign = 'left'; ctx.font = 'bold 18px Arial'; ctx.fillStyle = '#F2F2F2';
+      ctx.fillText('Total:', pad + 16, y + 4);
+      ctx.textAlign = 'right'; ctx.fillStyle = '#4F8EF7';
+      ctx.fillText(d.score?.split('/')[0]?.trim() || '0', W - pad - 16, y + 4); y += 40;
+      if (tomorrow) {
+        ctx.fillStyle = 'rgba(79,142,247,0.1)';
+        roundRect(ctx, pad, y, W - pad*2, 58, 12);
+        ctx.textAlign = 'center'; ctx.font = '12px Arial';
+        ctx.fillStyle = 'rgba(242,242,242,0.5)'; ctx.fillText('📅 Next Puzzle', W/2, y + 20);
+        ctx.font = 'bold 15px Arial'; ctx.fillStyle = '#4F8EF7';
+        ctx.fillText('Come back tomorrow · ' + tomorrow, W/2, y + 42); y += 66;
+      }
+      ctx.fillStyle = 'rgba(79,142,247,0.12)';
+      roundRect(ctx, pad, y, W - pad*2, 58, 12);
+      ctx.textAlign = 'center'; ctx.font = 'bold 16px Arial';
+      ctx.fillStyle = '#4F8EF7'; ctx.fillText('🏏 Can you beat me at Crickingo?', W/2, y + 24);
+      ctx.font = '13px Arial'; ctx.fillStyle = 'rgba(242,242,242,0.5)';
+      ctx.fillText('crickingo.vercel.app', W/2, y + 44);
+      if (shareBtn) shareBtn.style.opacity = '1';
+      canvas.toBlob(async (blob) => {
+        const file = new File([blob], 'crickingo-transfer.png', { type: 'image/png' });
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          try { await navigator.share({ files: [file], text: 'Can you beat me at Crickingo? 🏏\ncrickingo.vercel.app' }); return; }
+          catch (e) { if (e.name === 'AbortError') return; }
+        }
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'crickingo-transfer.png';
+        document.body.appendChild(a); a.click();
+        document.body.removeChild(a); URL.revokeObjectURL(url);
+        if (shareCopied) { shareCopied.classList.add('show'); setTimeout(() => shareCopied.classList.remove('show'), 2000); }
+      }, 'image/png');
+    };
+
+    function roundRect(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath(); ctx.fill();
+    }
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script type="module" src="transfer.js"></script>
+</body>
+</html>

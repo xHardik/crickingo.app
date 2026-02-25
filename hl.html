@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script type="module" src="hl.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Higher or Lower - Crickingo</title>
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+
+    /* ─────────────────────────────────────────
+       DESIGN TOKENS
+    ───────────────────────────────────────── */
+    :root {
+      --bg:            #060810;
+      --surface:       rgba(255, 255, 255, 0.04);
+      --surface-raised:rgba(255, 255, 255, 0.07);
+      --border:        rgba(255, 255, 255, 0.08);
+      --border-raised: rgba(255, 255, 255, 0.11);
+      --accent:        #F7C344;
+      --accent2:       #E84040;
+      --accent3:       #4F8EF7;
+      --green:         #3DD68C;
+      --orange:        #ffa400;
+      --text:          #F2F2F2;
+      --muted:         rgba(242, 242, 242, 0.5);
+      --card-radius:   16px;
+    }
+
+    /* ─────────────────────────────────────────
+       RESET
+    ───────────────────────────────────────── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ─────────────────────────────────────────
+       BACKGROUND DECORATION
+    ───────────────────────────────────────── */
+    .bg-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 60% at 10% 0%,   rgba(232, 64,  64,  0.09) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 90% 100%,  rgba(247, 195, 68,  0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 50% 50%,   rgba(79,  142, 247, 0.05) 0%, transparent 70%);
+    }
+
+    .bg-layer::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        -45deg,
+        transparent, transparent 40px,
+        rgba(255, 255, 255, 0.012) 40px, rgba(255, 255, 255, 0.012) 41px
+      );
+    }
+
+    /* ─────────────────────────────────────────
+       NAVIGATION
+    ───────────────────────────────────────── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 64px;
+      background: rgba(6, 8, 16, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 0 40px rgba(232, 64, 64, 0.1), 0 0 80px rgba(232, 64, 64, 0.05);
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 2px;
+      background: linear-gradient(90deg, var(--accent), #fff 60%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+    }
+
+    .nav-game-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent2);
+      background: rgba(232, 64, 64, 0.1);
+      border: 1px solid rgba(232, 64, 64, 0.25);
+      padding: 4px 12px;
+      border-radius: 100px;
+    }
+
+    .nav-back {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .nav-back:hover {
+      color: var(--text);
+      transform: translateX(-3px);
+    }
+
+    /* ─────────────────────────────────────────
+       PAGE LAYOUT
+    ───────────────────────────────────────── */
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 40px 80px;
+    }
+
+    /* ─────────────────────────────────────────
+       PAGE HEADER
+    ───────────────────────────────────────── */
+    .page-header {
+      margin-bottom: 28px;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .page-header h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      letter-spacing: 1px;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .page-header p {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    /* ─────────────────────────────────────────
+       PUZZLE BAR
+    ───────────────────────────────────────── */
+    .puzzle-bar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+      padding: 10px 18px;
+      background: rgba(232, 64, 64, 0.05);
+      border: 1px solid rgba(232, 64, 64, 0.12);
+      border-radius: 12px;
+      width: fit-content;
+      animation: fadeUp 0.6s ease 0.05s both;
+    }
+
+    .puzzle-bar-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .puzzle-bar-item strong {
+      color: var(--accent2);
+      font-weight: 700;
+    }
+
+    .puzzle-bar-sep {
+      width: 1px;
+      height: 14px;
+      background: var(--border);
+    }
+
+    /* ─────────────────────────────────────────
+       SCORE ROW
+    ───────────────────────────────────────── */
+    .score-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      animation: fadeUp 0.6s ease 0.1s both;
+    }
+
+    .score-card {
+      flex: 1;
+      background: var(--surface-raised);
+      border: 1px solid var(--border-raised);
+      border-radius: var(--card-radius);
+      padding: 16px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .score-card.current { border-left: 3px solid var(--accent2); }
+    .score-card.best    { border-left: 3px solid var(--accent); }
+
+    .score-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .score-card.current::before { background: linear-gradient(90deg, rgba(232, 64, 64, 0.06), transparent 60%); }
+    .score-card.best::before    { background: linear-gradient(90deg, rgba(247, 195, 68, 0.06), transparent 60%); }
+
+    .score-label {
+      font-size: 0.68rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .score-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.2rem;
+      letter-spacing: 1px;
+      line-height: 1;
+    }
+
+    .score-card.current .score-value {
+      background: linear-gradient(135deg, var(--accent2), #ff8080);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .score-card.best .score-value {
+      background: linear-gradient(135deg, var(--accent), #ffd700);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ─────────────────────────────────────────
+       GAME AREA — PLAYER CARDS
+    ───────────────────────────────────────── */
+    .game-area {
+      display: grid;
+      grid-template-columns: 1fr 80px 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+      align-items: center;
+      animation: fadeUp 0.6s ease 0.15s both;
+    }
+
+    .player-card {
+      background: var(--surface-raised);
+      border: 1px solid var(--border-raised);
+      border-radius: 20px;
+      padding: 36px 28px;
+      min-height: 380px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .player-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(79, 142, 247, 0.06), transparent 60%);
+      pointer-events: none;
+    }
+
+    .player-card.left { border-left: 3px solid var(--accent3); }
+    .player-card.left::before { background: linear-gradient(135deg, rgba(79, 142, 247, 0.08), transparent 60%); }
+
+    .player-card.correct {
+      border-color: var(--green);
+      box-shadow: 0 0 32px rgba(61, 214, 140, 0.2);
+      animation: correctPop 0.5s ease;
+    }
+
+    .player-card.wrong {
+      border-color: var(--accent2);
+      box-shadow: 0 0 32px rgba(232, 64, 64, 0.25);
+      animation: wrongShake 0.5s ease;
+    }
+
+    .player-emoji {
+      font-size: 3.2rem;
+      animation: floatEmoji 3s ease-in-out infinite;
+    }
+
+    .player-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.7rem;
+      letter-spacing: 1px;
+      line-height: 1;
+    }
+
+    .player-stat-type {
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 700;
+    }
+
+    .player-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      letter-spacing: 1px;
+      background: linear-gradient(135deg, var(--accent), #ffd700);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 16px rgba(247, 195, 68, 0.3));
+    }
+
+    .hidden-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      letter-spacing: 6px;
+      color: rgba(255, 255, 255, 0.2);
+    }
+
+    .vs-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 3px;
+      color: rgba(255, 255, 255, 0.3);
+      position: relative;
+    }
+
+    .vs-divider::before,
+    .vs-divider::after {
+      content: '';
+      position: absolute;
+      width: 1px;
+      height: 50px;
+      background: linear-gradient(to bottom, transparent, var(--border), transparent);
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .vs-divider::before { left: -16px; }
+    .vs-divider::after  { right: -16px; }
+
+    /* ─────────────────────────────────────────
+       RESULT MESSAGE (inline feedback)
+    ───────────────────────────────────────── */
+    .result-message {
+      border-radius: 12px;
+      padding: 14px 20px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-align: center;
+      border: 1px solid;
+      display: none;
+      margin-bottom: 16px;
+      animation: fadeUp 0.3s ease;
+    }
+
+    .result-message.show    { display: block; }
+    .result-message.correct { background: rgba(61, 214, 140, 0.1); color: var(--green); border-color: rgba(61, 214, 140, 0.4); }
+    .result-message.wrong   { background: rgba(232, 64, 64, 0.1);  color: #ff8080;      border-color: rgba(232, 64, 64, 0.4); }
+
+    /* ─────────────────────────────────────────
+       BUTTONS
+    ───────────────────────────────────────── */
+    .buttons {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      margin-bottom: 20px;
+      animation: fadeUp 0.6s ease 0.2s both;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 36px;
+      border: none;
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.1);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .btn:hover::before { opacity: 1; }
+
+    .btn-higher {
+      background: linear-gradient(135deg, #11998e, #3DD68C);
+      color: #000;
+      box-shadow: 0 6px 20px rgba(61, 214, 140, 0.3);
+    }
+
+    .btn-higher:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(61, 214, 140, 0.45);
+    }
+
+    .btn-lower {
+      background: linear-gradient(135deg, var(--accent2), #ff6a00);
+      color: #fff;
+      box-shadow: 0 6px 20px rgba(232, 64, 64, 0.3);
+    }
+
+    .btn-lower:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(232, 64, 64, 0.45);
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .btn-restart {
+      background: rgba(61, 214, 140, 0.15);
+      color: var(--green);
+      border: 1px solid rgba(61, 214, 140, 0.3);
+    }
+
+    .btn-restart:hover {
+      background: rgba(61, 214, 140, 0.25);
+      transform: translateY(-2px);
+    }
+
+    .btn-back {
+      background: var(--surface);
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .btn-back:hover {
+      color: var(--text);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .btn-share {
+      background: linear-gradient(135deg, rgba(79, 142, 247, 0.2), rgba(168, 85, 247, 0.2));
+      color: var(--accent3);
+      border: 1px solid rgba(79, 142, 247, 0.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-share:hover {
+      background: linear-gradient(135deg, rgba(79, 142, 247, 0.3), rgba(168, 85, 247, 0.3));
+      border-color: rgba(79, 142, 247, 0.6);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(79, 142, 247, 0.2);
+    }
+
+    .share-copied {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(61, 214, 140, 0.9);
+      color: #000;
+      font-weight: 800;
+      font-size: 0.8rem;
+      border-radius: 10px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+
+    .share-copied.show { opacity: 1; }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+      animation: fadeUp 0.6s ease 0.25s both;
+    }
+
+    /* ─────────────────────────────────────────
+       RESULT CARD (end-of-game)
+    ───────────────────────────────────────── */
+    .result-card {
+      display: none;
+      background: var(--surface-raised);
+      border: 1px solid var(--border-raised);
+      border-radius: 20px;
+      padding: 48px 40px;
+      text-align: center;
+      margin-bottom: 24px;
+      animation: fadeUp 0.5s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .result-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent2), var(--accent), var(--accent3));
+    }
+
+    .result-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.8rem;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    .result-score {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 5rem;
+      letter-spacing: 2px;
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin: 16px 0;
+      filter: drop-shadow(0 0 20px rgba(232, 64, 64, 0.4));
+      animation: scorePulse 2s ease-in-out infinite;
+    }
+
+    .result-phrase {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-bottom: 32px;
+    }
+
+    .result-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ─────────────────────────────────────────
+       RULES MODAL
+    ───────────────────────────────────────── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(12px);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-overlay.active { display: flex; animation: fadeIn 0.25s ease; }
+
+    .modal-box {
+      background: #0d1120;
+      border: 1px solid rgba(232, 64, 64, 0.2);
+      border-radius: 24px;
+      padding: 48px 40px;
+      max-width: 560px;
+      width: 90%;
+      max-height: 88vh;
+      overflow-y: auto;
+      position: relative;
+      animation: modalUp 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .modal-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent2), var(--accent), var(--accent3));
+      border-radius: 24px 24px 0 0;
+    }
+
+    .modal-box::-webkit-scrollbar { width: 6px; }
+    .modal-box::-webkit-scrollbar-thumb { background: rgba(232, 64, 64, 0.3); border-radius: 6px; }
+
+    .modal-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.4rem;
+      letter-spacing: 2px;
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .rules-list {
+      list-style: none;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .rules-list li {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid rgba(232, 64, 64, 0.5);
+      border-radius: 12px;
+      padding: 14px 18px;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: var(--text);
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .rules-list li:hover {
+      border-left-color: var(--accent2);
+      transform: translateX(4px);
+    }
+
+    .rule-icon { margin-right: 10px; }
+
+    .scoring-box {
+      background: rgba(247, 195, 68, 0.06);
+      border: 1px solid rgba(247, 195, 68, 0.2);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .scoring-box h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 1px;
+      color: var(--accent);
+      margin-bottom: 14px;
+      text-align: center;
+    }
+
+    .scoring-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      font-size: 0.88rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .scoring-item:last-child { border-bottom: none; }
+
+    .scoring-value {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .btn-primary {
+      background: var(--accent2);
+      color: #fff;
+      font-weight: 800;
+      width: 100%;
+      justify-content: center;
+      padding: 14px 20px;
+      font-size: 0.95rem;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+    }
+
+    .btn-primary:hover {
+      background: #ff6060;
+      transform: translateY(-2px);
+    }
+
+    /* ─────────────────────────────────────────
+       BOTTOM DASHBOARD
+    ───────────────────────────────────────── */
+    .bottom-dashboard {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 40px;
+      animation: fadeUp 0.6s ease 0.3s both;
+    }
+
+    .dashboard-card {
+      background: var(--surface-raised);
+      border: 1px solid var(--border-raised);
+      border-radius: var(--card-radius);
+      padding: 22px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dashboard-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(232, 64, 64, 0.04), transparent 60%);
+      pointer-events: none;
+    }
+
+    .dashboard-card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .dashboard-icon { font-size: 1.1rem; }
+
+    .dashboard-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+      color: var(--accent2);
+    }
+
+    /* streak dots grid */
+    .streak-dots {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      grid-template-rows: repeat(3, 44px);
+      gap: 4px;
+      margin-bottom: 14px;
+    }
+
+    .streak-dot {
+      width: 100%;
+      height: 44px;
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      position: relative;
+      transition: transform 0.15s;
+      cursor: default;
+    }
+
+    .streak-dot:hover { transform: translateY(-2px); }
+
+    .dot-score-val {
+      font-size: 0.65rem;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--green);
+      letter-spacing: 0;
+    }
+
+    .streak-dot.miss .dot-score-val,
+    .streak-dot.today-pending .dot-score-val { display: none; }
+
+    .streak-dot.today-played .dot-score-val { color: var(--accent2); }
+
+    .streak-dot.win {
+      background: rgba(61, 214, 140, 0.18);
+      border: 1px solid rgba(61, 214, 140, 0.45);
+    }
+
+    .streak-dot.miss {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .streak-dot.today-played {
+      background: rgba(232, 64, 64, 0.2);
+      border: 2px solid var(--accent2);
+      box-shadow: 0 0 8px rgba(232, 64, 64, 0.3);
+    }
+
+    .streak-dot.today-pending {
+      background: rgba(247, 195, 68, 0.08);
+      border: 2px dashed rgba(247, 195, 68, 0.35);
+    }
+
+    .streak-legend {
+      display: flex;
+      gap: 14px;
+      font-size: 0.72rem;
+      color: var(--muted);
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .dot-sample {
+      display: inline-block;
+      width: 10px;
+      height: 6px;
+      border-radius: 2px;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+
+    .dot-sample.dot-win   { background: rgba(61, 214, 140, 0.5); border: 1px solid var(--green); }
+    .dot-sample.dot-miss  { background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); }
+    .dot-sample.dot-today { background: rgba(232, 64, 64, 0.4); border: 1px solid var(--accent2); }
+
+    /* stats grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .stat-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 12px;
+      text-align: center;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .stat-item:hover {
+      border-color: rgba(232, 64, 64, 0.25);
+      background: rgba(232, 64, 64, 0.04);
+    }
+
+    .stat-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 1px;
+      background: linear-gradient(135deg, var(--accent2), #ff8080 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .stat-name {
+      font-size: 0.68rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+    }
+
+    /* ─────────────────────────────────────────
+       KEYFRAME ANIMATIONS
+    ───────────────────────────────────────── */
+    @keyframes fadeUp   { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn   { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes modalUp  { from { opacity: 0; transform: translateY(32px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes floatEmoji { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    @keyframes correctPop { 0%, 100% { transform: scale(1); } 40% { transform: scale(1.04); } }
+    @keyframes wrongShake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-10px); } 60% { transform: translateX(10px); } 80% { transform: translateX(-5px); } }
+    @keyframes scorePulse {
+      0%, 100% { filter: drop-shadow(0 0 20px rgba(232, 64, 64, 0.4)); }
+      50%       { filter: drop-shadow(0 0 40px rgba(232, 64, 64, 0.7)); }
+    }
+
+    /* ─────────────────────────────────────────
+       RESPONSIVE — TABLET
+    ───────────────────────────────────────── */
+    @media (max-width: 768px) {
+      nav { padding: 0 16px; }
+ .nav-back { display: none; } 
+      .page { padding: 20px 16px 60px; }
+
+      .page-header h1 { font-size: 1.8rem; }
+
+      .game-area {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .vs-divider { margin: 8px 0; }
+      .vs-divider::before,
+      .vs-divider::after { display: none; }
+
+      .player-card { min-height: 240px; padding: 24px 20px; }
+      .player-emoji { font-size: 2.2rem; }
+      .player-name  { font-size: 1.4rem; }
+      .player-value,
+      .hidden-value { font-size: 2.2rem; }
+
+      .buttons { flex-direction: column; }
+      .btn { width: 100%; }
+
+      .bottom-dashboard { grid-template-columns: 1fr; gap: 12px; }
+
+      .result-card { padding: 28px 18px; }
+
+      .streak-dots { gap: 3px; }
+    }
+
+    /* ─────────────────────────────────────────
+       RESPONSIVE — MOBILE
+    ───────────────────────────────────────── */
+    @media (max-width: 480px) {
+      .page { padding: 14px 12px 56px; }
+
+      .score-row { flex-direction: column; gap: 8px; }
+
+      .result-actions { flex-direction: column; align-items: stretch; }
+      .result-actions .btn { width: 100%; }
+
+      .streak-dots { gap: 2px; }
+      .streak-dot  { height: 36px; }
+      .dot-score-val { font-size: 0.55rem; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="bg-layer"></div>
+
+  <!-- ── RULES MODAL ── -->
+  <div id="rulesModal" class="modal-overlay" style="display:none;">
+    <div class="modal-box">
+      <h2 class="modal-title">📊 How to Play</h2>
+      <ul class="rules-list">
+        <li><span class="rule-icon">👀</span>The left player's stat is revealed</li>
+        <li><span class="rule-icon">🤔</span>Guess if the right player's stat is HIGHER or LOWER</li>
+        <li><span class="rule-icon">🔥</span>Build a streak — every correct answer is +100 pts</li>
+        <li><span class="rule-icon">❌</span>One wrong answer ends the game</li>
+        <li><span class="rule-icon">🏆</span>10 rounds, max 1000 pts — survive them all!</li>
+      </ul>
+      <div class="scoring-box">
+        <h3>💰 Scoring System (Max: 1000 pts)</h3>
+        <div class="scoring-item"><span>Each Correct Answer</span><span class="scoring-value">+100 pts</span></div>
+        <div class="scoring-item"><span>10/10 Perfect Round</span><span class="scoring-value">1000 pts</span></div>
+        <div class="scoring-item"><span>Wrong Answer</span>       <span class="scoring-value">Game Over</span></div>
+      </div>
+      <button class="btn-primary" onclick="closeRulesModal()">🚀 Start Playing</button>
+    </div>
+  </div>
+
+  <!-- ── NAVIGATION ── -->
+  <nav>
+    <a href="index.html" class="nav-logo">🏏 Crickingo</a>
+    <span class="nav-game-tag">📊 Higher or Lower</span>
+  </nav>
+
+  <!-- ── MAIN PAGE ── -->
+  <main class="page">
+
+    <div class="page-header">
+      <h1>Higher or Lower</h1>
+      <p>Cricket Stats Edition — 10 rounds, 1000 pts max</p>
+    </div>
+
+    <div class="puzzle-bar">
+      <div class="puzzle-bar-item">📅 <strong id="puzzleDate">—</strong></div>
+      <div class="puzzle-bar-sep"></div>
+      <div class="puzzle-bar-item">🧩 Puzzle <strong id="puzzleNumber">#—</strong></div>
+    </div>
+
+    <div class="score-row">
+      <div class="score-card current">
+        <div class="score-label">Current Score</div>
+        <div class="score-value" id="currentScore">0 pts</div>
+      </div>
+      <div class="score-card best">
+        <div class="score-label">Best Score</div>
+        <div class="score-value" id="highScore">— pts</div>
+      </div>
+    </div>
+
+    <!-- ── GAME AREA ── -->
+    <div id="gameArea">
+      <div class="game-area">
+        <div class="player-card left" id="leftCard">
+          <div class="player-emoji"     id="leftEmoji">🏏</div>
+          <div class="player-name"      id="leftName">Loading…</div>
+          <div class="player-stat-type" id="leftStat">Stat</div>
+          <div class="player-value"     id="leftValue">0</div>
+        </div>
+
+        <div class="vs-divider">VS</div>
+
+        <div class="player-card" id="rightCard">
+          <div class="player-emoji"     id="rightEmoji">🏏</div>
+          <div class="player-name"      id="rightName">Loading…</div>
+          <div class="player-stat-type" id="rightStat">Stat</div>
+          <div class="hidden-value"     id="rightValue">???</div>
+        </div>
+      </div>
+
+      <div class="result-message" id="resultMessage"></div>
+
+      <div class="buttons">
+        <button class="btn btn-higher" id="higherBtn" onclick="guess('higher')">⬆️ Higher</button>
+        <button class="btn btn-lower"  id="lowerBtn"  onclick="guess('lower')">⬇️ Lower</button>
+      </div>
+
+      <div class="controls">
+        <button class="btn btn-back" onclick="location.href='index.html'">← Home</button>
+      </div>
+    </div>
+
+    <!-- ── RESULT CARD ── -->
+    <div id="resultArea" class="result-card" style="display:none;">
+      <div class="result-title">Game Over!</div>
+      <div class="result-score"  id="scoreText">0 pts</div>
+      <div class="result-phrase" id="resultPhrase"></div>
+      <div class="result-actions">
+        <button class="btn btn-restart" id="tryAgainBtn" onclick="resetGame()">↺ Play Again</button>
+        <button class="btn btn-share"   id="shareBtn"    onclick="shareScore()">
+          📤 Share Score
+          <span class="share-copied" id="shareCopied">✓ Saved!</span>
+        </button>
+        <button class="btn btn-back" onclick="location.href='index.html'">← Home</button>
+      </div>
+      <div id="tournamentButtons"></div>
+    </div>
+
+    <!-- ── BOTTOM DASHBOARD ── -->
+    <div class="bottom-dashboard" id="bottomDashboard">
+      <div class="dashboard-card">
+        <div class="dashboard-card-header">
+          <span class="dashboard-icon">📅</span>
+          <span class="dashboard-label">Last 30 Days</span>
+        </div>
+        <div class="streak-dots" id="streakDots"></div>
+        <div class="streak-legend">
+          <span><span class="dot-sample dot-win"></span>   Played</span>
+          <span><span class="dot-sample dot-miss"></span>  Missed</span>
+          <span><span class="dot-sample dot-today"></span> Today</span>
+        </div>
+      </div>
+      <div class="dashboard-card">
+        <div class="dashboard-card-header">
+          <span class="dashboard-icon">📊</span>
+          <span class="dashboard-label">Your Stats</span>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-item"><div class="stat-value" id="statPlayed">—</div><div class="stat-name">Played</div></div>
+          <div class="stat-item"><div class="stat-value" id="statBest">—</div>  <div class="stat-name">Best Score</div></div>
+          <div class="stat-item"><div class="stat-value" id="statAvg">—</div>   <div class="stat-name">Avg Score</div></div>
+          <div class="stat-item"><div class="stat-value" id="statStreak">—</div><div class="stat-name">Day Streak</div></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+</body>
+</html>

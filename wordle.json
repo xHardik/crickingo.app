@@ -1,0 +1,212 @@
+{
+  "wordle-2026-02-01": {
+    "date": "2026-02-01",
+    "player": "KOHLI",
+    "hint_country": "🇮🇳 India",
+    "hint_position": "🏏 Batsman",
+    "difficulty": "easy"
+  },
+  "wordle-2026-02-02": {
+    "date": "2026-02-02",
+    "player": "ROHIT",
+    "hint_country": "🇮🇳 India",
+    "hint_position": "🏏 Opener/Batsman",
+    "difficulty": "easy"
+  },
+  "wordle-2026-02-03": {
+    "date": "2026-02-03",
+    "player": "DHONI",
+    "hint_country": "🇮🇳 India",
+    "hint_position": "🧤 Wicketkeeper/Finisher",
+    "difficulty": "easy"
+  },
+  "wordle-2026-02-04": {
+    "date": "2026-02-04",
+    "player": "BUMRAH",
+    "hint_country": "🇮🇳 India",
+    "hint_position": "⚡ Fast Bowler",
+    "difficulty": "medium"
+  },
+  "wordle-2026-02-05": {
+    "date": "2026-02-05",
+    "player": "SMITH",
+    "hint_country": "🇦🇺 Australia",
+    "hint_position": "🏏 Batsman",
+    "difficulty": "easy"
+  },
+  "wordle-2026-02-06": {
+    "date": "2026-02-06",
+    "player": "ROOT",
+    "hint_country": "🏴󠁧󠁢󠁥󠁮󠁧󠁿 England",
+    "hint_position": "🏏 Batsman",
+    "difficulty": "medium"
+  },
+  "wordle-2026-02-07": {
+    "date": "2026-02-07",
+    "player": "STOKES",
+    "hint_country": "🏴󠁧󠁢󠁥󠁮󠁧󠁿 England",
+    "hint_position": "🎯 All-rounder",
+    "difficulty": "medium"
+  },
+  "wordle-2026-02-08": {
+    "date": "2026-02-08",
+    "player": "WARNER",
+    "hint_country": "🇦🇺 Australia",
+    "hint_position": "🏏 Opener/Batsman",
+    "difficulty": "medium"
+  },
+  "wordle-2026-02-09": {
+    "date": "2026-02-09",
+    "player": "RAHUL",
+    "hint_country": "🇮🇳 India",
+    "hint_position": "🧤 Opener/Wicketkeeper",
+    "difficulty": "easy"
+  },
+  "wordle-2026-02-10": {
+    "date": "2026-02-10",
+    "player": "PANT",
+    "hint_country": "🇮🇳 India",
+    "hint_position": "🧤 Wicketkeeper/Batsman",
+    "difficulty": "medium"
+  },
+  "wordle-2026-02-11": {
+    "date": "2026-02-11",
+    "player": "JADEJA",
+    "hint_country": "🇮🇳 India",
+    "hint_position": "🎯 All-rounder/Spinner",
+    "difficulty": "medium"
+  },
+  "wordle-2026-02-12": {
+    "date": "2026-02-12",
+    "player": "ASHWIN",
+    "hint_country": "🇮🇳 India",
+    "hint_position": "🌀 Spinner",
+    "difficulty": "medium"
+  },
+  "wordle-2026-02-13": {
+    "date": "2026-02-13",
+    "player": "SHAMI",
+    "hint_country": "🇮🇳 India",
+    "hint_position": "⚡ Fast Bowler",
+    "difficulty": "easy"
+  },
+  "wordle-2026-02-14": {
+    "date": "2026-02-14",
+    "player": "GAYLE",
+    "hint_country": "🇯🇲 West Indies",
+    "hint_position": "🏏 Opener/Batsman",
+    "difficulty": "easy"
+  },
+  "wordle-2026-02-15": {
+    "date": "2026-02-15",
+    "player": "BUTLER",
+    "hint_country": "🏴󠁧󠁢󠁥󠁮󠁧󠁿 England",
+    "hint_position": "🧤 Wicketkeeper/Opener",
+    "difficulty": "medium"
+  },
+  "wordle-2026-02-16": {
+    "date": "2026-02-16",
+    "player": "BABAR",
+    "hint_country": "🇵🇰 Pakistan",
+    "hint_position": "🏏 Batsman",
+    "difficulty": "easy"
+  },
+  "wordle-2026-02-17": {
+    "date": "2026-02-17",
+    "player": "WILLIAMSON",
+    "hint_country": "🇳🇿 New Zealand",
+    "hint_position": "🏏 Batsman",
+    "difficulty": "hard"
+  },
+  "wordle-2026-02-18": {
+    "date": "2026-02-18",
+    "player": "BOULT",
+    "hint_country": "🇳🇿 New Zealand",
+    "hint_position": "⚡ Fast Bowler",
+    "difficulty": "easy"
+  },
+  "wordle-2026-02-19": {
+    "date": "2026-02-19",
+    "player": "STARC",
+    "hint_country": "🇦🇺 Australia",
+    "hint_position": "⚡ Fast Bowler",
+    "difficulty": "easy"
+  },
+  "wordle-2026-02-20": {
+    "date": "2026-02-20",
+    "player": "CUMMINS",
+    "hint_country": "🇦🇺 Australia",
+    "hint_position": "⚡ Fast Bowler",
+    "difficulty": "medium"
+  },
+  "wordle-2026-02-21": {
+    "date": "2026-02-21",
+    "player": "RABADA",
+    "hint_country": "🇿🇦 South Africa",
+    "hint_position": "⚡ Fast Bowler",
+    "difficulty": "medium"
+  },
+  "wordle-2026-02-22": {
+    "date": "2026-02-22",
+    "player": "ARCHER",
+    "hint_country": "🏴󠁧󠁢󠁥󠁮󠁧󠁿 England",
+    "hint_position": "⚡ Fast Bowler",
+    "difficulty": "medium"
+  },
+  "wordle-2026-02-23": {
+    "date": "2026-02-23",
+    "player": "RASHID",
+    "hint_country": "🇦🇫 Afghanistan",
+    "hint_position": "🌀 Leg Spinner",
+    "difficulty": "medium"
+  },
+  "wordle-2026-02-24": {
+    "date": "2026-02-24",
+    "player": "NARINE",
+    "hint_country": "🇯🇲 West Indies",
+    "hint_position": "🌀 Spinner",
+    "difficulty": "medium"
+  },
+  "wordle-2026-02-25": {
+    "date": "2026-02-25",
+    "player": "POLLARD",
+    "hint_country": "🇯🇲 West Indies",
+    "hint_position": "🎯 All-rounder/Finisher",
+    "difficulty": "medium"
+  },
+  "wordle-2026-02-26": {
+    "date": "2026-02-26",
+    "player": "RUSSELL",
+    "hint_country": "🇯🇲 West Indies",
+    "hint_position": "🎯 All-rounder/Finisher",
+    "difficulty": "medium"
+  },
+  "wordle-2026-02-27": {
+    "date": "2026-02-27",
+    "player": "MAXWELL",
+    "hint_country": "🇦🇺 Australia",
+    "hint_position": "🎯 All-rounder",
+    "difficulty": "medium"
+  },
+  "wordle-2026-02-28": {
+    "date": "2026-02-28",
+    "player": "DE VILLIERS",
+    "hint_country": "🇿🇦 South Africa",
+    "hint_position": "🧤 Wicketkeeper/Batsman",
+    "difficulty": "hard"
+  },
+  "wordle-2026-03-01": {
+    "date": "2026-03-01",
+    "player": "SANGAKKARA",
+    "hint_country": "🇱🇰 Sri Lanka",
+    "hint_position": "🧤 Wicketkeeper/Batsman",
+    "difficulty": "hard"
+  },
+  "wordle-2026-03-02": {
+    "date": "2026-03-02",
+    "player": "PONTING",
+    "hint_country": "🇦🇺 Australia",
+    "hint_position": "🏏 Batsman",
+    "difficulty": "medium"
+  }
+}
