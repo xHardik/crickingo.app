@@ -39,7 +39,6 @@
         radial-gradient(ellipse 50% 40% at 50% 50%, rgba(79,142,247,0.06) 0%, transparent 70%);
     }
 
-    /* cricket pattern overlay */
     .bg-layer::after {
       content: '';
       position: absolute; inset: 0;
@@ -209,7 +208,6 @@
       to   { transform: rotate(360deg); }
     }
 
-    /* glow pulse behind trophy */
     .trophy-glow {
       position: absolute;
       width: 225px; height: 225px;
@@ -222,7 +220,6 @@
       50%      { transform: scale(1.2); opacity: 1;   }
     }
 
-    /* trophy SVG */
     .trophy-svg {
       position: relative; z-index: 2;
       width: 180px; height: 180px;
@@ -234,7 +231,6 @@
       50%      { transform: translateY(-12px) rotate(2deg);  }
     }
 
-    /* sparkles */
     .sparkle {
       position: absolute;
       width: 6px; height: 6px;
@@ -324,7 +320,6 @@
       gap: 10px;
     }
 
-    /* per-card accent colors */
     .card-fire  { --card-accent: #F7C344; --card-gradient: linear-gradient(90deg,rgba(247,195,68,0.09),transparent 70%); }
     .card-blue  { --card-accent: #4F8EF7; --card-gradient: linear-gradient(90deg,rgba(79,142,247,0.09),transparent 70%); }
     .card-green { --card-accent: #3DD68C; --card-gradient: linear-gradient(90deg,rgba(61,214,140,0.09),transparent 70%); }
@@ -452,7 +447,6 @@
       pointer-events: none;
     }
 
-    /* animated shimmer sweep */
     .card-featured::before {
       content: '';
       position: absolute;
@@ -495,9 +489,7 @@
     }
 
     .footer-col-wide { flex: 2; }
-
     .footer-links-block { display: flex; flex-direction: column; gap: 16px; }
-
     .footer-links-row {
       display: flex; flex-wrap: wrap; gap: 7px;
     }
@@ -607,7 +599,24 @@
         padding: 50px 32px 40px;
         text-align: center;
       }
-      .hero-visual { display: none; }
+      /* Show trophy on tablet in a centered compact form */
+      .hero-visual {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        height: 260px;
+        margin-left: 0;
+        margin-top: 20px;
+      }
+      .trophy-wrap {
+        width: 260px;
+        height: 260px;
+      }
+      .trophy-svg { width: 130px; height: 130px; }
+      .trophy-glow { width: 160px; height: 160px; }
+      .ray:nth-child(odd)  { height: 120px; }
+      .ray:nth-child(even) { height: 100px; }
+
       .hero-eyebrow { margin: 0 auto 20px; }
       .hero-sub { margin: 0 auto 28px; }
       .hero-stats { justify-content: center; }
@@ -621,37 +630,70 @@
         padding: 0 18px;
         height: 56px;
       }
-      .nav-links { display: none; }
+      /* ✅ FIX: Show nav icons on mobile, just smaller */
+      .nav-links {
+        display: flex;
+        gap: 6px;
+      }
+      .nav-links a {
+        width: 32px;
+        height: 32px;
+        border-radius: 7px;
+      }
       .nav-logo { font-size: 1.5rem; }
       .nav-badge {
         font-size: 0.65rem;
         padding: 3px 10px;
       }
 
+      /* ✅ Side-by-side layout on mobile */
       .hero {
-        padding: 32px 18px 24px;
-        grid-template-columns: 1fr;
-        text-align: center;
+        padding: 28px 18px 20px;
+        grid-template-columns: 1fr 140px;
+        text-align: left;
+        gap: 8px;
+        align-items: center;
       }
       .hero-eyebrow {
-        font-size: 0.7rem;
-        margin: 0 auto 14px;
+        font-size: 0.65rem;
+        margin: 0 0 10px;
       }
       .hero h1 {
-        font-size: 2.8rem;
+        font-size: 2.2rem;
         letter-spacing: 1px;
-        margin-bottom: 14px;
+        margin-bottom: 10px;
       }
       .hero-sub {
-        font-size: 0.92rem;
-        margin: 0 auto 22px;
+        font-size: 0.82rem;
+        margin: 0 0 16px;
+        max-width: 100%;
       }
       .hero-stats {
-        justify-content: center;
-        gap: 24px;
+        justify-content: flex-start;
+        gap: 16px;
       }
-      .stat-num { font-size: 1.6rem; }
-      .hero-visual { display: none; }
+      .stat-num { font-size: 1.4rem; }
+      .stat-label { font-size: 0.65rem; }
+
+      /* Trophy column */
+      .hero-visual {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 140px;
+        height: 140px;
+        margin-left: 0;
+        margin-top: 0;
+      }
+      .trophy-wrap {
+        width: 140px;
+        height: 140px;
+      }
+      .trophy-svg { width: 72px; height: 72px; }
+      .trophy-glow { width: 90px; height: 90px; }
+      .ray:nth-child(odd)  { height: 65px; }
+      .ray:nth-child(even) { height: 52px; }
+      .sparkle { width: 4px !important; height: 4px !important; }
 
       .date-bar {
         padding: 0 18px;
@@ -714,12 +756,20 @@
 
     /* Small phones */
     @media (max-width: 380px) {
-      .hero h1 { font-size: 2.3rem; }
-      .hero-stats { gap: 16px; }
-      .stat-num { font-size: 1.4rem; }
+      .hero { grid-template-columns: 1fr 110px; gap: 6px; }
+      .hero h1 { font-size: 1.8rem; }
+      .hero-stats { gap: 10px; }
+      .stat-num { font-size: 1.2rem; }
+      .hero-visual { width: 110px; height: 110px; }
+      .trophy-wrap { width: 110px; height: 110px; }
+      .trophy-svg { width: 56px; height: 56px; }
+      .trophy-glow { width: 72px; height: 72px; }
+      .ray:nth-child(odd)  { height: 50px; }
+      .ray:nth-child(even) { height: 40px; }
       .game-card { padding: 12px 14px; gap: 12px; }
       .card-icon { width: 36px; height: 36px; font-size: 1.1rem; }
       .card-title { font-size: 0.95rem; }
+      .nav-badge { display: none; }
     }
   </style>
 </head>
@@ -771,33 +821,23 @@
     </div>
     <div class="hero-visual" aria-hidden="true">
       <div class="trophy-wrap">
-        <!-- rays -->
         <div class="rays">
           <div class="ray"></div><div class="ray"></div><div class="ray"></div>
           <div class="ray"></div><div class="ray"></div><div class="ray"></div>
           <div class="ray"></div><div class="ray"></div><div class="ray"></div>
           <div class="ray"></div><div class="ray"></div><div class="ray"></div>
         </div>
-        <!-- glow -->
         <div class="trophy-glow"></div>
-        <!-- sparkles -->
         <div class="sparkle"></div><div class="sparkle"></div>
         <div class="sparkle"></div><div class="sparkle"></div>
         <div class="sparkle"></div><div class="sparkle"></div>
-        <!-- trophy SVG -->
         <svg class="trophy-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- cup body -->
           <path d="M28 10 H72 L65 52 Q62 64 50 66 Q38 64 35 52 Z" fill="url(#tgold)" />
-          <!-- handles -->
           <path d="M28 14 Q10 14 10 32 Q10 46 28 46" stroke="url(#tgold2)" stroke-width="5" stroke-linecap="round" fill="none"/>
           <path d="M72 14 Q90 14 90 32 Q90 46 72 46" stroke="url(#tgold2)" stroke-width="5" stroke-linecap="round" fill="none"/>
-          <!-- stem -->
           <rect x="44" y="66" width="12" height="14" rx="2" fill="url(#tgold)"/>
-          <!-- base -->
           <rect x="32" y="80" width="36" height="8" rx="4" fill="url(#tgold)"/>
-          <!-- shine on cup -->
           <ellipse cx="40" cy="28" rx="5" ry="10" fill="rgba(255,255,255,0.18)" transform="rotate(-15 40 28)"/>
-          <!-- star on cup -->
           <text x="50" y="45" text-anchor="middle" font-size="18" fill="rgba(255,255,255,0.25)">★</text>
           <defs>
             <linearGradient id="tgold" x1="0" y1="0" x2="0" y2="1">
@@ -914,7 +954,7 @@
         <p>Test your cricket knowledge with daily puzzles and challenges. Play solo or compete with friends!</p>
       </div>
       <div class="footer-col footer-col-wide">
-        <h4>🎮 Play & Info</h4>
+        <h4>🎮 Play &amp; Info</h4>
         <div class="footer-links-block">
           <p class="footer-sub-label">Games</p>
           <div class="footer-links-row">

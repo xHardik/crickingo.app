@@ -31,6 +31,9 @@ function getRealTodayKey() {
 
 // ── Self-contained: save result + re-render dashboard ──
 function saveAndRenderResult(score, correct, wrong) {
+  // ✅ Never save stats/streak in tournament mode
+  if (isInTournament) return;
+
   const today = getRealTodayKey();
   let stats   = {};
   let history = {};
@@ -73,6 +76,58 @@ function renderDashboard(stats, history, today) {
     const el = document.getElementById(id);
     if (el) el.textContent = (val != null) ? val : '—';
   };
+
+  // ✅ In tournament mode, show "??" for all stats
+  if (isInTournament) {
+    setEl('statPlayed', '??');
+    setEl('statBest',   '??');
+    setEl('statAvg',    '??');
+    setEl('statStreak', '??');
+
+    const dotsEl = document.getElementById('streakDots');
+    if (!dotsEl) return;
+    dotsEl.innerHTML = '';
+
+    // Render 30 "??" dots instead of real history
+    for (let i = 0; i < 30; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'streak-dot tournament-hidden';
+      dot.title = 'Stats hidden in Tournament Mode';
+      dot.style.cssText = `
+        opacity: 0.35;
+        background: rgba(255,255,255,0.1);
+        border: 1px dashed rgba(255,255,255,0.2);
+      `;
+
+      const label = document.createElement('div');
+      label.className   = 'dot-score-val';
+      label.textContent = '??';
+      label.style.cssText = 'font-size: 0.55rem; color: rgba(255,255,255,0.4);';
+      dot.appendChild(label);
+
+      dotsEl.appendChild(dot);
+    }
+
+    // Also show a small notice under the dots
+    const dotsParent = dotsEl.parentNode;
+    if (dotsParent && !dotsParent.querySelector('.tournament-dots-notice')) {
+      const notice = document.createElement('div');
+      notice.className = 'tournament-dots-notice';
+      notice.style.cssText = `
+        text-align: center;
+        font-size: 0.75rem;
+        color: rgba(255,255,255,0.4);
+        margin-top: 8px;
+        font-style: italic;
+      `;
+      notice.textContent = '🏆 Stats & streaks are not tracked in Tournament Mode';
+      dotsParent.appendChild(notice);
+    }
+
+    return; // skip normal rendering
+  }
+
+  // Normal mode rendering below
   setEl('statPlayed', stats.played);
   setEl('statBest',   stats.best);
   setEl('statAvg',    stats.avg);
@@ -279,6 +334,7 @@ async function initGame() {
   updateScoreDisplay();
 
   // Render dashboard on page load with whatever history already exists
+  // In tournament mode this will show ?? dots automatically
   const today = getRealTodayKey();
   let stats   = {};
   let history = {};
@@ -371,14 +427,21 @@ function assignPlayerToCell(cell) {
   cell.dataset.filled = "true";
   lastFilledCellIndex = parseInt(cell.dataset.index, 10);
   updateScoreDisplay();
-  updateTodayDot(totalScore);
-  saveLiveScore(totalScore);
+
+  // ✅ Only update dot and save live score in normal mode
+  if (!isInTournament) {
+    updateTodayDot(totalScore);
+    saveLiveScore(totalScore);
+  }
 
   const allFilled = Array.from(document.querySelectorAll('.cell')).every(c => c.dataset.filled === "true");
   if (allFilled) endGame(); else showPlayer();
 }
 
 function saveLiveScore(score) {
+  // ✅ Guard: never save in tournament mode
+  if (isInTournament) return;
+
   const puzzleDate = getDateFromURL();
   let history = {};
   try { history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || {}; } catch { history = {}; }
@@ -391,21 +454,21 @@ function saveLiveScore(score) {
 }
 
 function updateTodayDot(score) {
-  const puzzleDate = getDateFromURL(); // use the date being played, not real today
+  // ✅ Guard: never update dots in tournament mode
+  if (isInTournament) return;
+
+  const puzzleDate = getDateFromURL();
   const dotsEl = document.getElementById('streakDots');
   if (!dotsEl) return;
 
-  // Find the dot whose title starts with puzzleDate
   const dots = dotsEl.querySelectorAll('.streak-dot');
   let targetDot = null;
   dots.forEach(dot => {
     if (dot.title.startsWith(puzzleDate) || dot.title.startsWith('Today')) {
-      // Match by data attribute we set during render
       if (dot.dataset.dotDate === puzzleDate) targetDot = dot;
     }
   });
 
-  // Fallback: if no match, use last dot
   if (!targetDot) targetDot = dots[dots.length - 1];
   if (!targetDot) return;
 
@@ -491,7 +554,7 @@ function _showEndScreen() {
     </div>
   `;
 
-  document.getElementById('scoreText').innerText       = `${finalScore} / 1000`;
+  document.getElementById('scoreText').innerText = `${finalScore} / 1000`;
 
   // Store data for canvas share card
   const puzzleDateShare = getDateFromURL();
@@ -512,7 +575,7 @@ function _showEndScreen() {
     tomorrow:  tomorrowShareStr,
     gold: true
   };
-  document.getElementById('resultPhrase').innerHTML    = phrase + scoreBreakdown + getTomorrowMessage();
+  document.getElementById('resultPhrase').innerHTML = phrase + scoreBreakdown + getTomorrowMessage();
 
   const resultArea = document.getElementById('resultArea');
   document.getElementById('gameGrid').style.display    = 'none';
@@ -543,7 +606,7 @@ function _showEndScreen() {
 
   resultArea.style.display = 'block';
 
-  // ── Save + re-render dashboard, then move it below result card so user sees it ──
+  // ── Save + re-render dashboard only in normal mode ──
   if (!isInTournament) {
     saveAndRenderResult(finalScore, correctCount, wrongAnswers);
 
