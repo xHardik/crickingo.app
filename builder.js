@@ -184,16 +184,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ── Tournament banner ──
 function showTournamentInfo() {
-  const infoDiv     = document.createElement('div');
-  infoDiv.id        = 'tournamentInfo';
+  if (document.getElementById('tournamentInfo')) return;
+  const infoDiv = document.createElement('div');
+  infoDiv.id = 'tournamentInfo';
   infoDiv.style.cssText = `
     position: fixed; top: 74px; left: 50%; transform: translateX(-50%);
-    background: rgba(247,195,68,0.12); color: #F7C344;
-    padding: 10px 24px; border-radius: 100px;
+    background: rgba(45,212,191,0.12); color: #2DD4BF;
+    padding: 8px 22px; border-radius: 100px;
     font-family: 'DM Sans', sans-serif; font-weight: 700;
-    font-size: 0.82rem; letter-spacing: 1px; text-transform: uppercase;
-    z-index: 999; border: 1px solid rgba(247,195,68,0.3);
-    backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(247,195,68,0.15);
+    font-size: 0.78rem; letter-spacing: 1px; text-transform: uppercase;
+    z-index: 999; border: 1px solid rgba(45,212,191,0.3);
+    backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(45,212,191,0.15);
     white-space: nowrap;
   `;
   infoDiv.innerHTML = '🏆 Tournament Mode — Play Your Best!';
@@ -227,7 +228,7 @@ function populatePuzzleBar(dateStr) {
   const display = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
   const dateEl  = document.getElementById('puzzleDate');
   if (dateEl) dateEl.textContent = display;
-  const launch = new Date('2026-03-01T00:00:00');
+  const launch = new Date('2026-01-15T00:00:00');
   const diff   = Math.floor((d - launch) / (1000 * 60 * 60 * 24)) + 1;
   const numEl  = document.getElementById('puzzleNumber');
   if (numEl) numEl.textContent = '#' + diff;

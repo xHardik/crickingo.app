@@ -198,18 +198,21 @@ function populatePuzzleBar() {
 // ─────────────────────────────────────────
 
 function showTournamentInfo() {
+  if (document.getElementById('tournamentInfo')) return;
   const infoDiv = document.createElement('div');
   infoDiv.id = 'tournamentInfo';
   infoDiv.style.cssText = `
-    position: fixed; top: 10px; left: 50%; transform: translateX(-50%);
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white; padding: 12px 25px; border-radius: 25px;
-    font-weight: 700; z-index: 1000;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-    text-align: center; font-size: 0.9em;
+    position: fixed; top: 74px; left: 50%; transform: translateX(-50%);
+    background: rgba(232,64,64,0.12); color: #E84040;
+    padding: 8px 22px; border-radius: 100px;
+    font-family: 'DM Sans', sans-serif; font-weight: 700;
+    font-size: 0.78rem; letter-spacing: 1px; text-transform: uppercase;
+    z-index: 999; border: 1px solid rgba(232,64,64,0.3);
+    backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(232,64,64,0.15);
+    white-space: nowrap;
   `;
-  infoDiv.innerHTML = `🏆 Tournament Mode - Play Your Best!`;
-  document.body.insertBefore(infoDiv, document.body.firstChild);
+  infoDiv.innerHTML = '🏆 Tournament Mode — Play Your Best!';
+  document.body.appendChild(infoDiv);
 }
 
 function showRulesModal() {
