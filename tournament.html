@@ -167,10 +167,23 @@
     }
 
     .form-input::placeholder { color: var(--muted); }
+
     .form-input:focus, .form-select:focus {
       outline: none;
       border-color: rgba(247,195,68,0.5);
       box-shadow: 0 0 0 3px rgba(247,195,68,0.08);
+    }
+
+    /* ── FIX: browser autofill white background ── */
+    .form-input:-webkit-autofill,
+    .form-input:-webkit-autofill:hover,
+    .form-input:-webkit-autofill:focus,
+    .form-input:-webkit-autofill:active {
+      -webkit-box-shadow: 0 0 0 1000px #0a0d1a inset !important;
+      -webkit-text-fill-color: #F2F2F2 !important;
+      caret-color: #F2F2F2;
+      border-color: rgba(255,255,255,0.08) !important;
+      transition: background-color 5000s ease-in-out 0s;
     }
 
     .form-select option { background: #0d1120; color: var(--text); }
@@ -573,7 +586,7 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 600px) {
-       .nav-back { display: none; } 
+      .nav-back { display: none; }
       nav { padding: 0 16px; }
       .page { padding: 28px 16px 80px; }
       .glass-card { padding: 24px 20px; }
@@ -611,7 +624,7 @@
 
         <div class="form-group">
           <label class="form-label">Tournament Name</label>
-          <input class="form-input" type="text" id="tournamentName" placeholder="Epic Tournament" value="Epic Tournament">
+          <input class="form-input" type="text" id="tournamentName" placeholder="Epic Tournament" value="Epic Tournament" autocomplete="off">
         </div>
 
         <div class="form-group">
@@ -625,7 +638,7 @@
 
         <div class="form-group">
           <label class="form-label">Your Name</label>
-          <input class="form-input" type="text" id="hostName" placeholder="Enter your name">
+          <input class="form-input" type="text" id="hostName" placeholder="Enter your name" autocomplete="off">
         </div>
 
         <button class="btn btn-primary" id="createTournamentBtn">🚀 Create Tournament</button>
@@ -638,12 +651,12 @@
 
         <div class="form-group">
           <label class="form-label">Tournament Code</label>
-          <input class="form-input" type="text" id="joinCode" placeholder="Enter 6-digit code" style="text-transform:uppercase;letter-spacing:4px;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;">
+          <input class="form-input" type="text" id="joinCode" placeholder="Enter 6-digit code" autocomplete="off" style="text-transform:uppercase;letter-spacing:4px;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;">
         </div>
 
         <div class="form-group">
           <label class="form-label">Your Name</label>
-          <input class="form-input" type="text" id="joinName" placeholder="Enter your name">
+          <input class="form-input" type="text" id="joinName" placeholder="Enter your name" autocomplete="off">
         </div>
 
         <button class="btn btn-secondary" id="joinTournamentBtn">→ Join Tournament</button>
