@@ -571,19 +571,8 @@ function checkTeam() {
     const resetBtn = document.querySelector('.btn-reset');
     if (resetBtn) resetBtn.style.display = 'none';
 
-    const tourneyMsg = document.createElement('div');
-    tourneyMsg.style.cssText = `
-      margin-top: 14px; padding: 20px;
-      background: rgba(247,195,68,0.08); border: 1px solid rgba(247,195,68,0.25);
-      border-radius: 14px; font-family: 'DM Sans', sans-serif; text-align: center;
-    `;
-    tourneyMsg.innerHTML = `
-      <p style="font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:rgba(242,242,242,0.5);margin-bottom:10px;">✅ Score Submitted!</p>
-      <p style="font-family:'Bebas Neue',sans-serif;font-size:2.8rem;letter-spacing:2px;background:linear-gradient(135deg,#F7C344,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:6px 0;">${rating}</p>
-      <p style="font-size:0.82rem;color:rgba(242,242,242,0.5);margin-top:6px;">Team rating ${rating} · Returning to tournament…</p>
-    `;
-    resultEl.appendChild(tourneyMsg);
-    setTimeout(() => returnToTournament(), 2000);
+    // ✅ Skip result card entirely in tournament mode
+    returnToTournament();
   }
 }
 

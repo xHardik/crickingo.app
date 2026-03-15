@@ -338,8 +338,8 @@ function submitGuess() {
     window._shareData = buildShareData(currentScore, true);
 
     if (isInTournament) {
-      showTournamentEndScreen(currentScore, true);
-      setTimeout(() => finishGame(currentScore), 2000);
+      // ✅ Skip result card entirely in tournament mode
+      finishGame(currentScore);
     } else {
       showResultCard(
         `🎉 ${targetPlayer}!`,
@@ -362,8 +362,8 @@ function submitGuess() {
     window._shareData = buildShareData(0, false);
 
     if (isInTournament) {
-      showTournamentEndScreen(0, false);
-      setTimeout(() => finishGame(0), 2000);
+      // ✅ Skip result card entirely in tournament mode
+      finishGame(0);
     } else {
       showResultCard(
         `😞 Game Over!`,

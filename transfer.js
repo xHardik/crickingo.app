@@ -541,28 +541,21 @@ function endGame() {
   if (existingBtns) existingBtns.remove();
 
   if (isInTournament) {
-    const actionsRow = resultArea.querySelector('.result-actions');
-    if (actionsRow) actionsRow.style.display = 'none';
-
-    const tournamentDiv = document.createElement('div');
-    tournamentDiv.id = 'tournamentButtons';
-    tournamentDiv.style.cssText = `
-      text-align: center; margin-top: 20px; padding: 20px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-radius: 15px; color: white;
-    `;
-    tournamentDiv.innerHTML =
-      '<p style="font-size:1.2em;font-weight:700;margin-bottom:10px;">✅ Score Submitted!</p>' +
-      '<p style="font-size:2em;font-weight:900;margin:10px 0;">' + finalScore + ' Points</p>' +
-      '<p style="font-size:0.9em;opacity:0.9;">Returning to tournament...</p>';
-    resultArea.appendChild(tournamentDiv);
-    setTimeout(() => finishGame(finalScore), 2000);
-  } else {
-    const actionsRow = resultArea.querySelector('.result-actions');
-    if (actionsRow) actionsRow.style.display = 'flex';
+    // ✅ Skip result card entirely in tournament mode — go straight to next game
+    finishGame(finalScore);
+    return;
   }
 
+  const actionsRow2 = resultArea.querySelector('.result-actions');
+  if (actionsRow2) actionsRow2.style.display = 'flex';
   resultArea.style.display = 'block';
+  saveAndRenderResult(finalScore, correctAnswers);
+
+  const dashboard = document.getElementById('bottomDashboard');
+  if (dashboard && resultArea) {
+    resultArea.parentNode.insertBefore(dashboard, resultArea.nextSibling);
+    setTimeout(() => { dashboard.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 400);
+  }
 
   // Save + re-render dashboard only in normal mode
   if (!isInTournament) {

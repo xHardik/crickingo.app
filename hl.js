@@ -537,31 +537,20 @@ function endGame(isPerfect = false) {
   const tryAgainBtn = document.getElementById('tryAgainBtn');
 
   if (isInTournament) {
-    if (tryAgainBtn) tryAgainBtn.style.display = 'none';
-    const tournamentDiv = document.getElementById('tournamentButtons');
-    if (tournamentDiv) {
-      tournamentDiv.innerHTML = `
-        <div style="margin-top:20px;padding:20px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:14px;color:white;text-align:center;">
-          <p style="font-size:1.1em;font-weight:700;margin-bottom:8px;">✅ Score Submitted!</p>
-          <p style="font-size:2em;font-weight:900;margin:8px 0;">${currentScore} pts</p>
-          <p style="font-size:0.85em;opacity:0.9;">${roundsCompleted} / ${MAX_ROUNDS} rounds · Returning…</p>
-        </div>
-      `;
-    }
-    setTimeout(() => finishGame(currentScore), 2000);
-
-  } else {
-    if (tryAgainBtn) tryAgainBtn.style.display = '';
-    saveAndRenderResult(currentScore);
-
-    const dashboard = document.getElementById('bottomDashboard');
-    if (dashboard && resultArea) {
-      resultArea.parentNode.insertBefore(dashboard, resultArea.nextSibling);
-      setTimeout(() => dashboard.scrollIntoView({ behavior: 'smooth', block: 'start' }), 400);
-    }
+    // ✅ Skip result card entirely in tournament mode — go straight to next game
+    finishGame(currentScore);
+    return;
   }
 
+  if (tryAgainBtn) tryAgainBtn.style.display = '';
+  saveAndRenderResult(currentScore);
   if (resultArea) resultArea.style.display = 'block';
+
+  const dashboard = document.getElementById('bottomDashboard');
+  if (dashboard && resultArea) {
+    resultArea.parentNode.insertBefore(dashboard, resultArea.nextSibling);
+    setTimeout(() => dashboard.scrollIntoView({ behavior: 'smooth', block: 'start' }), 400);
+  }
 }
 
 // ─────────────────────────────────────────
