@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script type="module" src="hl.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Higher or Lower - Crickingo</title>
@@ -519,7 +518,7 @@
     .controls {
       display: flex;
       gap: 10px;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       margin-bottom: 24px;
       animation: fadeUp 0.6s ease 0.25s both;
     }
@@ -899,7 +898,7 @@
     ───────────────────────────────────────── */
     @media (max-width: 768px) {
       nav { padding: 0 16px; }
- .nav-back { display: none; } 
+      .nav-back { display: flex; }
       .page { padding: 20px 16px 60px; }
 
       .page-header h1 { font-size: 1.8rem; }
@@ -920,7 +919,7 @@
       .hidden-value { font-size: 2.2rem; }
 
       .buttons { flex-direction: column; }
-      .btn { width: 100%; }
+      .buttons .btn { width: 100%; }
 
       .bottom-dashboard { grid-template-columns: 1fr; gap: 12px; }
 
@@ -934,6 +933,7 @@
     ───────────────────────────────────────── */
     @media (max-width: 480px) {
       .page { padding: 14px 12px 56px; }
+      .nav-back { font-size: 0.78rem; }
 
       .score-row { flex-direction: column; gap: 8px; }
 
@@ -1080,6 +1080,28 @@
     </div>
 
   </main>
+
+  <!-- ── PUZZLE BAR INLINE SCRIPT (same pattern as rivalry.html) ── -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams  = new URLSearchParams(window.location.search);
+      const puzzleDate = urlParams.get('date') || new Date().toISOString().split('T')[0];
+
+      const d       = new Date(puzzleDate + 'T00:00:00');
+      const dateStr = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+
+      const dateEl = document.getElementById('puzzleDate');
+      if (dateEl) dateEl.textContent = dateStr;
+
+      const launch = new Date('2026-02-08T00:00:00');
+      const diff   = Math.floor((d - launch) / (1000 * 60 * 60 * 24)) + 1;
+      const numEl  = document.getElementById('puzzleNumber');
+      if (numEl) numEl.textContent = '#' + diff;
+    });
+  </script>
+
+  <!-- ── hl.js loaded at bottom so DOM is ready ── -->
+  <script type="module" src="hl.js"></script>
 
 </body>
 </html>
