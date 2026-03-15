@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script type="module" src="wordle.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cricket Wordle - Crickingo</title>
@@ -73,12 +72,6 @@
       color: var(--accent3); background: rgba(168,85,247,0.1);
       border: 1px solid rgba(168,85,247,0.25); padding: 4px 12px; border-radius: 100px;
     }
-    .nav-back {
-      display: flex; align-items: center; gap: 6px;
-      color: var(--muted); text-decoration: none;
-      font-size: 0.88rem; font-weight: 500; transition: color 0.2s, transform 0.2s;
-    }
-    .nav-back:hover { color: var(--text); transform: translateX(-3px); }
 
     /* ── PAGE ── */
     .page {
@@ -221,9 +214,7 @@
       cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;
       transition: all 0.25s ease; box-shadow: 0 4px 16px rgba(168,85,247,0.3);
     }
-    .btn-submit:hover { background: #be7af5;
-       transform: translateY(-2px); 
-       box-shadow: 0 8px 24px rgba(168,85,247,0.45); }
+    .btn-submit:hover { background: #be7af5; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(168,85,247,0.45); }
     .btn-submit:disabled { background: var(--surface-raised); color: var(--muted); box-shadow: none; cursor: not-allowed; transform: none; }
 
     .btn-restart { background: rgba(61,214,140,0.15); color: var(--green); border: 1px solid rgba(61,214,140,0.3); }
@@ -257,10 +248,10 @@
       margin-top: 16px; position: relative; z-index: 1;
     }
 
-    /* ── CONTROLS — centered ── */
+    /* ── CONTROLS ── */
     .controls {
       display: flex; gap: 10px; flex-wrap: wrap;
-      justify-content: center;          /* ← centered */
+      justify-content: center;
       margin-bottom: 20px;
       animation: fadeUp 0.6s ease 0.2s both;
     }
@@ -384,7 +375,6 @@
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
       nav { padding: 0 16px; }
-      .nav-back { display: none; } 
       .page { padding: 20px 16px 60px; }
       .page-header h1 { font-size: 1.8rem; }
       .puzzle-bar { flex-wrap: wrap; gap: 8px; padding: 8px 14px; }
@@ -515,7 +505,7 @@
       <div class="attempt-counter" id="stats">Attempts: 0 / 5</div>
     </div>
 
-    <!-- ── CONTROLS — centered ── -->
+    <!-- ── CONTROLS ── -->
     <div class="controls">
       <button class="btn btn-restart" onclick="resetGame()">↺ New Game</button>
       <button class="btn btn-back"    onclick="location.href='index.html'">← Home</button>
@@ -527,7 +517,7 @@
       <div class="result-score"  id="scoreText"></div>
       <div class="result-phrase" id="resultPhrase"></div>
       <div class="result-actions">
-        <button class="btn btn-restart" onclick="resetGame()">↺ Play Again</button>
+        <button class="btn btn-restart" id="tryAgainBtn" onclick="resetGame()">↺ Play Again</button>
         <button class="btn btn-share" id="shareBtn" onclick="shareScore()">
           📤 Share Score
           <span class="share-copied" id="shareCopied">✓ Saved!</span>
@@ -566,6 +556,30 @@
     </div>
 
   </main>
+
+  <!-- ── PUZZLE BAR INLINE SCRIPT (same pattern as rivalry.html) ── -->
+  <script>
+    function getPuzzleDateKey() {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('date') || new Date().toISOString().split('T')[0];
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const puzzleDate = new Date(getPuzzleDateKey() + 'T00:00:00');
+      const dateStr = puzzleDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+
+      const dateEl = document.getElementById('puzzleDate');
+      if (dateEl) dateEl.textContent = dateStr;
+
+      const launch = new Date('2026-03-01T00:00:00');
+      const diff   = Math.floor((puzzleDate - launch) / (1000 * 60 * 60 * 24)) + 1;
+      const numEl  = document.getElementById('puzzleNumber');
+      if (numEl) numEl.textContent = '#' + diff;
+    });
+  </script>
+
+  <!-- ── wordle.js loaded at bottom so DOM is ready ── -->
+  <script type="module" src="wordle.js"></script>
 
 </body>
 </html>

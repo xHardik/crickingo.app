@@ -30,23 +30,12 @@ function getDateFromURL() {
   return urlParams.get('date') || new Date().toISOString().split('T')[0];
 }
 
-function populatePuzzleBar(puzzleDate) {
-  // ✅ Hide puzzle bar in tournament mode
+function populatePuzzleBar() {
+  // ✅ Hide puzzle bar in tournament mode only — date/number set by inline HTML script
   if (isInTournament) {
     const puzzleBar = document.querySelector('.puzzle-bar');
     if (puzzleBar) puzzleBar.style.display = 'none';
-    return;
   }
-
-  const d       = new Date(puzzleDate + 'T00:00:00');
-  const dateStr = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-  const dateEl  = document.getElementById('puzzleDate');
-  if (dateEl) dateEl.textContent = dateStr;
-
-  const launch = new Date('2026-03-01T00:00:00');
-  const diff   = Math.floor((d - launch) / (1000 * 60 * 60 * 24)) + 1;
-  const numEl  = document.getElementById('puzzleNumber');
-  if (numEl) numEl.textContent = '#' + diff;
 }
 
 function saveGameResult(score) {
@@ -270,7 +259,7 @@ async function initGame() {
   if (hintDisplay) hintDisplay.classList.remove('show');
   hideMessage();
 
-  populatePuzzleBar(puzzleDateStr);
+  populatePuzzleBar();
   createBoard();
   updateStats();
   updateScoreDisplay();
