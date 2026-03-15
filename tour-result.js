@@ -13,165 +13,171 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+const db  = getDatabase(app);
 
 const GAMES = [
-  { name: "Higher Or Lower", url: "https://crickingo.vercel.app/hl.html" },
-  { name: "Cricket Bingo", url: "https://crickingo.vercel.app/rivalry.html" },
-  { name: "Transfer History", url: "https://crickingo.vercel.app/transfer.html" },
-  { name: "Build Your Team", url: "https://crickingo.vercel.app/builder.html" },
-  { name: "Wordle", url: "https://crickingo.vercel.app/wordle.html" }
+  { name: 'Higher Or Lower',  emoji: '📈' },
+  { name: 'Cricket Bingo',    emoji: '🏏' },
+  { name: 'Transfer History', emoji: '🔄' },
+   { name: 'Wordle',           emoji: '🟨' },
+  { name: 'Build Your Team',  emoji: '🏗️' },
+ 
 ];
 
+const MEDALS = ['🥇', '🥈', '🥉'];
+
+// ── LOAD ──────────────────────────────────────────────
 async function loadResults() {
-    const code = localStorage.getItem('tournamentCode');
-    
-    if (!code) {
-        alert('No tournament data found!');
-        window.location.href = 'tournament.html';
-        return;
-    }
+  const code = localStorage.getItem('tournamentCode');
+  if (!code) {
+    alert('No tournament data found!');
+    window.location.href = 'tournament.html';
+    return;
+  }
 
-    const tournamentRef = ref(db, `tournaments/${code}`);
-    const snapshot = await get(tournamentRef);
-
+  try {
+    const snapshot = await get(ref(db, `tournaments/${code}`));
     if (!snapshot.exists()) {
-        alert('Tournament not found!');
-        window.location.href = 'tournament.html';
-        return;
+      alert('Tournament not found!');
+      window.location.href = 'tournament.html';
+      return;
     }
-
-    const tournament = snapshot.val();
-    displayResults(tournament);
-    createConfetti();
+    displayResults(snapshot.val());
+  } catch (err) {
+    console.error('Error loading results:', err);
+    alert('Failed to load results. Please try again.');
+  }
 }
 
+// ── DISPLAY ───────────────────────────────────────────
 function displayResults(tournament) {
-    // Set tournament name
-    document.getElementById('tournamentName').textContent = tournament.name;
+  document.getElementById('tournamentName').textContent = tournament.name || 'Tournament';
 
-    // Calculate totals
-    const players = Object.values(tournament.players);
-    const scores = tournament.scores || {};
+  const players = Object.values(tournament.players || {});
+  const scores  = tournament.scores || {};
 
-    const results = players.map(player => {
-        let total = 0;
-        const gameScores = {};
-        
-        const playerScores = scores[player.id] || {};
-        for (let i = 0; i < GAMES.length; i++) {
-            const score = playerScores[`game${i}`] || 0;
-            gameScores[`game${i}`] = score;
-            total += score;
-        }
+  const results = players.map(player => {
+    let total = 0;
+    const gameScores = {};
+    const playerScores = scores[player.id] || {};
 
-        return { 
-            player, 
-            total, 
-            gameScores 
-        };
+    GAMES.forEach((_, i) => {
+      const s = playerScores[`game${i}`] || 0;
+      gameScores[`game${i}`] = s;
+      total += s;
     });
 
-    // Sort by total score
-    results.sort((a, b) => b.total - a.total);
+    return { player, total, gameScores };
+  });
 
-    // Display podium (top 3)
-    displayPodium(results.slice(0, 3));
+  results.sort((a, b) => b.total - a.total);
 
-    // Display full leaderboard
-    displayLeaderboard(results);
+  displayPodium(results.slice(0, 3));
+  displayLeaderboard(results);
 }
 
+// ── PODIUM ────────────────────────────────────────────
 function displayPodium(top3) {
-    const podium = document.getElementById('podium');
-    podium.innerHTML = '';
+  const podium = document.getElementById('podium');
+  podium.innerHTML = '';
 
-    const medals = ['🥇', '🥈', '🥉'];
-    const classes = ['first', 'second', 'third'];
+  // Visual order: 2nd left, 1st centre, 3rd right
+  const visualOrder = [
+    top3[1] ? { ...top3[1], rank: 1, cls: 'second' } : null,
+    top3[0] ? { ...top3[0], rank: 0, cls: 'first'  } : null,
+    top3[2] ? { ...top3[2], rank: 2, cls: 'third'  } : null,
+  ].filter(Boolean);
 
-    top3.forEach((result, index) => {
-        const place = document.createElement('div');
-        place.className = `podium-place ${classes[index]}`;
-        place.innerHTML = `
-            <div class="podium-box">
-                <div class="medal">${medals[index]}</div>
-                <div class="player-name">${result.player.name}</div>
-                <div class="player-score">${result.total}</div>
-                <div class="rank-label">${index === 0 ? 'Champion!' : index === 1 ? '2nd Place' : '3rd Place'}</div>
-            </div>
-        `;
-        podium.appendChild(place);
-    });
+  visualOrder.forEach(({ player, total, rank, cls }) => {
+    const place = document.createElement('div');
+    place.className = `podium-place ${cls}`;
+    place.innerHTML = `
+      <div class="podium-player">
+        <span class="podium-medal">${MEDALS[rank]}</span>
+        <div class="podium-player-name">${esc(player.name)}</div>
+        <div class="podium-score">${total.toLocaleString()}</div>
+        <div class="podium-pts">points</div>
+      </div>
+      <div class="podium-block">#${rank + 1}</div>
+    `;
+    podium.appendChild(place);
+  });
 }
 
+// ── LEADERBOARD ───────────────────────────────────────
 function displayLeaderboard(results) {
-    const leaderboard = document.getElementById('leaderboard');
-    leaderboard.innerHTML = '';
+  const lb = document.getElementById('leaderboard');
+  lb.innerHTML = '';
 
-    results.forEach((result, index) => {
-        const rank = index + 1;
-        const isTop3 = rank <= 3;
-        
-        const row = document.createElement('div');
-        row.className = `player-row ${isTop3 ? 'top-3' : ''}`;
-        
-        const breakdownId = `breakdown-${index}`;
-        
-        row.innerHTML = `
-            <div class="player-info">
-                <div class="rank">#${rank}</div>
-                <div class="name">${result.player.name}</div>
-            </div>
-            <div class="total-score">${result.total} pts</div>
-            <button class="breakdown-btn" onclick="toggleBreakdown('${breakdownId}')">
-                📊 Breakdown
-            </button>
-        `;
-        
-        const breakdown = document.createElement('div');
-        breakdown.id = breakdownId;
-        breakdown.className = 'breakdown';
-        
-        let breakdownHTML = '';
-        GAMES.forEach((game, i) => {
-            const score = result.gameScores[`game${i}`] || 0;
-            breakdownHTML += `
-                <div class="breakdown-item">
-                    <span class="game-name">${game.name}</span>
-                    <span class="game-score">${score} pts</span>
-                </div>
-            `;
-        });
-        
-        breakdown.innerHTML = breakdownHTML;
-        row.appendChild(breakdown);
-        leaderboard.appendChild(row);
-    });
+  results.forEach((result, index) => {
+    const isTop3   = index < 3;
+    const rankDisp = index < 3 ? MEDALS[index] : `#${index + 1}`;
+    const initials = result.player.name.trim().slice(0, 2).toUpperCase();
+
+    const bRows = GAMES.map((game, i) => {
+      const score = result.gameScores[`game${i}`] || 0;
+      return `
+        <div class="breakdown-item">
+          <span class="game-name">${game.emoji} ${game.name}</span>
+          <span class="game-score ${score > 0 ? 'positive' : 'zero'}">${score > 0 ? score.toLocaleString() + ' pts' : '—'}</span>
+        </div>
+      `;
+    }).join('');
+
+    const row = document.createElement('div');
+    row.className = `player-row ${isTop3 ? 'top-3' : ''}`;
+    row.innerHTML = `
+      <div class="rank">${rankDisp}</div>
+      <div class="player-info">
+        <div class="player-avatar">${initials}</div>
+        <div class="name">${esc(result.player.name)}</div>
+      </div>
+      <div class="total-score">${result.total.toLocaleString()}</div>
+      <button class="breakdown-btn" onclick="event.stopPropagation(); window.toggleBreakdown(this)">Details</button>
+      <div class="breakdown-wrap">
+        <div class="breakdown">
+          <div class="breakdown-header">📊 Score Breakdown</div>
+          ${bRows}
+          <div class="breakdown-total">
+            <span>Total Score</span>
+            <span class="breakdown-total-score">${result.total.toLocaleString()}</span>
+          </div>
+        </div>
+      </div>
+    `;
+
+    lb.appendChild(row);
+  });
 }
 
-function toggleBreakdown(id) {
-    const breakdown = document.getElementById(id);
-    breakdown.classList.toggle('show');
-}
+// ── TOGGLE ────────────────────────────────────────────
+window.toggleBreakdown = function(btn) {
+  const row  = btn.closest('.player-row');
+  const wrap = row.querySelector('.breakdown-wrap');
+  const isOpen = wrap.classList.contains('show');
 
-function createConfetti() {
-    const colors = ['#667eea', '#764ba2', '#FFD700', '#FFA500'];
-    
-    for (let i = 0; i < 50; i++) {
-        setTimeout(() => {
-            const confetti = document.createElement('div');
-            confetti.className = 'confetti';
-            confetti.style.left = Math.random() * 100 + '%';
-            confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-            confetti.style.animationDelay = Math.random() * 3 + 's';
-            confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
-            document.body.appendChild(confetti);
-            
-            setTimeout(() => confetti.remove(), 5000);
-        }, i * 100);
-    }
-}
+  // Close all open panels
+  document.querySelectorAll('.breakdown-wrap.show').forEach(w => {
+    w.classList.remove('show');
+    const b = w.closest('.player-row')?.querySelector('.breakdown-btn');
+    if (b) { b.classList.remove('open'); b.textContent = 'Details'; }
+  });
 
-window.toggleBreakdown = toggleBreakdown;
+  // Open this one if it was closed
+  if (!isOpen) {
+    wrap.classList.add('show');
+    btn.classList.add('open');
+    btn.textContent = 'Hide';
+    setTimeout(() => wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+  }
+};
+
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
 
 loadResults();
