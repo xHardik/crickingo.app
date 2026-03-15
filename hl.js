@@ -356,7 +356,11 @@ function init() {
     sessionStorage.setItem('hlRulesShown', 'true');
   }
 
-  if (isInTournament) showTournamentInfo();
+  if (isInTournament) {
+    showTournamentInfo();
+    // Hide Home button — it sits inside .buttons alongside Higher/Lower
+    document.querySelectorAll('.buttons .btn-back').forEach(b => b.style.display = 'none');
+  }
 
   const today = getRealTodayKey();
   let stats   = {};

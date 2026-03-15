@@ -167,7 +167,8 @@
     }
 
     .podium-place {
-      flex: 1;
+      flex: 0 0 auto;
+      width: calc(33.333% - 8px);
       max-width: 200px;
       display: flex; flex-direction: column;
       align-items: center;
@@ -479,58 +480,60 @@
       nav { padding: 0 14px; }
       .nav-logo { font-size: 1.5rem; }
       .nav-tag  { font-size: 0.65rem; padding: 4px 10px; letter-spacing: 1px; }
-      .nav-home { font-size: 0.8rem; }
 
-      .page { padding: 28px 14px 80px; }
+      .page { padding: 24px 12px 80px; }
 
-      .hero-trophy { font-size: 3.5rem; }
+      .hero-trophy { font-size: 3.2rem; }
+      .hero-title  { font-size: clamp(1.8rem, 7vw, 2.8rem); letter-spacing: 2px; }
 
-      /* Podium: tighter on small screens */
-      #podium { gap: 6px; padding: 0; }
+      /* Podium: fixed thirds, no overflow */
+      #podium { gap: 6px; padding: 0; width: 100%; }
 
-      .podium-place { max-width: none; }
+      .podium-place {
+        width: calc(33.333% - 4px);
+        max-width: none;
+      }
 
-      .podium-medal { font-size: 1.5rem; margin-bottom: 4px; }
+      .podium-medal { font-size: 1.4rem; margin-bottom: 4px; }
 
-      .podium-player { padding: 10px 6px 8px; border-radius: 12px; }
+      .podium-player { padding: 10px 4px 8px; border-radius: 10px; }
 
-      .podium-player-name { font-size: 0.72rem; }
+      .podium-player-name {
+        font-size: 0.68rem;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        max-width: 100%;
+      }
 
-      .podium-score { font-size: 1.4rem; }
+      .podium-score { font-size: clamp(1.1rem, 4vw, 1.4rem); letter-spacing: 1px; }
 
-      .podium-pts { font-size: 0.55rem; }
+      .podium-pts { font-size: 0.5rem; }
 
-      .podium-block { font-size: 0.9rem; }
-      .podium-place.first  .podium-block { height: 72px; }
-      .podium-place.second .podium-block { height: 50px; }
-      .podium-place.third  .podium-block { height: 32px; }
+      .podium-block { font-size: 0.85rem; }
+      .podium-place.first  .podium-block { height: 64px; }
+      .podium-place.second .podium-block { height: 44px; }
+      .podium-place.third  .podium-block { height: 28px; }
 
-      /* Leaderboard rows: stack score below name on tiny screens */
+      /* Leaderboard */
       .leaderboard-wrap { padding: 16px 12px; border-radius: 14px; }
-
       .player-row { padding: 10px 10px; gap: 8px; }
-
       .rank { font-size: 1.2rem; min-width: 22px; }
-
       .player-avatar { width: 30px; height: 30px; font-size: 0.78rem; }
-
       .name { font-size: 0.82rem; }
-
       .total-score { font-size: 1.25rem; }
-
       .breakdown-btn { font-size: 0.58rem; padding: 4px 9px; letter-spacing: 0.5px; }
-
       .breakdown { padding: 12px; }
-
       .breakdown-item { font-size: 0.78rem; padding: 8px 0; }
-
       .game-score { font-size: 0.95rem; }
+
+      /* Actions stack on mobile */
+      .actions { flex-direction: column; padding: 0 8px; }
+      .actions .btn { width: 100%; justify-content: center; }
     }
 
     /* Very small screens: hide avatar to save space */
     @media (max-width: 360px) {
       .player-avatar { display: none; }
-      .breakdown-btn { display: none; }
+      .podium-score  { font-size: 1rem; }
     }
   </style>
 </head>
@@ -543,7 +546,6 @@
   <nav>
     <a href="index.html" class="nav-logo">🏏 Crickingo</a>
     <span class="nav-tag">🏆 Results</span>
-    <a href="index.html" class="nav-home">← Home</a>
   </nav>
 
   <!-- ── PAGE ── -->
@@ -570,6 +572,9 @@
 
     <!-- ACTIONS -->
     <div class="actions">
+      <button class="btn btn-primary" onclick="window.location.href='index.html'">
+        🏠 Home
+      </button>
       <button class="btn btn-secondary" onclick="window.location.href='tournament.html'">
         🔄 New Tournament
       </button>
