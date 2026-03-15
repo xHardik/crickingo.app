@@ -1,5 +1,5 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-import { getDatabase, ref, get } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+import { getDatabase, ref, get, remove } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyC5nqnzG2jGtDcZlL6x9mg7r1xRrldyfpg",
@@ -19,9 +19,8 @@ const GAMES = [
   { name: 'Higher Or Lower',  emoji: '📈' },
   { name: 'Cricket Bingo',    emoji: '🏏' },
   { name: 'Transfer History', emoji: '🔄' },
-   { name: 'Wordle',           emoji: '🟨' },
   { name: 'Build Your Team',  emoji: '🏗️' },
- 
+  { name: 'Wordle',           emoji: '🟨' },
 ];
 
 const MEDALS = ['🥇', '🥈', '🥉'];
@@ -43,6 +42,20 @@ async function loadResults() {
       return;
     }
     displayResults(snapshot.val());
+
+    // ✅ Auto-delete tournament from Firebase 5 mins after results load
+    // Gives everyone enough time to see results, then cleans up automatically
+    setTimeout(async () => {
+      try {
+        await remove(ref(db, `tournaments/${code}`));
+        localStorage.removeItem('tournamentCode');
+        localStorage.removeItem('playerId');
+        localStorage.removeItem('playerName');
+        console.log('🗑️ Tournament cleaned up:', code);
+      } catch (e) {
+        console.log('Cleanup skipped (already deleted):', e.message);
+      }
+    }, 5 * 60 * 1000); // 5 minutes
   } catch (err) {
     console.error('Error loading results:', err);
     alert('Failed to load results. Please try again.');
