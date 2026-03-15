@@ -311,7 +311,8 @@
     .rank {
       font-family: 'Bebas Neue', sans-serif;
       font-size: 1.4rem; letter-spacing: 1px;
-      min-width: 28px; text-align: center;
+      min-width: 36px; width: 36px;
+      text-align: center;
       color: var(--muted); flex-shrink: 0;
     }
     .player-row.top-3 .rank { color: var(--accent); }
@@ -336,12 +337,14 @@
     .name {
       font-weight: 700; font-size: 0.88rem; color: var(--text);
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      min-width: 0;
     }
 
     .total-score {
       font-family: 'Bebas Neue', sans-serif;
       font-size: 1.45rem; letter-spacing: 1px;
       color: var(--green); flex-shrink: 0;
+      min-width: 60px; text-align: right;
     }
     .player-row.top-3 .total-score { color: var(--accent); }
 
@@ -516,10 +519,10 @@
       /* Leaderboard */
       .leaderboard-wrap { padding: 16px 12px; border-radius: 14px; }
       .player-row { padding: 10px 10px; gap: 8px; }
-      .rank { font-size: 1.2rem; min-width: 22px; }
+      .rank { font-size: 1.2rem; min-width: 32px; width: 32px; }
       .player-avatar { width: 30px; height: 30px; font-size: 0.78rem; }
       .name { font-size: 0.82rem; }
-      .total-score { font-size: 1.25rem; }
+      .total-score { font-size: 1.25rem; min-width: 54px; text-align: right; }
       .breakdown-btn { font-size: 0.58rem; padding: 4px 9px; letter-spacing: 0.5px; }
       .breakdown { padding: 12px; }
       .breakdown-item { font-size: 0.78rem; padding: 8px 0; }

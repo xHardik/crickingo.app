@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- ✅ Runs synchronously before first paint — hides page instantly when returning from a game -->
+  <script>
+    if (new URLSearchParams(window.location.search).get('score') !== null) {
+      document.documentElement.style.cssText = 'visibility:hidden;background:#060810';
+    }
+  </script>
   <script type="module" src="tour-match.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">

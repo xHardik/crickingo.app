@@ -27,15 +27,6 @@ let currentTournament = null;
 let currentPlayer     = null;
 let currentGameIndex  = 0;
 
-// ── Immediately hide the page if we're returning from a game ──
-// This fires synchronously before DOMContentLoaded so there's zero flash.
-(function() {
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('score') !== null && params.get('game') !== null) {
-    document.documentElement.style.visibility = 'hidden';
-  }
-})();
-
 // ===== CREATE TOURNAMENT =====
 async function createTournament() {
   const name        = document.getElementById('tournamentName').value.trim();
