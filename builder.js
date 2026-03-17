@@ -105,7 +105,7 @@ function updateTodayDot(rating) {
 function renderDashboard(stats, history, today) {
   // ✅ In tournament mode, hide the entire dashboard
   if (isInTournament) {
-    const dashboard = document.getElementById('bottomDashboard');
+    const dashboard = document.querySelector('.left-dashboard');
     if (dashboard) dashboard.style.display = 'none';
     return;
   }
@@ -217,21 +217,11 @@ async function loadPlayersByDate(selectedDate) {
 }
 
 function populatePuzzleBar(dateStr) {
-  // ✅ Hide puzzle bar in tournament mode
+  // ✅ Hide puzzle bar in tournament mode only — date/number set by inline HTML script
   if (isInTournament) {
     const puzzleBar = document.querySelector('.puzzle-bar');
     if (puzzleBar) puzzleBar.style.display = 'none';
-    return;
   }
-
-  const d       = new Date(dateStr + 'T00:00:00');
-  const display = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-  const dateEl  = document.getElementById('puzzleDate');
-  if (dateEl) dateEl.textContent = display;
-  const launch = new Date('2026-01-15T00:00:00');
-  const diff   = Math.floor((d - launch) / (1000 * 60 * 60 * 24)) + 1;
-  const numEl  = document.getElementById('puzzleNumber');
-  if (numEl) numEl.textContent = '#' + diff;
 }
 
 function getDateFromURL() {
