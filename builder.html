@@ -325,7 +325,7 @@
     /* ── PLAYERS GRID ── */
     .players-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 14px;
       flex: 1;
       min-height: 400px;
@@ -1086,7 +1086,17 @@
       .modal-title { font-size: 1.8rem; }
       .stats-demo { flex-direction: column; }
       .strategy-grid { grid-template-columns: 1fr; }
-      .players-grid { grid-template-columns: 1fr; max-height: 55vh; }
+
+      /* ── FIX: 2-column player grid on tablet/mobile ── */
+      .players-grid {
+        grid-template-columns: repeat(2, 1fr);
+        max-height: 55vh;
+        gap: 10px;
+      }
+
+      .player-card { padding: 12px; }
+      .player-name { font-size: 0.85rem; }
+
       .glass-panel { padding: 20px; }
       .left-dashboard { grid-template-columns: 1fr; }
     }
@@ -1095,7 +1105,19 @@
       .page { padding: 16px 12px 56px; }
       .filters { gap: 6px; }
       .filter-btn { padding: 6px 12px; font-size: 0.72rem; }
-      .players-grid { max-height: 50vh; }
+
+      /* ── FIX: keep 2-column grid on small phones ── */
+      .players-grid {
+        grid-template-columns: repeat(2, 1fr);
+        max-height: 50vh;
+        gap: 8px;
+      }
+
+      .player-card { padding: 10px; }
+      .player-name { font-size: 0.8rem; }
+      .player-price { font-size: 0.85rem; padding: 3px 8px; }
+      .stat-bar-label { font-size: 0.58rem; }
+      .stat-bar-val { font-size: 0.78rem; }
     }
   </style>
 </head>

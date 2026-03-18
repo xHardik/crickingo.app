@@ -3,24 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cricket Bingo - Crickingo</title>
+  <title>Cricket Bingo — Crickingo</title>
   <link rel="icon" type="image/png" href="logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;0,9..40,900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #060810;
-      --surface: rgba(255,255,255,0.04);
+      --bg: #05070f;
+      --surface: rgba(255,255,255,0.038);
+      --surface2: rgba(255,255,255,0.065);
       --border: rgba(255,255,255,0.08);
+      --border2: rgba(255,255,255,0.13);
       --accent: #F7C344;
+      --accent-dim: rgba(247,195,68,0.14);
       --accent2: #E84040;
       --accent3: #4F8EF7;
-      --text: #F2F2F2;
-      --muted: rgba(242,242,242,0.5);
+      --green: #3DD68C;
+      --teal: #2DD4BF;
+      --purple: #A855F7;
+      --text: #F0F0F0;
+      --muted: rgba(240,240,240,0.45);
+      --muted2: rgba(240,240,240,0.25);
       --card-radius: 16px;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
 
     body {
       font-family: 'DM Sans', sans-serif;
@@ -30,178 +38,289 @@
       overflow-x: hidden;
     }
 
+    /* ── BACKGROUND ── */
     .bg-layer {
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    }
+    .bg-layer::before {
+      content: '';
+      position: absolute; inset: 0;
       background:
-        radial-gradient(ellipse 80% 60% at 10% 0%, rgba(247,195,68,0.1) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 50% at 90% 100%, rgba(232,64,64,0.08) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 40% at 50% 50%, rgba(79,142,247,0.05) 0%, transparent 70%);
+        radial-gradient(ellipse 80% 60% at 8% -5%, rgba(247,195,68,0.11) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 50% at 95% 105%, rgba(232,64,64,0.08) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 40% at 50% 50%, rgba(79,142,247,0.05) 0%, transparent 65%);
     }
     .bg-layer::after {
       content: '';
       position: absolute; inset: 0;
       background-image: repeating-linear-gradient(
-        -45deg, transparent, transparent 40px,
-        rgba(255,255,255,0.012) 40px, rgba(255,255,255,0.012) 41px
+        -45deg, transparent, transparent 48px,
+        rgba(255,255,255,0.008) 48px, rgba(255,255,255,0.008) 49px
       );
     }
 
+    .noise {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.022;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+    }
+
+    /* ── NAV ── */
     nav {
-      position: sticky; top: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 40px; height: 64px;
-      background: rgba(6,8,16,0.85);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-      box-shadow: 0 0 40px rgba(247,195,68,0.15), 0 0 80px rgba(247,195,68,0.08);
+      position: sticky; top: 0; z-index: 200;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      padding: 0 32px; height: 62px;
+      background: rgba(5,7,15,0.82);
+      backdrop-filter: blur(24px) saturate(1.4);
+      border-bottom: 1px solid rgba(247,195,68,0.1);
     }
 
     .nav-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.8rem; letter-spacing: 2px;
-      background: linear-gradient(90deg, var(--accent), #fff 60%);
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.75rem; letter-spacing: 3px;
+      background: linear-gradient(100deg, var(--accent) 0%, #ffe9a0 50%, var(--accent) 100%);
+      background-size: 200% auto;
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
       text-decoration: none;
+      animation: logoShimmer 4s linear infinite;
     }
+    @keyframes logoShimmer { from{background-position:0% center} to{background-position:200% center} }
 
-    .nav-center { display: flex; align-items: center; gap: 8px; }
-
-    .nav-game-tag {
-      font-size: 0.72rem; font-weight: 700;
+    .nav-center-tag {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 0.72rem; font-weight: 800;
       text-transform: uppercase; letter-spacing: 2px;
       color: var(--accent);
       background: rgba(247,195,68,0.1);
       border: 1px solid rgba(247,195,68,0.25);
-      padding: 4px 12px; border-radius: 100px;
+      padding: 5px 14px; border-radius: 100px;
+    }
+    .nav-center-tag .fire-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent); animation: blink 1.5s ease infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .nav-right { display: flex; align-items: center; justify-content: flex-end; }
+    .nav-help-wrap { position: relative; display: flex; align-items: center; }
+    .nav-help-btn {
+      width: 34px; height: 34px; border-radius: 50%;
+      border: 1px solid var(--border2);
+      background: var(--surface);
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .nav-help-btn:hover {
+      background: rgba(247,195,68,0.12);
+      border-color: rgba(247,195,68,0.4);
+      color: var(--accent);
+      transform: scale(1.1);
+    }
+    .nav-help-tooltip {
+      position: absolute;
+      right: calc(100% + 10px);
+      top: 50%; transform: translateY(-50%);
+      background: rgba(10,14,30,0.96);
+      border: 1px solid rgba(247,195,68,0.25);
+      color: var(--accent);
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+      padding: 5px 12px; border-radius: 8px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s, transform 0.15s;
+      transform: translateY(-50%) translateX(4px);
+    }
+    .nav-help-tooltip::after {
+      content: '';
+      position: absolute;
+      left: 100%; top: 50%; transform: translateY(-50%);
+      border: 5px solid transparent;
+      border-left-color: rgba(247,195,68,0.25);
+    }
+    .nav-help-wrap:hover .nav-help-tooltip {
+      opacity: 1;
+      transform: translateY(-50%) translateX(0);
     }
 
-    .nav-back {
-      display: flex; align-items: center; gap: 6px;
-      color: var(--muted); text-decoration: none;
-      font-size: 0.88rem; font-weight: 500;
-      transition: color 0.2s, transform 0.2s;
-    }
-    .nav-back:hover { color: var(--text); transform: translateX(-3px); }
-
+    /* ── PAGE ── */
     .page {
       position: relative; z-index: 1;
-      max-width: 980px; margin: 0 auto;
-      padding: 40px 40px 80px;
+      max-width: 1000px; margin: 0 auto;
+      padding: 36px 36px 80px;
     }
 
-    .page-header { margin-bottom: 28px; animation: fadeUp 0.6s ease both; }
-
+    /* ── PAGE HEADER ── */
+    .page-header {
+      margin-bottom: 24px;
+      animation: fadeUp 0.5s ease both;
+    }
     .page-header h1 {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(2rem, 5vw, 3rem);
-      letter-spacing: 1px; line-height: 1; margin-bottom: 6px;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      letter-spacing: 2px; line-height: 1; margin-bottom: 5px;
     }
+    .page-header p { color: var(--muted); font-size: 0.88rem; }
 
-    .page-header p { color: var(--muted); font-size: 0.9rem; }
-
+    /* ── PUZZLE BAR ── */
     .puzzle-bar {
-      display: flex; align-items: center; gap: 16px;
-      margin-bottom: 28px; padding: 10px 18px;
+      display: flex; align-items: center; gap: 0;
+      margin-bottom: 24px; width: fit-content;
       background: rgba(247,195,68,0.05);
-      border: 1px solid rgba(247,195,68,0.12);
-      border-radius: 12px; width: fit-content;
-      animation: fadeUp 0.6s ease 0.05s both;
+      border: 1px solid rgba(247,195,68,0.15);
+      border-radius: 12px; overflow: hidden;
+      animation: fadeUp 0.5s ease 0.05s both;
+    }
+    .puzzle-bar-item {
+      display: flex; align-items: center; gap: 7px;
+      padding: 9px 16px; font-size: 0.77rem; color: var(--muted);
+    }
+    .puzzle-bar-item strong { color: var(--accent); font-weight: 700; }
+    .puzzle-bar-sep { width: 1px; height: 100%; background: rgba(247,195,68,0.15); }
+
+    /* ── LIVE SCORE STRIP ── */
+    .live-score-strip {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; padding: 14px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px; margin-bottom: 18px;
+      animation: fadeUp 0.5s ease 0.08s both;
+    }
+    .lss-item { display: flex; flex-direction: column; align-items: center; gap: 2px; flex: 1; }
+    .lss-val {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.55rem;
+      letter-spacing: 1px; line-height: 1;
+    }
+    .lss-val.score-val {
+      background: linear-gradient(135deg, var(--accent), #fff 80%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .lss-val.correct-val { color: var(--green); }
+    .lss-val.streak-val { color: #f97316; }
+    .lss-label { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); }
+    .lss-divider { width: 1px; height: 38px; background: var(--border2); }
+
+    /* ── PLAYER BOX ── */
+    .player-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px 24px;
+      margin-bottom: 18px;
+      position: relative; overflow: hidden;
+      animation: fadeUp 0.5s ease 0.1s both;
+    }
+    .player-box::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+      background: linear-gradient(180deg, var(--accent), rgba(247,195,68,0.3));
+    }
+    .player-box-glow {
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg, rgba(247,195,68,0.05), transparent 55%);
+      pointer-events: none;
     }
 
-    .puzzle-bar-item { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: var(--muted); }
-    .puzzle-bar-item strong { color: var(--accent); font-weight: 700; }
-    .puzzle-bar-sep { width: 1px; height: 14px; background: var(--border); }
+    .player-info-row { display: flex; align-items: center; gap: 16px; position: relative; z-index: 1; }
 
+    .player-avatar {
+      width: 54px; height: 54px; border-radius: 50%;
+      background: rgba(247,195,68,0.12);
+      border: 2px solid rgba(247,195,68,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; flex-shrink: 0;
+      box-shadow: 0 0 20px rgba(247,195,68,0.15);
+    }
+
+    .player-info { flex: 1; min-width: 0; }
+    .player-name {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.65rem; letter-spacing: 1px;
+      line-height: 1; margin-bottom: 5px; color: var(--text);
+    }
+
+    .player-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .player-count {
+      font-size: 0.72rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+    .player-progress-bar {
+      flex: 1; min-width: 80px; max-width: 160px;
+      height: 4px; background: rgba(255,255,255,0.07);
+      border-radius: 100px; overflow: hidden;
+    }
+    .player-progress-fill {
+      height: 100%; border-radius: 100px;
+      background: linear-gradient(90deg, var(--accent), #ffd060);
+      transition: width 0.4s ease;
+    }
+
+    .controls {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      position: relative; z-index: 1; margin-top: 16px;
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 10px 20px; border: none; border-radius: 10px;
+      font-family: 'DM Sans', sans-serif; font-size: 0.83rem; font-weight: 700;
+      cursor: pointer; transition: all 0.22s ease;
+      text-transform: uppercase; letter-spacing: 0.5px; text-decoration: none;
+    }
+    .btn-skip {
+      background: rgba(247,195,68,0.12); color: var(--accent);
+      border: 1px solid rgba(247,195,68,0.28);
+    }
+    .btn-skip:hover { background: rgba(247,195,68,0.22); border-color: rgba(247,195,68,0.5); transform: translateY(-2px); }
+    .btn-restart {
+      background: rgba(61,214,140,0.12); color: var(--green);
+      border: 1px solid rgba(61,214,140,0.28);
+    }
+    .btn-restart:hover { background: rgba(61,214,140,0.22); transform: translateY(-2px); }
+    .btn-back {
+      background: var(--surface); color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    .btn-back:hover { color: var(--text); border-color: var(--border2); transform: translateY(-2px); }
+    .btn-primary {
+      background: var(--accent); color: #000; font-weight: 800;
+    }
+    .btn-primary:hover { background: #ffd060; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(247,195,68,0.3); }
     .btn-share {
-      background: linear-gradient(135deg, rgba(79,142,247,0.2), rgba(168,85,247,0.2));
-      color: #4F8EF7; border: 1px solid rgba(79,142,247,0.35);
+      background: linear-gradient(135deg, rgba(79,142,247,0.18), rgba(168,85,247,0.18));
+      color: var(--accent3); border: 1px solid rgba(79,142,247,0.3);
       position: relative; overflow: hidden;
     }
-    .btn-share:hover {
-      background: linear-gradient(135deg, rgba(79,142,247,0.3), rgba(168,85,247,0.3));
-      border-color: rgba(79,142,247,0.6); transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(79,142,247,0.2);
-    }
-
+    .btn-share:hover { background: linear-gradient(135deg, rgba(79,142,247,0.28), rgba(168,85,247,0.28)); border-color: rgba(79,142,247,0.55); transform: translateY(-2px); }
     .share-copied {
-      position: absolute; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-      background: rgba(61,214,140,0.9); color: #000; font-weight: 800; font-size: 0.8rem;
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      background: rgba(61,214,140,0.92); color: #000; font-weight: 800; font-size: 0.78rem;
       border-radius: 10px; opacity: 0; pointer-events: none; transition: opacity 0.2s;
     }
     .share-copied.show { opacity: 1; }
 
-    .game-info { margin-bottom: 20px; animation: fadeUp 0.6s ease 0.1s both; }
-
-    .player-box {
-      background: var(--surface); border: 1px solid var(--border);
-      border-left: 3px solid var(--accent); border-radius: var(--card-radius);
-      padding: 20px 24px; position: relative; overflow: hidden;
+    /* ── SEARCH ── */
+    .search-wrapper {
+      position: relative; margin-bottom: 22px;
+      animation: fadeUp 0.5s ease 0.15s both;
     }
-
-    .player-box::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(90deg, rgba(247,195,68,0.06), transparent 60%);
-      pointer-events: none;
-    }
-
-    .player-info-row { display: flex; align-items: center; gap: 16px; }
-
-    .player-avatar {
-      width: 52px; height: 52px; border-radius: 50%;
-      background: rgba(247,195,68,0.15); border: 2px solid rgba(247,195,68,0.3);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.5rem; flex-shrink: 0;
-    }
-
-    .player-info { flex: 1; min-width: 0; }
-
-    .player-name {
-      font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 1px;
-      line-height: 1; margin-bottom: 4px; position: relative; z-index: 1;
-    }
-
-    .player-count {
-      font-size: 0.78rem; color: var(--muted);
-      text-transform: uppercase; letter-spacing: 1px; position: relative; z-index: 1;
-    }
-
-    .controls {
-      display: flex; gap: 10px; flex-wrap: wrap;
-      position: relative; z-index: 1; margin-top: 14px;
-    }
-
-    .btn {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 10px 20px; border: none; border-radius: 10px;
-      font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 700;
-      cursor: pointer; transition: all 0.25s ease;
-      text-transform: uppercase; letter-spacing: 0.5px; text-decoration: none;
-    }
-
-    .btn-skip { background: rgba(247,195,68,0.15); color: var(--accent); border: 1px solid rgba(247,195,68,0.3); }
-    .btn-skip:hover { background: rgba(247,195,68,0.25); border-color: rgba(247,195,68,0.5); transform: translateY(-2px); }
-
-    .btn-restart { background: rgba(61,214,140,0.15); color: #3DD68C; border: 1px solid rgba(61,214,140,0.3); }
-    .btn-restart:hover { background: rgba(61,214,140,0.25); transform: translateY(-2px); }
-
-    .btn-back { background: var(--surface); color: var(--muted); border: 1px solid var(--border); }
-    .btn-back:hover { color: var(--text); border-color: rgba(255,255,255,0.2); transform: translateY(-2px); }
-
-    .btn-primary { background: var(--accent); color: #000; font-weight: 800; }
-    .btn-primary:hover { background: #ffd060; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(247,195,68,0.3); }
-
-    .search-wrapper { position: relative; margin-bottom: 24px; animation: fadeUp 0.6s ease 0.15s both; }
-
     .search-input {
       width: 100%; padding: 14px 20px;
       font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
-      background: var(--surface); border: 1px solid var(--border);
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: var(--card-radius); color: var(--text);
       transition: border-color 0.2s, box-shadow 0.2s;
     }
     .search-input::placeholder { color: var(--muted); }
-    .search-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(247,195,68,0.12); }
+    .search-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(247,195,68,0.1); }
 
     .dropdown-list {
       position: absolute; width: 100%; max-height: 280px; overflow-y: auto;
@@ -209,12 +328,10 @@
       border-radius: var(--card-radius); box-shadow: 0 16px 48px rgba(0,0,0,0.6);
       z-index: 1000; display: none; margin-top: 6px;
     }
-    .dropdown-list::-webkit-scrollbar { width: 6px; }
-    .dropdown-list::-webkit-scrollbar-thumb { background: rgba(247,195,68,0.3); border-radius: 6px; }
-    .dropdown-list.active { display: block; animation: dropDown 0.2s ease; }
-
-    @keyframes dropDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
-
+    .dropdown-list::-webkit-scrollbar { width: 5px; }
+    .dropdown-list::-webkit-scrollbar-thumb { background: rgba(247,195,68,0.3); border-radius: 5px; }
+    .dropdown-list.active { display: block; animation: dropDown 0.18s ease; }
+    @keyframes dropDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
     .dropdown-item {
       padding: 12px 18px; cursor: pointer; color: var(--text);
       font-size: 0.9rem; border-bottom: 1px solid var(--border);
@@ -224,382 +341,380 @@
     .dropdown-item:last-child { border-bottom: none; }
     .no-results { padding: 16px 18px; color: var(--muted); font-size: 0.88rem; text-align: center; }
 
+    /* ── GRID ── */
+    .grid-section { animation: fadeUp 0.5s ease 0.2s both; }
+
+    .grid-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .grid-header-label {
+      font-size: 0.68rem; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 2.5px; color: var(--muted);
+    }
+    .grid-filled-count {
+      font-size: 0.7rem; font-weight: 700; color: var(--muted2);
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 3px 10px; border-radius: 100px;
+    }
+    .grid-filled-count span { color: var(--green); }
+
     .grid {
       display: grid; grid-template-columns: repeat(5, 1fr);
-      gap: 12px; margin-bottom: 32px; animation: fadeUp 0.6s ease 0.2s both;
+      gap: 10px; margin-bottom: 28px;
     }
 
     .cell {
-      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.11);
-      border-radius: 14px; min-height: 130px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 14px; min-height: 128px;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      gap: 10px; padding: 14px; text-align: center; cursor: pointer;
-      transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s cubic-bezier(0.4,0,0.2,1);
+      gap: 9px; padding: 14px; text-align: center; cursor: pointer;
+      transition: border-color 0.22s, box-shadow 0.22s, transform 0.22s cubic-bezier(0.34,1.56,0.64,1), background 0.22s;
       position: relative; overflow: hidden;
     }
-
-    .cell::after {
-      content: ''; position: absolute;
-      top: 0; left: -100%; width: 60%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
-      transition: none;
-    }
-    .cell:hover:not([data-filled="true"])::after { animation: cellShimmer 0.6s ease forwards; }
-    @keyframes cellShimmer { from { left: -100%; } to { left: 200%; } }
-
-
     .cell::before {
       content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(247,195,68,0.07), transparent);
-      opacity: 0; transition: opacity 0.25s;
+      background: linear-gradient(135deg, rgba(247,195,68,0.08), transparent 60%);
+      opacity: 0; transition: opacity 0.22s; pointer-events: none;
+    }
+    /* shimmer on hover */
+    .cell::after {
+      content: ''; position: absolute;
+      top: 0; left: -120%; width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
+    }
+    .cell:hover:not([data-filled="true"])::after { animation: cellShimmer 0.55s ease forwards; }
+    @keyframes cellShimmer { from{left:-120%} to{left:220%} }
+
+    .cell:hover:not([data-filled="true"]) {
+      border-color: rgba(247,195,68,0.45);
+      background: rgba(247,195,68,0.04);
+      transform: translateY(-4px) scale(1.025);
+      box-shadow: 0 14px 32px rgba(247,195,68,0.15);
     }
     .cell:hover:not([data-filled="true"])::before { opacity: 1; }
-    .cell:hover:not([data-filled="true"]) {
-      border-color: rgba(247,195,68,0.45); transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 12px 28px rgba(247,195,68,0.18);
-    }
 
     .cell-image {
-      width: 52px; height: 52px; object-fit: contain;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+      width: 50px; height: 50px; object-fit: contain;
+      filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
       transition: transform 0.2s; position: relative; z-index: 1;
     }
     .cell:hover .cell-image { transform: scale(1.1); }
 
     .cell-text {
-      font-size: 0.78rem; font-weight: 600; line-height: 1.35;
+      font-size: 0.76rem; font-weight: 600; line-height: 1.35;
       color: var(--text); word-break: break-word; position: relative; z-index: 1;
     }
 
+    /* CORRECT state */
     .cell.correct {
-      border-color: #3DD68C; box-shadow: 0 8px 24px rgba(61,214,140,0.25); overflow: hidden;
+      border-color: var(--green);
+      box-shadow: 0 6px 22px rgba(61,214,140,0.22);
     }
     .cell.correct::before {
       content: ''; position: absolute; inset: 0;
-      background: linear-gradient(180deg, rgba(61,214,140,0.18) 0%, rgba(61,214,140,0.08) 100%);
-      opacity: 1; clip-path: inset(100% 0 0 0);
-      animation: liquidFill 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-      pointer-events: none; z-index: 0;
+      background: linear-gradient(180deg, rgba(61,214,140,0.18) 0%, rgba(61,214,140,0.07) 100%);
+      opacity: 1; clip-path: inset(100% 0 0 0); pointer-events: none; z-index: 0;
+      animation: liquidFill 0.6s cubic-bezier(0.22,1,0.36,1) forwards;
     }
-    @keyframes liquidFill { 0% { clip-path: inset(100% 0 0 0); } 100% { clip-path: inset(0% 0 0 0); } }
+    @keyframes liquidFill { 0%{clip-path:inset(100% 0 0 0)} 100%{clip-path:inset(0% 0 0 0)} }
 
-    .cell.correct { animation: correctBounce 0.5s cubic-bezier(0.4,0,0.2,1) forwards; }
-    @keyframes correctBounce { 0% { transform: scale(1); } 30% { transform: scale(1.06); } 60% { transform: scale(0.97); } 100% { transform: scale(1); } }
+    .cell.correct { animation: correctBounce 0.45s cubic-bezier(0.4,0,0.2,1) forwards; }
+    @keyframes correctBounce { 0%{transform:scale(1)} 30%{transform:scale(1.07)} 60%{transform:scale(0.97)} 100%{transform:scale(1)} }
 
-    .cell.correct::after {
-      content: '✓'; position: absolute; top: 8px; right: 10px;
-      font-size: 0.85rem; color: #3DD68C; font-weight: 900;
-      opacity: 0; animation: tickFade 0.6s ease 0.1s forwards; z-index: 2;
+    .cell.correct .cell-check {
+      position: absolute; top: 8px; right: 9px;
+      font-size: 0.8rem; color: var(--green); font-weight: 900;
+      opacity: 0; animation: tickFade 0.5s ease 0.1s forwards; z-index: 2;
     }
     @keyframes tickFade {
-      0% { opacity: 0; transform: scale(0) rotate(-20deg); }
-      60% { opacity: 1; transform: scale(1.3) rotate(5deg); }
-      100% { opacity: 1; transform: scale(1) rotate(0deg); }
+      0%{opacity:0;transform:scale(0) rotate(-20deg)}
+      60%{opacity:1;transform:scale(1.3) rotate(5deg)}
+      100%{opacity:1;transform:scale(1) rotate(0deg)}
     }
 
-    .cell.ripple { animation: victoryRipple 0.6s cubic-bezier(0.4,0,0.2,1) both; }
-    @keyframes victoryRipple {
-      0%   { transform: scale(1);    box-shadow: 0 0 0 0   rgba(61,214,140,0.8); }
-      25%  { transform: scale(1.1);  box-shadow: 0 0 0 10px rgba(61,214,140,0.4); }
-      50%  { transform: scale(0.96); box-shadow: 0 0 0 20px rgba(61,214,140,0.15); }
-      75%  { transform: scale(1.03); box-shadow: 0 0 0 28px rgba(61,214,140,0.05); }
-      100% { transform: scale(1);    box-shadow: 0 0 0 36px rgba(61,214,140,0); }
-    }
-    .cell.ripple::before {
-      animation: rippleShimmer 0.6s ease both !important;
-      clip-path: inset(0% 0 0 0) !important;
-    }
-    @keyframes rippleShimmer {
-      0%   { opacity: 0.5; background: linear-gradient(135deg, rgba(247,195,68,0.25), rgba(61,214,140,0.15)); }
-      50%  { opacity: 1;   background: linear-gradient(135deg, rgba(247,195,68,0.4),  rgba(61,214,140,0.25)); }
-      100% { opacity: 1;   background: linear-gradient(135deg, rgba(61,214,140,0.18), rgba(61,214,140,0.08)); }
-    }
-
+    /* WRONG state */
     .cell.wrong {
-      background: rgba(232,64,64,0.1); border-color: var(--accent2);
-      box-shadow: 0 0 28px rgba(232,64,64,0.25);
-      animation: wrongSequence 0.6s cubic-bezier(0.4,0,0.2,1) forwards;
+      border-color: var(--accent2);
+      box-shadow: 0 0 24px rgba(232,64,64,0.25);
+      animation: wrongShake 0.55s cubic-bezier(0.4,0,0.2,1) forwards;
     }
     .cell.wrong::before { background: linear-gradient(135deg, rgba(232,64,64,0.12), transparent); opacity: 1; }
-    @keyframes wrongSequence {
-      0%   { transform: translateX(0)    rotate(0deg); }
-      15%  { transform: translateX(-10px) rotate(-2deg); }
-      30%  { transform: translateX(10px)  rotate(2deg); }
-      45%  { transform: translateX(-7px)  rotate(-1deg); }
-      60%  { transform: translateX(7px)   rotate(1deg); }
-      75%  { transform: translateX(-3px)  rotate(0deg); }
-      100% { transform: translateX(0)    rotate(0deg); }
+    @keyframes wrongShake {
+      0%  {transform:translateX(0) rotate(0)}
+      15% {transform:translateX(-9px) rotate(-2deg)}
+      30% {transform:translateX(9px) rotate(2deg)}
+      45% {transform:translateX(-6px) rotate(-1deg)}
+      60% {transform:translateX(6px) rotate(1deg)}
+      75% {transform:translateX(-2px)}
+      100%{transform:translateX(0) rotate(0)}
     }
-    .cell.wrong::after {
-      content: '✕'; position: absolute; top: 8px; right: 10px;
-      font-size: 0.85rem; color: var(--accent2); font-weight: 900;
-      opacity: 0; animation: tickFade 0.5s ease 0.05s forwards; z-index: 2;
+    .cell.wrong .cell-check {
+      position: absolute; top: 8px; right: 9px;
+      font-size: 0.8rem; color: var(--accent2); font-weight: 900;
+      opacity: 0; animation: tickFade 0.45s ease 0.05s forwards; z-index: 2;
     }
 
+    /* RIPPLE victory */
+    .cell.ripple { animation: victoryRipple 0.6s cubic-bezier(0.4,0,0.2,1) both; }
+    @keyframes victoryRipple {
+      0%  {transform:scale(1);   box-shadow:0 0 0 0 rgba(61,214,140,0.8)}
+      25% {transform:scale(1.1); box-shadow:0 0 0 10px rgba(61,214,140,0.4)}
+      50% {transform:scale(0.96);box-shadow:0 0 0 20px rgba(61,214,140,0.12)}
+      75% {transform:scale(1.03);box-shadow:0 0 0 28px rgba(61,214,140,0.04)}
+      100%{transform:scale(1);   box-shadow:0 0 0 36px rgba(61,214,140,0)}
+    }
+
+    /* ── RESULT CARD ── */
     .result-card {
-      display: none; background: var(--surface); border: 1px solid var(--border);
-      border-radius: 20px; padding: 48px 40px; text-align: center;
-      animation: fadeUp 0.5s ease; position: relative; overflow: hidden;
+      display: none;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 22px; padding: 48px 40px; text-align: center;
+      animation: fadeUp 0.5s ease;
+      position: relative; overflow: hidden;
     }
     .result-card::before {
       content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2), #4F8EF7);
+      background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+      border-radius: 22px 22px 0 0;
     }
-
-    .result-title { font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem; letter-spacing: 2px; margin-bottom: 8px; }
-
+    .result-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(61,214,140,0.1); border: 1px solid rgba(61,214,140,0.3);
+      color: var(--green); font-size: 0.7rem; font-weight: 800;
+      letter-spacing: 2px; text-transform: uppercase;
+      padding: 5px 14px; border-radius: 100px;
+      margin-bottom: 16px;
+    }
+    .result-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem; letter-spacing: 2px; margin-bottom: 6px;
+    }
     .result-score {
-      font-family: 'Bebas Neue', sans-serif; font-size: 5rem; letter-spacing: 2px;
-      background: linear-gradient(135deg, var(--accent), #ffd700);
+      font-family: 'Bebas Neue', sans-serif; font-size: 5.5rem; letter-spacing: 2px;
+      background: linear-gradient(135deg, var(--accent), #ffd700 50%, var(--accent));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      line-height: 1; margin: 16px 0;
-      filter: drop-shadow(0 0 20px rgba(247,195,68,0.4));
-      animation: scorePulse 2s ease-in-out infinite;
+      line-height: 1; margin: 12px 0;
+      filter: drop-shadow(0 0 24px rgba(247,195,68,0.45));
+      animation: scorePulse 2.5s ease-in-out infinite;
     }
     @keyframes scorePulse {
-      0%,100% { filter: drop-shadow(0 0 20px rgba(247,195,68,0.4)); }
-      50%      { filter: drop-shadow(0 0 40px rgba(247,195,68,0.7)); }
+      0%,100%{filter:drop-shadow(0 0 20px rgba(247,195,68,0.4))}
+      50%    {filter:drop-shadow(0 0 44px rgba(247,195,68,0.75))}
     }
+    .result-phrase { color: var(--muted); font-size: 1rem; margin-bottom: 28px; line-height: 1.6; }
 
-    .result-phrase { color: var(--muted); font-size: 1rem; margin-bottom: 32px; }
-    .result-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .result-breakdown {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 10px; margin-bottom: 28px; text-align: left;
+    }
+    .rb-item {
+      background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px 16px;
+    }
+    .rb-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 4px; }
+    .rb-val { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 1px; color: var(--accent); }
+    .rb-val.green { color: var(--green); }
+    .rb-val.red   { color: var(--accent2); }
 
+    .result-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+    /* ── MODAL ── */
     .modal-overlay {
       display: none; position: fixed; inset: 0; z-index: 9999;
-      background: rgba(0,0,0,0.8); backdrop-filter: blur(12px);
-      justify-content: center; align-items: center;
+      background: rgba(0,0,0,0.82); backdrop-filter: blur(14px);
+      justify-content: center; align-items: center; padding: 20px;
     }
-    .modal-overlay.active { display: flex; animation: fadeIn 0.25s ease; }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
+    .modal-overlay.active { display: flex; animation: fadeIn 0.22s ease; }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
     .modal-box {
-      background: #0d1120; border: 1px solid rgba(247,195,68,0.2);
-      border-radius: 24px; padding: 48px 40px;
-      max-width: 580px; width: 90%; max-height: 88vh; overflow-y: auto;
-      position: relative; animation: modalUp 0.35s cubic-bezier(0.4,0,0.2,1);
+      background: #0c1020; border: 1px solid rgba(247,195,68,0.18);
+      border-radius: 24px; padding: 44px 36px;
+      max-width: 560px; width: 100%; max-height: 88vh; overflow-y: auto;
+      position: relative; animation: modalUp 0.32s cubic-bezier(0.4,0,0.2,1);
     }
     .modal-box::before {
       content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2), #4F8EF7);
+      background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
       border-radius: 24px 24px 0 0;
     }
-    @keyframes modalUp { from { opacity: 0; transform: translateY(32px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
-    .modal-box::-webkit-scrollbar { width: 6px; }
-    .modal-box::-webkit-scrollbar-thumb { background: rgba(247,195,68,0.3); border-radius: 6px; }
-
-    .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 2.4rem; letter-spacing: 2px; text-align: center; margin-bottom: 28px; }
-    .rules-list { list-style: none; margin-bottom: 24px; display: flex; flex-direction: column; gap: 10px; }
+    @keyframes modalUp { from{opacity:0;transform:translateY(28px) scale(0.96)} to{opacity:1;transform:translateY(0) scale(1)} }
+    .modal-box::-webkit-scrollbar { width: 5px; }
+    .modal-box::-webkit-scrollbar-thumb { background: rgba(247,195,68,0.3); border-radius: 5px; }
+    .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 2.3rem; letter-spacing: 2px; text-align: center; margin-bottom: 26px; }
+    .rules-list { list-style: none; margin-bottom: 22px; display: flex; flex-direction: column; gap: 9px; }
     .rules-list li {
       background: var(--surface); border: 1px solid var(--border);
-      border-left: 3px solid rgba(247,195,68,0.5); border-radius: 12px;
-      padding: 14px 18px; font-size: 0.92rem; line-height: 1.6; color: var(--text);
+      border-left: 3px solid rgba(247,195,68,0.45); border-radius: 12px;
+      padding: 13px 16px; font-size: 0.9rem; line-height: 1.6;
       transition: border-color 0.2s, transform 0.2s;
     }
     .rules-list li:hover { border-left-color: var(--accent); transform: translateX(4px); }
-    .rule-icon { margin-right: 10px; }
-
+    .rule-icon { margin-right: 8px; }
     .scoring-box {
-      background: rgba(247,195,68,0.06); border: 1px solid rgba(247,195,68,0.2);
-      border-radius: 14px; padding: 20px; margin-bottom: 24px;
+      background: rgba(247,195,68,0.05); border: 1px solid rgba(247,195,68,0.18);
+      border-radius: 14px; padding: 18px; margin-bottom: 22px;
     }
-    .scoring-box h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 1px; color: var(--accent); margin-bottom: 14px; text-align: center; }
-    .scoring-item { display: flex; justify-content: space-between; padding: 8px 0; font-size: 0.88rem; border-bottom: 1px solid var(--border); }
+    .scoring-box h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 1px; color: var(--accent); margin-bottom: 12px; text-align: center; }
+    .scoring-item { display: flex; justify-content: space-between; padding: 7px 0; font-size: 0.86rem; border-bottom: 1px solid var(--border); }
     .scoring-item:last-child { border-bottom: none; }
     .scoring-value { color: var(--accent); font-weight: 700; }
 
-    .bottom-dashboard {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 16px; margin-top: 40px; animation: fadeUp 0.6s ease 0.3s both;
+    /* ── DASHBOARD ── */
+    .bottom-section {
+      margin-top: 44px;
+      animation: fadeUp 0.6s ease 0.3s both;
     }
+    .section-divider {
+      display: flex; align-items: center; gap: 14px; margin-bottom: 22px;
+    }
+    .section-divider-label {
+      font-size: 0.68rem; font-weight: 800;
+      letter-spacing: 3px; text-transform: uppercase; color: var(--muted);
+      white-space: nowrap;
+    }
+    .section-divider-line { flex: 1; height: 1px; background: var(--border2); }
 
+    .dashboard-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 16px; margin-bottom: 24px;
+    }
     .dashboard-card {
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--card-radius); padding: 22px 24px;
+      border-radius: 18px; padding: 22px 24px;
       position: relative; overflow: hidden;
     }
     .dashboard-card::before {
       content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(247,195,68,0.04), transparent 60%);
+      background: linear-gradient(135deg, rgba(247,195,68,0.03), transparent 60%);
       pointer-events: none;
     }
-
     .dashboard-card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 18px; }
     .dashboard-icon { font-size: 1.1rem; }
-    .dashboard-label { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; color: var(--accent); }
+    .dashboard-label { font-family: 'Bebas Neue', sans-serif; font-size: 1.05rem; letter-spacing: 2px; color: var(--accent); }
 
-    .streak-calendar { margin-bottom: 14px; }
-    .streak-dow-row { display: none; }
-
-    /* ── STREAK DOTS — fixed to actually show score ── */
+    /* streak dots */
     .streak-dots {
-      display: grid;
-      grid-template-columns: repeat(10, 1fr);
-      grid-template-rows: repeat(3, 44px); /* bumped from 38px */
-      gap: 4px;
-      margin-bottom: 14px;
+      display: grid; grid-template-columns: repeat(10, 1fr);
+      grid-template-rows: repeat(3, 42px);
+      gap: 3px; margin-bottom: 12px;
     }
-
     .streak-dot {
-      width: 100%; height: 44px;
-      border-radius: 5px;
+      width: 100%; height: 42px; border-radius: 5px;
       display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 2px; position: relative;
+      align-items: center; justify-content: center; gap: 1px;
       transition: transform 0.15s; cursor: default;
     }
-
-    /* Hide pip entirely — only show score number */
     .streak-dot .dot-pip { display: none; }
-
-    .streak-dot .dot-score-val {
-      font-size: 0.68rem; font-weight: 800; line-height: 1;
-      color: #3DD68C; letter-spacing: 0;
-    }
-
-    /* Hide score for non-played states */
+    .streak-dot .dot-score-val { font-size: 0.65rem; font-weight: 800; line-height: 1; color: var(--green); }
     .streak-dot.miss .dot-score-val,
-    .streak-dot.empty .dot-score-val,
     .streak-dot.today-pending .dot-score-val { display: none; }
-
     .streak-dot.today-played .dot-score-val { color: var(--accent); }
     .streak-dot:hover { transform: translateY(-2px); }
+    .streak-dot.win { background: rgba(61,214,140,0.13); border: 1px solid rgba(61,214,140,0.38); }
+    .streak-dot.miss { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); }
+    .streak-dot.today-played { background: rgba(247,195,68,0.14); border: 2px solid var(--accent); box-shadow: 0 0 10px rgba(247,195,68,0.2); }
+    .streak-dot.today-pending { background: rgba(79,142,247,0.09); border: 2px dashed rgba(79,142,247,0.38); }
 
-    .streak-dot.empty { background: transparent; border: none; pointer-events: none; }
-
-    .streak-dot.win {
-      background: rgba(61,214,140,0.15); border: 1px solid rgba(61,214,140,0.4); color: #3DD68C;
-    }
-    .streak-dot.miss {
-      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: var(--muted);
-    }
-    .streak-dot.today-played {
-      background: rgba(247,195,68,0.15); border: 2px solid var(--accent); color: var(--accent);
-      box-shadow: 0 0 10px rgba(247,195,68,0.25);
-    }
-    .streak-dot.today-pending {
-      background: rgba(79,142,247,0.1); border: 2px dashed rgba(79,142,247,0.4); color: #4F8EF7;
-    }
-
-    .dot-score { font-size: 0.46rem; font-weight: 800; line-height: 1; }
-
-    .streak-legend { display: flex; gap: 14px; font-size: 0.72rem; color: var(--muted); align-items: center; }
-    .dot-sample { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 4px; vertical-align: middle; }
-    .dot-sample.dot-win  { background: rgba(61,214,140,0.5); border: 1px solid #3DD68C; }
+    .streak-legend { display: flex; gap: 13px; font-size: 0.7rem; color: var(--muted); align-items: center; }
+    .dot-sample { display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 4px; vertical-align: middle; }
+    .dot-sample.dot-win  { background: rgba(61,214,140,0.5); border: 1px solid var(--green); }
     .dot-sample.dot-miss { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); }
-    .dot-sample.dot-today { background: rgba(247,195,68,0.3); border: 1px solid var(--accent); }
+    .dot-sample.dot-today{ background: rgba(247,195,68,0.3); border: 1px solid var(--accent); }
 
-    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .stat-item {
       background: rgba(255,255,255,0.03); border: 1px solid var(--border);
       border-radius: 12px; padding: 14px 12px; text-align: center;
       transition: border-color 0.2s, background 0.2s;
     }
-    .stat-item:hover { border-color: rgba(247,195,68,0.25); background: rgba(247,195,68,0.04); }
-
+    .stat-item:hover { border-color: rgba(247,195,68,0.22); background: rgba(247,195,68,0.03); }
     .stat-value {
-      font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 1px;
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.75rem; letter-spacing: 1px;
       background: linear-gradient(135deg, var(--accent), #fff 80%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      line-height: 1; margin-bottom: 4px;
+      line-height: 1; margin-bottom: 3px;
     }
-    .stat-name { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
+    .stat-name { font-size: 0.64rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
 
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
 
+    /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
-      nav { padding: 0 16px; }
-      .nav-center { display: none; }
-      .page { padding: 20px 16px 60px; }
-      .page-header { margin-bottom: 18px; }
-      .page-header h1 { font-size: 1.8rem; }
-      .page-header p { font-size: 0.82rem; }
-      .puzzle-bar { flex-wrap: wrap; gap: 8px; padding: 8px 14px; }
-      .puzzle-bar-item { font-size: 0.74rem; }
+      nav { padding: 0 16px; height: 56px; }
+      .nav-logo { font-size: 1.5rem; }
+      .page { padding: 18px 16px 56px; }
+      .page-header h1 { font-size: 1.9rem; }
+      .page-header p { font-size: 0.8rem; }
+      .live-score-strip { padding: 12px 16px; gap: 8px; }
+      .lss-val { font-size: 1.3rem; }
+      .lss-label { font-size: 0.58rem; }
       .player-box { padding: 16px 18px; }
-      .player-avatar { width: 44px; height: 44px; font-size: 1.3rem; }
+      .player-avatar { width: 44px; height: 44px; font-size: 1.35rem; }
       .player-name { font-size: 1.4rem; }
-      .player-count { font-size: 0.72rem; }
-      .player-info-row { gap: 12px; }
-      .controls { margin-top: 12px; gap: 8px; }
-      .btn { flex: 1; justify-content: center; padding: 10px 12px; font-size: 0.78rem; }
+      .controls { gap: 6px; }
+      .btn { padding: 9px 14px; font-size: 0.76rem; }
       .grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
       .cell { min-height: 100px; padding: 10px; gap: 7px; border-radius: 12px; }
       .cell-image { width: 38px; height: 38px; }
       .cell-text { font-size: 0.68rem; }
-      .result-card { padding: 28px 18px; border-radius: 16px; }
-      .result-title { font-size: 2rem; }
-      .result-score { font-size: 3.2rem; }
-      .result-phrase { font-size: 0.88rem; }
-      .result-actions { gap: 8px; }
-      .result-actions .btn { font-size: 0.78rem; padding: 10px 14px; }
-      .modal-box { padding: 28px 18px; border-radius: 18px; }
-      .modal-title { font-size: 1.7rem; }
-      .rules-list li { font-size: 0.85rem; padding: 12px 14px; }
-      .scoring-item { font-size: 0.82rem; }
-      .bottom-dashboard { grid-template-columns: 1fr; gap: 12px; margin-top: 28px; }
-      .dashboard-card { padding: 18px 16px; }
-      .dashboard-label { font-size: 1rem; }
-      .streak-dots { gap: 3px; }
-      .streak-dot { height: 40px; }
-      .stats-grid { gap: 10px; }
+      .result-card { padding: 28px 20px; }
+      .result-title { font-size: 2.2rem; }
+      .result-score { font-size: 3.8rem; }
+      .result-breakdown { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .dashboard-grid { grid-template-columns: 1fr; gap: 12px; }
       .stat-value { font-size: 1.6rem; }
-      .stat-item { padding: 12px 10px; }
+      .streak-dots { gap: 3px; }
+      .streak-dot { height: 38px; }
     }
 
     @media (max-width: 480px) {
-      .page { padding: 16px 12px 56px; }
+      .page { padding: 14px 12px 52px; }
       .grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
-      .cell { min-height: 90px; padding: 8px; gap: 6px; border-radius: 10px; }
+      .cell { min-height: 88px; padding: 8px; border-radius: 10px; }
       .cell-image { width: 32px; height: 32px; }
-      .cell-text { font-size: 0.62rem; line-height: 1.25; }
-      .player-name { font-size: 1.25rem; }
-      .player-avatar { width: 40px; height: 40px; font-size: 1.1rem; }
-      .controls { display: flex; flex-wrap: wrap; }
-      #skipBtn { grid-column: 1 / -1; }
+      .cell-text { font-size: 0.62rem; }
+      .result-breakdown { grid-template-columns: 1fr 1fr; }
       .result-actions { flex-direction: column; align-items: stretch; }
-      .result-actions .btn { width: 100%; justify-content: center; }
-      .streak-dots { gap: 2px; }
-      .streak-dot { height: 36px; }
+      .result-actions .btn { width: 100%; }
+      .live-score-strip { flex-wrap: wrap; }
+      .lss-divider { display: none; }
+      .streak-dot { height: 34px; }
       .streak-dot .dot-score-val { font-size: 0.58rem; }
-      .stat-value { font-size: 1.5rem; }
-      .stat-name { font-size: 0.62rem; }
-      .puzzle-bar { width: 100%; justify-content: space-between; }
     }
 
     @media (max-width: 380px) {
       .grid { gap: 5px; }
-      .cell { min-height: 82px; padding: 6px; }
+      .cell { min-height: 78px; padding: 6px; }
       .cell-image { width: 28px; height: 28px; }
       .cell-text { font-size: 0.58rem; }
-      .player-name { font-size: 1.1rem; }
-      .btn { font-size: 0.74rem; padding: 9px 10px; }
-    }
-
-    @media (max-width: 320px) {
-      .grid { grid-template-columns: repeat(2, 1fr); }
-      .cell { min-height: 90px; }
+      .player-name { font-size: 1.2rem; }
     }
   </style>
 </head>
 <body>
 
   <div class="bg-layer"></div>
+  <div class="noise"></div>
 
-  <!-- MODAL -->
-  <div id="rulesModal" class="modal-overlay" style="display:none;">
+  <!-- ── MODAL ── -->
+  <div id="rulesModal" class="modal-overlay" style="display:none;" onclick="if(event.target===this)closeRulesModal()">
     <div class="modal-box">
       <h2 class="modal-title">🏏 How to Play</h2>
       <ul class="rules-list">
         <li><span class="rule-icon">🎯</span>Match players to the correct category boxes in the grid</li>
-        <li><span class="rule-icon">✅</span><strong>Correct Answer:</strong> Earn +50 points and move to the next player</li>
-        <li><span class="rule-icon">❌</span><strong>Wrong Answer:</strong> Lose 10 points and skip the next player as penalty</li>
-        <li><span class="rule-icon">⏭️</span><strong>Skip:</strong> No points gained or lost, move to next player</li>
-        <li><span class="rule-icon">🔥</span><strong>Build Streaks:</strong> Get bonus points for consecutive correct answers!</li>
-        <li><span class="rule-icon">🏆</span>Fill all 16 squares to complete the game and earn accuracy bonuses!</li>
+        <li><span class="rule-icon">✅</span><strong>Correct:</strong> Earn +50 points and move to the next player</li>
+        <li><span class="rule-icon">❌</span><strong>Wrong:</strong> Lose 10 points — next player is skipped as penalty</li>
+        <li><span class="rule-icon">⏭️</span><strong>Skip:</strong> No points lost, move on freely</li>
+        <li><span class="rule-icon">🔥</span><strong>Build Streaks:</strong> Consecutive correct answers earn bonus points!</li>
+        <li><span class="rule-icon">🏆</span>Fill all 16 squares for accuracy bonuses!</li>
       </ul>
       <div class="scoring-box">
-        <h3>💰 Scoring System (Max: 1000 pts)</h3>
+        <h3>💰 Scoring System — Max 1000 pts</h3>
         <div class="scoring-item"><span>Correct Answer</span><span class="scoring-value">+50 pts</span></div>
         <div class="scoring-item"><span>Wrong Answer</span><span class="scoring-value">−10 pts</span></div>
         <div class="scoring-item"><span>3-Streak Bonus</span><span class="scoring-value">+20 pts</span></div>
@@ -609,23 +724,32 @@
         <div class="scoring-item"><span>Perfect Round (15/15)</span><span class="scoring-value">+200 pts</span></div>
         <div class="scoring-item"><span>100% Accuracy</span><span class="scoring-value">+150 pts</span></div>
       </div>
-      <button class="btn btn-primary" style="width:100%;justify-content:center;padding:14px 20px;font-size:0.95rem;border-radius:12px;" onclick="closeRulesModal()">
+      <button class="btn btn-primary" style="width:100%;padding:14px;font-size:0.92rem;border-radius:12px;" onclick="closeRulesModal()">
         🚀 Start Playing
       </button>
     </div>
   </div>
 
-  <!-- NAV -->
+  <!-- ── NAV ── -->
   <nav>
     <a href="index.html" class="nav-logo">🏏 Crickingo</a>
-    <span class="nav-game-tag" style="font-size:0.82rem;">🔥 Cricket Bingo</span>
+    <div class="nav-center-tag">
+      <span class="fire-dot"></span>
+      Cricket Bingo
+    </div>
+    <div class="nav-right">
+      <div class="nav-help-wrap">
+        <button class="nav-help-btn" onclick="openRulesModal()" aria-label="How to play">?</button>
+        <div class="nav-help-tooltip">Rules / How to Play</div>
+      </div>
+    </div>
   </nav>
 
-  <!-- PAGE -->
+  <!-- ── PAGE ── -->
   <main class="page">
 
     <div class="page-header">
-      <h1 id="gridTitle">Rivalry Grid</h1>
+      <h1 id="gridTitle">Cricket Bingo</h1>
       <p id="gridSubtitle">CSK vs MI — the ultimate IPL rivalry showdown</p>
     </div>
 
@@ -635,13 +759,43 @@
       <div class="puzzle-bar-item">🧩 Puzzle <strong id="puzzleNumber">#—</strong></div>
     </div>
 
+    <!-- LIVE SCORE STRIP -->
+    <div class="live-score-strip">
+      <div class="lss-item">
+        <div class="lss-val score-val" id="liveScore">0</div>
+        <div class="lss-label">Score</div>
+      </div>
+      <div class="lss-divider"></div>
+      <div class="lss-item">
+        <div class="lss-val correct-val" id="liveCorrect">0</div>
+        <div class="lss-label">Correct</div>
+      </div>
+      <div class="lss-divider"></div>
+      <div class="lss-item">
+        <div class="lss-val" id="liveFilled" style="color:var(--muted)">0/16</div>
+        <div class="lss-label">Filled</div>
+      </div>
+      <div class="lss-divider"></div>
+      <div class="lss-item">
+        <div class="lss-val streak-val" id="liveStreak">0</div>
+        <div class="lss-label">🔥 Streak</div>
+      </div>
+    </div>
+
+    <!-- PLAYER BOX -->
     <div class="game-info">
       <div class="player-box">
+        <div class="player-box-glow"></div>
         <div class="player-info-row">
           <div class="player-avatar">🏏</div>
           <div class="player-info">
             <div class="player-name" id="currentPlayer">Loading...</div>
-            <div class="player-count" id="playerCount">Player 1 of 9</div>
+            <div class="player-meta">
+              <span class="player-count" id="playerCount">Player 1 of 9</span>
+              <div class="player-progress-bar">
+                <div class="player-progress-fill" id="playerProgressFill" style="width:11%"></div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="controls">
@@ -652,20 +806,48 @@
       </div>
     </div>
 
+    <!-- SEARCH -->
     <div class="search-wrapper">
-      <input type="text" id="searchInput" class="search-input" placeholder="🔍  Type to search player..." autocomplete="off">
+      <input type="text" id="searchInput" class="search-input" placeholder="🔍  Search for a player..." autocomplete="off">
       <div id="dropdownList" class="dropdown-list"></div>
     </div>
 
-    <div class="grid" id="gameGrid"></div>
+    <!-- GRID -->
+    <div class="grid-section">
+      <div class="grid-header">
+        <span class="grid-header-label">Bingo Board</span>
 
+      </div>
+      <div class="grid" id="gameGrid"></div>
+    </div>
+
+    <!-- RESULT -->
     <div id="resultArea" style="display:none;" class="result-card">
+      <div class="result-badge">✓ Game Complete</div>
       <div class="result-title">Game Over!</div>
       <div class="result-score" id="scoreText"></div>
       <div class="result-phrase" id="resultPhrase"></div>
-      <div id="shareFooter" style="display:none; margin: 16px 0 8px; padding: 16px 20px; background: rgba(247,195,68,0.08); border: 1px solid rgba(247,195,68,0.2); border-radius: 12px; text-align: center;">
-        <div style="font-size: 1rem; font-weight: 700; color: #F7C344; margin-bottom: 4px;">🏏 Can you beat me at Crickingo?</div>
-        <div style="font-size: 0.85rem; color: rgba(242,242,242,0.6); letter-spacing: 0.5px;">crickingo.vercel.app</div>
+      <div class="result-breakdown">
+        <div class="rb-item">
+          <div class="rb-label">Correct</div>
+          <div class="rb-val green" id="rbCorrect">—</div>
+        </div>
+        <div class="rb-item">
+          <div class="rb-label">Wrong</div>
+          <div class="rb-val red" id="rbWrong">—</div>
+        </div>
+        <div class="rb-item">
+          <div class="rb-label">Best Streak</div>
+          <div class="rb-val" id="rbStreak">—</div>
+        </div>
+        <div class="rb-item">
+          <div class="rb-label">Filled</div>
+          <div class="rb-val" id="rbFilled">—</div>
+        </div>
+      </div>
+      <div id="shareFooter" style="display:none;margin:0 0 20px;padding:14px 18px;background:rgba(247,195,68,0.07);border:1px solid rgba(247,195,68,0.18);border-radius:12px;text-align:center;">
+        <div style="font-size:0.92rem;font-weight:700;color:var(--accent);margin-bottom:3px;">🏏 Can you beat me at Crickingo?</div>
+        <div style="font-size:0.78rem;color:var(--muted);">crickingo.vercel.app</div>
       </div>
       <div class="result-actions">
         <button class="btn btn-restart" onclick="restartGame()">↺ Play Again</button>
@@ -673,297 +855,243 @@
           📤 Share Score
           <span class="share-copied" id="shareCopied">✓ Saved!</span>
         </button>
-        <button class="btn btn-back" onclick="backToMenu()">← Back to Home</button>
+        <button class="btn btn-back" onclick="backToMenu()">← Home</button>
       </div>
     </div>
 
-    <!-- BOTTOM DASHBOARD -->
-    <div class="bottom-dashboard" id="bottomDashboard">
+    <!-- ── BOTTOM SECTION ── -->
+    <div class="bottom-section" id="bottomDashboard">
 
-      <div class="dashboard-card">
-        <div class="dashboard-card-header">
-          <span class="dashboard-icon">📅</span>
-          <span class="dashboard-label">Last 30 Days</span>
-        </div>
-        <div class="streak-calendar">
-          <div class="streak-dow-row"></div>
+      <!-- STATS + STREAK -->
+      <div class="section-divider">
+        <span class="section-divider-label">Your Progress</span>
+        <div class="section-divider-line"></div>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="dashboard-card">
+          <div class="dashboard-card-header">
+            <span class="dashboard-icon">📅</span>
+            <span class="dashboard-label">Last 30 Days</span>
+          </div>
           <div class="streak-dots" id="streakDots"></div>
+          <div class="streak-legend">
+            <span><span class="dot-sample dot-win"></span>Played</span>
+            <span><span class="dot-sample dot-miss"></span>Missed</span>
+            <span><span class="dot-sample dot-today"></span>Today</span>
+          </div>
         </div>
-        <div class="streak-legend">
-          <span><span class="dot-sample dot-win"></span> Played</span>
-          <span><span class="dot-sample dot-miss"></span> Missed</span>
-          <span><span class="dot-sample dot-today"></span> Today</span>
+
+        <div class="dashboard-card">
+          <div class="dashboard-card-header">
+            <span class="dashboard-icon">📊</span>
+            <span class="dashboard-label">Your Stats</span>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-item"><div class="stat-value" id="statPlayed">—</div><div class="stat-name">Played</div></div>
+            <div class="stat-item"><div class="stat-value" id="statBest">—</div><div class="stat-name">Best Score</div></div>
+            <div class="stat-item"><div class="stat-value" id="statAvg">—</div><div class="stat-name">Avg Score</div></div>
+            <div class="stat-item"><div class="stat-value" id="statStreak">—</div><div class="stat-name">Day Streak</div></div>
+          </div>
         </div>
       </div>
 
-      <div class="dashboard-card">
-        <div class="dashboard-card-header">
-          <span class="dashboard-icon">📊</span>
-          <span class="dashboard-label">Your Stats</span>
-        </div>
-        <div class="stats-grid">
-          <div class="stat-item">
-            <div class="stat-value" id="statPlayed">—</div>
-            <div class="stat-name">Played</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-value" id="statBest">—</div>
-            <div class="stat-name">Best Score</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-value" id="statAvg">—</div>
-            <div class="stat-name">Avg Score</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-value" id="statStreak">—</div>
-            <div class="stat-name">Day Streak</div>
-          </div>
-        </div>
+      <!-- CRICKET CORNER -->
+      <div class="section-divider" style="margin-top:24px;">
+        <span class="section-divider-label">Cricket Corner</span>
+        <div class="section-divider-line"></div>
       </div>
+
+      <div id="cricket-corner"></div>
 
     </div>
-
   </main>
 
   <script>
+    /* ── CONSTANTS ── */
     const STATS_KEY   = 'crickingo_rivalry_stats';
     const HISTORY_KEY = 'crickingo_rivalry_history';
 
-    function getTodayKey() {
-      // Always use actual today's date for the dashboard key,
-      // NOT the ?date= URL param — that's only for loading puzzle data.
-      return new Date().toISOString().split('T')[0];
-    }
-
+    function getTodayKey()  { return new Date().toISOString().split('T')[0]; }
     function getPuzzleDateKey() {
-      // Used only for loading the right puzzle from JSON
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get('date') || getTodayKey();
+      const p = new URLSearchParams(window.location.search);
+      return p.get('date') || getTodayKey();
     }
+    function loadStats()   { try { return JSON.parse(localStorage.getItem(STATS_KEY))   || {}; } catch { return {}; } }
+    function loadHistory() { try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || {}; } catch { return {}; } }
 
-    function loadStats() {
-      try { return JSON.parse(localStorage.getItem(STATS_KEY)) || {}; } catch { return {}; }
-    }
-
-    function loadHistory() {
-      try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || {}; } catch { return {}; }
-    }
-
-    // Called from rivalry.js after game ends
+    /* ── SAVE RESULT (called by rivalry.js) ── */
     window.saveGameResult = function(score, correct, wrong) {
-      const key     = getTodayKey(); // always today's real date
-      const stats   = loadStats();
+      const key = getTodayKey();
+      const stats = loadStats();
       const history = loadHistory();
-
-      // Save best score for today
       if (!history[key] || score > history[key].score) {
         history[key] = { score, correct, wrong };
       }
-
-      // Rebuild aggregate stats
-      const allEntries = Object.values(history);
-      stats.played = allEntries.length;
-      stats.best   = Math.max(...allEntries.map(e => e.score));
-      stats.avg    = Math.round(allEntries.reduce((s, e) => s + e.score, 0) / allEntries.length);
-
-      // Day streak: consecutive days ending today
+      const all = Object.values(history);
+      stats.played = all.length;
+      stats.best   = Math.max(...all.map(e => e.score));
+      stats.avg    = Math.round(all.reduce((s,e) => s + e.score, 0) / all.length);
       let streak = 0;
       const check = new Date();
       while (true) {
         const k = check.toISOString().split('T')[0];
-        if (history[k]) { streak++; check.setDate(check.getDate() - 1); }
-        else break;
+        if (history[k]) { streak++; check.setDate(check.getDate() - 1); } else break;
       }
       stats.streak = streak;
-
-      localStorage.setItem(STATS_KEY,   JSON.stringify(stats));
+      localStorage.setItem(STATS_KEY, JSON.stringify(stats));
       localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
-
       renderDashboard();
     };
 
+    /* ── RENDER DASHBOARD ── */
     function renderDashboard() {
       const stats   = loadStats();
       const history = loadHistory();
-      const today   = getTodayKey(); // real today
-
-      // Stats numbers
+      const today   = getTodayKey();
       const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val ?? '—'; };
-      set('statPlayed', stats.played  ?? '—');
-      set('statBest',   stats.best    ?? '—');
-      set('statAvg',    stats.avg     ?? '—');
+      set('statPlayed', stats.played ?? '—');
+      set('statBest',   stats.best   ?? '—');
+      set('statAvg',    stats.avg    ?? '—');
       set('statStreak', stats.streak != null ? stats.streak + (stats.streak === 1 ? ' day' : ' days') : '—');
 
-      // Last 30 days dot grid
       const dotsEl = document.getElementById('streakDots');
       if (!dotsEl) return;
       dotsEl.innerHTML = '';
-
       const now = new Date(today + 'T00:00:00');
-
       for (let i = 29; i >= 0; i--) {
-        const d     = new Date(now);
-        d.setDate(d.getDate() - i);
-        const key   = d.toISOString().split('T')[0];
+        const d = new Date(now); d.setDate(d.getDate() - i);
+        const key = d.toISOString().split('T')[0];
         const entry = history[key];
         const isToday = (key === today);
-
         const dot = document.createElement('div');
-
-        if (isToday && entry) {
-          dot.className = 'streak-dot today-played';
-          dot.title = `Today · ${entry.score} pts`;
-        } else if (isToday) {
-          dot.className = 'streak-dot today-pending';
-          dot.title = 'Today — not played yet';
-        } else if (entry) {
-          dot.className = 'streak-dot win';
-          dot.title = `${key} · ${entry.score} pts`;
-        } else {
-          dot.className = 'streak-dot miss';
-          dot.title = `${key} — missed`;
-        }
-
-        // Score number inside dot (only shown for win / today-played via CSS)
+        dot.className = isToday && entry ? 'streak-dot today-played'
+          : isToday ? 'streak-dot today-pending'
+          : entry   ? 'streak-dot win'
+          : 'streak-dot miss';
+        dot.title = entry ? `${key} · ${entry.score} pts` : `${key}`;
         if (entry) {
           const sc = document.createElement('div');
           sc.className = 'dot-score-val';
           sc.textContent = entry.score;
           dot.appendChild(sc);
         }
-
         dotsEl.appendChild(dot);
       }
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      // Puzzle bar uses puzzle date (may differ from real today if ?date= param set)
-      const puzzleDate = new Date(getPuzzleDateKey() + 'T00:00:00');
-      const dateStr = puzzleDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-      const el = document.getElementById('puzzleDate');
-      if (el) el.textContent = dateStr;
+    /* ── MODAL OPEN/CLOSE ── */
+    window.openRulesModal = function() {
+      const m = document.getElementById('rulesModal');
+      if (m) { m.style.display = ''; m.classList.add('active'); }
+    };
+    window.closeRulesModal = function() {
+      const m = document.getElementById('rulesModal');
+      if (m) { m.classList.remove('active'); m.style.display = 'none'; }
+    };
 
-      const launch = new Date('2026-03-01T00:00:00');
-      const diff = Math.floor((puzzleDate - launch) / (1000 * 60 * 60 * 24)) + 1;
-      const numEl = document.getElementById('puzzleNumber');
-      if (numEl) numEl.textContent = '#' + diff;
+    /* ── LIVE SCORE UPDATE (called by rivalry.js) ── */
+    window.updateLiveScore = function(score, correct, filled, streak) {
+      const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+      set('liveScore', score ?? 0);
+      set('liveCorrect', correct ?? 0);
+      set('liveFilled', (filled ?? 0) + '/16');
+      set('liveStreak', streak ?? 0);
+      set('gridFilledNum', filled ?? 0);
+    };
 
-      renderDashboard();
-    });
+    /* ── UPDATE PROGRESS BAR (called by rivalry.js) ── */
+    window.updatePlayerProgress = function(current, total) {
+      const fill = document.getElementById('playerProgressFill');
+      if (fill) fill.style.width = Math.round((current / total) * 100) + '%';
+    };
 
+    /* ── SHARE ── */
     window._shareData = {};
-
     window.shareScore = async function() {
       const shareBtn    = document.getElementById('shareBtn');
       const shareCopied = document.getElementById('shareCopied');
       if (shareBtn) shareBtn.style.opacity = '0.6';
-
       const d = window._shareData || {};
-      const score     = d.score     || '0 / 1000';
-      const phrase    = d.phrase    || '';
+      const score = d.score || '0 / 1000';
+      const phrase = d.phrase || '';
       const breakdown = d.breakdown || [];
-      const tomorrow  = d.tomorrow  || '';
-      const isGold    = d.gold;
-
+      const tomorrow = d.tomorrow || '';
+      const isGold = d.gold;
       const accent = isGold ? '#F7C344' : '#4F8EF7';
       const W = 600, pad = 44;
       let H = 420 + breakdown.length * 36 + (tomorrow ? 80 : 0);
       const canvas = document.createElement('canvas');
-      canvas.width  = W * 2; canvas.height = H * 2;
-      const ctx = canvas.getContext('2d');
-      ctx.scale(2, 2);
-
-      // BG
-      ctx.fillStyle = '#060810';
-      ctx.fillRect(0, 0, W, H);
-
-      // Top bar
-      const grad = ctx.createLinearGradient(0, 0, W, 0);
-      grad.addColorStop(0, '#4F8EF7'); grad.addColorStop(0.5, '#F7C344'); grad.addColorStop(1, '#E84040');
-      ctx.fillStyle = grad; ctx.fillRect(0, 0, W, 3);
-
+      canvas.width = W * 2; canvas.height = H * 2;
+      const ctx = canvas.getContext('2d'); ctx.scale(2, 2);
+      ctx.fillStyle = '#060810'; ctx.fillRect(0, 0, W, H);
+      const grad = ctx.createLinearGradient(0,0,W,0);
+      grad.addColorStop(0,'#4F8EF7'); grad.addColorStop(0.5,'#F7C344'); grad.addColorStop(1,'#E84040');
+      ctx.fillStyle = grad; ctx.fillRect(0,0,W,3);
       let y = pad + 16;
-
-      // GAME OVER
       ctx.font = 'bold 34px Arial'; ctx.fillStyle = '#F2F2F2'; ctx.textAlign = 'center';
       ctx.fillText('GAME OVER!', W/2, y); y += 46;
-
-      // Score box
       ctx.fillStyle = isGold ? 'rgba(247,195,68,0.2)' : 'rgba(79,142,247,0.2)';
-      rr(ctx, pad, y, W - pad*2, 66, 12);
-      ctx.fillStyle = accent; ctx.font = 'bold 38px Arial';
-      ctx.fillText(score, W/2, y + 46); y += 82;
-
-      // Phrase
-      ctx.font = '15px Arial'; ctx.fillStyle = 'rgba(242,242,242,0.6)';
-      ctx.fillText(phrase, W/2, y); y += 38;
-
-      // Breakdown box
-      const bH = 40 + breakdown.length * 34 + 48;
-      ctx.fillStyle = 'rgba(255,255,255,0.05)'; rr(ctx, pad, y, W - pad*2, bH, 12);
-      ctx.font = 'bold 14px Arial'; ctx.fillStyle = '#F2F2F2';
-      ctx.fillText('📊 Score Breakdown', W/2, y + 26); y += 44;
-
+      rr(ctx, pad, y, W-pad*2, 66, 12);
+      ctx.fillStyle = accent; ctx.font = 'bold 38px Arial'; ctx.fillText(score, W/2, y+46); y += 82;
+      ctx.font = '15px Arial'; ctx.fillStyle = 'rgba(242,242,242,0.6)'; ctx.fillText(phrase, W/2, y); y += 38;
+      const bH = 40 + breakdown.length*34 + 48;
+      ctx.fillStyle = 'rgba(255,255,255,0.05)'; rr(ctx, pad, y, W-pad*2, bH, 12);
+      ctx.font = 'bold 14px Arial'; ctx.fillStyle = '#F2F2F2'; ctx.fillText('📊 Score Breakdown', W/2, y+26); y += 44;
       breakdown.forEach(row => {
-        ctx.textAlign = 'left'; ctx.font = '13px Arial';
-        ctx.fillStyle = 'rgba(242,242,242,0.8)';
-        ctx.fillText(row.label, pad + 16, y + 14);
-        if (row.value) {
-          ctx.textAlign = 'right'; ctx.fillStyle = row.color || accent;
-          ctx.fillText(row.value, W - pad - 16, y + 14);
-        }
+        ctx.textAlign='left'; ctx.font='13px Arial'; ctx.fillStyle='rgba(242,242,242,0.8)';
+        ctx.fillText(row.label, pad+16, y+14);
+        if (row.value) { ctx.textAlign='right'; ctx.fillStyle=row.color||accent; ctx.fillText(row.value, W-pad-16, y+14); }
         y += 34;
       });
-
-      ctx.strokeStyle = 'rgba(255,255,255,0.12)'; ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.moveTo(pad + 16, y); ctx.lineTo(W - pad - 16, y); ctx.stroke();
-      y += 20;
-      ctx.textAlign = 'left'; ctx.font = 'bold 17px Arial'; ctx.fillStyle = '#F2F2F2';
-      ctx.fillText('Total:', pad + 16, y + 4);
-      ctx.textAlign = 'right'; ctx.fillStyle = accent;
-      ctx.fillText(score.split('/')[0].trim(), W - pad - 16, y + 4); y += 44;
-
-      // Tomorrow
+      ctx.strokeStyle='rgba(255,255,255,0.12)'; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(pad+16,y); ctx.lineTo(W-pad-16,y); ctx.stroke(); y+=20;
+      ctx.textAlign='left'; ctx.font='bold 17px Arial'; ctx.fillStyle='#F2F2F2'; ctx.fillText('Total:',pad+16,y+4);
+      ctx.textAlign='right'; ctx.fillStyle=accent; ctx.fillText(score.split('/')[0].trim(),W-pad-16,y+4); y+=44;
       if (tomorrow) {
-        ctx.fillStyle = 'rgba(79,142,247,0.1)'; rr(ctx, pad, y, W - pad*2, 58, 12);
-        ctx.textAlign = 'center'; ctx.font = '12px Arial'; ctx.fillStyle = 'rgba(242,242,242,0.5)';
-        ctx.fillText('📅 Next Puzzle', W/2, y + 20);
-        ctx.font = 'bold 14px Arial'; ctx.fillStyle = '#4F8EF7';
-        ctx.fillText('Come back tomorrow · ' + tomorrow, W/2, y + 42); y += 66;
+        ctx.fillStyle='rgba(79,142,247,0.1)'; rr(ctx,pad,y,W-pad*2,58,12);
+        ctx.textAlign='center'; ctx.font='12px Arial'; ctx.fillStyle='rgba(242,242,242,0.5)';
+        ctx.fillText('📅 Next Puzzle',W/2,y+20);
+        ctx.font='bold 14px Arial'; ctx.fillStyle='#4F8EF7';
+        ctx.fillText('Come back tomorrow · '+tomorrow,W/2,y+42); y+=66;
       }
-
-      // CTA
-      ctx.fillStyle = isGold ? 'rgba(247,195,68,0.1)' : 'rgba(79,142,247,0.1)';
-      rr(ctx, pad, y, W - pad*2, 58, 12);
-      ctx.textAlign = 'center'; ctx.font = 'bold 15px Arial'; ctx.fillStyle = accent;
-      ctx.fillText('🏏 Can you beat me at Crickingo?', W/2, y + 24);
-      ctx.font = '12px Arial'; ctx.fillStyle = 'rgba(242,242,242,0.4)';
-      ctx.fillText('crickingo.vercel.app', W/2, y + 44);
-
-      if (shareBtn) shareBtn.style.opacity = '1';
-
+      ctx.fillStyle=isGold?'rgba(247,195,68,0.1)':'rgba(79,142,247,0.1)';
+      rr(ctx,pad,y,W-pad*2,58,12);
+      ctx.textAlign='center'; ctx.font='bold 15px Arial'; ctx.fillStyle=accent;
+      ctx.fillText('🏏 Can you beat me at Crickingo?',W/2,y+24);
+      ctx.font='12px Arial'; ctx.fillStyle='rgba(242,242,242,0.4)';
+      ctx.fillText('crickingo.vercel.app',W/2,y+44);
+      if (shareBtn) shareBtn.style.opacity='1';
       canvas.toBlob(async (blob) => {
-        const file = new File([blob], 'crickingo-score.png', { type: 'image/png' });
-        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-          try { await navigator.share({ files: [file], text: 'Can you beat me at Crickingo? 🏏\ncrickingo.vercel.app' }); return; }
-          catch (e) { if (e.name === 'AbortError') return; }
+        const file = new File([blob],'crickingo-score.png',{type:'image/png'});
+        if (navigator.share && navigator.canShare && navigator.canShare({files:[file]})) {
+          try { await navigator.share({files:[file],text:'Can you beat me at Crickingo? 🏏\ncrickingo.vercel.app'}); return; }
+          catch(e) { if(e.name==='AbortError') return; }
         }
         const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url; a.download = 'crickingo-score.png';
-        document.body.appendChild(a); a.click();
-        document.body.removeChild(a); URL.revokeObjectURL(url);
-        if (shareCopied) { shareCopied.classList.add('show'); setTimeout(() => shareCopied.classList.remove('show'), 2000); }
-      }, 'image/png');
+        const a = document.createElement('a'); a.href=url; a.download='crickingo-score.png';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+        if (shareCopied) { shareCopied.classList.add('show'); setTimeout(()=>shareCopied.classList.remove('show'),2000); }
+      },'image/png');
     };
 
-    function rr(ctx, x, y, w, h, r) {
-      ctx.beginPath();
-      ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r);
-      ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
-      ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r);
-      ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath(); ctx.fill();
+    function rr(ctx,x,y,w,h,r){
+      ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+      ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+      ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+      ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();ctx.fill();
     }
+
+    /* ── INIT ── */
+    document.addEventListener('DOMContentLoaded', () => {
+      const puzzleDate = new Date(getPuzzleDateKey() + 'T00:00:00');
+      const dateStr = puzzleDate.toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'});
+      const el = document.getElementById('puzzleDate'); if (el) el.textContent = dateStr;
+      const launch = new Date('2026-03-01T00:00:00');
+      const diff = Math.floor((puzzleDate - launch) / (1000*60*60*24)) + 1;
+      const numEl = document.getElementById('puzzleNumber'); if (numEl) numEl.textContent = '#' + diff;
+      renderDashboard();
+    });
   </script>
 
   <script>
@@ -971,30 +1099,25 @@
       const allCells = Array.from(document.querySelectorAll('#gameGrid .cell'));
       const filled = allCells.filter(c => c.dataset.filled === 'true');
       if (!filled.length) return;
-
       const cols = 5;
-      const origin = (originIndex != null && allCells[originIndex]) ? originIndex : allCells.indexOf(filled[filled.length - 1]);
-      const originRow = Math.floor(origin / cols);
-      const originCol = origin % cols;
-
+      const origin = (originIndex != null && allCells[originIndex]) ? originIndex : allCells.indexOf(filled[filled.length-1]);
+      const oRow = Math.floor(origin / cols), oCol = origin % cols;
       filled.forEach(cell => {
-        const idx  = allCells.indexOf(cell);
-        const row  = Math.floor(idx / cols);
-        const col  = idx % cols;
-        const dist = Math.abs(row - originRow) + Math.abs(col - originCol);
-        const delay = dist * 80;
-
+        const idx = allCells.indexOf(cell);
+        const dist = Math.abs(Math.floor(idx/cols) - oRow) + Math.abs(idx%cols - oCol);
         setTimeout(() => {
-          cell.classList.remove('ripple');
-          void cell.offsetWidth;
-          cell.classList.add('ripple');
-          cell.addEventListener('animationend', () => cell.classList.remove('ripple'), { once: true });
-        }, delay);
+          cell.classList.remove('ripple'); void cell.offsetWidth; cell.classList.add('ripple');
+          cell.addEventListener('animationend', () => cell.classList.remove('ripple'), {once:true});
+        }, dist * 80);
       });
     };
   </script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script type="module">
+    import { renderCricketCorner } from './cricket-corner.js';
+    document.addEventListener('DOMContentLoaded', () => renderCricketCorner('cricket-corner'));
+  </script>
   <script type="module" src="rivalry.js"></script>
 </body>
 </html>
