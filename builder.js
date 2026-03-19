@@ -21,7 +21,7 @@ const isInTournament = localStorage.getItem('inTournamentGame') === 'true' &&
                        urlParams.get('tournament') === 'true';
 
 let PLAYERS = [];
-const TARGET_RATING = 1850;
+const TARGET_RATING = 2000;
 const TOTAL_BUDGET  = 100;
 const MAX_PLAYERS   = 11;
 
@@ -538,7 +538,7 @@ function checkTeam() {
     resultEl.innerHTML = `
       <div class="result-box failure">
         <div class="result-box-title">Not Quite!</div>
-        <div class="result-box-msg">Rating: <strong style="color:var(--accent2)">${rating}</strong> — need ${deficit} more to reach 1850. Try again!</div>
+        <div class="result-box-msg">Rating: <strong style="color:var(--accent2)">${rating}</strong> — need ${deficit} more to reach 2000. Try again!</div>
         <button id="shareBtn" onclick="shareScore()" style="
           margin-top:14px; display:inline-flex; align-items:center; gap:6px;
           padding:10px 22px; border-radius:10px;
