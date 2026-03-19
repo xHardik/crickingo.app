@@ -103,11 +103,12 @@
     .stat-bar-fill.field { background: linear-gradient(90deg, #3DD68C, #6fedb5); }
     .stat-bar-val { font-family: 'Bebas Neue', sans-serif; font-size: 0.82rem; letter-spacing: 0.5px; color: var(--text); width: 22px; text-align: right; flex-shrink: 0; }
 
-    .role-requirements { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; min-height: 26px; }
-    .role-req { font-size: 0.66rem; font-weight: 700; padding: 4px 10px; border-radius: 100px; letter-spacing: 0.5px; transition: all 0.2s; }
-    .role-req.req-pending { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); color: var(--muted); }
-    .role-req.req-ok { background: rgba(61,214,140,0.12); border: 1px solid rgba(61,214,140,0.35); color: var(--green); }
-    .role-req.req-over { background: rgba(232,64,64,0.12); border: 1px solid rgba(232,64,64,0.35); color: var(--accent2); }
+    .role-requirements { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; min-height: 30px; padding: 14px 16px; background: rgba(255,255,255,0.025); border: 1px solid var(--border2); border-radius: 14px; }
+    .role-req { font-size: 0.72rem; font-weight: 800; padding: 6px 13px; border-radius: 100px; letter-spacing: 0.8px; transition: all 0.25s; display: flex; align-items: center; gap: 5px; }
+    .role-req.req-pending { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); color: rgba(240,240,240,0.5); }
+    .role-req.req-ok { background: rgba(61,214,140,0.15); border: 1px solid rgba(61,214,140,0.5); color: var(--green); box-shadow: 0 0 12px rgba(61,214,140,0.15); }
+    .role-req.req-over { background: rgba(232,64,64,0.15); border: 1px solid rgba(232,64,64,0.5); color: var(--accent2); box-shadow: 0 0 12px rgba(232,64,64,0.15); animation: reqShake 0.35s ease; }
+    @keyframes reqShake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
 
     .team-title { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; margin-bottom: 12px; }
     .selected-player { display: flex; align-items: center; gap: 10px; padding: 9px 12px; margin-bottom: 7px; background: var(--surface); border: 1px solid var(--border); border-radius: 11px; transition: border-color 0.2s, transform 0.2s; }
@@ -258,7 +259,7 @@
         </div>
       </div>
       <ul class="rules-list">
-        <li><span class="rule-icon">🏆</span><strong>Win Condition:</strong> Reach a team rating of <span style="color:var(--accent);font-weight:800;">2000+</span> with a valid composition to win!</li>
+        <li><span class="rule-icon">🏆</span><strong>Win Condition:</strong> Reach a team rating of <span style="color:var(--accent);font-weight:800;">1850+</span> with a valid composition to win!</li>
         <li><span class="rule-icon">🔄</span>Use role filters to browse and plan your team</li>
         <li><span class="rule-icon">💡</span><strong>Pro Tip:</strong> All-Rounders contribute to all three stats — great value picks!</li>
       </ul>
@@ -267,7 +268,7 @@
         <div class="strategy-grid">
           <div class="strategy-item"><div class="strategy-label">⚖️ Composition</div><div class="strategy-value">Meet role minimums first</div></div>
           <div class="strategy-item"><div class="strategy-label">💰 Budget</div><div class="strategy-value">Spread spend across roles</div></div>
-          <div class="strategy-item"><div class="strategy-label">📈 Rating</div><div class="strategy-value">Target 2000+ total</div></div>
+          <div class="strategy-item"><div class="strategy-label">📈 Rating</div><div class="strategy-value">Target 1850+ total</div></div>
           <div class="strategy-item"><div class="strategy-label">⚡ Value</div><div class="strategy-value">All-rounders = 3-stat boost</div></div>
         </div>
       </div>
@@ -289,7 +290,7 @@
   <main class="page">
     <div class="page-header">
       <h1>Build Your XI</h1>
-      <p>Pick 11 players within budget — hit 2000+ team rating to win</p>
+      <p>Pick 11 players within budget — hit 1850+ team rating to win</p>
     </div>
     <div class="puzzle-bar">
       <div class="puzzle-bar-item">📅 <strong id="puzzleDate">—</strong></div>
