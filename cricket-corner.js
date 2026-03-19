@@ -213,27 +213,16 @@ function pickRandom(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
 export function renderCricketCorner(containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
 
-  const quiz     = pickRandom(QUIZZES);
-  const factPool = shuffle(FACTS).slice(0, 6);
-  const glossPool= shuffle(GLOSSARY);
+  // one random item each, picked fresh every page load
+  const quiz  = pickRandom(QUIZZES);
+  const fact  = pickRandom(FACTS);
+  const gloss = pickRandom(GLOSSARY);
 
-  let factIdx  = 0;
-  let glossIdx = 0;
   let answered = false;
-
   const id = 'cc_' + Math.random().toString(36).slice(2, 7);
 
   container.innerHTML = `
@@ -242,111 +231,53 @@ export function renderCricketCorner(containerId) {
       #${id} .cc-card {
         background: rgba(79,142,247,0.05);
         border: 1px solid rgba(79,142,247,0.18);
-        border-radius: 18px;
-        overflow: hidden;
-        position: relative;
+        border-radius: 18px; overflow: hidden; position: relative;
       }
       #${id} .cc-card::before {
-        content: '';
-        position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+        content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
         background: linear-gradient(180deg, #4F8EF7, #A855F7);
       }
       #${id} .cc-tabs {
-        display: flex;
-        border-bottom: 1px solid rgba(255,255,255,0.07);
+        display: flex; border-bottom: 1px solid rgba(255,255,255,0.07);
       }
       #${id} .cc-tab {
-        flex: 1; padding: 11px 8px;
-        font-size: 0.7rem; font-weight: 800;
-        text-align: center; cursor: pointer;
-        color: rgba(240,240,240,0.35);
-        border: none; background: transparent;
-        border-bottom: 2px solid transparent;
-        text-transform: uppercase; letter-spacing: 1.5px;
-        transition: all 0.18s; font-family: inherit;
+        flex: 1; padding: 11px 8px; font-size: 0.7rem; font-weight: 800;
+        text-align: center; cursor: pointer; color: rgba(240,240,240,0.35);
+        border: none; background: transparent; border-bottom: 2px solid transparent;
+        text-transform: uppercase; letter-spacing: 1.5px; transition: all 0.18s; font-family: inherit;
       }
-      #${id} .cc-tab.active {
-        color: #4F8EF7;
-        border-bottom-color: #4F8EF7;
-        background: rgba(79,142,247,0.05);
-      }
-      #${id} .cc-body { padding: 20px 22px; min-height: 190px; }
+      #${id} .cc-tab.active { color: #4F8EF7; border-bottom-color: #4F8EF7; background: rgba(79,142,247,0.05); }
+      #${id} .cc-body { padding: 20px 22px; min-height: 170px; }
       #${id} .panel { display: none; }
       #${id} .panel.active { display: block; }
 
-      #${id} .quiz-q {
-        font-size: 0.88rem; font-weight: 600; line-height: 1.6;
-        color: #F0F0F0; margin-bottom: 14px;
-      }
+      #${id} .quiz-q { font-size: 0.88rem; font-weight: 600; line-height: 1.6; color: #F0F0F0; margin-bottom: 14px; }
       #${id} .quiz-opts { display: flex; flex-direction: column; gap: 7px; margin-bottom: 12px; }
       #${id} .quiz-opt {
-        padding: 9px 14px; border-radius: 10px;
-        border: 1px solid rgba(255,255,255,0.08);
-        background: rgba(255,255,255,0.04);
-        font-size: 0.8rem; cursor: pointer;
-        color: rgba(240,240,240,0.75);
-        text-align: left; transition: all 0.15s; font-family: inherit;
+        padding: 9px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08);
+        background: rgba(255,255,255,0.04); font-size: 0.8rem; cursor: pointer;
+        color: rgba(240,240,240,0.75); text-align: left; transition: all 0.15s; font-family: inherit;
       }
-      #${id} .quiz-opt:hover:not([disabled]) {
-        border-color: rgba(79,142,247,0.4);
-        background: rgba(79,142,247,0.08);
-        color: #F0F0F0;
-      }
+      #${id} .quiz-opt:hover:not([disabled]) { border-color: rgba(79,142,247,0.4); background: rgba(79,142,247,0.08); color: #F0F0F0; }
       #${id} .quiz-opt.correct { background: rgba(61,214,140,0.12); border-color: rgba(61,214,140,0.45); color: #3DD68C; }
       #${id} .quiz-opt.wrong   { background: rgba(232,64,64,0.1);   border-color: rgba(232,64,64,0.4);   color: #E84040; }
-      #${id} .quiz-exp {
-        font-size: 0.77rem; color: rgba(240,240,240,0.5); line-height: 1.6; min-height: 16px;
-      }
-      #${id} .cc-next-btn {
-        margin-top: 12px; font-size: 0.72rem; font-weight: 800;
-        color: #4F8EF7; cursor: pointer; background: none; border: none;
-        padding: 0; font-family: inherit; text-transform: uppercase; letter-spacing: 1px;
-        display: none;
-      }
-      #${id} .cc-next-btn:hover { color: #7ab4ff; }
+      #${id} .quiz-exp { font-size: 0.77rem; color: rgba(240,240,240,0.5); line-height: 1.6; min-height: 16px; }
 
       #${id} .fact-label {
         font-size: 0.63rem; font-weight: 800; letter-spacing: 2px;
         text-transform: uppercase; color: rgba(240,240,240,0.3); margin-bottom: 10px;
       }
-      #${id} .fact-text {
-        font-size: 0.86rem; color: rgba(240,240,240,0.72); line-height: 1.72; margin-bottom: 16px;
-      }
-      #${id} .fact-row { display: flex; align-items: center; gap: 8px; }
-      #${id} .fact-dots { display: flex; gap: 5px; flex: 1; }
-      #${id} .fact-dot {
-        width: 5px; height: 5px; border-radius: 50%;
-        background: rgba(255,255,255,0.14); cursor: pointer; transition: background 0.15s; flex-shrink: 0;
-      }
-      #${id} .fact-dot.on { background: #4F8EF7; }
-      #${id} .nav-btn {
-        width: 26px; height: 26px; border-radius: 50%;
-        border: 1px solid rgba(255,255,255,0.1);
-        background: rgba(255,255,255,0.04);
-        color: rgba(240,240,240,0.45); font-size: 0.85rem;
-        cursor: pointer; display: flex; align-items: center; justify-content: center;
-        transition: all 0.15s; flex-shrink: 0; font-family: inherit;
-      }
-      #${id} .nav-btn:hover { border-color: rgba(79,142,247,0.45); color: #4F8EF7; background: rgba(79,142,247,0.08); }
+      #${id} .fact-text { font-size: 0.86rem; color: rgba(240,240,240,0.72); line-height: 1.72; }
 
       #${id} .gloss-term {
         font-family: 'Bebas Neue', sans-serif; font-size: 1.55rem;
         letter-spacing: 2px; color: #F0F0F0; margin-bottom: 8px; line-height: 1;
       }
-      #${id} .gloss-def {
-        font-size: 0.84rem; color: rgba(240,240,240,0.62); line-height: 1.72; margin-bottom: 12px;
-      }
+      #${id} .gloss-def { font-size: 0.84rem; color: rgba(240,240,240,0.62); line-height: 1.72; margin-bottom: 12px; }
       #${id} .gloss-ex {
         font-size: 0.77rem; color: rgba(240,240,240,0.35); font-style: italic;
-        border-left: 2px solid rgba(79,142,247,0.28);
-        padding-left: 12px; line-height: 1.6; margin-bottom: 16px;
+        border-left: 2px solid rgba(79,142,247,0.28); padding-left: 12px; line-height: 1.6;
       }
-      #${id} .gloss-next {
-        font-size: 0.72rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
-        color: #4F8EF7; background: none; border: none; cursor: pointer;
-        font-family: inherit; padding: 0;
-      }
-      #${id} .gloss-next:hover { color: #7ab4ff; }
     </style>
 
     <div id="${id}">
@@ -362,24 +293,17 @@ export function renderCricketCorner(containerId) {
             <div class="quiz-q" id="${id}-qtext"></div>
             <div class="quiz-opts" id="${id}-qopts"></div>
             <div class="quiz-exp" id="${id}-qexp"></div>
-            <button class="cc-next-btn" id="${id}-qnext">Next question →</button>
           </div>
 
           <div id="${id}-fact" class="panel">
-            <div class="fact-label">Cricket fact</div>
+            <div class="fact-label">Cricket Fact</div>
             <div class="fact-text" id="${id}-facttext"></div>
-            <div class="fact-row">
-              <div class="fact-dots" id="${id}-factdots"></div>
-              <button class="nav-btn" id="${id}-fprev">‹</button>
-              <button class="nav-btn" id="${id}-fnext">›</button>
-            </div>
           </div>
 
           <div id="${id}-gloss" class="panel">
             <div class="gloss-term" id="${id}-gterm"></div>
             <div class="gloss-def"  id="${id}-gdef"></div>
             <div class="gloss-ex"   id="${id}-gex"></div>
-            <button class="gloss-next" id="${id}-gnext">Next term →</button>
           </div>
 
         </div>
@@ -397,70 +321,31 @@ export function renderCricketCorner(containerId) {
     });
   });
 
-  // quiz
-  function loadQuiz(q) {
-    answered = false;
-    document.getElementById(`${id}-qtext`).textContent = q.q;
-    document.getElementById(`${id}-qexp`).textContent = '';
-    document.getElementById(`${id}-qnext`).style.display = 'none';
-    const optsEl = document.getElementById(`${id}-qopts`);
-    optsEl.innerHTML = '';
-    q.opts.forEach((o, i) => {
-      const b = document.createElement('button');
-      b.className = 'quiz-opt';
-      b.textContent = o;
-      b.addEventListener('click', () => {
-        if (answered) return;
-        answered = true;
-        optsEl.querySelectorAll('.quiz-opt').forEach((btn, bi) => {
-          btn.disabled = true;
-          if (bi === q.ans) btn.classList.add('correct');
-          else if (bi === i) btn.classList.add('wrong');
-        });
-        document.getElementById(`${id}-qexp`).textContent = (i === q.ans ? '✓ ' : '✗ ') + q.exp;
-        document.getElementById(`${id}-qnext`).style.display = 'block';
+  // quiz — one question, answer reveals explanation
+  document.getElementById(`${id}-qtext`).textContent = quiz.q;
+  const optsEl = document.getElementById(`${id}-qopts`);
+  quiz.opts.forEach((o, i) => {
+    const b = document.createElement('button');
+    b.className = 'quiz-opt';
+    b.textContent = o;
+    b.addEventListener('click', () => {
+      if (answered) return;
+      answered = true;
+      optsEl.querySelectorAll('.quiz-opt').forEach((btn, bi) => {
+        btn.disabled = true;
+        if (bi === quiz.ans) btn.classList.add('correct');
+        else if (bi === i)   btn.classList.add('wrong');
       });
-      optsEl.appendChild(b);
+      document.getElementById(`${id}-qexp`).textContent = (i === quiz.ans ? '✓ ' : '✗ ') + quiz.exp;
     });
-  }
-
-  loadQuiz(quiz);
-  document.getElementById(`${id}-qnext`).addEventListener('click', () => {
-    loadQuiz(pickRandom(QUIZZES));
+    optsEl.appendChild(b);
   });
 
-  // facts
-  function renderFact() {
-    document.getElementById(`${id}-facttext`).textContent = factPool[factIdx];
-    const dotsEl = document.getElementById(`${id}-factdots`);
-    dotsEl.innerHTML = '';
-    factPool.forEach((_, i) => {
-      const d = document.createElement('div');
-      d.className = 'fact-dot' + (i === factIdx ? ' on' : '');
-      const ci = i;
-      d.addEventListener('click', () => { factIdx = ci; renderFact(); });
-      dotsEl.appendChild(d);
-    });
-  }
+  // fact — just show it
+  document.getElementById(`${id}-facttext`).textContent = fact;
 
-  renderFact();
-  document.getElementById(`${id}-fprev`).addEventListener('click', () => {
-    factIdx = (factIdx - 1 + factPool.length) % factPool.length; renderFact();
-  });
-  document.getElementById(`${id}-fnext`).addEventListener('click', () => {
-    factIdx = (factIdx + 1) % factPool.length; renderFact();
-  });
-
-  // glossary
-  function renderGloss() {
-    const g = glossPool[glossIdx];
-    document.getElementById(`${id}-gterm`).textContent = g.t;
-    document.getElementById(`${id}-gdef`).textContent = g.d;
-    document.getElementById(`${id}-gex`).textContent = '"' + g.ex + '"';
-  }
-
-  renderGloss();
-  document.getElementById(`${id}-gnext`).addEventListener('click', () => {
-    glossIdx = (glossIdx + 1) % glossPool.length; renderGloss();
-  });
+  // glossary — just show it
+  document.getElementById(`${id}-gterm`).textContent = gloss.t;
+  document.getElementById(`${id}-gdef`).textContent  = gloss.d;
+  document.getElementById(`${id}-gex`).textContent   = '"' + gloss.ex + '"';
 }

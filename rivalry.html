@@ -645,8 +645,11 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
-      nav { padding: 0 16px; height: 56px; }
-      .nav-logo { font-size: 1.5rem; }
+      nav { padding: 0 16px; height: 54px; }
+      .nav-logo { font-size: 1.4rem; }
+      .nav-center-tag { font-size: 0.62rem; padding: 4px 10px; gap: 5px; }
+      .nav-center-tag .fire-dot { width: 5px; height: 5px; }
+      .nav-help-btn { width: 30px; height: 30px; font-size: 0.88rem; }
       .page { padding: 18px 16px 56px; }
       .page-header h1 { font-size: 1.9rem; }
       .page-header p { font-size: 0.8rem; }
@@ -688,6 +691,10 @@
     }
 
     @media (max-width: 380px) {
+      nav { height: 50px; }
+      .nav-logo { font-size: 1.25rem; letter-spacing: 2px; }
+      .nav-center-tag { font-size: 0.55rem; padding: 3px 8px; letter-spacing: 1px; }
+      .nav-help-btn { width: 26px; height: 26px; font-size: 0.8rem; }
       .grid { gap: 5px; }
       .cell { min-height: 78px; padding: 6px; }
       .cell-image { width: 28px; height: 28px; }
