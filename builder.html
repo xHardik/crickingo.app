@@ -358,6 +358,23 @@
     </div>
   </main>
 
+  <script>
+    function getPuzzleDateKey() {
+      const p = new URLSearchParams(window.location.search);
+      return p.get('date') || new Date().toISOString().split('T')[0];
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      const puzzleDate = new Date(getPuzzleDateKey() + 'T00:00:00');
+      const dateStr = puzzleDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+      const dateEl = document.getElementById('puzzleDate');
+      if (dateEl) dateEl.textContent = dateStr;
+      const launch = new Date('2026-03-01T00:00:00');
+      const diff   = Math.floor((puzzleDate - launch) / (1000 * 60 * 60 * 24)) + 1;
+      const numEl  = document.getElementById('puzzleNumber');
+      if (numEl) numEl.textContent = '#' + diff;
+    });
+  </script>
+
   <script type="module">
     import { renderCricketCorner } from './cricket-corner.js';
     document.addEventListener('DOMContentLoaded', () => renderCricketCorner('cricket-corner'));
