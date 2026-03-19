@@ -245,6 +245,62 @@
     .info-text { text-align: center; color: var(--muted); font-size: 0.8rem; margin-bottom: 16px; }
 
     @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+    /* HOW IT WORKS */
+    .how-section, .previews-section { margin-top: 36px; }
+    .how-label { font-family: 'Bebas Neue', sans-serif; font-size: 0.9rem; letter-spacing: 3.5px;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 20px;
+      display: flex; align-items: center; gap: 12px; }
+    .how-label::before, .how-label::after { content: ''; flex: 1; height: 1px; background: var(--border2); }
+
+    .how-steps { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; align-items: start; gap: 0; }
+    .how-step { background: var(--surface); border: 1px solid var(--border); border-radius: 18px;
+      padding: 24px 18px; text-align: center; position: relative; overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s; }
+    .how-step:hover { border-color: rgba(247,195,68,0.3); transform: translateY(-3px); }
+    .how-step::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+    .how-step-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
+    .how-step-num { font-family: 'Bebas Neue', sans-serif; font-size: 0.7rem; letter-spacing: 3px;
+      color: var(--accent); opacity: 0.6; margin-bottom: 6px; }
+    .how-step-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.05rem; letter-spacing: 1.5px;
+      color: var(--text); margin-bottom: 8px; }
+    .how-step-desc { font-size: 0.76rem; color: var(--muted); line-height: 1.55; }
+    .how-connector { display: flex; align-items: center; justify-content: center;
+      padding: 0 10px; margin-top: 40px; }
+    .how-connector::before { content: '→'; font-size: 1.2rem; color: var(--accent); opacity: 0.5; }
+
+    /* GAME PREVIEWS */
+    .previews-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .previews-grid .preview-card:nth-child(5) { grid-column: 1 / -1; max-width: calc(50% - 6px); margin: 0 auto; width: 100%; }
+    .preview-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+      padding: 20px 18px; position: relative; overflow: hidden;
+      transition: border-color 0.22s, transform 0.22s, box-shadow 0.22s; cursor: default; }
+    .preview-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: var(--pc); }
+    .preview-card::after { content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, color-mix(in srgb, var(--pc) 12%, transparent), transparent 70%);
+      pointer-events: none; }
+    .preview-card:hover { border-color: color-mix(in srgb, var(--pc) 50%, transparent);
+      transform: translateY(-3px); box-shadow: 0 12px 32px color-mix(in srgb, var(--pc) 14%, transparent); }
+    .preview-icon { font-size: 1.8rem; margin-bottom: 10px; display: block; }
+    .preview-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.05rem; letter-spacing: 1.5px;
+      color: var(--text); margin-bottom: 6px; }
+    .preview-desc { font-size: 0.74rem; color: var(--muted); line-height: 1.5; margin-bottom: 12px; }
+    .preview-max { font-size: 0.7rem; font-weight: 700; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 1px; }
+    .preview-max strong { color: var(--pc); }
+
+    @media (max-width: 600px) {
+      .how-steps { grid-template-columns: 1fr; gap: 10px; }
+      .how-connector { padding: 0; margin-top: 0; transform: rotate(90deg); height: 24px; }
+      .how-step { padding: 18px 16px; }
+      .previews-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .previews-grid .preview-card:nth-child(5) { max-width: 100%; }
+      .preview-card { padding: 16px 14px; }
+    }
+    @media (max-width: 400px) {
+      .previews-grid { grid-template-columns: 1fr; }
+    }
 
     @media (max-width: 600px) {
       nav { padding: 0 16px; height: 56px; }
@@ -317,6 +373,71 @@
         </div>
         <button class="btn btn-secondary" id="joinTournamentBtn">→ Join Tournament</button>
       </div>
+
+      <!-- HOW IT WORKS -->
+      <div class="how-section">
+        <div class="how-label">How It Works</div>
+        <div class="how-steps">
+          <div class="how-step">
+            <div class="how-step-icon">🏟️</div>
+            <div class="how-step-num">01</div>
+            <div class="how-step-title">Create &amp; Share</div>
+            <div class="how-step-desc">Host creates a tournament and shares the 6-digit code with friends</div>
+          </div>
+          <div class="how-connector"></div>
+          <div class="how-step">
+            <div class="how-step-icon">🎮</div>
+            <div class="how-step-num">02</div>
+            <div class="how-step-title">Play All Games</div>
+            <div class="how-step-desc">Everyone plays the same 4 games — same puzzles, fair competition</div>
+          </div>
+          <div class="how-connector"></div>
+          <div class="how-step">
+            <div class="how-step-icon">🏆</div>
+            <div class="how-step-num">03</div>
+            <div class="how-step-title">Crown the Winner</div>
+            <div class="how-step-desc">Scores combine across all games — highest total wins</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GAME PREVIEWS -->
+      <div class="previews-section">
+        <div class="how-label">Games You'll Play</div>
+        <div class="previews-grid">
+          <div class="preview-card" style="--pc:#E84040;">
+            <div class="preview-icon">📈</div>
+            <div class="preview-name">Higher or Lower</div>
+            <div class="preview-desc">Compare cricket stats — go higher or lower to keep your streak</div>
+            <div class="preview-max">Max <strong>1000 pts</strong></div>
+          </div>
+          <div class="preview-card" style="--pc:#2DD4BF;">
+            <div class="preview-icon">🎯</div>
+            <div class="preview-name">Cricket Bingo</div>
+            <div class="preview-desc">Match clues to fill a 4×4 grid of cricket players</div>
+            <div class="preview-max">Max <strong>1000 pts</strong></div>
+          </div>
+          <div class="preview-card" style="--pc:#4F8EF7;">
+            <div class="preview-icon">🔄</div>
+            <div class="preview-name">Transfer History</div>
+            <div class="preview-desc">Guess where the player transferred using the clues</div>
+            <div class="preview-max">Max <strong>1000 pts</strong></div>
+          </div>
+          <div class="preview-card" style="--pc:#A855F7;">
+            <div class="preview-icon">🔤</div>
+            <div class="preview-name">Cricket Wordle</div>
+            <div class="preview-desc">Guess the player's name in 5 attempts</div>
+            <div class="preview-max">Max <strong>1000 pts</strong></div>
+          </div>
+          <div class="preview-card" style="--pc:#F7C344;">
+            <div class="preview-icon">🏗️</div>
+            <div class="preview-name">Build Your XI</div>
+            <div class="preview-desc">Pick 11 players within budget — hit 1850+ team rating</div>
+            <div class="preview-max">Max <strong>2000 pts</strong></div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <!-- LOBBY -->
