@@ -20,114 +20,101 @@ const urlParams      = new URLSearchParams(window.location.search);
 const isInTournament = localStorage.getItem('inTournamentGame') === 'true' &&
                        urlParams.get('tournament') === 'true';
 
-// ── Storage keys ──
 const STATS_KEY   = 'crickingo_rivalry_stats';
 const HISTORY_KEY = 'crickingo_rivalry_history';
 
-// ── Always real today, never the ?date= URL param ──
-function getRealTodayKey() {
-  return new Date().toISOString().split('T')[0];
-}
+function getRealTodayKey() { return new Date().toISOString().split('T')[0]; }
+function getDateFromURL()  { return urlParams.get('date') || new Date().toISOString().split('T')[0]; }
 
-// ── Self-contained: save result + re-render dashboard ──
-function saveAndRenderResult(score, correct, wrong) {
-  // ✅ Never save stats/streak in tournament mode
+// ── Save final result (mirrors wordle saveGameResult exactly) ──
+function saveGameResult(score, correct, wrong) {
   if (isInTournament) return;
-
-  const today = getRealTodayKey();
-  let stats   = {};
-  let history = {};
-
+  const puzzleDate = getDateFromURL();
+  const today      = getRealTodayKey();
+  let stats = {}, history = {};
   try { stats   = JSON.parse(localStorage.getItem(STATS_KEY))   || {}; } catch { stats   = {}; }
   try { history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || {}; } catch { history = {}; }
-
-  if (!history[today] || score > history[today].score) {
-    history[today] = { score, correct, wrong };
-  }
-
+  if (!history[puzzleDate] || score > history[puzzleDate].score) history[puzzleDate] = { score, correct, wrong };
   const allEntries = Object.values(history);
   stats.played = allEntries.length;
   stats.best   = Math.max(...allEntries.map(e => e.score));
   stats.avg    = Math.round(allEntries.reduce((s, e) => s + e.score, 0) / allEntries.length);
-
   let streak = 0;
   const check = new Date(today + 'T00:00:00');
   while (true) {
     const k = check.toISOString().split('T')[0];
-    if (history[k]) { streak++; check.setDate(check.getDate() - 1); }
-    else break;
+    if (history[k]) { streak++; check.setDate(check.getDate() - 1); } else break;
   }
   stats.streak = streak;
-
   localStorage.setItem(STATS_KEY,   JSON.stringify(stats));
   localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
-
-  console.log('✅ Saved under key:', today, '→', history[today]);
-
+  console.log('✅ [Rivalry] Saved:', puzzleDate, '→', history[puzzleDate]);
   renderDashboard(stats, history, today);
 }
 
-// ── Render last-30-days dots + stat numbers ──
+// ── Update dot live during game (mirrors wordle updateTodayDot exactly) ──
+function updateTodayDot(score) {
+  if (isInTournament) return;
+  const puzzleDate = getDateFromURL();
+  const dotsEl     = document.getElementById('streakDots');
+  if (!dotsEl) return;
+  let targetDot = null;
+  dotsEl.querySelectorAll('.streak-dot').forEach(dot => {
+    if (dot.dataset.dotDate === puzzleDate) targetDot = dot;
+  });
+  if (!targetDot) return;
+  targetDot.className = 'streak-dot today-played';
+  targetDot.title     = `${puzzleDate} · ${score} pts`;
+  let sc = targetDot.querySelector('.dot-score-val');
+  if (!sc) { sc = document.createElement('div'); sc.className = 'dot-score-val'; targetDot.appendChild(sc); }
+  sc.textContent = score;
+}
+
+// ── Render dashboard (mirrors wordle renderDashboard exactly) ──
 function renderDashboard(stats, history, today) {
-  // ✅ In tournament mode, hide the entire dashboard
   if (isInTournament) {
     const dashboard = document.getElementById('bottomDashboard');
     if (dashboard) dashboard.style.display = 'none';
     return;
   }
-
   const setEl = (id, val) => {
     const el = document.getElementById(id);
-    if (el) el.textContent = (val != null) ? val : '—';
+    if (el) el.textContent = (val !== null && val !== undefined) ? String(val) : '—';
   };
-
-  setEl('statPlayed', stats.played);
-  setEl('statBest',   stats.best);
-  setEl('statAvg',    stats.avg);
-  setEl('statStreak', stats.streak != null
-    ? stats.streak + (stats.streak === 1 ? ' day' : ' days')
-    : null);
-
+  setEl('statPlayed', stats.played  !== undefined ? stats.played  : '—');
+  setEl('statBest',   stats.best    !== undefined ? stats.best    : '—');
+  setEl('statAvg',    stats.avg     !== undefined ? stats.avg     : '—');
+  setEl('statStreak', stats.streak  !== undefined ? stats.streak + (stats.streak === 1 ? ' day' : ' days') : '—');
   const dotsEl = document.getElementById('streakDots');
   if (!dotsEl) return;
   dotsEl.innerHTML = '';
-
   const base = new Date(today + 'T00:00:00');
-
   for (let i = 29; i >= 0; i--) {
-    const d       = new Date(base);
-    d.setDate(d.getDate() - i);
+    const d = new Date(base); d.setDate(d.getDate() - i);
     const key     = d.toISOString().split('T')[0];
     const entry   = history[key];
     const isToday = key === today;
-
     const dot = document.createElement('div');
-
-    if (isToday && entry) {
-      dot.className = 'streak-dot today-played';
-      dot.title = `Today · ${entry.score} pts`;
-    } else if (isToday) {
-      dot.className = 'streak-dot today-pending';
-      dot.title = 'Today — not played yet';
-    } else if (entry) {
-      dot.className = 'streak-dot win';
-      dot.title = `${key} · ${entry.score} pts`;
-    } else {
-      dot.className = 'streak-dot miss';
-      dot.title = `${key} — missed`;
-    }
-
     dot.dataset.dotDate = key;
-
+    if (isToday && entry)      { dot.className = 'streak-dot today-played'; dot.title = `Today · ${entry.score} pts`; }
+    else if (isToday)          { dot.className = 'streak-dot today-pending'; dot.title = 'Today — not played yet'; }
+    else if (entry)            { dot.className = 'streak-dot win';  dot.title = `${key} · ${entry.score} pts`; }
+    else                       { dot.className = 'streak-dot miss'; dot.title = `${key} — missed`; }
     if (entry) {
       const sc = document.createElement('div');
-      sc.className   = 'dot-score-val';
-      sc.textContent = entry.score;
+      sc.className = 'dot-score-val'; sc.textContent = entry.score;
       dot.appendChild(sc);
     }
-
     dotsEl.appendChild(dot);
   }
+}
+
+function initDashboard() {
+  const today = getRealTodayKey();
+  let stats = {}, history = {};
+  try { stats   = JSON.parse(localStorage.getItem(STATS_KEY))   || {}; } catch {}
+  try { history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || {}; } catch {}
+  renderDashboard(stats, history, today);
 }
 
 function showTournamentInfo() {
@@ -153,7 +140,6 @@ let currentGame = null;
 let currentIndex = 0;
 let correctCount = 0;
 let gameActive = false;
-let selectedDate = null;
 let totalScore = 0;
 let currentStreak = 0;
 let wrongAnswers = 0;
@@ -178,18 +164,14 @@ async function loadData() {
   }
 }
 
-function getDateFromURL() {
-  return urlParams.get('date') || new Date().toISOString().split('T')[0];
-}
-
 function showRulesModal() {
   const modal = document.getElementById('rulesModal');
-  if (modal) modal.style.display = 'flex';
+  if (modal) { modal.style.display = ''; modal.classList.add('active'); }
 }
 
 function closeRulesModal() {
   const modal = document.getElementById('rulesModal');
-  if (modal) modal.style.display = 'none';
+  if (modal) { modal.classList.remove('active'); modal.style.display = 'none'; }
 }
 
 function calculateStreakBonus(streak) {
@@ -218,20 +200,15 @@ function updateScoreDisplay() {
 async function initGame() {
   await loadData();
 
-  if (urlParams.get('tournament') !== 'true') {
-    localStorage.removeItem('inTournamentGame');
-  }
-
+  if (urlParams.get('tournament') !== 'true') localStorage.removeItem('inTournamentGame');
   showRulesModal();
+  if (isInTournament) showTournamentInfo();
 
   if (isInTournament) {
-    showTournamentInfo();
-    // Hide restart and home buttons in game-info controls, keep skip
     const restartBtn = document.querySelector('.controls .btn-restart');
     const backBtn    = document.querySelector('.controls .btn-back');
     if (restartBtn) restartBtn.style.display = 'none';
     if (backBtn)    backBtn.style.display    = 'none';
-    // Hide puzzle date/number bar in tournament mode
     const puzzleBar = document.querySelector('.puzzle-bar');
     if (puzzleBar) puzzleBar.style.display = 'none';
   }
@@ -245,15 +222,11 @@ async function initGame() {
       if (snapshot.exists()) {
         const storedKey = snapshot.val();
         currentGame = gridData[storedKey];
-        selectedDate = storedKey.replace('rivalry-', '') || 'default';
-        console.log('✅ Read existing rivalry seed:', storedKey);
       } else {
         const availableGames = Object.keys(gridData).filter(k => k.startsWith('rivalry'));
         const randomKey = availableGames[Math.floor(Math.random() * availableGames.length)];
         currentGame = gridData[randomKey];
-        selectedDate = randomKey.replace('rivalry-', '') || 'default';
         await set(ref(db, seedPath), randomKey);
-        console.log('🎲 Wrote new rivalry seed:', randomKey);
       }
     } catch (err) {
       console.error('Firebase error, using random fallback:', err);
@@ -262,8 +235,8 @@ async function initGame() {
       currentGame = gridData[randomKey];
     }
   } else {
-    const selectedDate = getDateFromURL();
-    const gameKey = `rivalry-${selectedDate}`;
+    const dateKey  = getDateFromURL();
+    const gameKey  = `rivalry-${dateKey}`;
     const availableKeys = Object.keys(gridData).filter(k => k.startsWith('rivalry')).sort();
     currentGame = gridData[gameKey] || gridData[availableKeys[availableKeys.length - 1]];
     if (!gridData[gameKey]) console.log('No data for today, using latest:', availableKeys[availableKeys.length - 1]);
@@ -282,8 +255,8 @@ async function initGame() {
   streakBonusEarned = 0; lastFilledCellIndex = 0;
   gameActive = true;
 
-  document.getElementById('gridTitle').innerText  = currentGame.title;
-  document.getElementById('gridSubtitle').innerText = currentGame.subtitle;
+  const gridSubtitleEl = document.getElementById('gridSubtitle');
+  if (gridSubtitleEl) gridSubtitleEl.innerText = currentGame.subtitle;
 
   const searchWrapper = document.querySelector('.search-wrapper');
   if (searchWrapper) searchWrapper.style.display = 'none';
@@ -293,13 +266,10 @@ async function initGame() {
   showPlayer();
   updateScoreDisplay();
 
-  // Render dashboard on page load (will auto-hide if tournament)
-  const today = getRealTodayKey();
-  let stats   = {};
-  let history = {};
-  try { stats   = JSON.parse(localStorage.getItem(STATS_KEY))   || {}; } catch {}
-  try { history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || {}; } catch {}
-  renderDashboard(stats, history, today);
+  if (typeof window.updateLiveScore === 'function') window.updateLiveScore(0, 0, 0, 0);
+  if (typeof window.updatePlayerProgress === 'function') window.updatePlayerProgress(0, currentGame.players.length);
+
+  initDashboard();
 }
 
 function addScoreDisplay() {
@@ -343,6 +313,7 @@ function showPlayer() {
   if (currentIndex >= currentGame.players.length) { endGame(); return; }
   document.getElementById('currentPlayer').innerText = currentGame.players[currentIndex];
   document.getElementById('playerCount').innerText   = `Player ${currentIndex + 1} / ${currentGame.players.length}`;
+  if (typeof window.updatePlayerProgress === 'function') window.updatePlayerProgress(currentIndex, currentGame.players.length);
 }
 
 function assignPlayerToCell(cell) {
@@ -364,6 +335,9 @@ function assignPlayerToCell(cell) {
     text.className = 'cell-text';
     text.innerText = player + " ✅";
     cell.appendChild(text);
+    const check = document.createElement('div');
+    check.className = 'cell-check'; check.textContent = '✓';
+    cell.appendChild(check);
     cell.classList.add('correct');
     correctCount++; currentStreak++;
     totalScore += POINTS.CORRECT;
@@ -378,6 +352,9 @@ function assignPlayerToCell(cell) {
     text.className = 'cell-text';
     text.innerText = player + " ❌";
     cell.appendChild(text);
+    const check = document.createElement('div');
+    check.className = 'cell-check'; check.textContent = '✗';
+    cell.appendChild(check);
     cell.classList.add('wrong');
     totalScore += POINTS.WRONG; wrongAnswers++; currentStreak = 0;
     currentIndex += 2;
@@ -385,61 +362,18 @@ function assignPlayerToCell(cell) {
 
   cell.dataset.filled = "true";
   lastFilledCellIndex = parseInt(cell.dataset.index, 10);
+
   updateScoreDisplay();
 
-  // ✅ Only update dot and save live score in normal mode
-  if (!isInTournament) {
-    updateTodayDot(totalScore);
-    saveLiveScore(totalScore);
-  }
+  const filledCount = Array.from(document.querySelectorAll('#gameGrid .cell')).filter(c => c.dataset.filled === 'true').length;
+  if (typeof window.updateLiveScore === 'function') window.updateLiveScore(totalScore, correctCount, filledCount, currentStreak);
+  if (typeof window.updatePlayerProgress === 'function') window.updatePlayerProgress(currentIndex, currentGame.players.length);
 
-  const allFilled = Array.from(document.querySelectorAll('.cell')).every(c => c.dataset.filled === "true");
+  // ── Live dot update on every answer (mirrors wordle) ──
+  if (!isInTournament) updateTodayDot(totalScore);
+
+  const allFilled = Array.from(document.querySelectorAll('#gameGrid .cell')).every(c => c.dataset.filled === "true");
   if (allFilled) endGame(); else showPlayer();
-}
-
-function saveLiveScore(score) {
-  // ✅ Guard: never save in tournament mode
-  if (isInTournament) return;
-
-  const puzzleDate = getDateFromURL();
-  let history = {};
-  try { history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || {}; } catch { history = {}; }
-
-  if (!history[puzzleDate] || score > history[puzzleDate].score) {
-    history[puzzleDate] = { score, correct: correctCount, wrong: wrongAnswers, live: true };
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
-  }
-}
-
-function updateTodayDot(score) {
-  // ✅ Guard: never update dots in tournament mode
-  if (isInTournament) return;
-
-  const puzzleDate = getDateFromURL();
-  const dotsEl = document.getElementById('streakDots');
-  if (!dotsEl) return;
-
-  const dots = dotsEl.querySelectorAll('.streak-dot');
-  let targetDot = null;
-  dots.forEach(dot => {
-    if (dot.title.startsWith(puzzleDate) || dot.title.startsWith('Today')) {
-      if (dot.dataset.dotDate === puzzleDate) targetDot = dot;
-    }
-  });
-
-  if (!targetDot) targetDot = dots[dots.length - 1];
-  if (!targetDot) return;
-
-  targetDot.className = 'streak-dot today-played';
-  targetDot.title = puzzleDate + ' · ' + score + ' pts';
-
-  let sc = targetDot.querySelector('.dot-score-val');
-  if (!sc) {
-    sc = document.createElement('div');
-    sc.className = 'dot-score-val';
-    targetDot.appendChild(sc);
-  }
-  sc.textContent = score;
 }
 
 function showStreakNotification(streak, bonus) {
@@ -464,7 +398,11 @@ function showStreakNotification(streak, bonus) {
 function skipPlayer() {
   if (gameActive && currentIndex < currentGame.players.length) {
     skippedPlayers++; currentStreak = 0; currentIndex++;
-    updateScoreDisplay(); showPlayer();
+    updateScoreDisplay();
+    const filledCount = Array.from(document.querySelectorAll('#gameGrid .cell')).filter(c => c.dataset.filled === 'true').length;
+    if (typeof window.updateLiveScore === 'function') window.updateLiveScore(totalScore, correctCount, filledCount, currentStreak);
+    if (typeof window.updatePlayerProgress === 'function') window.updatePlayerProgress(currentIndex, currentGame.players.length);
+    showPlayer();
   }
 }
 
@@ -472,11 +410,7 @@ function endGame() {
   gameActive = false;
   const skipBtn = document.getElementById('skipBtn');
   if (skipBtn) skipBtn.disabled = true;
-
-  if (typeof window.triggerVictoryRipple === 'function') {
-    window.triggerVictoryRipple(lastFilledCellIndex);
-  }
-
+  if (typeof window.triggerVictoryRipple === 'function') window.triggerVictoryRipple(lastFilledCellIndex);
   setTimeout(() => _showEndScreen(), 800);
 }
 
@@ -496,7 +430,6 @@ function _showEndScreen() {
   if (totalScore < 0) totalScore = 0;
 
   const finalScore = totalScore;
-  const phrase     = getResultPhrase(accuracy);
 
   const scoreBreakdown = `
     <div style="text-align:left;margin:20px auto;max-width:400px;background:rgba(255,255,255,0.1);padding:20px;border-radius:15px;">
@@ -519,56 +452,50 @@ function _showEndScreen() {
   dTomorrowShare.setDate(dTomorrowShare.getDate() + 1);
   const tomorrowShareStr = dTomorrowShare.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
   const bkd = [];
-  bkd.push({ label: `✅ Correct (${correctCount})`,   value: `+${correctCount * 50}`,      color: '#4caf50' });
-  bkd.push({ label: `❌ Wrong (${wrongAnswers})`,      value: `${wrongAnswers * POINTS.WRONG}`, color: '#f44336' });
-  bkd.push({ label: `⏭️ Skipped`,                     value: String(skippedPlayers),        color: '#9e9e9e' });
-  bkd.push({ label: `🔥 Streak Bonuses`,               value: `+${streakBonusEarned}`,       color: '#ff9800' });
+  bkd.push({ label: `✅ Correct (${correctCount})`,   value: `+${correctCount * 50}`,          color: '#4caf50' });
+  bkd.push({ label: `❌ Wrong (${wrongAnswers})`,      value: `${wrongAnswers * POINTS.WRONG}`,  color: '#f44336' });
+  bkd.push({ label: `⏭️ Skipped`,                     value: String(skippedPlayers),            color: '#9e9e9e' });
+  bkd.push({ label: `🔥 Streak Bonuses`,               value: `+${streakBonusEarned}`,           color: '#ff9800' });
   if (accuracyBonus > 0) bkd.push({ label: '🎯 Accuracy Bonus', value: `+${accuracyBonus}`, color: '#2196f3' });
   if (perfectBonus  > 0) bkd.push({ label: '⚡ Perfect Round',  value: `+${perfectBonus}`,  color: '#9c27b0' });
   window._shareData = {
-    score:     `${finalScore} / 1000`,
-    phrase:    getResultPhrase(accuracy),
-    breakdown: bkd,
-    tomorrow:  tomorrowShareStr,
-    gold: true
+    score: `${finalScore} / 1000`, phrase: getResultPhrase(accuracy),
+    breakdown: bkd, tomorrow: tomorrowShareStr, gold: true
   };
-  document.getElementById('resultPhrase').innerHTML = phrase + scoreBreakdown + getTomorrowMessage();
+  document.getElementById('resultPhrase').innerHTML = getResultPhrase(accuracy) + scoreBreakdown + getTomorrowMessage();
 
   const resultArea = document.getElementById('resultArea');
-  document.getElementById('gameGrid').style.display    = 'none';
-  document.querySelector('.game-info').style.display   = 'none';
+  document.getElementById('gameGrid').style.display  = 'none';
+  document.querySelector('.game-info').style.display = 'none';
 
   const existingBtns = document.getElementById('tournamentButtons');
   if (existingBtns) existingBtns.remove();
 
-  if (isInTournament) {
-    // ✅ Skip result card entirely in tournament mode — go straight to next game
-    finishGame(finalScore);
-    return;
-  }
+  if (isInTournament) { finishGame(finalScore); return; }
+
+  const filledCount = Array.from(document.querySelectorAll('#gameGrid .cell')).filter(c => c.dataset.filled === 'true').length;
+  if (typeof window.updateLiveScore === 'function') window.updateLiveScore(finalScore, correctCount, filledCount, currentStreak);
 
   const actionsRow2 = resultArea.querySelector('.result-actions');
   if (actionsRow2) actionsRow2.style.display = 'flex';
   resultArea.style.display = 'block';
-  saveAndRenderResult(finalScore, correctCount, wrongAnswers);
+
+  const rbCorrect = document.getElementById('rbCorrect');
+  const rbWrong   = document.getElementById('rbWrong');
+  const rbStreak  = document.getElementById('rbStreak');
+  const rbFilled  = document.getElementById('rbFilled');
+  if (rbCorrect) rbCorrect.textContent = correctCount;
+  if (rbWrong)   rbWrong.textContent   = wrongAnswers;
+  if (rbStreak)  rbStreak.textContent  = streakBonusEarned > 0 ? `+${streakBonusEarned} pts` : '0';
+  if (rbFilled)  rbFilled.textContent  = filledCount + '/15';
+
+  // ── Save final result (mirrors wordle) ──
+  saveGameResult(finalScore, correctCount, wrongAnswers);
 
   const dashboard = document.getElementById('bottomDashboard');
   if (dashboard && resultArea) {
     resultArea.parentNode.insertBefore(dashboard, resultArea.nextSibling);
-    setTimeout(() => { dashboard.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 400);
-  }
-
-  // ── Save + re-render dashboard only in normal mode ──
-  if (!isInTournament) {
-    saveAndRenderResult(finalScore, correctCount, wrongAnswers);
-
-    const dashboard = document.getElementById('bottomDashboard');
-    if (dashboard && resultArea) {
-      resultArea.parentNode.insertBefore(dashboard, resultArea.nextSibling);
-      setTimeout(() => {
-        dashboard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 400);
-    }
+    setTimeout(() => dashboard.scrollIntoView({ behavior: 'smooth', block: 'start' }), 400);
   }
 }
 
