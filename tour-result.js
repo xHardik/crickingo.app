@@ -25,7 +25,7 @@ const GAMES = [
 
 const MEDALS = ['🥇', '🥈', '🥉'];
 
-// ── LOAD ──────────────────────────────────────────────
+// ── LOAD ───
 async function loadResults() {
   const code = localStorage.getItem('tournamentCode');
   if (!code) {
