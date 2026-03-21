@@ -30,4 +30,5 @@ window.addEventListener('DOMContentLoaded', () => {
   bindGameBtn('wordleBtn',   'wordle.html');
   bindGameBtn('hlBtn',       'hl.html');
   bindGameBtn('builderBtn',  'builder.html');
+  bindGameBtn('whoareyaBtn' , 'whoareya.html')
 });

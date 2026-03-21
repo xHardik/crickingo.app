@@ -587,7 +587,7 @@ function resetTeam() {
 function backToMenu() { window.location.href = 'index.html'; }
 
 function returnToTournament() {
-  const gameIndex = localStorage.getItem('currentGameIndex') || '4';
+  const gameIndex = localStorage.getItem('currentGameIndex') || '5';
   localStorage.removeItem('inTournamentGame');
   window.location.href = `tournament.html?score=${currentSessionScore || 0}&game=${gameIndex}`;
 }

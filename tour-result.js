@@ -19,8 +19,10 @@ const GAMES = [
   { name: 'Higher Or Lower',  emoji: '📈' },
   { name: 'Cricket Bingo',    emoji: '🏏' },
   { name: 'Transfer History', emoji: '🔄' },
+   { name: 'Wordle',           emoji: '🟨' },
+  { name: 'WhoAreYa?',           emoji: '🟨' },
   { name: 'Build Your Team',  emoji: '🏗️' },
-  { name: 'Wordle',           emoji: '🟨' },
+ 
 ];
 
 const MEDALS = ['🥇', '🥈', '🥉'];

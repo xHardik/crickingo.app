@@ -29,7 +29,6 @@
       overflow-x: hidden;
     }
 
-    /* ── BACKGROUND ── */
     .bg-layer {
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
       background:
@@ -46,7 +45,6 @@
       );
     }
 
-    /* ── NAV ── */
     nav {
       position: sticky; top: 0; z-index: 100;
       display: flex; align-items: center; justify-content: space-between;
@@ -75,7 +73,6 @@
       font-size: 0.75rem; padding: 4px 12px; border-radius: 100px; letter-spacing: 0.5px;
     }
 
-    /* ── PAGE LAYOUT ── */
     .page-wrap {
       position: relative; z-index: 1;
       max-width: 820px; margin: 0 auto;
@@ -87,7 +84,6 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ── BACK LINK ── */
     .back-btn {
       display: inline-flex; align-items: center; gap: 8px;
       color: var(--muted); text-decoration: none;
@@ -97,7 +93,6 @@
     }
     .back-btn:hover { color: var(--accent); transform: translateX(-4px); }
 
-    /* ── PAGE HEADER ── */
     .page-header {
       margin-bottom: 52px;
       padding-bottom: 32px;
@@ -134,7 +129,6 @@
       color: var(--muted); font-size: 1.05rem; line-height: 1.7; max-width: 560px;
     }
 
-    /* ── SECTIONS ── */
     .section { margin-bottom: 44px; }
     .section-heading { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
     .section-heading-line { width: 28px; height: 2px; background: var(--accent); border-radius: 2px; flex-shrink: 0; }
@@ -144,7 +138,6 @@
     }
     .section p { color: var(--muted); font-size: 0.97rem; line-height: 1.8; margin-bottom: 12px; }
 
-    /* ── GAME ITEMS ── */
     .games-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 4px; }
     .game-item {
       display: flex; align-items: flex-start; gap: 12px;
@@ -161,7 +154,6 @@
     .game-item-title { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 1px; color: var(--text); line-height: 1; margin-bottom: 3px; }
     .game-item-desc { font-size: 0.77rem; color: var(--muted); line-height: 1.4; }
 
-    /* ── PILLARS ── */
     .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 4px; }
     .pillar {
       display: flex; align-items: flex-start; gap: 12px;
@@ -179,7 +171,6 @@
     .pillar-title { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 1px; color: var(--text); line-height: 1; margin-bottom: 3px; }
     .pillar-desc { font-size: 0.77rem; color: var(--muted); line-height: 1.4; }
 
-    /* ── STAT PILLS ── */
     .stat-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0; }
     .stat-pill {
       display: flex; flex-direction: column; gap: 2px;
@@ -190,7 +181,6 @@
     .stat-pill-num { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--accent); letter-spacing: 1px; line-height: 1; }
     .stat-pill-label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
 
-    /* ── STEPS ── */
     .steps { display: flex; flex-direction: column; margin-top: 4px; }
     .step {
       display: flex; align-items: flex-start; gap: 20px;
@@ -208,7 +198,6 @@
     .step-title { font-weight: 700; font-size: 0.97rem; color: var(--text); margin-bottom: 4px; }
     .step-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
 
-    /* ── VALUES ── */
     .values-list { display: flex; flex-direction: column; margin-top: 8px; }
     .value-item {
       display: flex; align-items: flex-start; gap: 16px;
@@ -223,7 +212,6 @@
     .value-title { font-weight: 700; font-size: 0.97rem; color: var(--text); margin-bottom: 4px; }
     .value-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
 
-    /* ── COMMUNITY BANNER ── */
     .community-banner {
       margin-top: 48px; padding: 28px;
       background: linear-gradient(135deg, rgba(79,142,247,0.08), rgba(247,195,68,0.06));
@@ -246,7 +234,6 @@
     .community-link.discord { background: rgba(88,101,242,0.15); color: #7289da; border: 1px solid rgba(88,101,242,0.3); }
     .community-link.discord:hover { box-shadow: 0 4px 16px rgba(88,101,242,0.2); }
 
-    /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
       .pillars { grid-template-columns: repeat(2, 1fr); }
       .games-grid { grid-template-columns: repeat(2, 1fr); }
@@ -347,10 +334,10 @@
           </div>
         </div>
         <div class="game-item">
-          <div class="game-item-icon">🎮</div>
+          <div class="game-item-icon">🏏</div>
           <div class="game-item-body">
-            <div class="game-item-title">Play With Friends</div>
-            <div class="game-item-desc">Multiplayer tournaments and leaderboards</div>
+            <div class="game-item-title">Who Are Ya?</div>
+            <div class="game-item-desc">Guess the mystery cricketer from attribute clues</div>
           </div>
         </div>
       </div>
