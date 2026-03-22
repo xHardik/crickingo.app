@@ -41,7 +41,7 @@ let guessedNames = [];
 let won          = false;
 
 // ── HELPERS ──
-function getTodayKey()  { return new Date().toISOString().split('T')[0]; }
+function getTodayKey()  { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
 function getPuzzleKey() { return urlParams.get('date') || getTodayKey(); }
 function loadStats()    { try { return JSON.parse(localStorage.getItem(STATS_KEY))   || {}; } catch { return {}; } }
 function loadHistory()  { try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || {}; } catch { return {}; } }
@@ -197,7 +197,6 @@ function initSearch() {
     if (!q) {
       dd.classList.remove('active');
       
-      sw.classList.remove('dd-open');
       return;
     }
 
@@ -223,7 +222,6 @@ function initSearch() {
 
     dd.classList.add('active');
     
-    sw.classList.add('dd-open');
   });
 
   document.addEventListener('click', e => {
@@ -235,7 +233,6 @@ function initSearch() {
 function closeDropdown() {
   document.getElementById('dropdownList')?.classList.remove('active');
   
-  document.getElementById('searchWrapper')?.classList.remove('dd-open');
 }
 
 function selectPlayer(name) {
@@ -322,12 +319,25 @@ function renderRow(cells) {
   document.getElementById('guessesWrap').prepend(row);
 }
 
+const HINT_META = {
+  'hint-role':    { icon: '🧢', label: 'Role' },
+  'hint-country': { icon: '🌍', label: 'Country' },
+  'hint-debut':   { icon: '📅', label: 'Debut' },
+};
+
 function revealHint(id, text) {
   const el = document.getElementById(id);
-  if (el && !el.classList.contains('revealed')) {
-    el.textContent = text;
-    el.classList.add('revealed');
-  }
+  if (!el || el.classList.contains('revealed')) return;
+  const m = HINT_META[id] || {};
+  // Extract just the value (strip "Role: " prefix etc)
+  const val = text.includes(': ') ? text.split(': ').slice(1).join(': ') : text;
+  el.innerHTML = `
+    <span class="hp-icon">${m.icon || '💡'}</span>
+    <span class="hp-label">${m.label || ''}</span>
+    <span class="hp-val">${val}</span>
+  `;
+  el.classList.remove('locked');
+  el.classList.add('revealed');
 }
 
 function renderAttemptDots() {
@@ -375,7 +385,7 @@ function endGame(didWin) {
 // ── TOURNAMENT FINISH ──
 function finishGame(score) {
   localStorage.removeItem('inTournamentGame');
-  const gameIndex = localStorage.getItem('currentGameIndex') || '4';
+  const gameIndex = localStorage.getItem('currentGameIndex') || '1';
   window.location.href = `tournament.html?score=${score}&game=${gameIndex}`;
 }
 
@@ -422,7 +432,7 @@ function saveResult(didWin, att, score) {
   let streak = 0;
   const check = new Date(today + 'T00:00:00');
   while (true) {
-    const k = check.toISOString().split('T')[0];
+    const k = `${check.getFullYear()}-${String(check.getMonth()+1).padStart(2,'0')}-${String(check.getDate()).padStart(2,'0')}`;
     if (history[k]) { streak++; check.setDate(check.getDate() - 1); } else break;
   }
   stats.streak = streak;
@@ -451,7 +461,7 @@ function renderDots(history, today) {
   const base = new Date(today + 'T00:00:00');
   for (let i = 29; i >= 0; i--) {
     const d   = new Date(base); d.setDate(d.getDate() - i);
-    const key     = d.toISOString().split('T')[0];
+    const key     = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     const entry   = history[key];
     const isToday = key === today;
     const dot     = document.createElement('div');

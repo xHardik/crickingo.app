@@ -16,11 +16,12 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 const GAMES = [
-  { name: "Higher Or Lower", url: "https://crickingo.vercel.app/hl.html" },
-  { name: "Cricket Bingo",   url: "https://crickingo.vercel.app/rivalry.html" },
-  { name: "Transfer History",url: "https://crickingo.vercel.app/transfer.html" },
-  { name: "Wordle",          url: "https://crickingo.vercel.app/wordle.html" },
-  { name: "Build Your Team", url: "https://crickingo.vercel.app/builder.html" },
+  { name: "Higher Or Lower",  url: "https://crickingo.vercel.app/hl.html" },
+  { name: "Cricket Bingo",    url: "https://crickingo.vercel.app/rivalry.html" },
+  { name: "Transfer History", url: "https://crickingo.vercel.app/transfer.html" },
+  { name: "Wordle",           url: "https://crickingo.vercel.app/wordle.html" },
+  { name: "Who Are Ya?",      url: "https://crickingo.vercel.app/whoareya.html" },
+  { name: "Build Your Team",  url: "https://crickingo.vercel.app/builder.html" },
 ];
 
 let currentTournament = null;
@@ -145,7 +146,7 @@ function showWaitingForOthers(tournament) {
       .sub{color:rgba(242,242,242,.45);font-size:.86rem;margin-bottom:28px}
       .games-list{display:flex;flex-direction:column;gap:8px;margin-bottom:28px;text-align:left}
       .game-row{display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(61,214,140,.07);border:1px solid rgba(61,214,140,.2);border-radius:10px;font-size:.84rem;color:rgba(242,242,242,.8);font-weight:500;animation:fadeUp .4s ease both}
-      .game-row:nth-child(1){animation-delay:.05s}.game-row:nth-child(2){animation-delay:.10s}.game-row:nth-child(3){animation-delay:.15s}.game-row:nth-child(4){animation-delay:.20s}.game-row:nth-child(5){animation-delay:.25s}
+      .game-row:nth-child(1){animation-delay:.05s}.game-row:nth-child(2){animation-delay:.10s}.game-row:nth-child(3){animation-delay:.15s}.game-row:nth-child(4){animation-delay:.20s}.game-row:nth-child(5){animation-delay:.25s}.game-row:nth-child(6){animation-delay:.30s}
       @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
       .check{width:26px;height:26px;border-radius:50%;background:rgba(61,214,140,.15);border:1px solid rgba(61,214,140,.4);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.9rem}
       .status-box{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:20px}
@@ -172,7 +173,7 @@ function showWaitingForOthers(tournament) {
   `;
 }
 
-// ===== TRANSITION SCREEN — shown between games, replaces the tournament page flash =====
+// ===== TRANSITION SCREEN =====
 function showTransitionScreen(score, nextGameIndex) {
   document.documentElement.style.visibility = 'visible';
   document.body.innerHTML = `
@@ -399,7 +400,6 @@ window.addEventListener('load', async () => {
   const gameId      = urlParams.get('game');
 
   if (returnScore !== null && gameId !== null) {
-    // Clear URL params
     window.history.replaceState({}, document.title, window.location.pathname);
 
     const code       = localStorage.getItem('tournamentCode');
@@ -415,34 +415,27 @@ window.addEventListener('load', async () => {
     currentTournament = code;
     currentPlayer     = { name: playerName, id: playerId };
 
-    // Submit score
     const gameKey = `game${gameId}`;
     await update(ref(db, `tournaments/${code}/scores/${playerId}`), {
       [gameKey]: parseInt(returnScore)
     });
 
-    // Wait for Firebase to sync
     await new Promise(resolve => setTimeout(resolve, 800));
 
-    // Get fresh tournament data
     const snapshot        = await get(ref(db, `tournaments/${code}`));
     const tournament      = snapshot.val();
     const scores          = tournament.scores || {};
     const playerScores    = scores[playerId] || {};
 
-    // Find next game
     let nextGameIndex = -1;
     for (let i = 0; i < GAMES.length; i++) {
       if (playerScores[`game${i}`] === undefined) { nextGameIndex = i; break; }
     }
 
     if (nextGameIndex !== -1) {
-      // Show transition screen (no tournament page flash)
       showTransitionScreen(returnScore, nextGameIndex);
       setTimeout(() => redirectToGame(nextGameIndex), 2200);
-
     } else {
-      // All games done — show waiting screen
       document.documentElement.style.visibility = 'visible';
       showWaitingForOthers(tournament);
       listenToTournament(code);
@@ -451,16 +444,14 @@ window.addEventListener('load', async () => {
       }, 1000);
     }
 
-    return; // skip normal DOMContentLoaded setup
+    return;
   }
 
-  // Normal page load — show the tournament setup UI
   document.documentElement.style.visibility = 'visible';
 });
 
 // ===== EVENT LISTENERS =====
 document.addEventListener('DOMContentLoaded', () => {
-  // Only attach if we're NOT returning from a game
   const params = new URLSearchParams(window.location.search);
   if (params.get('score') !== null) return;
 

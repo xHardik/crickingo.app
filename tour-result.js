@@ -17,17 +17,16 @@ const db  = getDatabase(app);
 
 const GAMES = [
   { name: 'Higher Or Lower',  emoji: '📈' },
-  { name: 'Cricket Bingo',    emoji: '🏏' },
+  { name: 'Cricket Bingo',    emoji: '🎯' },
   { name: 'Transfer History', emoji: '🔄' },
-   { name: 'Wordle',           emoji: '🟨' },
-  { name: 'WhoAreYa?',           emoji: '🟨' },
+  { name: 'Wordle',           emoji: '🔤' },
+  { name: 'Who Are Ya?',      emoji: '🏏' },
   { name: 'Build Your Team',  emoji: '🏗️' },
- 
 ];
 
 const MEDALS = ['🥇', '🥈', '🥉'];
 
-// ── LOAD ───
+// ── LOAD ──────────────────────────────────────────────
 async function loadResults() {
   const code = localStorage.getItem('tournamentCode');
   if (!code) {
@@ -45,8 +44,7 @@ async function loadResults() {
     }
     displayResults(snapshot.val());
 
-    // ✅ Auto-delete tournament from Firebase 5 mins after results load
-    // Gives everyone enough time to see results, then cleans up automatically
+    // Auto-delete after 5 mins
     setTimeout(async () => {
       try {
         await remove(ref(db, `tournaments/${code}`));
@@ -57,7 +55,7 @@ async function loadResults() {
       } catch (e) {
         console.log('Cleanup skipped (already deleted):', e.message);
       }
-    }, 5 * 60 * 1000); // 5 minutes
+    }, 5 * 60 * 1000);
   } catch (err) {
     console.error('Error loading results:', err);
     alert('Failed to load results. Please try again.');
@@ -96,7 +94,6 @@ function displayPodium(top3) {
   const podium = document.getElementById('podium');
   podium.innerHTML = '';
 
-  // Visual order: 2nd left, 1st centre, 3rd right
   const visualOrder = [
     top3[1] ? { ...top3[1], rank: 1, cls: 'second' } : null,
     top3[0] ? { ...top3[0], rank: 0, cls: 'first'  } : null,
@@ -171,14 +168,12 @@ window.toggleBreakdown = function(btn) {
   const wrap = row.querySelector('.breakdown-wrap');
   const isOpen = wrap.classList.contains('show');
 
-  // Close all open panels
   document.querySelectorAll('.breakdown-wrap.show').forEach(w => {
     w.classList.remove('show');
     const b = w.closest('.player-row')?.querySelector('.breakdown-btn');
     if (b) { b.classList.remove('open'); b.textContent = 'Details'; }
   });
 
-  // Open this one if it was closed
   if (!isOpen) {
     wrap.classList.add('show');
     btn.classList.add('open');

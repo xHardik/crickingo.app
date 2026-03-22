@@ -55,36 +55,69 @@
     .att-dot.correct{background:var(--green);border-color:var(--green);transform:scale(1.4)}
 
     /* ── HINTS ── */
-    .hint-strip{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;animation:fadeUp .5s ease .1s both}
-    .hint-pill{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:20px;padding:5px 14px;font-size:.74rem;font-weight:500;color:var(--muted);transition:all .4s cubic-bezier(.34,1.56,.64,1)}
-    .hint-pill.revealed{color:var(--accent);border-color:rgba(247,195,68,.45);background:rgba(247,195,68,.09);animation:pillPop .55s cubic-bezier(.34,1.56,.64,1)}
+    /* ── HINT STRIP ── */
+    .hint-strip{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:16px;animation:fadeUp .5s ease .1s both;padding:0 4px}
+    .hint-pill{
+      display:flex;align-items:center;gap:6px;
+      background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);
+      border-radius:100px;padding:6px 14px 6px 10px;
+      font-size:.73rem;font-weight:600;color:var(--muted);
+      transition:all .4s cubic-bezier(.34,1.56,.64,1);
+      white-space:nowrap;
+    }
+    .hint-pill .hp-icon{font-size:.8rem;opacity:.5;transition:opacity .3s}
+    .hint-pill .hp-label{font-size:.58rem;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;opacity:.45;transition:opacity .3s;margin-right:2px}
+    .hint-pill .hp-val{font-weight:700}
+    .hint-pill.revealed{
+      color:var(--accent);border-color:rgba(247,195,68,.5);
+      background:rgba(247,195,68,.1);
+      box-shadow:0 0 12px rgba(247,195,68,.12);
+      animation:pillPop .55s cubic-bezier(.34,1.56,.64,1);
+    }
+    .hint-pill.revealed .hp-icon{opacity:1}
+    .hint-pill.revealed .hp-label{opacity:.65}
+    .hint-pill.locked{cursor:default}
     @keyframes pillPop{0%{transform:scale(1)}45%{transform:scale(1.14)}100%{transform:scale(1)}}
 
     /* ── LEGEND ── */
-    .legend-bar{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:18px;animation:fadeUp .5s ease .12s both}
-    .legend-item{display:flex;align-items:center;gap:6px;font-size:.7rem;color:var(--muted)}
-    .legend-dot{width:11px;height:11px;border-radius:4px}
-    .legend-dot.green{background:rgba(61,214,140,.5);border:1px solid var(--green)}
-    .legend-dot.yellow{background:rgba(247,195,68,.4);border:1px solid var(--accent)}
-    .legend-dot.red{background:rgba(232,64,64,.38);border:1px solid var(--accent2)}
+    /* ── LEGEND BAR ── */
+    .legend-bar{
+      display:flex;gap:6px;flex-wrap:wrap;justify-content:center;
+      margin-bottom:18px;animation:fadeUp .5s ease .12s both;
+      background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);
+      border-radius:100px;padding:7px 16px;width:fit-content;margin-left:auto;margin-right:auto;
+    }
+    .legend-item{
+      display:flex;align-items:center;gap:5px;
+      font-size:.67rem;font-weight:700;color:var(--muted);
+      text-transform:uppercase;letter-spacing:.8px;
+      padding:0 8px;position:relative;
+    }
+    .legend-item:not(:last-child)::after{
+      content:'';position:absolute;right:0;top:10%;bottom:10%;
+      width:1px;background:rgba(255,255,255,.1);
+    }
+    .legend-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+    .legend-dot.green{background:rgba(61,214,140,.55);border:1px solid var(--green);box-shadow:0 0 5px rgba(61,214,140,.3)}
+    .legend-dot.yellow{background:rgba(247,195,68,.5);border:1px solid var(--accent);box-shadow:0 0 5px rgba(247,195,68,.25)}
+    .legend-dot.red{background:rgba(232,64,64,.45);border:1px solid var(--accent2);box-shadow:0 0 5px rgba(232,64,64,.2)}
 
     /* ── SEARCH ── */
-    .search-wrapper{position:relative;margin-bottom:20px;animation:fadeUp .5s ease .15s both;z-index:10;overflow:visible}
-    .search-input{width:100%;padding:14px 20px;font-family:'DM Sans',sans-serif;font-size:.95rem;background:rgba(10,14,32,.85);backdrop-filter:blur(20px);border:1.5px solid var(--border2);border-radius:var(--card-radius);color:var(--text);transition:border-color .2s,box-shadow .2s,border-radius .15s}
+    .search-wrapper{position:relative;margin-bottom:20px;animation:fadeUp .5s ease .15s both;z-index:9999;isolation:isolate;overflow:visible}
+    .search-input{width:100%;padding:14px 20px;font-family:'DM Sans',sans-serif;font-size:.95rem;background:rgba(10,14,32,.85);backdrop-filter:blur(20px);border:1.5px solid var(--border2);border-radius:var(--card-radius);color:var(--text);transition:border-color .2s,box-shadow .2s}
     .search-input::placeholder{color:var(--muted)}
     .search-input:focus{outline:none;border-color:#F97316;box-shadow:0 0 0 3px rgba(249,115,22,.13)}
     .search-input:disabled{opacity:.35;cursor:not-allowed}
-    .search-wrapper.dd-open .search-input{border-bottom-left-radius:0;border-bottom-right-radius:0;border-color:#F97316;border-bottom-color:rgba(249,115,22,.2)}
 
     /* ── DROPDOWN ── */
-    .dropdown-list{position:absolute;top:100%;left:0;right:0;max-height:320px;overflow-y:auto;background:rgba(10,14,32,.92);backdrop-filter:blur(20px);border:1.5px solid #F97316;border-top:none;border-radius:0 0 var(--card-radius) var(--card-radius);box-shadow:0 24px 60px rgba(0,0,0,.6);display:none;margin-top:0}
+    .dropdown-list{position:absolute;top:60px;left:0;right:0;max-height:300px;overflow-y:auto;background:#0b0e1a;border:1.5px solid #F97316;border-radius:var(--card-radius);box-shadow:0 20px 60px rgba(0,0,0,1),0 0 0 1px rgba(249,115,22,.15);z-index:99999;display:none}
     .dropdown-list::-webkit-scrollbar{width:4px}
     .dropdown-list::-webkit-scrollbar-thumb{background:rgba(249,115,22,.4);border-radius:4px}
     .dropdown-list.active{display:block;animation:dropDown .16s ease}
-    @keyframes dropDown{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
-    .dropdown-item{padding:12px 16px;cursor:pointer;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,.06);background:transparent;transition:background .12s,padding-left .15s}
-    .dropdown-item:hover{background:rgba(249,115,22,.09);padding-left:20px}
-    .dropdown-item:last-child{border-bottom:none;border-radius:0 0 var(--card-radius) var(--card-radius)}
+    @keyframes dropDown{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+    .dropdown-item{padding:12px 16px;cursor:pointer;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,.06);background:#0b0e1a;transition:background .15s,padding-left .15s}
+    .dropdown-item:hover{background:#131b36;padding-left:20px}
+    .dropdown-item:last-child{border-bottom:none}
     .di-flag{font-size:1.55rem;flex-shrink:0;line-height:1;width:30px;text-align:center}
     .di-info{flex:1;min-width:0}
     .di-name{font-weight:700;font-size:.9rem;color:#fff;line-height:1.2}
@@ -263,6 +296,12 @@
     @media(max-width:700px){
       nav{padding:0 14px;height:54px}.nav-logo{font-size:1.35rem}.nav-center-tag{font-size:.6rem;padding:4px 10px}
       .page{padding:18px 14px 56px}.page-header h1{font-size:1.9rem}
+      .hint-strip{gap:6px}
+      .hint-pill{padding:5px 10px 5px 8px;font-size:.68rem}
+      .hint-pill .hp-val{font-size:.68rem}
+      .hint-pill .hp-label{display:none}
+      .legend-bar{padding:6px 12px;gap:4px}
+      .legend-item{font-size:.62rem;padding:0 6px}
       .col-headers,.guess-row{grid-template-columns:2fr 1.3fr 1.1fr 1.1fr .95fr .95fr;gap:3px}
       .g-cell{font-size:.62rem;min-height:56px;padding:8px 4px}.g-cell:first-child{font-size:.72rem}.g-cell-flag{font-size:1.2rem}
       .dashboard-grid{grid-template-columns:1fr}.result-breakdown{grid-template-columns:1fr 1fr}.result-card{padding:28px 18px}
@@ -344,15 +383,27 @@
   </div>
 
   <div class="hint-strip" id="hintStrip">
-    <div class="hint-pill" id="hint-role">Role: ?</div>
-    <div class="hint-pill" id="hint-country">Country: ?</div>
-    <div class="hint-pill" id="hint-debut">Debut: ?</div>
+    <div class="hint-pill locked" id="hint-role">
+      <span class="hp-icon">🧢</span>
+      <span class="hp-label">Role</span>
+      <span class="hp-val">Unlocks @ guess 2</span>
+    </div>
+    <div class="hint-pill locked" id="hint-country">
+      <span class="hp-icon">🌍</span>
+      <span class="hp-label">Country</span>
+      <span class="hp-val">Unlocks @ guess 5</span>
+    </div>
+    <div class="hint-pill locked" id="hint-debut">
+      <span class="hp-icon">📅</span>
+      <span class="hp-label">Debut</span>
+      <span class="hp-val">Unlocks @ guess 7</span>
+    </div>
   </div>
 
   <div class="legend-bar">
-    <div class="legend-item"><div class="legend-dot green"></div> Correct</div>
-    <div class="legend-item"><div class="legend-dot yellow"></div> Close / Same region</div>
-    <div class="legend-item"><div class="legend-dot red"></div> Wrong</div>
+    <div class="legend-item"><div class="legend-dot green"></div>Correct</div>
+    <div class="legend-item"><div class="legend-dot yellow"></div>Close</div>
+    <div class="legend-item"><div class="legend-dot red"></div>Wrong</div>
   </div>
 
   <div class="search-wrapper" id="searchWrapper">
