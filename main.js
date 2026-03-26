@@ -16,19 +16,15 @@ window.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('selectedDate', this.value);
   });
 
-  function bindGameBtn(id, page) {
-    const btn = document.getElementById(id);
-    if (!btn) return;
-    btn.addEventListener('click', function (e) {
+  // Intercept all game card <a> clicks and append ?date= to the URL
+  const gameCards = document.querySelectorAll('.game-card');
+  gameCards.forEach(card => {
+    card.addEventListener('click', function (e) {
       e.preventDefault();
-      window.location.href = page + '?date=' + dateInput.value;
+      const href = this.getAttribute('href');
+      if (!href) return;
+      const selectedDate = dateInput.value || today;
+      window.location.href = href + '?date=' + selectedDate;
     });
-  }
-
-  bindGameBtn('rivalryBtn',  'rivalry.html');
-  bindGameBtn('transferBtn', 'transfer.html');
-  bindGameBtn('wordleBtn',   'wordle.html');
-  bindGameBtn('hlBtn',       'hl.html');
-  bindGameBtn('builderBtn',  'builder.html');
-  bindGameBtn('whoareyaBtn' , 'whoareya.html')
+  });
 });

@@ -23,7 +23,10 @@ const isInTournament = localStorage.getItem('inTournamentGame') === 'true' &&
 const STATS_KEY   = 'crickingo_wordle_stats';
 const HISTORY_KEY = 'crickingo_wordle_history';
 
-function getRealTodayKey() { return new Date().toISOString().split('T')[0]; }
+function getRealTodayKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
 function getDateFromURL()  { return urlParams.get('date') || new Date().toISOString().split('T')[0]; }
 
 function populatePuzzleBar() {
@@ -48,7 +51,7 @@ function saveGameResult(score) {
   let streak = 0;
   const check = new Date(today + 'T00:00:00');
   while (true) {
-    const k = check.toISOString().split('T')[0];
+        const k = `${check.getFullYear()}-${String(check.getMonth()+1).padStart(2,'0')}-${String(check.getDate()).padStart(2,'0')}`;
     if (history[k]) { streak++; check.setDate(check.getDate() - 1); } else break;
   }
   stats.streak = streak;
@@ -95,7 +98,7 @@ function renderDashboard(stats, history, today) {
   const base = new Date(today + 'T00:00:00');
   for (let i = 29; i >= 0; i--) {
     const d = new Date(base); d.setDate(d.getDate() - i);
-    const key = d.toISOString().split('T')[0];
+        const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     const entry = history[key];
     const isToday = key === today;
     const dot = document.createElement('div');
@@ -377,6 +380,8 @@ function showHint(attemptNumber) {
 function resetGame() {
   initGame();
   const input = document.getElementById('guessInput');
+
+
   if (input) { input.value = ''; input.focus(); }
 }
 

@@ -113,7 +113,15 @@
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
       text-decoration: none;
     }
-    .nav-logo-icon { font-size: 1.5rem; filter: drop-shadow(0 0 8px rgba(247,195,68,0.7)); }
+    /* Fix: emoji needs its own span so -webkit-text-fill-color doesn't hide it */
+    .nav-logo-icon {
+      font-size: 1.5rem;
+      filter: drop-shadow(0 0 8px rgba(247,195,68,0.7)) sepia(1) saturate(4) hue-rotate(5deg) brightness(1.1);
+      -webkit-text-fill-color: initial;
+      background: none;
+      -webkit-background-clip: unset;
+      background-clip: unset;
+    }
 
     .nav-center-group { display: flex; align-items: center; gap: 8px; }
     .nav-right { display: flex; align-items: center; gap: 10px; }
@@ -219,7 +227,7 @@
       100% { transform: translateY(0px) scaleX(1) scaleY(1); }
     }
     @keyframes ballShadow {
-      0%,100% { transform: translateX(-50%) scaleX(1); opacity: 0.5; }
+      0%, 100% { transform: translateX(-50%) scaleX(1); opacity: 0.5; }
       72%      { transform: translateX(-50%) scaleX(0.25); opacity: 0.15; }
       96%      { transform: translateX(-50%) scaleX(1.25); opacity: 0.6; }
     }
@@ -565,79 +573,25 @@
 
     /* ════════════════════════════════════════════════
        MOBILE PERFORMANCE OPTIMIZATIONS
-       Reduces GPU overdraw & concurrent animation count
     ════════════════════════════════════════════════ */
     @media (max-width: 768px) {
-      /* 1. Halve blur on blobs — single biggest perf win on mobile */
-      .bg-blob {
-        filter: blur(40px);
-        opacity: 0.3;
-      }
+      .bg-blob { filter: blur(40px); opacity: 0.3; }
+      nav { backdrop-filter: blur(8px); }
+      .grid-overlay { display: none; }
+      .blob-3 { display: none; }
+      .blob-1, .blob-2 { animation: none; }
+      .ball-orbit-wrap, .ball-orbit-wrap2 { display: none; }
+      .bs2, .bs4, .bs6 { display: none; }
+      .bt2, .bt3 { display: none; }
+      .ball-ring-svg { display: none; }
+      .ball-ground-shadow { filter: none; opacity: 0.25; }
+      .ball-glow { display: none; }
+      .card-shimmer { display: none; }
 
-      /* 2. Reduce nav backdrop blur */
-      nav {
-        backdrop-filter: blur(8px);
-      }
-
-      /* 3. Kill animated full-page grid — full repaint every 6s */
-      .grid-overlay {
-        display: none;
-      }
-
-      /* 4. Kill third blob entirely */
-      .blob-3 {
-        display: none;
-      }
-
-      /* 5. Stop blob drift animations */
-      .blob-1, .blob-2 {
-        animation: none;
-      }
-
-      /* 6. Kill orbit rings — not visible at small ball size */
-      .ball-orbit-wrap,
-      .ball-orbit-wrap2 {
-        display: none;
-      }
-
-      /* 7. Kill half the sparks */
-      .bs2, .bs4, .bs6 {
-        display: none;
-      }
-
-      /* 8. Keep only the main trail */
-      .bt2, .bt3 {
-        display: none;
-      }
-
-      /* 9. Kill SVG ring-pop pulses */
-      .ball-ring-svg {
-        display: none;
-      }
-
-      /* 10. Remove blur from shadow — filter on mobile is expensive */
-      .ball-ground-shadow {
-        filter: none;
-        opacity: 0.25;
-      }
-
-      /* 11. Kill glow pulse */
-      .ball-glow {
-        display: none;
-      }
-
-      /* 12. Kill shimmer sweep on featured card */
-      .card-shimmer {
-        display: none;
-      }
-
-      /* 13. Disable card hover effects on touch — they fire on tap
-             and leave cards in a transformed stuck state */
+      /* Disable hover effects on touch */
       .game-card:hover,
       .game-card.revealed:hover {
-        transform: none;
-        box-shadow: none;
-        border-color: var(--border);
+        transform: none; box-shadow: none; border-color: var(--border);
       }
       .game-card:hover::before { opacity: 0.55; top: 10%; bottom: 10%; }
       .game-card:hover .card-glow { opacity: 0; }
@@ -663,6 +617,10 @@
       .nav-logo { font-size: 1.55rem; }
       .nav-pill-btn span { display: none; }
       .nav-pill-btn { padding: 7px 10px; }
+
+      /* FIX: Hide "Daily Live" badge on mobile */
+      .live-badge { display: none; }
+
       .hero { grid-template-columns: 1fr 120px; text-align: left; padding: 28px 18px 20px; gap: 12px; align-items: center; }
       .hero-eyebrow { font-size: 0.62rem; }
       .hero-title { font-size: 2.5rem; margin-bottom: 12px; }
@@ -684,7 +642,21 @@
       .card-title { font-size: 1.08rem; }
       .card-desc { font-size: 0.74rem; }
       .card-arrow { width: 30px; height: 30px; font-size: 0.85rem; }
-      .footer-top { grid-template-columns: 1fr; gap: 32px; padding-bottom: 32px; }
+
+      /* FIX: Footer brand full width, then Games + Info side by side */
+      .footer-top {
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        padding-bottom: 32px;
+      }
+      .footer-brand {
+        grid-column: 1 / -1;
+      }
+      /* FIX: Allow tagline to wrap fully — remove max-width constraint on mobile */
+      .footer-tagline {
+        max-width: 100%;
+      }
+
       .footer-inner { padding: 40px 18px 0; }
       .footer-bottom-bar { padding: 16px 18px 24px; flex-direction: column; align-items: flex-start; }
     }
@@ -712,8 +684,9 @@
   <!-- NAV -->
   <nav>
     <a href="#" class="nav-logo">
+      <!-- FIX: Emoji wrapped in separate span to escape gradient text-fill -->
       <span class="nav-logo-icon">🏏</span>
-      Crickingo
+      <span>Crickingo</span>
     </a>
     <div class="nav-center-group">
       <a href="https://www.reddit.com/r/Crickingo/" target="_blank" class="nav-pill-btn reddit" aria-label="Reddit">
@@ -825,7 +798,7 @@
         <div class="card-glow"></div>
         <div class="card-icon">🕵️</div>
         <div class="card-body">
-          <div class="card-row"><div class="card-title">Who Are Ya?</div><span class="card-tag">Daily</span></div>
+          <div class="card-row"><div class="card-title">Who Are Ya?</div><span class="card-tag">Guess</span></div>
           <p class="card-desc">Guess the mystery cricketer from country, role, debut year and more.</p>
         </div>
         <div class="card-arrow">→</div>
@@ -871,18 +844,6 @@
         <div class="card-arrow">→</div>
       </a>
 
-      <a href="tournament.html" class="game-card gc-teal featured">
-        <div class="card-shimmer"></div>
-        <div class="card-glow"></div>
-        <div class="featured-tag">✦ Multiplayer</div>
-        <div class="card-icon">🎮</div>
-        <div class="card-body">
-          <div class="card-row"><div class="card-title">Play With Friends</div><span class="card-tag">Live Room</span></div>
-          <p class="card-desc">Create a room and compete with your friends in real time.</p>
-        </div>
-        <div class="card-arrow">→</div>
-      </a>
-
     </div>
   </section>
 
@@ -921,7 +882,7 @@
             <a href="about.html"><span class="fl-icon">👋</span>About Us</a>
             <a href="terms.html"><span class="fl-icon">📄</span>Terms</a>
             <a href="privacy.html"><span class="fl-icon">🔒</span>Privacy</a>
-            <a href="mailto:contact.crickingo@gmail.com"><span class="fl-icon">✉️</span>Contact</a>
+            <a href="/cdn-cgi/l/email-protection#22414d4c564341560c41504b41494b4c454d62454f434b4e0c414d4f"><span class="fl-icon">✉️</span>Contact</a>
           </div>
         </div>
       </div>
@@ -933,7 +894,7 @@
     </div>
   </footer>
 
-  <script src="main.js" defer></script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="main.js" defer></script>
   <script>
     const cards = document.querySelectorAll('.game-card');
     const observer = new IntersectionObserver((entries) => {

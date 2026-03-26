@@ -23,10 +23,13 @@ const isInTournament = localStorage.getItem('inTournamentGame') === 'true' &&
 const STATS_KEY   = 'crickingo_rivalry_stats';
 const HISTORY_KEY = 'crickingo_rivalry_history';
 
-function getRealTodayKey() { return new Date().toISOString().split('T')[0]; }
-function getDateFromURL()  { return urlParams.get('date') || new Date().toISOString().split('T')[0]; }
+// ✅ FIX: local date (not UTC toISOString) — avoids off-by-one for IST/UTC+ timezones
+function getRealTodayKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function getDateFromURL()  { return urlParams.get('date') || getRealTodayKey(); }
 
-// ── Save final result (mirrors wordle saveGameResult exactly) ──
 function saveGameResult(score, correct, wrong) {
   if (isInTournament) return;
   const puzzleDate = getDateFromURL();
@@ -42,7 +45,8 @@ function saveGameResult(score, correct, wrong) {
   let streak = 0;
   const check = new Date(today + 'T00:00:00');
   while (true) {
-    const k = check.toISOString().split('T')[0];
+    // ✅ FIX: local date parts for streak key
+    const k = `${check.getFullYear()}-${String(check.getMonth()+1).padStart(2,'0')}-${String(check.getDate()).padStart(2,'0')}`;
     if (history[k]) { streak++; check.setDate(check.getDate() - 1); } else break;
   }
   stats.streak = streak;
@@ -52,7 +56,6 @@ function saveGameResult(score, correct, wrong) {
   renderDashboard(stats, history, today);
 }
 
-// ── Update dot live during game (mirrors wordle updateTodayDot exactly) ──
 function updateTodayDot(score) {
   if (isInTournament) return;
   const puzzleDate = getDateFromURL();
@@ -70,7 +73,6 @@ function updateTodayDot(score) {
   sc.textContent = score;
 }
 
-// ── Render dashboard (mirrors wordle renderDashboard exactly) ──
 function renderDashboard(stats, history, today) {
   if (isInTournament) {
     const dashboard = document.getElementById('bottomDashboard');
@@ -91,7 +93,8 @@ function renderDashboard(stats, history, today) {
   const base = new Date(today + 'T00:00:00');
   for (let i = 29; i >= 0; i--) {
     const d = new Date(base); d.setDate(d.getDate() - i);
-    const key     = d.toISOString().split('T')[0];
+    // ✅ FIX: local date parts for dot key
+    const key     = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     const entry   = history[key];
     const isToday = key === today;
     const dot = document.createElement('div');
@@ -184,10 +187,7 @@ function calculateStreakBonus(streak) {
 
 function updateScoreDisplay() {
   let scoreDisplay = document.getElementById('currentScore');
-  if (!scoreDisplay) {
-    addScoreDisplay();
-    scoreDisplay = document.getElementById('currentScore');
-  }
+  if (!scoreDisplay) { addScoreDisplay(); scoreDisplay = document.getElementById('currentScore'); }
   if (!scoreDisplay) return;
   scoreDisplay.innerHTML = `
     <div style="font-size: 1.5em; font-weight: 900; color: #ffd700;">💰 ${totalScore} pts</div>
@@ -199,7 +199,6 @@ function updateScoreDisplay() {
 
 async function initGame() {
   await loadData();
-
   if (urlParams.get('tournament') !== 'true') localStorage.removeItem('inTournamentGame');
   showRulesModal();
   if (isInTournament) showTournamentInfo();
@@ -213,7 +212,6 @@ async function initGame() {
     if (puzzleBar) puzzleBar.style.display = 'none';
   }
 
-  // ===== TOURNAMENT SEED LOGIC =====
   if (isInTournament) {
     const tournamentCode = localStorage.getItem('tournamentCode');
     const seedPath = `tournaments/${tournamentCode}/gameData/rivalry_key`;
@@ -239,16 +237,10 @@ async function initGame() {
     const gameKey  = `rivalry-${dateKey}`;
     const availableKeys = Object.keys(gridData).filter(k => k.startsWith('rivalry')).sort();
     currentGame = gridData[gameKey] || gridData[availableKeys[availableKeys.length - 1]];
-    if (!gridData[gameKey]) console.log('No data for today, using latest:', availableKeys[availableKeys.length - 1]);
     console.log('Normal mode:', gameKey);
   }
-  // ===== END SEED LOGIC =====
 
-  if (!currentGame) {
-    alert('No Rivalry Grid available. Returning to menu.');
-    backToMenu();
-    return;
-  }
+  if (!currentGame) { alert('No Rivalry Grid available. Returning to menu.'); backToMenu(); return; }
 
   currentIndex = 0; correctCount = 0; totalScore = 0;
   currentStreak = 0; wrongAnswers = 0; skippedPlayers = 0;
@@ -362,14 +354,12 @@ function assignPlayerToCell(cell) {
 
   cell.dataset.filled = "true";
   lastFilledCellIndex = parseInt(cell.dataset.index, 10);
-
   updateScoreDisplay();
 
   const filledCount = Array.from(document.querySelectorAll('#gameGrid .cell')).filter(c => c.dataset.filled === 'true').length;
   if (typeof window.updateLiveScore === 'function') window.updateLiveScore(totalScore, correctCount, filledCount, currentStreak);
   if (typeof window.updatePlayerProgress === 'function') window.updatePlayerProgress(currentIndex, currentGame.players.length);
 
-  // ── Live dot update on every answer (mirrors wordle) ──
   if (!isInTournament) updateTodayDot(totalScore);
 
   const allFilled = Array.from(document.querySelectorAll('#gameGrid .cell')).every(c => c.dataset.filled === "true");
@@ -489,7 +479,6 @@ function _showEndScreen() {
   if (rbStreak)  rbStreak.textContent  = streakBonusEarned > 0 ? `+${streakBonusEarned} pts` : '0';
   if (rbFilled)  rbFilled.textContent  = filledCount + '/15';
 
-  // ── Save final result (mirrors wordle) ──
   saveGameResult(finalScore, correctCount, wrongAnswers);
 
   const dashboard = document.getElementById('bottomDashboard');

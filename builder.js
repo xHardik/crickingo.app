@@ -33,9 +33,10 @@ let currentSessionScore = null;
 const STATS_KEY   = 'crickingo_builder_stats';
 const HISTORY_KEY = 'crickingo_builder_history';
 
-function getRealTodayKey() {
-  return new Date().toISOString().split('T')[0];
-}
+  function getRealTodayKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  }
 function getDateKey() {
   return urlParams.get('date') || getRealTodayKey();
 }
@@ -62,7 +63,7 @@ function saveAndRenderResult(rating, won) {
   let streak = 0;
   const check = new Date(today + 'T00:00:00');
   while (true) {
-    const k = check.toISOString().split('T')[0];
+        const k = `${check.getFullYear()}-${String(check.getMonth()+1).padStart(2,'0')}-${String(check.getDate()).padStart(2,'0')}`;
     if (history[k]) { streak++; check.setDate(check.getDate() - 1); }
     else break;
   }
@@ -125,7 +126,7 @@ function renderDashboard(stats, history, today) {
   for (let i = 29; i >= 0; i--) {
     const d       = new Date(base);
     d.setDate(d.getDate() - i);
-    const key     = d.toISOString().split('T')[0];
+       const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     const entry   = history[key];
     const isToday = key === today;
 

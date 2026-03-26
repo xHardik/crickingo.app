@@ -25,22 +25,29 @@ const isInTournament = localStorage.getItem('inTournamentGame') === 'true' &&
 const STATS_KEY   = 'crickingo_transfer_stats';
 const HISTORY_KEY = 'crickingo_transfer_history';
 
-function getRealTodayKey() { return new Date().toISOString().split('T')[0]; }
-function getDateFromURL()  { return urlParams.get('date') || new Date().toISOString().split('T')[0]; }
+// getRealTodayKey → always the real calendar today (for streak dots & stats)
+// Uses LOCAL date parts (not toISOString/UTC) — same as whoareya.js getTodayKey()
+// Fixes the off-by-one dot issue for IST and other UTC+ timezones
+function getRealTodayKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function getDateFromURL()  { return urlParams.get('date') || getRealTodayKey(); }
 
 function saveAndRenderResult(score, correct) {
   if (isInTournament) return;
-  const today = getRealTodayKey();
+  const puzzleDate = getDateFromURL();   // save under puzzle date
+  const realToday  = getRealTodayKey(); // dots always relative to real today
   let stats = {}, history = {};
   try { stats   = JSON.parse(localStorage.getItem(STATS_KEY))   || {}; } catch { stats   = {}; }
   try { history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || {}; } catch { history = {}; }
-  if (!history[today] || score > history[today].score) history[today] = { score, correct };
+  if (!history[puzzleDate] || score > history[puzzleDate].score) history[puzzleDate] = { score, correct };
   const allEntries = Object.values(history);
   stats.played = allEntries.length;
   stats.best   = Math.max(...allEntries.map(e => e.score));
   stats.avg    = Math.round(allEntries.reduce((s, e) => s + e.score, 0) / allEntries.length);
   let streak = 0;
-  const check = new Date(today + 'T00:00:00');
+  const check = new Date(realToday + 'T00:00:00');
   while (true) {
     const k = check.toISOString().split('T')[0];
     if (history[k]) { streak++; check.setDate(check.getDate() - 1); } else break;
@@ -48,8 +55,8 @@ function saveAndRenderResult(score, correct) {
   stats.streak = streak;
   localStorage.setItem(STATS_KEY,   JSON.stringify(stats));
   localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
-  console.log('✅ Saved under key:', today, '→', history[today]);
-  renderDashboard(stats, history, today);
+  console.log('✅ Saved under key:', puzzleDate, '→', history[puzzleDate]);
+  renderDashboard(stats, history, realToday);
 }
 
 function saveLiveScore(score, correct) {
@@ -61,19 +68,18 @@ function saveLiveScore(score, correct) {
     history[puzzleDate] = { score, correct, live: true };
     localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
   }
-  updateTodayDot(score);
+  updateTodayDot(score, puzzleDate);
 }
 
-function updateTodayDot(score) {
+// puzzleDate param: which date entry to highlight in the dots grid
+function updateTodayDot(score, puzzleDate) {
   if (isInTournament) return;
-  const puzzleDate = getDateFromURL();
   const dotsEl = document.getElementById('streakDots');
   if (!dotsEl) return;
   const dots = dotsEl.querySelectorAll('.streak-dot');
   let targetDot = null;
   dots.forEach(dot => { if (dot.dataset.dotDate === puzzleDate) targetDot = dot; });
-  if (!targetDot) targetDot = dots[dots.length - 1];
-  if (!targetDot) return;
+  if (!targetDot) return; // puzzle date not visible in last-30-days grid — just skip
   targetDot.className = 'streak-dot today-played';
   targetDot.title = puzzleDate + ' · ' + score + ' pts';
   let sc = targetDot.querySelector('.dot-score-val');
@@ -81,7 +87,7 @@ function updateTodayDot(score) {
   sc.textContent = score;
 }
 
-function renderDashboard(stats, history, today) {
+function renderDashboard(stats, history, realToday) {
   if (isInTournament) {
     const dashboard = document.getElementById('bottomDashboard');
     if (dashboard) dashboard.style.display = 'none';
@@ -95,24 +101,47 @@ function renderDashboard(stats, history, today) {
   setEl('statBest',   stats.best    !== undefined ? stats.best    : '—');
   setEl('statAvg',    stats.avg     !== undefined ? stats.avg     : '—');
   setEl('statStreak', stats.streak  !== undefined ? stats.streak + (stats.streak === 1 ? ' day' : ' days') : '—');
+
   const dotsEl = document.getElementById('streakDots');
   if (!dotsEl) return;
   dotsEl.innerHTML = '';
-  const base = new Date(today + 'T00:00:00');
+
+  // Always build dots grid relative to real today
+  const base = new Date(realToday + 'T00:00:00');
+  const puzzleDate = getDateFromURL();
+
   for (let i = 29; i >= 0; i--) {
     const d = new Date(base); d.setDate(d.getDate() - i);
-    const key = d.toISOString().split('T')[0];
-    const entry = history[key];
-    const isToday = key === today;
+    const key     = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    const entry   = history[key];
+    const isToday = key === realToday;
+    const isPuzzle = key === puzzleDate && !isToday; // puzzle date (past), not real today
+
     const dot = document.createElement('div');
     dot.dataset.dotDate = key;
-    if (isToday && entry)      { dot.className = 'streak-dot today-played'; dot.title = `Today · ${entry.score} pts`; }
-    else if (isToday)          { dot.className = 'streak-dot today-pending'; dot.title = 'Today — not played yet'; }
-    else if (entry)            { dot.className = 'streak-dot win'; dot.title = `${key} · ${entry.score} pts`; }
-    else                       { dot.className = 'streak-dot miss'; dot.title = `${key} — missed`; }
+
+    if (isToday && entry) {
+      dot.className = 'streak-dot today-played';
+      dot.title = `Today · ${entry.score} pts`;
+    } else if (isToday) {
+      dot.className = 'streak-dot today-pending';
+      dot.title = 'Today — not played yet';
+    } else if (isPuzzle && entry) {
+      // Past puzzle date that was just played — highlight same as today-played
+      dot.className = 'streak-dot today-played';
+      dot.title = `${key} · ${entry.score} pts`;
+    } else if (entry) {
+      dot.className = 'streak-dot win';
+      dot.title = `${key} · ${entry.score} pts`;
+    } else {
+      dot.className = 'streak-dot miss';
+      dot.title = `${key} — missed`;
+    }
+
     if (entry) {
       const sc = document.createElement('div');
-      sc.className = 'dot-score-val'; sc.textContent = entry.score;
+      sc.className = 'dot-score-val';
+      sc.textContent = entry.score;
       dot.appendChild(sc);
     }
     dotsEl.appendChild(dot);
@@ -137,7 +166,6 @@ function showTournamentInfo() {
   document.body.appendChild(infoDiv);
 }
 
-// ── PATCHED: use .active class to match new transfer.html modal ──
 function showRulesModal() {
   const modal = document.getElementById('rulesModal');
   if (modal) { modal.style.display = ''; modal.classList.add('active'); }
@@ -234,11 +262,12 @@ async function initGame() {
   setupSearchInput();
   updateScoreDisplay();
 
-  const today = getRealTodayKey();
+  // Always use real today for initial dashboard render
+  const realToday = getRealTodayKey();
   let stats = {}, history = {};
   try { stats   = JSON.parse(localStorage.getItem(STATS_KEY))   || {}; } catch {}
   try { history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || {}; } catch {}
-  renderDashboard(stats, history, today);
+  renderDashboard(stats, history, realToday);
 }
 
 function addScoreDisplay() {

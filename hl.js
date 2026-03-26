@@ -1,3 +1,4 @@
+
 // ==== FIREBASE IMPORT =====
 import { getDatabase, ref, set, get } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
@@ -23,12 +24,14 @@ const isInTournament = localStorage.getItem('inTournamentGame') === 'true' &&
 const STATS_KEY   = 'crickingo_hl_stats';
 const HISTORY_KEY = 'crickingo_hl_history';
 
+// ✅ FIX: local date (not UTC toISOString) — avoids off-by-one for IST/UTC+ timezones
 function getRealTodayKey() {
-  return new Date().toISOString().split('T')[0];
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
 
 function getDateFromURL() {
-  return urlParams.get('date') || new Date().toISOString().split('T')[0];
+  return urlParams.get('date') || getRealTodayKey();
 }
 
 function saveAndRenderResult(score) {
@@ -45,7 +48,8 @@ function saveAndRenderResult(score) {
   let streak = 0;
   const check = new Date(today + 'T00:00:00');
   while (true) {
-    const k = check.toISOString().split('T')[0];
+    // ✅ FIX: local date parts for streak key
+    const k = `${check.getFullYear()}-${String(check.getMonth()+1).padStart(2,'0')}-${String(check.getDate()).padStart(2,'0')}`;
     if (history[k]) { streak++; check.setDate(check.getDate() - 1); } else break;
   }
   stats.streak = streak;
@@ -107,7 +111,8 @@ function renderDashboard(stats, history, today) {
   const base = new Date(today + 'T00:00:00');
   for (let i = 29; i >= 0; i--) {
     const d = new Date(base); d.setDate(d.getDate() - i);
-    const key = d.toISOString().split('T')[0];
+    // ✅ FIX: local date parts for dot key
+    const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     const entry = history[key];
     const isToday = key === today;
     const dot = document.createElement('div');
@@ -150,7 +155,6 @@ function showTournamentInfo() {
   document.body.appendChild(infoDiv);
 }
 
-// ── PATCHED: use .active class to match new hl.html modal ──
 function showRulesModal() {
   const modal = document.getElementById('rulesModal');
   if (modal) { modal.style.display = ''; modal.classList.add('active'); }
@@ -455,7 +459,6 @@ window.shareScore = async function () {
   },'image/png');
 };
 
-// ── GLOBAL EXPORTS ──
 window.guess           = guess;
 window.resetGame       = resetGame;
 window.finishGame      = finishGame;
@@ -464,5 +467,4 @@ window.closeRulesModal = closeRulesModal;
 window.backToMenu      = backToMenu;
 window.saveGameResult  = saveAndRenderResult;
 
-// ── BOOT ──
 loadPlayers();
