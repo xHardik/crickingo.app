@@ -115,10 +115,7 @@
     }
     .nav-logo-icon { font-size: 1.5rem; filter: drop-shadow(0 0 8px rgba(247,195,68,0.7)); }
 
-    .nav-center-group {
-      display: flex; align-items: center; gap: 8px;
-    }
-
+    .nav-center-group { display: flex; align-items: center; gap: 8px; }
     .nav-right { display: flex; align-items: center; gap: 10px; }
 
     .nav-pill-btn {
@@ -174,7 +171,6 @@
       display: block;
       -webkit-text-stroke: 2px var(--accent);
       color: transparent;
-      position: relative;
     }
     .hero-title .line-solid { display: block; }
 
@@ -210,13 +206,10 @@
       border-right: 1px solid var(--border2);
     }
     .hero-stat:last-child { border-right: none; }
-    .hero-stat-num {
-      font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 1px; color: var(--accent); line-height: 1;
-    }
+    .hero-stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 1px; color: var(--accent); line-height: 1; }
     .hero-stat-label { font-size: 0.64rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
 
-    /* hero-right merged with ball-scene above */
-
+    /* ─── BALL ANIMATIONS ─── */
     @keyframes bounceBall {
       0%   { transform: translateY(0px) scaleX(1) scaleY(1); animation-timing-function: cubic-bezier(0.215,0.61,0.355,1); }
       45%  { transform: translateY(-160px) scaleX(1) scaleY(1); animation-timing-function: cubic-bezier(0.55,0.055,0.675,0.19); }
@@ -272,6 +265,7 @@
     .ball-bounce-wrap {
       position: absolute; bottom: 44px;
       animation: bounceBall 1.55s cubic-bezier(0.215,0.61,0.355,1) infinite;
+      will-change: transform;
     }
     .ball-body {
       width: 82px; height: 82px; border-radius: 50%;
@@ -298,6 +292,7 @@
     .ball-seam-ring {
       position: absolute; inset: -4px;
       animation: ballSeamSpin 1.1s linear infinite;
+      will-change: transform;
     }
     .ball-ground-shadow {
       position: absolute; bottom: 26px; left: 50%;
@@ -340,10 +335,7 @@
       background: rgba(220,70,40,0.75);
       box-shadow: 0 0 8px rgba(200,50,20,0.7);
     }
-    .ball-orbit-dot2 {
-      width: 5px; height: 5px; top: -2.5px; margin-left: -2.5px;
-      background: rgba(180,40,20,0.6);
-    }
+    .ball-orbit-dot2 { width: 5px; height: 5px; top: -2.5px; margin-left: -2.5px; background: rgba(180,40,20,0.6); }
     .ball-ring-svg {
       position: absolute; bottom: 30px; left: 50%;
       transform: translateX(-50%);
@@ -412,18 +404,10 @@
       max-width: 820px; margin: 0 auto; padding: 0 40px 100px;
       animation: fadeUp 0.5s 0.38s ease both;
     }
-
-    .section-hdr {
-      display: flex; align-items: center; gap: 14px; margin-bottom: 20px;
-    }
-    .section-label {
-      font-family: 'Space Mono', monospace; font-size: 0.64rem; font-weight: 700; letter-spacing: 3.5px; text-transform: uppercase; color: var(--muted2); white-space: nowrap;
-    }
+    .section-hdr { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+    .section-label { font-family: 'Space Mono', monospace; font-size: 0.64rem; font-weight: 700; letter-spacing: 3.5px; text-transform: uppercase; color: var(--muted2); white-space: nowrap; }
     .section-line { flex: 1; height: 1px; background: linear-gradient(90deg, var(--border2), transparent); }
-    .section-count {
-      font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--muted3); letter-spacing: 1px;
-    }
-
+    .section-count { font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--muted3); letter-spacing: 1px; }
     .games-grid { display: flex; flex-direction: column; gap: 22px; }
 
     .gc-fire   { --ca:#F7C344; --cag:rgba(247,195,68,0.09); --cag2:rgba(247,195,68,0.18); --cas:rgba(247,195,68,0.25); }
@@ -440,14 +424,16 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 16px; padding: 16px 18px; overflow: hidden;
-      transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.28s, border-color 0.28s, background 0.28s;
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.55s cubic-bezier(0.22,1,0.36,1), transform 0.55s cubic-bezier(0.22,1,0.36,1), box-shadow 0.28s, border-color 0.28s, background 0.28s;
       cursor: pointer;
     }
     .game-card::before {
       content: ''; position: absolute; left: 0; top: 10%; bottom: 10%;
       width: 3px; border-radius: 0 3px 3px 0;
       background: var(--ca, var(--accent)); opacity: 0.55;
-      transition: opacity 0.25s, height 0.25s, top 0.25s, bottom 0.25s;
+      transition: opacity 0.25s, top 0.25s, bottom 0.25s;
     }
     .card-glow {
       position: absolute; inset: 0; pointer-events: none; border-radius: 16px;
@@ -461,6 +447,8 @@
     }
     .game-card:hover::before { opacity: 1; top: 0; bottom: 0; border-radius: 0; }
     .game-card:hover .card-glow { opacity: 1; }
+    .game-card.revealed { opacity: 1; transform: translateY(0); }
+    .game-card.revealed:hover { transform: translateX(4px) translateY(-3px); }
 
     .card-icon {
       position: relative; z-index: 2; flex-shrink: 0;
@@ -494,10 +482,7 @@
       color: var(--ca, var(--accent)); font-size: 1rem;
       transition: all 0.28s cubic-bezier(0.34,1.56,0.64,1);
     }
-    .game-card:hover .card-arrow {
-      background: var(--ca, var(--accent)); border-color: var(--ca, var(--accent));
-      color: #000; transform: translateX(4px) scale(1.12);
-    }
+    .game-card:hover .card-arrow { background: var(--ca, var(--accent)); border-color: var(--ca, var(--accent)); color: #000; transform: translateX(4px) scale(1.12); }
 
     .game-card.featured {
       border-color: rgba(6,182,212,0.3);
@@ -511,9 +496,7 @@
       font-size: 0.52rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
       padding: 3px 12px; border-radius: 0 0 9px 9px; z-index: 5;
     }
-    .card-shimmer {
-      position: absolute; inset: 0; border-radius: 16px; overflow: hidden; pointer-events: none;
-    }
+    .card-shimmer { position: absolute; inset: 0; border-radius: 16px; overflow: hidden; pointer-events: none; }
     .card-shimmer::before {
       content: ''; position: absolute; top: 0; left: -130%; width: 65%; height: 100%;
       background: linear-gradient(105deg, transparent, rgba(255,255,255,0.05), transparent);
@@ -524,157 +507,148 @@
     /* ─── FOOTER ─── */
     footer {
       position: relative; z-index: 1;
-      border-top: 1px solid var(--border);
-      max-width: 1120px; margin: 0 auto; padding: 52px 40px 40px;
-    }
-
-    .footer-grid { display: grid; grid-template-columns: 260px 1fr; gap: 52px; margin-bottom: 44px; }
-
-    .footer-logo-text {
-      font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 3px;
-      background: linear-gradient(90deg, var(--accent), #fff 75%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      display: block; margin-bottom: 12px;
-    }
-    .footer-desc { color: var(--muted); font-size: 0.82rem; line-height: 1.72; max-width: 230px; }
-
-    .footer-socials { display: flex; gap: 8px; margin-top: 20px; }
-    .footer-social-btn {
-      display: flex; align-items: center; justify-content: center;
-      width: 36px; height: 36px; border-radius: 10px;
-      border: 1px solid var(--border); background: var(--surface);
-      color: var(--muted); text-decoration: none; transition: all 0.2s;
-    }
-    .footer-social-btn:hover { background: var(--surface2); border-color: var(--border3); color: var(--text); transform: translateY(-2px); }
-
-    .footer-links-col h4 {
-      font-family: 'Space Mono', monospace; font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px;
-      color: var(--muted3); margin-bottom: 12px;
-    }
-    .footer-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 22px; }
-    .footer-pill {
-      display: inline-flex; align-items: center; gap: 5px;
-      padding: 5px 13px; background: var(--surface); border: 1px solid var(--border);
-      border-radius: 100px; color: var(--muted); text-decoration: none;
-      font-size: 0.77rem; font-weight: 600; transition: all 0.2s; white-space: nowrap;
-    }
-    .footer-pill:hover { background: var(--accent-dim); border-color: rgba(247,195,68,0.32); color: var(--accent); transform: translateY(-1px); }
-
-    /* ─── SCROLL REVEAL ─── */
-    .game-card {
-      opacity: 0;
-      transform: translateY(32px) translateX(0);
-      transition: opacity 0.55s cubic-bezier(0.22,1,0.36,1), transform 0.55s cubic-bezier(0.22,1,0.36,1), box-shadow 0.28s, border-color 0.28s, background 0.28s;
-    }
-    .game-card.revealed {
-      opacity: 1;
-      transform: translateY(0) translateX(0);
-    }
-    .game-card.revealed:hover {
-      transform: translateX(4px) translateY(-3px);
-    }
-
-    /* ─── FOOTER REDESIGN ─── */
-    footer {
-      position: relative; z-index: 1;
       margin-top: 40px;
       background: rgba(255,255,255,0.02);
       border-top: 1px solid var(--border2);
     }
-
-    .footer-inner {
-      max-width: 1120px; margin: 0 auto;
-      padding: 64px 40px 0;
-    }
-
+    .footer-inner { max-width: 1120px; margin: 0 auto; padding: 64px 40px 0; }
     .footer-top {
-      display: grid;
-      grid-template-columns: 280px 1fr 1fr;
-      gap: 52px;
-      padding-bottom: 52px;
-      border-bottom: 1px solid var(--border);
+      display: grid; grid-template-columns: 280px 1fr 1fr; gap: 52px;
+      padding-bottom: 52px; border-bottom: 1px solid var(--border);
     }
-
     .footer-brand-name {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 2.2rem; letter-spacing: 4px;
+      font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; letter-spacing: 4px;
       background: linear-gradient(110deg, #ffe680 0%, var(--accent) 50%, #e8a800 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
       display: block; margin-bottom: 10px; line-height: 1;
     }
-    .footer-tagline {
-      color: var(--muted); font-size: 0.83rem; line-height: 1.7;
-      max-width: 220px; margin-bottom: 24px;
-    }
+    .footer-tagline { color: var(--muted); font-size: 0.83rem; line-height: 1.7; max-width: 220px; margin-bottom: 24px; }
     .footer-social-row { display: flex; gap: 8px; }
     .footer-soc {
       display: flex; align-items: center; justify-content: center;
       width: 38px; height: 38px; border-radius: 10px;
       border: 1px solid var(--border2); background: var(--surface);
-      color: var(--muted); text-decoration: none;
-      transition: all 0.2s;
+      color: var(--muted); text-decoration: none; transition: all 0.2s;
     }
     .footer-soc:hover { background: var(--surface3); border-color: var(--border3); color: var(--text); transform: translateY(-2px); }
     .footer-soc.reddit:hover  { color: #ff6b35; border-color: rgba(255,107,53,0.4); background: rgba(255,107,53,0.1); }
     .footer-soc.discord:hover { color: #7289da; border-color: rgba(114,137,218,0.4); background: rgba(114,137,218,0.1); }
-
     .footer-col h5 {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.6rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 3px;
-      color: var(--accent); margin-bottom: 18px;
+      font-family: 'Space Mono', monospace; font-size: 0.6rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 3px; color: var(--accent); margin-bottom: 18px;
     }
     .footer-link-list { display: flex; flex-direction: column; gap: 11px; }
     .footer-link-list a {
       display: flex; align-items: center; gap: 9px;
-      color: var(--muted); text-decoration: none;
-      font-size: 0.84rem; font-weight: 600;
-      transition: all 0.18s;
+      color: var(--muted); text-decoration: none; font-size: 0.84rem; font-weight: 600; transition: all 0.18s;
     }
     .footer-link-list a:hover { color: var(--text); transform: translateX(4px); }
     .footer-link-list a .fl-icon {
       width: 28px; height: 28px; border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.9rem;
-      background: var(--surface); border: 1px solid var(--border);
-      flex-shrink: 0; transition: all 0.18s;
+      display: flex; align-items: center; justify-content: center; font-size: 0.9rem;
+      background: var(--surface); border: 1px solid var(--border); flex-shrink: 0; transition: all 0.18s;
     }
     .footer-link-list a:hover .fl-icon { background: var(--surface2); border-color: var(--border2); }
-
     .footer-bottom-bar {
-      max-width: 1120px; margin: 0 auto;
-      padding: 20px 40px 32px;
-      display: flex; justify-content: space-between; align-items: center;
-      flex-wrap: wrap; gap: 10px;
+      max-width: 1120px; margin: 0 auto; padding: 20px 40px 32px;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
     }
-    .footer-bottom-bar p {
-      color: var(--muted2); font-size: 0.73rem;
-      font-family: 'Space Mono', monospace;
-    }
+    .footer-bottom-bar p { color: var(--muted2); font-size: 0.73rem; font-family: 'Space Mono', monospace; }
     .footer-bottom-bar .footer-badge {
       display: flex; align-items: center; gap: 6px;
       padding: 5px 12px; border-radius: 100px;
-      background: rgba(247,195,68,0.07);
-      border: 1px solid rgba(247,195,68,0.18);
-      color: var(--accent);
-      font-family: 'Space Mono', monospace;
-      font-size: 0.62rem; font-weight: 700; letter-spacing: 1.5px;
-    }
-
-    @media (max-width: 900px) {
-      .footer-top { grid-template-columns: 1fr 1fr; }
-      .footer-brand { grid-column: 1 / -1; }
-    }
-    @media (max-width: 640px) {
-      .footer-top { grid-template-columns: 1fr; gap: 32px; padding-bottom: 32px; }
-      .footer-inner { padding: 40px 18px 0; }
-      .footer-bottom-bar { padding: 16px 18px 24px; flex-direction: column; align-items: flex-start; }
+      background: rgba(247,195,68,0.07); border: 1px solid rgba(247,195,68,0.18);
+      color: var(--accent); font-family: 'Space Mono', monospace; font-size: 0.62rem; font-weight: 700; letter-spacing: 1.5px;
     }
 
     @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
 
+    /* ════════════════════════════════════════════════
+       MOBILE PERFORMANCE OPTIMIZATIONS
+       Reduces GPU overdraw & concurrent animation count
+    ════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      /* 1. Halve blur on blobs — single biggest perf win on mobile */
+      .bg-blob {
+        filter: blur(40px);
+        opacity: 0.3;
+      }
+
+      /* 2. Reduce nav backdrop blur */
+      nav {
+        backdrop-filter: blur(8px);
+      }
+
+      /* 3. Kill animated full-page grid — full repaint every 6s */
+      .grid-overlay {
+        display: none;
+      }
+
+      /* 4. Kill third blob entirely */
+      .blob-3 {
+        display: none;
+      }
+
+      /* 5. Stop blob drift animations */
+      .blob-1, .blob-2 {
+        animation: none;
+      }
+
+      /* 6. Kill orbit rings — not visible at small ball size */
+      .ball-orbit-wrap,
+      .ball-orbit-wrap2 {
+        display: none;
+      }
+
+      /* 7. Kill half the sparks */
+      .bs2, .bs4, .bs6 {
+        display: none;
+      }
+
+      /* 8. Keep only the main trail */
+      .bt2, .bt3 {
+        display: none;
+      }
+
+      /* 9. Kill SVG ring-pop pulses */
+      .ball-ring-svg {
+        display: none;
+      }
+
+      /* 10. Remove blur from shadow — filter on mobile is expensive */
+      .ball-ground-shadow {
+        filter: none;
+        opacity: 0.25;
+      }
+
+      /* 11. Kill glow pulse */
+      .ball-glow {
+        display: none;
+      }
+
+      /* 12. Kill shimmer sweep on featured card */
+      .card-shimmer {
+        display: none;
+      }
+
+      /* 13. Disable card hover effects on touch — they fire on tap
+             and leave cards in a transformed stuck state */
+      .game-card:hover,
+      .game-card.revealed:hover {
+        transform: none;
+        box-shadow: none;
+        border-color: var(--border);
+      }
+      .game-card:hover::before { opacity: 0.55; top: 10%; bottom: 10%; }
+      .game-card:hover .card-glow { opacity: 0; }
+      .game-card:hover .card-icon { transform: none; box-shadow: none; }
+      .game-card:hover .card-arrow { background: var(--surface2); border-color: var(--border2); color: var(--ca, var(--accent)); transform: none; }
+    }
+
     /* ─── RESPONSIVE ─── */
     @media (max-width: 900px) {
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      .footer-brand { grid-column: 1 / -1; }
       .hero { grid-template-columns: 1fr; padding: 52px 32px 40px; text-align: center; gap: 36px; }
       .hero-sub { margin: 0 auto 36px; }
       .hero-cta-row { justify-content: center; }
@@ -710,10 +684,9 @@
       .card-title { font-size: 1.08rem; }
       .card-desc { font-size: 0.74rem; }
       .card-arrow { width: 30px; height: 30px; font-size: 0.85rem; }
-      footer { padding: 36px 18px 28px; }
-      .footer-grid { grid-template-columns: 1fr; gap: 30px; }
-      .footer-desc { max-width: 100%; }
-      .footer-bottom { flex-direction: column; align-items: flex-start; padding-top: 18px; }
+      .footer-top { grid-template-columns: 1fr; gap: 32px; padding-bottom: 32px; }
+      .footer-inner { padding: 40px 18px 0; }
+      .footer-bottom-bar { padding: 16px 18px 24px; flex-direction: column; align-items: flex-start; }
     }
 
     @media (max-width: 380px) {
@@ -742,7 +715,6 @@
       <span class="nav-logo-icon">🏏</span>
       Crickingo
     </a>
-
     <div class="nav-center-group">
       <a href="https://www.reddit.com/r/Crickingo/" target="_blank" class="nav-pill-btn reddit" aria-label="Reddit">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
@@ -753,7 +725,6 @@
         <span>Discord</span>
       </a>
     </div>
-
     <div class="nav-right">
       <div class="live-badge"><span class="live-dot"></span>Daily Live</div>
     </div>
@@ -773,18 +744,9 @@
         <a href="#games" class="cta-primary">Play Now →</a>
       </div>
       <div class="hero-stats">
-        <div class="hero-stat">
-          <span class="hero-stat-num">6</span>
-          <span class="hero-stat-label">Games</span>
-        </div>
-        <div class="hero-stat">
-          <span class="hero-stat-num">IPL</span>
-          <span class="hero-stat-label">Focused</span>
-        </div>
-        <div class="hero-stat">
-          <span class="hero-stat-num">More Games</span>
-          <span class="hero-stat-label">Coming Soon..</span>
-        </div>
+        <div class="hero-stat"><span class="hero-stat-num">6</span><span class="hero-stat-label">Games</span></div>
+        <div class="hero-stat"><span class="hero-stat-num">IPL</span><span class="hero-stat-label">Focused</span></div>
+        <div class="hero-stat"><span class="hero-stat-num">∞</span><span class="hero-stat-label">Coming Soon</span></div>
       </div>
     </div>
 
@@ -847,7 +809,6 @@
       <div class="section-line"></div>
       <span class="section-count">06 Games</span>
     </div>
-
     <div class="games-grid">
 
       <a href="rivalry.html" class="game-card gc-fire">
@@ -929,7 +890,6 @@
   <footer>
     <div class="footer-inner">
       <div class="footer-top">
-
         <div class="footer-brand">
           <span class="footer-brand-name">🏏 Crickingo</span>
           <p class="footer-tagline">Daily cricket puzzles, IPL trivia and head-to-head challenges. Built for fans, by fans.</p>
@@ -942,7 +902,6 @@
             </a>
           </div>
         </div>
-
         <div class="footer-col">
           <h5>Games</h5>
           <div class="footer-link-list">
@@ -955,7 +914,6 @@
             <a href="tournament.html"><span class="fl-icon">🎮</span>Play With Friends</a>
           </div>
         </div>
-
         <div class="footer-col">
           <h5>Info</h5>
           <div class="footer-link-list">
@@ -966,10 +924,8 @@
             <a href="mailto:contact.crickingo@gmail.com"><span class="fl-icon">✉️</span>Contact</a>
           </div>
         </div>
-
       </div>
     </div>
-
     <div class="footer-bottom-bar">
       <p>© 2026 Crickingo. All rights reserved.</p>
       <div class="footer-badge">🏏 Made for cricket fans</div>
