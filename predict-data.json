@@ -38,7 +38,7 @@
     "name": "Sunrisers Hyderabad",
     "short": "SRH",
     "emoji": "🟠",
-    "players": ["Abhishek Sharma", "Travis Head", "Heinrich Klaasen"]
+    "players": ["Abhishek Sharma", "Travis Head", "Heinrich Klaasen" , "Ishaan Kishan" , "Anyone else"]
   },
   
   "result": {
@@ -57,7 +57,7 @@
       "name": "Royal Challengers Bengaluru",
       "short": "RCB",
       "emoji": "🔴",
-      "players": []
+      "players": ["Virat Kohli", "Rajat Patidar", "Phil Salt", "Jacob Bethel", "Jiesh Sharma" , "Anyone else"]
     },
     "team2": {
       "name": "Sunrisers Hyderabad",

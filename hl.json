@@ -8,11 +8,11 @@
       {"name": "Kumar Sangakkara", "stat": "ODI Runs", "value": 14234, "image": "🎯"},
       {"name": "Ricky Ponting", "stat": "Test Runs", "value": 13378, "image": "🏆"},
       {"name": "Brian Lara", "stat": "Test Runs", "value": 11953, "image": "💎"},
-      {"name": "Virat Kohli", "stat": "IPL Runs", "value": 7263, "image": "👑"},
-      {"name": "Shikhar Dhawan", "stat": "IPL Runs", "value": 6617, "image": "🏏"},
-      {"name": "David Warner", "stat": "IPL Runs", "value": 6397, "image": "⚡"},
-      {"name": "Rohit Sharma", "stat": "ODI Runs", "value": 10866, "image": "🏏"},
-      {"name": "MS Dhoni", "stat": "IPL Runs", "value": 5243, "image": "🧤"}
+      {"name": "Virat Kohli", "stat": "IPL Runs", "value": 8661, "image": "👑"},
+      {"name": "Shikhar Dhawan", "stat": "IPL Runs", "value": 6769, "image": "🏏"},
+      {"name": "David Warner", "stat": "IPL Runs", "value": 6565, "image": "⚡"},
+      {"name": "Rohit Sharma", "stat": "ODI Runs", "value": 10860, "image": "🏏"},
+      {"name": "MS Dhoni", "stat": "IPL Runs", "value": 5439, "image": "🧤"}
     ]
   },
 
@@ -139,16 +139,16 @@
     "date": "2026-03-09",
     "theme": "IPL All-Time Top Scorers",
     "players": [
-      {"name": "Virat Kohli", "stat": "IPL Runs", "value": 7263, "image": "👑"},
-      {"name": "Shikhar Dhawan", "stat": "IPL Runs", "value": 6617, "image": "🏏"},
-      {"name": "David Warner", "stat": "IPL Runs", "value": 6397, "image": "⚡"},
-      {"name": "Rohit Sharma", "stat": "IPL Runs", "value": 6211, "image": "🏏"},
+      {"name": "Virat Kohli", "stat": "IPL Runs", "value": 8661, "image": "👑"},
+      {"name": "Rohit Sharma", "stat": "IPL Runs", "value": 7046, "image": "🏏"},
+      {"name": "Shikhar Dhawan", "stat": "IPL Runs", "value": 6769, "image": "🏏"},
+      {"name": "David Warner", "stat": "IPL Runs", "value": 6565, "image": "⚡"},
       {"name": "Suresh Raina", "stat": "IPL Runs", "value": 5528, "image": "🦁"},
+      {"name": "MS Dhoni", "stat": "IPL Runs", "value": 5439, "image": "🧤"},
+      {"name": "KL Rahul", "stat": "IPL Runs", "value": 5222, "image": "🎯"},
       {"name": "AB de Villiers", "stat": "IPL Runs", "value": 5162, "image": "🚀"},
-      {"name": "MS Dhoni", "stat": "IPL Runs", "value": 5243, "image": "🧤"},
-      {"name": "Chris Gayle", "stat": "IPL Runs", "value": 4965, "image": "💥"},
-      {"name": "Dinesh Karthik", "stat": "IPL Runs", "value": 4462, "image": "🧤"},
-      {"name": "KL Rahul", "stat": "IPL Runs", "value": 4163, "image": "🎯"}
+      {"name": "Ajinkya Rahane", "stat": "IPL Runs", "value": 5032, "image": "🏏"},
+      {"name": "Robin Uthappa", "stat": "IPL Runs", "value": 4952, "image": "🧤"}
     ]
   },
 
@@ -207,16 +207,16 @@
     "date": "2026-03-13",
     "theme": "IPL All-Time Wicket Takers",
     "players": [
-      {"name": "Yuzvendra Chahal", "stat": "IPL Wickets", "value": 205, "image": "🎯"},
+      {"name": "Yuzvendra Chahal", "stat": "IPL Wickets", "value": 221, "image": "🎯"},
+      {"name": "Bhuvneshwar Kumar", "stat": "IPL Wickets", "value": 193, "image": "🏏"},
+      {"name": "Piyush Chawla", "stat": "IPL Wickets", "value": 192, "image": "🌀"},
+      {"name": "Sunil Narine", "stat": "IPL Wickets", "value": 192, "image": "🌀"},
+      {"name": "R Ashwin", "stat": "IPL Wickets", "value": 187, "image": "🎯"},
       {"name": "DJ Bravo", "stat": "IPL Wickets", "value": 183, "image": "🎸"},
+      {"name": "Jasprit Bumrah", "stat": "IPL Wickets", "value": 183, "image": "💥"},
+      {"name": "Amit Mishra", "stat": "IPL Wickets", "value": 174, "image": "🎳"},
       {"name": "Lasith Malinga", "stat": "IPL Wickets", "value": 170, "image": "🔥"},
-      {"name": "Amit Mishra", "stat": "IPL Wickets", "value": 166, "image": "🎳"},
-      {"name": "Piyush Chawla", "stat": "IPL Wickets", "value": 157, "image": "🌀"},
-      {"name": "Harbhajan Singh", "stat": "IPL Wickets", "value": 150, "image": "🎯"},
-      {"name": "Jasprit Bumrah", "stat": "IPL Wickets", "value": 149, "image": "💥"},
-      {"name": "Sunil Narine", "stat": "IPL Wickets", "value": 148, "image": "🌀"},
-      {"name": "Bhuvneshwar Kumar", "stat": "IPL Wickets", "value": 143, "image": "🏏"},
-      {"name": "Kagiso Rabada", "stat": "IPL Wickets", "value": 131, "image": "🔥"}
+      {"name": "Ravindra Jadeja", "stat": "IPL Wickets", "value": 170, "image": "⚡"}
     ]
   },
 
@@ -296,8 +296,8 @@
       {"name": "Tim David", "stat": "IPL Strike Rate", "value": 156.3, "image": "⭐"},
       {"name": "Glenn Maxwell", "stat": "IPL Strike Rate", "value": 154.4, "image": "⚡"},
       {"name": "AB de Villiers", "stat": "IPL Strike Rate", "value": 151.7, "image": "🚀"},
-      {"name": "Kieron Pollard", "stat": "IPL Strike Rate", "value": 147.0, "image": "🏏"},
       {"name": "Rinku Singh", "stat": "IPL Strike Rate", "value": 149.8, "image": "🎯"},
+      {"name": "Kieron Pollard", "stat": "IPL Strike Rate", "value": 147.0, "image": "🏏"},
       {"name": "Chris Gayle", "stat": "IPL Strike Rate", "value": 148.9, "image": "💥"},
       {"name": "Suryakumar Yadav", "stat": "IPL Strike Rate", "value": 146.5, "image": "🌟"},
       {"name": "Hardik Pandya", "stat": "IPL Strike Rate", "value": 143.2, "image": "🔥"},
@@ -343,16 +343,16 @@
     "date": "2026-03-21",
     "theme": "Most IPL Matches Played",
     "players": [
-      {"name": "MS Dhoni", "stat": "IPL Matches", "value": 264, "image": "🧤"},
+      {"name": "MS Dhoni", "stat": "IPL Matches", "value": 278, "image": "🧤"},
+      {"name": "Rohit Sharma", "stat": "IPL Matches", "value": 270, "image": "🏏"},
+      {"name": "Virat Kohli", "stat": "IPL Matches", "value": 267, "image": "👑"},
       {"name": "Dinesh Karthik", "stat": "IPL Matches", "value": 257, "image": "🧤"},
-      {"name": "Virat Kohli", "stat": "IPL Matches", "value": 246, "image": "👑"},
-      {"name": "Rohit Sharma", "stat": "IPL Matches", "value": 243, "image": "🏏"},
+      {"name": "Ravindra Jadeja", "stat": "IPL Matches", "value": 254, "image": "⚡"},
       {"name": "Shikhar Dhawan", "stat": "IPL Matches", "value": 222, "image": "🏏"},
       {"name": "Suresh Raina", "stat": "IPL Matches", "value": 205, "image": "🦁"},
       {"name": "Kieron Pollard", "stat": "IPL Matches", "value": 189, "image": "🏏"},
-      {"name": "David Warner", "stat": "IPL Matches", "value": 182, "image": "⚡"},
-      {"name": "Harbhajan Singh", "stat": "IPL Matches", "value": 163, "image": "🎯"},
-      {"name": "Andre Russell", "stat": "IPL Matches", "value": 135, "image": "💥"}
+      {"name": "David Warner", "stat": "IPL Matches", "value": 184, "image": "⚡"},
+      {"name": "Harbhajan Singh", "stat": "IPL Matches", "value": 163, "image": "🎯"}
     ]
   },
 
@@ -367,9 +367,9 @@
       {"name": "Virender Sehwag", "stat": "Highest Test Score", "value": 319, "image": "💥"},
       {"name": "Rohit Sharma", "stat": "Highest ODI Score", "value": 264, "image": "🏏"},
       {"name": "Martin Guptill", "stat": "Highest ODI Score", "value": 237, "image": "🦘"},
+      {"name": "Brendon McCullum", "stat": "Highest T20I Score", "value": 123, "image": "⭐"},
       {"name": "Chris Gayle", "stat": "Highest T20I Score", "value": 117, "image": "💥"},
-      {"name": "AB de Villiers", "stat": "Highest T20I Score", "value": 114, "image": "🚀"},
-      {"name": "Brendon McCullum", "stat": "Highest T20I Score", "value": 123, "image": "⭐"}
+      {"name": "AB de Villiers", "stat": "Highest T20I Score", "value": 114, "image": "🚀"}
     ]
   },
 
@@ -397,11 +397,11 @@
       {"name": "Virat Kohli", "stat": "Season Runs (2016)", "value": 973, "image": "👑"},
       {"name": "Shubman Gill", "stat": "Season Runs (2023)", "value": 890, "image": "🌟"},
       {"name": "Jos Buttler", "stat": "Season Runs (2022)", "value": 863, "image": "🎯"},
+      {"name": "Chris Gayle", "stat": "Season Runs (2012)", "value": 733, "image": "💥"},
       {"name": "David Warner", "stat": "Season Runs (2019)", "value": 692, "image": "⚡"},
       {"name": "KL Rahul", "stat": "Season Runs (2020)", "value": 670, "image": "🎯"},
       {"name": "Ruturaj Gaikwad", "stat": "Season Runs (2021)", "value": 635, "image": "🌟"},
-      {"name": "Shikhar Dhawan", "stat": "Season Runs (2008)", "value": 616, "image": "🏏"},
-      {"name": "Chris Gayle", "stat": "Season Runs (2012)", "value": 733, "image": "💥"},
+      {"name": "Shikhar Dhawan", "stat": "Season Runs (2020)", "value": 618, "image": "🏏"},
       {"name": "Suresh Raina", "stat": "Season Runs (2013)", "value": 548, "image": "🦁"},
       {"name": "Rohit Sharma", "stat": "Season Runs (2013)", "value": 538, "image": "🏏"}
     ]
@@ -449,10 +449,10 @@
       {"name": "Chennai Super Kings", "stat": "IPL Titles", "value": 5, "image": "🟡"},
       {"name": "Kolkata Knight Riders", "stat": "IPL Titles", "value": 3, "image": "🟣"},
       {"name": "Rajasthan Royals", "stat": "IPL Titles", "value": 2, "image": "💜"},
+      {"name": "Royal Challengers Bengaluru", "stat": "IPL Titles", "value": 1, "image": "🔴"},
       {"name": "Sunrisers Hyderabad", "stat": "IPL Titles", "value": 1, "image": "🟠"},
       {"name": "Gujarat Titans", "stat": "IPL Titles", "value": 1, "image": "🔵"},
       {"name": "Deccan Chargers", "stat": "IPL Titles", "value": 1, "image": "⚡"},
-      {"name": "Royal Challengers Bangalore", "stat": "IPL Titles", "value": 0, "image": "🔴"},
       {"name": "Punjab Kings", "stat": "IPL Titles", "value": 0, "image": "🔴"},
       {"name": "Delhi Capitals", "stat": "IPL Titles", "value": 0, "image": "🔵"}
     ]
@@ -462,12 +462,12 @@
     "date": "2026-03-28",
     "theme": "🔴🟠 RCB vs SRH - IPL Runs",
     "players": [
-      {"name": "Virat Kohli", "stat": "IPL Runs", "value": 7263, "image": "👑"},
+      {"name": "Virat Kohli", "stat": "IPL Runs", "value": 8661, "image": "👑"},
       {"name": "AB de Villiers", "stat": "IPL Runs", "value": 5162, "image": "🚀"},
+      {"name": "Dinesh Karthik", "stat": "IPL Runs", "value": 4842, "image": "🧤"},
+      {"name": "Faf du Plessis", "stat": "IPL Runs", "value": 4773, "image": "🔴"},
       {"name": "Chris Gayle", "stat": "IPL Runs", "value": 4965, "image": "💥"},
-      {"name": "Dinesh Karthik", "stat": "IPL Runs", "value": 4462, "image": "🧤"},
-      {"name": "Faf du Plessis", "stat": "IPL Runs", "value": 2935, "image": "🔴"},
-      {"name": "David Warner", "stat": "IPL Runs", "value": 6397, "image": "⚡"},
+      {"name": "David Warner", "stat": "IPL Runs", "value": 6565, "image": "⚡"},
       {"name": "Shikhar Dhawan", "stat": "IPL Runs", "value": 2847, "image": "🟠"},
       {"name": "Kane Williamson", "stat": "IPL Runs", "value": 2023, "image": "🟠"},
       {"name": "Manish Pandey", "stat": "IPL Runs", "value": 2748, "image": "🟠"},
@@ -479,14 +479,14 @@
     "date": "2026-03-29",
     "theme": "🔵🟣 MI vs KKR - IPL Wickets",
     "players": [
-      {"name": "Jasprit Bumrah", "stat": "IPL Wickets", "value": 149, "image": "🔵"},
+      {"name": "Jasprit Bumrah", "stat": "IPL Wickets", "value": 183, "image": "🔵"},
       {"name": "Lasith Malinga", "stat": "IPL Wickets", "value": 170, "image": "🔵"},
       {"name": "Harbhajan Singh", "stat": "IPL Wickets", "value": 150, "image": "🔵"},
       {"name": "Zaheer Khan", "stat": "IPL Wickets", "value": 102, "image": "🔵"},
       {"name": "Kieron Pollard", "stat": "IPL Wickets", "value": 69, "image": "🔵"},
-      {"name": "Sunil Narine", "stat": "IPL Wickets", "value": 148, "image": "🟣"},
+      {"name": "Sunil Narine", "stat": "IPL Wickets", "value": 192, "image": "🟣"},
       {"name": "Andre Russell", "stat": "IPL Wickets", "value": 87, "image": "🟣"},
-      {"name": "Piyush Chawla", "stat": "IPL Wickets", "value": 157, "image": "🟣"},
+      {"name": "Piyush Chawla", "stat": "IPL Wickets", "value": 192, "image": "🟣"},
       {"name": "Varun Chakravarthy", "stat": "IPL Wickets", "value": 91, "image": "🟣"},
       {"name": "Umesh Yadav", "stat": "IPL Wickets", "value": 87, "image": "🟣"}
     ]
@@ -496,12 +496,12 @@
     "date": "2026-03-30",
     "theme": "💜🟡 RR vs CSK - IPL Runs",
     "players": [
-      {"name": "Sanju Samson", "stat": "IPL Runs", "value": 3836, "image": "💜"},
-      {"name": "Jos Buttler", "stat": "IPL Runs", "value": 2631, "image": "💜"},
-      {"name": "Yashasvi Jaiswal", "stat": "IPL Runs", "value": 1245, "image": "💜"},
-      {"name": "Ajinkya Rahane", "stat": "IPL Runs", "value": 2619, "image": "💜"},
+      {"name": "Sanju Samson", "stat": "IPL Runs", "value": 4704, "image": "💜"},
       {"name": "Shane Watson", "stat": "IPL Runs", "value": 3874, "image": "💜"},
-      {"name": "MS Dhoni", "stat": "IPL Runs", "value": 5243, "image": "🟡"},
+      {"name": "Jos Buttler", "stat": "IPL Runs", "value": 2631, "image": "💜"},
+      {"name": "Ajinkya Rahane", "stat": "IPL Runs", "value": 5032, "image": "💜"},
+      {"name": "Yashasvi Jaiswal", "stat": "IPL Runs", "value": 1245, "image": "💜"},
+      {"name": "MS Dhoni", "stat": "IPL Runs", "value": 5439, "image": "🟡"},
       {"name": "Suresh Raina", "stat": "IPL Runs", "value": 5528, "image": "🟡"},
       {"name": "Ruturaj Gaikwad", "stat": "IPL Runs", "value": 2794, "image": "🟡"},
       {"name": "Ambati Rayudu", "stat": "IPL Runs", "value": 2792, "image": "🟡"},
