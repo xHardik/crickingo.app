@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Match Predictor - Crickingo</title>
+  <meta property="og:title" content="Match Predictor - Crickingo">
+  <meta property="og:description" content="Predict today's IPL winner, top scorer, and total runs. Climb the live season leaderboard.">
+  <meta property="og:url" content="https://crickingo.vercel.app/predict.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#05070f;--surface:rgba(255,255,255,.045);--surface2:rgba(255,255,255,.085);--surface3:#121827;--border:rgba(255,255,255,.1);--border-strong:rgba(247,195,68,.22);--accent:#f7c344;--blue:#4f8ef7;--green:#3dd68c;--red:#e84040;--text:#f0f0f0;--muted:rgba(240,240,240,.62);--shadow:0 22px 60px rgba(0,0,0,.28)}
+    *{box-sizing:border-box;margin:0;padding:0}body{font-family:'DM Sans',sans-serif;background:radial-gradient(circle at top left,rgba(247,195,68,.08),transparent 30%),radial-gradient(circle at bottom right,rgba(79,142,247,.08),transparent 28%),linear-gradient(180deg,#09101c 0%,#05070f 100%);color:var(--text);min-height:100vh}
+    nav{position:sticky;top:0;z-index:20;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 24px;height:60px;background:rgba(5,7,15,.86);backdrop-filter:blur(14px);border-bottom:1px solid rgba(247,195,68,.14)}
+    .nav-logo{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;font-size:1.8rem;color:var(--accent);text-decoration:none}.nav-pill{justify-self:center;font-size:.72rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:6px 14px;border-radius:999px;color:var(--accent);background:rgba(247,195,68,.1);border:1px solid rgba(247,195,68,.24)}.nav-user{justify-self:end;border:1px solid var(--border);background:var(--surface);color:var(--muted);border-radius:999px;padding:7px 14px;font-size:.8rem;font-weight:700;cursor:pointer;transition:.2s ease}.nav-user:hover{color:var(--accent);border-color:var(--border-strong);transform:translateY(-1px)}
+    .page{max-width:1120px;margin:0 auto;padding:32px 24px 72px}.page h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.6rem,6vw,3.8rem);letter-spacing:2px;line-height:1;margin-bottom:6px}.page p.lead{color:var(--muted);margin-bottom:18px;max-width:620px}
+    .meta{display:flex;flex-wrap:wrap;width:fit-content;overflow:hidden;border-radius:14px;border:1px solid rgba(247,195,68,.14);background:rgba(247,195,68,.05);margin-bottom:24px}.meta div{padding:10px 16px;font-size:.8rem;color:var(--muted)}.meta strong{color:var(--accent)}.sep{width:1px;background:rgba(247,195,68,.14)}
+    .layout{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:24px;align-items:start}.card{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.03));border:1px solid var(--border);border-radius:22px;position:relative;overflow:hidden;box-shadow:var(--shadow)}.card:before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--blue))}
+    .switcher{display:none;padding:18px;margin-bottom:18px;background:rgba(79,142,247,.06);border:1px solid rgba(79,142,247,.18);border-radius:18px}.switcher.active{display:block}.switcher-top{display:flex;justify-content:space-between;gap:12px;margin-bottom:12px}.switcher-title{font-family:'Bebas Neue',sans-serif;letter-spacing:2px;font-size:1.1rem}.switcher-sub{font-size:.75rem;color:var(--muted)}.switcher-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+    .switch-btn{width:100%;text-align:left;padding:14px;border:1px solid rgba(79,142,247,.18);border-radius:15px;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025));color:var(--text);cursor:pointer;transition:.22s ease}.switch-btn:hover{transform:translateY(-2px);border-color:rgba(247,195,68,.28)}.switch-btn.active{border-color:var(--accent);background:linear-gradient(180deg,rgba(247,195,68,.14),rgba(247,195,68,.05));box-shadow:0 14px 30px rgba(247,195,68,.1)}.switch-time{font-size:.68rem;color:var(--blue);text-transform:uppercase;font-weight:700;margin-bottom:6px}.switch-fixture{font-family:'Bebas Neue',sans-serif;letter-spacing:1px;font-size:1rem}.switch-venue{margin-top:4px;color:var(--muted);font-size:.72rem}
+    .empty,.match,.score,.leader{padding:24px}.empty{text-align:center;padding:48px 28px}.empty h2,.score h2,.leader h2{font-family:'Bebas Neue',sans-serif;letter-spacing:2px}.empty p{color:var(--muted);line-height:1.6}
+    .head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:24px}.tag{font-size:.72rem;text-transform:uppercase;letter-spacing:2px;font-weight:800;color:var(--accent);padding:6px 12px;border-radius:999px;background:rgba(247,195,68,.1);border:1px solid rgba(247,195,68,.24)}.time{font-size:.8rem;color:var(--muted);padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}
+    .teams{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}.team{flex:1;text-align:center}.emoji{font-size:3rem;display:block;margin-bottom:8px}.name{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:2px}.short{font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}.vs{padding:8px 14px;border-radius:12px;border:1px solid var(--border);background:var(--surface2);color:rgba(240,240,240,.35);font-family:'Bebas Neue',sans-serif;letter-spacing:3px}.venue{text-align:center;color:var(--muted);font-size:.82rem;margin-bottom:28px}
+    .section{margin-bottom:24px}.section h3{font-family:'Bebas Neue',sans-serif;letter-spacing:2px;font-size:1.05rem;margin-bottom:4px}.section p{color:var(--muted);font-size:.76rem;margin-bottom:14px}.pts{display:inline-block;margin-left:8px;font-family:'DM Sans',sans-serif;font-size:.68rem;font-weight:800;color:var(--accent);border:1px solid rgba(247,195,68,.24);background:rgba(247,195,68,.1);border-radius:999px;padding:3px 8px}
+    .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.pick{border:2px solid var(--border);border-radius:15px;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));color:var(--text);cursor:pointer;transition:.22s ease}.pick:hover:not(.locked){transform:translateY(-2px);border-color:rgba(247,195,68,.28);box-shadow:0 12px 24px rgba(0,0,0,.16)}.pick.selected{border-color:var(--accent);background:linear-gradient(180deg,rgba(247,195,68,.16),rgba(247,195,68,.06));box-shadow:0 16px 32px rgba(247,195,68,.1)}.pick.locked{cursor:default}.pick.correct{border-color:var(--green)!important;background:rgba(61,214,140,.1)!important}.pick.wrong{border-color:var(--red)!important;background:rgba(232,64,64,.08)!important;opacity:.65}
+    .winner{padding:18px 12px;text-align:center}.winner .emoji{font-size:2rem;margin-bottom:6px}.winner-name{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:1px}.target{text-align:center;font-family:'Bebas Neue',sans-serif;font-size:2.8rem;letter-spacing:2px;color:var(--accent);margin-bottom:4px}.target-sub{text-align:center;color:var(--muted);font-size:.74rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px}.runs{padding:16px 12px;text-align:center;font-weight:700;color:var(--muted)}.icon{display:block;font-size:1.3rem;margin-bottom:5px}
+    select{width:100%;padding:14px 44px 14px 14px;border-radius:14px;background:var(--surface3);border:1px solid rgba(255,255,255,.12);color:var(--text);font-family:'DM Sans',sans-serif;font-size:.95rem;appearance:none;-webkit-appearance:none;-moz-appearance:none;background-image:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0)),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Cpath fill='%23f0f0f0' d='M7 10.2 2.1 5.3l1-1L7 8.1l3.9-3.8 1 1z'/%3E%3C/svg%3E");background-repeat:no-repeat,no-repeat;background-position:center,right 14px center;box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}select:focus{outline:none;border-color:rgba(247,195,68,.45);box-shadow:0 0 0 3px rgba(247,195,68,.12)}select:disabled{opacity:.55}select option{background:#121827;color:#f0f0f0}
+    .submit{width:100%;border:none;border-radius:16px;padding:16px;font-size:.95rem;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:#000;background:linear-gradient(135deg,var(--accent),#e6a800);cursor:pointer;box-shadow:0 14px 30px rgba(247,195,68,.24);transition:.22s ease}.submit:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 18px 36px rgba(247,195,68,.28)}.submit:disabled{background:rgba(255,255,255,.08);color:var(--muted);box-shadow:none;cursor:not-allowed}
+    .banner{display:none;margin-top:16px;padding:14px 16px;border-radius:14px;font-size:.88rem;font-weight:700;line-height:1.5;text-align:center}.banner.show{display:block}.submitted{background:rgba(61,214,140,.08);border:1px solid rgba(61,214,140,.22);color:var(--green)}.locked{background:rgba(247,195,68,.08);border:1px solid rgba(247,195,68,.22);color:var(--accent)}.info{background:rgba(79,142,247,.08);border:1px solid rgba(79,142,247,.22);color:#9ec3ff}
+    .score{display:none;margin-top:20px}.score.active{display:block}.score-list{display:grid;gap:10px;margin:16px 0 20px}.score-row{display:flex;justify-content:space-between;gap:12px;padding:13px 15px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.025)}.score-label{font-weight:700;font-size:.84rem;margin-bottom:3px}.score-detail{color:var(--muted);font-size:.73rem}.score-points{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:1px}.ok{color:var(--green)}.no{color:var(--red)}.score-total{text-align:center;font-family:'Bebas Neue',sans-serif;font-size:3.6rem;line-height:1;color:var(--blue)}.score-sub{text-align:center;color:var(--muted);font-size:.74rem;text-transform:uppercase;letter-spacing:2px}
+    .label{display:flex;align-items:center;gap:14px;margin:28px 0 18px}.label span{color:var(--muted);text-transform:uppercase;letter-spacing:3px;font-size:.68rem;font-weight:800}.label:after{content:"";flex:1;height:1px;background:var(--border)}.rules{padding:18px;border-radius:16px;border:1px solid rgba(247,195,68,.14);background:rgba(247,195,68,.04)}.rules h3{font-family:'Bebas Neue',sans-serif;color:var(--accent);letter-spacing:2px;font-size:1rem;margin-bottom:12px}.rule{display:flex;justify-content:space-between;gap:16px;padding:8px 0;border-bottom:1px solid var(--border);font-size:.82rem}.rule:last-child{border-bottom:0}.rule span:first-child{color:var(--muted)}.rule span:last-child{color:var(--accent);font-weight:800}
+    .leader{position:sticky;top:76px}.leader-sub{color:var(--muted);font-size:.74rem;margin:4px 0 18px}.my-rank{display:none;align-items:center;gap:12px;padding:14px 16px;margin-bottom:16px;border-radius:14px;background:rgba(79,142,247,.08);border:1px solid rgba(79,142,247,.22)}.my-rank.show{display:flex}.my-num{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;line-height:1;color:var(--blue)}.my-name{font-weight:700;font-size:.9rem}.my-meta{color:var(--muted);font-size:.72rem;margin-top:2px}.lb{display:grid;gap:8px;max-height:480px;overflow-y:auto}.lb-row{display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.02)}.lb-row.me{border-color:rgba(247,195,68,.28);background:rgba(247,195,68,.06)}.lb-pos{width:26px;text-align:center;font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--muted)}.lb-name{flex:1;font-size:.86rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.lb-row.me .lb-name{color:var(--accent)}.lb-total{text-align:right}.lb-pts{font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--blue)}.lb-m{color:var(--muted);font-size:.68rem}
+    .modal{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.82);backdrop-filter:blur(12px);align-items:center;justify-content:center;padding:20px}.modal.active{display:flex}.modal-box{width:min(440px,100%);padding:36px 30px;border-radius:24px;background:#0c1020;border:1px solid rgba(247,195,68,.22)}.modal-box h2{text-align:center;font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:2px;margin-bottom:8px}.modal-box p{color:var(--muted);text-align:center;font-size:.86rem;line-height:1.5;margin-bottom:24px}.modal-error{display:none;margin-bottom:10px;color:#ff8c8c;font-size:.8rem;text-align:center}.modal-box input{width:100%;padding:14px 15px;border-radius:12px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-family:'DM Sans',sans-serif;font-size:1rem;margin-bottom:12px}.modal-box button{width:100%;padding:14px;border:none;border-radius:12px;background:var(--accent);color:#000;font-weight:900;font-size:.95rem;cursor:pointer}
+    @media (max-width:920px){.layout{grid-template-columns:1fr}.leader{position:static}}@media (max-width:768px){nav{padding:0 14px;height:56px;grid-template-columns:1fr auto}.nav-pill{display:none}.page{padding:22px 16px 64px}.match{padding:22px 18px}.emoji{font-size:2.2rem}.name{font-size:1.3rem}.switcher-top{flex-direction:column;align-items:flex-start}}@media (max-width:520px){.grid2{grid-template-columns:1fr}.teams{gap:8px}.vs{font-size:1rem;padding:6px 10px}.meta{width:100%}}
+  </style>
+</head>
+<body>
+  <div id="usernameModal" class="modal">
+    <div class="modal-box">
+      <h2>Join The Predictor</h2>
+      <p>Pick a username to save your predictions and track your place on the IPL 2026 board. No login needed.</p>
+      <div id="modalError" class="modal-error">Use 3 to 18 letters, numbers, or underscores only.</div>
+      <input id="usernameInput" type="text" maxlength="18" placeholder="e.g. CricketFan07" autocomplete="off">
+      <button onclick="saveUsername()">Start Predicting</button>
+    </div>
+  </div>
+  <nav>
+    <a class="nav-logo" href="index.html">Crickingo</a>
+    <div class="nav-pill">Match Predictor</div>
+    <button id="navUser" class="nav-user" type="button" onclick="changeUsername()">User: <span id="navUserText">-</span></button>
+  </nav>
+  <main class="page">
+    <h1>Match Predictor</h1>
+    <p class="lead">Predict today's IPL match, lock it in before the deadline, and climb the season leaderboard.</p>
+    <div class="meta">
+      <div>Date <strong id="puzzleDate">-</strong></div><div class="sep"></div>
+      <div>Season <strong>IPL 2026</strong></div><div class="sep"></div>
+      <div>User <strong id="pbUsername">-</strong></div>
+    </div>
+    <div class="layout">
+      <div>
+        <div id="matchSwitcher" class="switcher">
+          <div class="switcher-top">
+            <div class="switcher-title">Choose Today's Fixture</div>
+            <div class="switcher-sub">Double-header days save predictions separately for each match.</div>
+          </div>
+          <div id="matchSwitcherGrid" class="switcher-grid"></div>
+        </div>
+        <div id="noMatchCard" class="card empty" style="display:none;">
+          <h2>No Match Today</h2>
+          <p>No IPL fixture is configured for today yet. Add today's entry to <code>predict-data.json</code> and this page will go live automatically.</p>
+        </div>
+        <div id="matchCard" class="card match" style="display:none;">
+          <div class="head">
+            <div id="matchLabel" class="tag">Today's IPL Match</div>
+            <div id="matchTime" class="time">-</div>
+          </div>
+          <div class="teams">
+            <div class="team"><span id="t1emoji" class="emoji">🏏</span><div id="t1name" class="name">-</div><div id="t1short" class="short">-</div></div>
+            <div class="vs">VS</div>
+            <div class="team"><span id="t2emoji" class="emoji">🏏</span><div id="t2name" class="name">-</div><div id="t2short" class="short">-</div></div>
+          </div>
+          <div id="matchVenue" class="venue">-</div>
+          <div class="section">
+            <h3>Who will win?<span class="pts">+100 pts</span></h3>
+            <p>Pick the match winner before the lock time.</p>
+            <div class="grid2">
+              <button id="wb1" class="pick winner" type="button" onclick="pickWinner(0)"><span id="we1" class="emoji">🏏</span><div id="wn1" class="winner-name">-</div></button>
+              <button id="wb2" class="pick winner" type="button" onclick="pickWinner(1)"><span id="we2" class="emoji">🏏</span><div id="wn2" class="winner-name">-</div></button>
+            </div>
+          </div>
+          <div class="section">
+            <h3>Top scorer<span class="pts">+150 pts</span></h3>
+            <p>Choose the player who will score the most runs in the match.</p>
+            <select id="scorerSel"><option value="">Select a player</option></select>
+          </div>
+          <div class="section">
+            <h3>Total runs<span class="pts">+100 pts</span></h3>
+            <div id="runsTarget" class="target">-</div>
+            <div class="target-sub">Combined runs in the match</div>
+            <div class="grid2">
+              <button id="rbHigh" class="pick runs" type="button" onclick="pickRuns('higher')"><span class="icon">↑</span>Higher</button>
+              <button id="rbLow" class="pick runs" type="button" onclick="pickRuns('lower')"><span class="icon">↓</span>Lower</button>
+            </div>
+          </div>
+          <button id="submitBtn" class="submit" type="button" onclick="submitPred()" disabled>Lock In Predictions</button>
+          <div id="statusBanner" class="banner"></div>
+        </div>
+        <div id="scoreCard" class="card score">
+          <h2>Your Result</h2>
+          <div id="scoreList" class="score-list"></div>
+          <div id="scoreTotal" class="score-total">-</div>
+          <div class="score-sub">Points Earned</div>
+        </div>
+        <div class="label"><span>Scoring</span></div>
+        <div class="rules">
+          <h3>Points Per Match</h3>
+          <div class="rule"><span>Match winner correct</span><span>+100 pts</span></div>
+          <div class="rule"><span>Top scorer correct</span><span>+150 pts</span></div>
+          <div class="rule"><span>Total runs correct</span><span>+100 pts</span></div>
+          <div class="rule"><span>All 3 correct bonus</span><span>+50 pts</span></div>
+          <div class="rule"><span>Max per match</span><span>400 pts</span></div>
+        </div>
+      </div>
+      <aside class="card leader">
+        <h2>Season Board</h2>
+        <div class="leader-sub">Live IPL 2026 points from every scored prediction.</div>
+        <div id="myRankBox" class="my-rank">
+          <div id="myRankNum" class="my-num">#-</div>
+          <div><div id="myRankName" class="my-name">-</div><div id="myRankMeta" class="my-meta">-</div></div>
+        </div>
+        <div id="leaderboardList" class="lb"><div class="lb-row"><div class="lb-name">Loading leaderboard...</div></div></div>
+      </aside>
+    </div>
+  </main>
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import { getDatabase, ref, set, get, onValue } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+    const firebaseConfig={apiKey:"AIzaSyC5nqnzG2jGtDcZlL6x9mg7r1xRrldyfpg",authDomain:"ogcrickingo.firebaseapp.com",databaseURL:"https://ogcrickingo-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"ogcrickingo",storageBucket:"ogcrickingo.firebasestorage.app",messagingSenderId:"672434440025",appId:"1:672434440025:web:ba51a4b85b7cb78bfeee48"};
+    const app=initializeApp(firebaseConfig),db=getDatabase(app),TZ='Asia/Kolkata',DEVICE_KEY='cp_device_id',USER_KEY='cp_username',VALID=/^[A-Za-z0-9_]{3,18}$/;
+    const DEVICE_ID=getOrCreateDeviceId(),TODAY=getDateKey(); let username=localStorage.getItem(USER_KEY)||'',allMatchData={},matchesForDay=[],currentMatchKey=null,match=null,savedPred=null,pickedWinner=null,pickedScorer='',pickedRunsChoice=null,leaderboardBound=false;
+    function getDateKey(date=new Date()){const parts=new Intl.DateTimeFormat('en-CA',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(date),map={};parts.forEach(p=>{if(p.type!=='literal')map[p.type]=p.value;});return `${map.year}-${map.month}-${map.day}`;}
+    function baseKey(key){return String(key||'').slice(0,10)} function displayDate(key){return new Date(`${baseKey(key)}T00:00:00+05:30`).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric',timeZone:TZ});}
+    function getOrCreateDeviceId(){let id=localStorage.getItem(DEVICE_KEY);if(!id){id=typeof crypto!=='undefined'&&crypto.randomUUID?crypto.randomUUID():`device_${Math.random().toString(36).slice(2)}${Date.now().toString(36)}`;localStorage.setItem(DEVICE_KEY,id);}return id;}
+    function isMatchKey(key){return /^\d{4}-\d{2}-\d{2}(?:-[A-Z])?$/.test(key)} function lockDate(matchKey,lockTime='19:30'){return new Date(`${baseKey(matchKey)}T${lockTime}:00+05:30`)}
+    function esc(v){return String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+    function showBanner(msg,type){const b=document.getElementById('statusBanner');b.className=`banner show ${type}`;b.textContent=msg;} function clearBanner(){const b=document.getElementById('statusBanner');b.className='banner';b.textContent='';}
+    function syncIdentity(){document.getElementById('navUserText').textContent=username||'-';document.getElementById('pbUsername').textContent=username||'-';}
+    async function syncProfile(){if(!username)return;await set(ref(db,`predictor/profiles/${DEVICE_ID}`),{username,updatedAt:Date.now()});}
+    function matchesForDate(dateKey){return Object.entries(allMatchData).filter(([k,v])=>k.startsWith(dateKey)&&isMatchKey(k)&&v?.team1&&v?.team2).sort((a,b)=>(a[1].lockTime||'').localeCompare(b[1].lockTime||''));}
+    function pickDefault(entries){if(!entries.length)return null;const now=new Date();const open=entries.find(([k,v])=>now<lockDate(k,v.lockTime||'19:30')&&!v.result);return (open||entries[0])[0];}
+    function resetState(){pickedWinner=null;pickedScorer='';pickedRunsChoice=null;savedPred=null;['wb1','wb2','rbHigh','rbLow'].forEach(id=>document.getElementById(id).classList.remove('selected','locked','correct','wrong'));document.getElementById('scorerSel').disabled=false;document.getElementById('scorerSel').value='';document.getElementById('submitBtn').disabled=true;document.getElementById('submitBtn').style.display='';document.getElementById('submitBtn').textContent='Lock In Predictions';document.getElementById('scoreCard').classList.remove('active');document.getElementById('scoreList').innerHTML='';document.getElementById('scoreTotal').textContent='-';clearBanner();}
+    function renderSwitcher(){const wrap=document.getElementById('matchSwitcher'),grid=document.getElementById('matchSwitcherGrid');if(matchesForDay.length<=1){wrap.classList.remove('active');grid.innerHTML='';return;}wrap.classList.add('active');grid.innerHTML=matchesForDay.map(([k,v])=>`<button class="switch-btn ${k===currentMatchKey?'active':''}" data-match-key="${esc(k)}" type="button"><div class="switch-time">${esc(v.timeLabel||`${v.lockTime||'19:30'} IST`)}</div><div class="switch-fixture">${esc(`${v.team1.short} vs ${v.team2.short}`)}</div><div class="switch-venue">${esc(v.venue||'Venue TBA')}</div></button>`).join('');grid.querySelectorAll('.switch-btn').forEach(btn=>btn.addEventListener('click',async()=>{const next=btn.dataset.matchKey;if(!next||next===currentMatchKey)return;currentMatchKey=next;match=allMatchData[currentMatchKey]||null;renderSwitcher();renderMatch();await loadSavedPrediction();}));}
+    function renderMatch(){resetState();if(!match){document.getElementById('noMatchCard').style.display='block';document.getElementById('matchCard').style.display='none';return;}document.getElementById('noMatchCard').style.display='none';document.getElementById('matchCard').style.display='block';document.getElementById('matchLabel').textContent=matchesForDay.length>1?'Selected IPL Match':"Today's IPL Match";document.getElementById('matchTime').textContent=match.timeLabel||`${match.lockTime||'19:30'} IST lock`;document.getElementById('matchVenue').textContent=match.venue||'Venue to be announced';['t1emoji','we1'].forEach(id=>document.getElementById(id).textContent=match.team1.emoji||'🏏');['t2emoji','we2'].forEach(id=>document.getElementById(id).textContent=match.team2.emoji||'🏏');document.getElementById('t1name').textContent=document.getElementById('wn1').textContent=match.team1.name||'-';document.getElementById('t2name').textContent=document.getElementById('wn2').textContent=match.team2.name||'-';document.getElementById('t1short').textContent=match.team1.short||'-';document.getElementById('t2short').textContent=match.team2.short||'-';document.getElementById('runsTarget').textContent=match.runsTarget||'-';const sel=document.getElementById('scorerSel');sel.innerHTML='<option value="">Select a player</option>';[...(match.team1.players||[]),...(match.team2.players||[])].forEach(player=>{const option=document.createElement('option');option.value=player;option.textContent=player;sel.appendChild(option);});sel.onchange=()=>{pickedScorer=sel.value;updateSubmit();};if(!(match.team1.players||[]).length||!(match.team2.players||[]).length)showBanner('Add player names for this fixture in predict-data.json before opening predictions.','info');}
+    function updateSubmit(){const playersReady=(match?.team1?.players||[]).length>0&&(match?.team2?.players||[]).length>0;document.getElementById('submitBtn').disabled=!(pickedWinner!==null&&pickedScorer&&pickedRunsChoice&&playersReady);}
+    function lockInputs(){['wb1','wb2','rbHigh','rbLow'].forEach(id=>document.getElementById(id).classList.add('locked'));document.getElementById('scorerSel').disabled=true;}
+    async function loadSavedPrediction(){if(!match||!currentMatchKey)return;try{const snap=await get(ref(db,`predictor/predictions/${currentMatchKey}/${DEVICE_ID}`));if(snap.exists()){savedPred=snap.val();restoreSaved();return;}}catch(e){console.error(e);}const playersReady=(match.team1.players||[]).length>0&&(match.team2.players||[]).length>0;if(match.result){lockInputs();showBanner('Results are live for this fixture. Pick the next open match instead.','info');}else if(!playersReady){lockInputs();}else if(new Date()>=lockDate(currentMatchKey,match.lockTime||'19:30')){lockInputs();showBanner('Predictions are locked because this match has started.','locked');}}
+    function restoreSaved(){if(!savedPred||!match)return;pickedWinner=savedPred.winner===match.team1.name?0:1;pickedScorer=savedPred.scorer||'';pickedRunsChoice=savedPred.runs||null;document.getElementById('wb1').classList.toggle('selected',pickedWinner===0);document.getElementById('wb2').classList.toggle('selected',pickedWinner===1);document.getElementById('rbHigh').classList.toggle('selected',pickedRunsChoice==='higher');document.getElementById('rbLow').classList.toggle('selected',pickedRunsChoice==='lower');document.getElementById('scorerSel').value=pickedScorer;document.getElementById('submitBtn').style.display='none';lockInputs();if(match.result){showBanner('Your prediction is locked. Results are now in.','info');showResults();}else showBanner('Your prediction is locked in for this fixture.','submitted');}
+    function runsOutcome(entry){if(!entry?.result)return null;if(entry.result.runsResult)return entry.result.runsResult;if(typeof entry.result.totalRuns!=='number'||typeof entry.runsTarget!=='number')return null;return entry.result.totalRuns>entry.runsTarget?'higher':'lower';}
+    function scorePrediction(entry,prediction){if(!entry?.result||!prediction)return null;let total=0;const rows=[];const winnerOk=prediction.winner===entry.result.winner,scorerOk=prediction.scorer===entry.result.topScorer,outcome=runsOutcome(entry),runsOk=outcome?prediction.runs===outcome:false;rows.push({label:'Match Winner',pick:prediction.winner,answer:entry.result.winner,points:winnerOk?100:0,ok:winnerOk});if(winnerOk)total+=100;rows.push({label:'Top Scorer',pick:prediction.scorer,answer:entry.result.topScorer,points:scorerOk?150:0,ok:scorerOk});if(scorerOk)total+=150;rows.push({label:'Total Runs',pick:prediction.runs==='higher'?`Higher than ${entry.runsTarget}`:`Lower than ${entry.runsTarget}`,answer:typeof entry.result.totalRuns==='number'?`Actual: ${entry.result.totalRuns}`:`Outcome: ${outcome||'-'}`,points:runsOk?100:0,ok:runsOk});if(runsOk)total+=100;if(winnerOk&&scorerOk&&runsOk)total+=50;return {total,rows,outcome};}
+    function showResults(){if(!match?.result||!savedPred)return;const score=scorePrediction(match,savedPred);if(!score)return;document.getElementById('scoreList').innerHTML=score.rows.map(r=>`<div class="score-row"><div><div class="score-label">${esc(r.label)}</div><div class="score-detail">Your pick: ${esc(r.pick)} | Answer: ${esc(r.answer)}</div></div><div class="score-points ${r.ok?'ok':'no'}">${r.ok?`+${r.points}`:'0'}</div></div>`).join('');document.getElementById('scoreTotal').textContent=String(score.total);document.getElementById('scoreCard').classList.add('active');const winnerIndex=match.result.winner===match.team1.name?0:1;document.getElementById('wb1').classList.add(winnerIndex===0?'correct':'wrong');document.getElementById('wb2').classList.add(winnerIndex===1?'correct':'wrong');if(score.outcome){document.getElementById('rbHigh').classList.add(score.outcome==='higher'?'correct':'wrong');document.getElementById('rbLow').classList.add(score.outcome==='lower'?'correct':'wrong');}}
+    function computeLeaderboard(predictions,profiles){const totals={};Object.entries(predictions).forEach(([matchKey,fixturePreds])=>{if(!isMatchKey(matchKey))return;const entry=allMatchData[matchKey];if(!entry?.result)return;Object.entries(fixturePreds||{}).forEach(([deviceId,prediction])=>{const score=scorePrediction(entry,prediction);if(!score)return;if(!totals[deviceId])totals[deviceId]={id:deviceId,name:profiles[deviceId]?.username||prediction.username||'Anonymous',total:0,matches:0};totals[deviceId].name=profiles[deviceId]?.username||prediction.username||totals[deviceId].name;totals[deviceId].total+=score.total;totals[deviceId].matches+=1;});});return Object.values(totals).sort((a,b)=>b.total-a.total||b.matches-a.matches||a.name.localeCompare(b.name));}
+    function renderLeaderboard(entries){const myIndex=entries.findIndex(e=>e.id===DEVICE_ID),myBox=document.getElementById('myRankBox');if(myIndex>=0){const me=entries[myIndex];myBox.classList.add('show');document.getElementById('myRankNum').textContent=`#${myIndex+1}`;document.getElementById('myRankName').textContent=me.name;document.getElementById('myRankMeta').textContent=`${me.total} pts | ${me.matches} scored matches`;}else myBox.classList.remove('show');const list=document.getElementById('leaderboardList');if(!entries.length){list.innerHTML='<div class="lb-row"><div class="lb-name">No scored predictions yet. Be the first to get on the board.</div></div>';return;}list.innerHTML=entries.slice(0,50).map((e,i)=>`<div class="lb-row ${e.id===DEVICE_ID?'me':''}"><div class="lb-pos">${i+1}</div><div class="lb-name">${esc(e.name)}${e.id===DEVICE_ID?' <- you':''}</div><div class="lb-total"><div class="lb-pts">${e.total}</div><div class="lb-m">${e.matches}m</div></div></div>`).join('');}
+    function subscribeLeaderboard(){if(leaderboardBound)return;leaderboardBound=true;onValue(ref(db,'predictor'),snap=>{const data=snap.val()||{};renderLeaderboard(computeLeaderboard(data.predictions||{},data.profiles||{}));},()=>{document.getElementById('leaderboardList').innerHTML='<div class="lb-row"><div class="lb-name">Unable to load leaderboard right now.</div></div>';});}
+    async function boot(){document.getElementById('puzzleDate').textContent=displayDate(TODAY);syncIdentity();try{const response=await fetch('predict-data.json');allMatchData=await response.json();}catch{allMatchData={};}matchesForDay=matchesForDate(TODAY);currentMatchKey=pickDefault(matchesForDay);match=currentMatchKey?allMatchData[currentMatchKey]:null;if(!username)document.getElementById('usernameModal').classList.add('active');else await onReady();}
+    async function onReady(){syncIdentity();await syncProfile();renderSwitcher();renderMatch();await loadSavedPrediction();subscribeLeaderboard();}
+    window.saveUsername=async function(){const value=document.getElementById('usernameInput').value.trim();if(!VALID.test(value)){document.getElementById('modalError').style.display='block';return;}document.getElementById('modalError').style.display='none';username=value;localStorage.setItem(USER_KEY,username);document.getElementById('usernameModal').classList.remove('active');await onReady();};
+    document.getElementById('usernameInput').addEventListener('keydown',e=>{if(e.key==='Enter')window.saveUsername();});
+    window.changeUsername=async function(){const next=prompt('Change username:',username);if(!next)return;const trimmed=next.trim();if(!VALID.test(trimmed)){alert('Use 3 to 18 letters, numbers, or underscores only.');return;}username=trimmed;localStorage.setItem(USER_KEY,username);syncIdentity();await syncProfile();if(currentMatchKey&&savedPred){savedPred={...savedPred,username};await set(ref(db,`predictor/predictions/${currentMatchKey}/${DEVICE_ID}`),savedPred);}};
+    window.pickWinner=function(index){if(document.getElementById('wb1').classList.contains('locked'))return;pickedWinner=index;document.getElementById('wb1').classList.toggle('selected',index===0);document.getElementById('wb2').classList.toggle('selected',index===1);updateSubmit();};
+    window.pickRuns=function(choice){if(document.getElementById('rbHigh').classList.contains('locked'))return;pickedRunsChoice=choice;document.getElementById('rbHigh').classList.toggle('selected',choice==='higher');document.getElementById('rbLow').classList.toggle('selected',choice==='lower');updateSubmit();};
+    window.submitPred=async function(){if(!match||!currentMatchKey||!username||pickedWinner===null||!pickedScorer||!pickedRunsChoice)return;const btn=document.getElementById('submitBtn');btn.disabled=true;btn.textContent='Saving...';const prediction={username,winner:pickedWinner===0?match.team1.name:match.team2.name,scorer:pickedScorer,runs:pickedRunsChoice,submittedAt:Date.now()};try{await set(ref(db,`predictor/predictions/${currentMatchKey}/${DEVICE_ID}`),prediction);savedPred=prediction;btn.style.display='none';lockInputs();if(match.result){showBanner('Saved. Results are already available for this fixture.','info');showResults();}else showBanner('Prediction locked. Come back after the match for the score reveal.','submitted');}catch(e){console.error(e);btn.disabled=false;btn.textContent='Lock In Predictions';alert('Saving failed. Please try again.');}};
+    boot();
+  </script>
+</body>
+</html>

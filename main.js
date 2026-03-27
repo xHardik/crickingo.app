@@ -16,10 +16,10 @@ window.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('selectedDate', this.value);
   });
 
-  // Intercept all game card <a> clicks and append ?date= to the URL
-  const gameCards = document.querySelectorAll('.game-card');
-  gameCards.forEach(card => {
-    card.addEventListener('click', function (e) {
+  // Keep archive browsing consistent only for daily archive-enabled links.
+  const datedLinks = document.querySelectorAll('[data-date-link]');
+  datedLinks.forEach(link => {
+    link.addEventListener('click', function (e) {
       e.preventDefault();
       const href = this.getAttribute('href');
       if (!href) return;

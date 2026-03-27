@@ -1,0 +1,411 @@
+{
+  "_notes": {
+    "fixture_source": "IPL 2026 first-phase fixtures published March 27, 2026",
+    "usage": "Fill team players before each match and add result only after the game ends."
+  },
+  "_template": {
+    "YYYY-MM-DD": {
+      "timeLabel": "7:30 PM IST lock",
+      "lockTime": "19:30",
+      "venue": "MA Chidambaram Stadium, Chennai",
+      "runsTarget": 349,
+      "team1": {
+        "name": "Chennai Super Kings",
+        "short": "CSK",
+        "emoji": "🟡",
+        "players": []
+      },
+      "team2": {
+        "name": "Mumbai Indians",
+        "short": "MI",
+        "emoji": "🔵",
+        "players": []
+      }
+    }
+  },
+  "2026-03-27": {
+  "timeLabel": "7:30 PM IST lock",
+  "lockTime": "19:30",
+  "venue": "M. Chinnaswamy Stadium, Bengaluru",
+  "runsTarget": 349,
+  "team1": {
+    "name": "Royal Challengers Bengaluru",
+    "short": "RCB",
+    "emoji": "🔴",
+    "players": ["Virat Kohli", "Rajat Patidar", "Phil Salt"]
+  },
+  "team2": {
+    "name": "Sunrisers Hyderabad",
+    "short": "SRH",
+    "emoji": "🟠",
+    "players": ["Abhishek Sharma", "Travis Head", "Heinrich Klaasen"]
+  },
+  
+  "result": {
+    "winner": "Royal Challengers Bengaluru",
+    "topScorer": "Virat Kohli",
+    "totalRuns": 372
+  }
+},
+
+  "2026-03-28": {
+    "timeLabel": "7:30 PM IST lock",
+    "lockTime": "19:30",
+    "venue": "M. Chinnaswamy Stadium, Bengaluru",
+    "runsTarget": 349,
+    "team1": {
+      "name": "Royal Challengers Bengaluru",
+      "short": "RCB",
+      "emoji": "🔴",
+      "players": []
+    },
+    "team2": {
+      "name": "Sunrisers Hyderabad",
+      "short": "SRH",
+      "emoji": "🟠",
+      "players": []
+    }
+  },
+  "2026-03-29": {
+    "timeLabel": "7:30 PM IST lock",
+    "lockTime": "19:30",
+    "venue": "Wankhede Stadium, Mumbai",
+    "runsTarget": 347,
+    "team1": {
+      "name": "Mumbai Indians",
+      "short": "MI",
+      "emoji": "🔵",
+      "players": []
+    },
+    "team2": {
+      "name": "Kolkata Knight Riders",
+      "short": "KKR",
+      "emoji": "🟣",
+      "players": []
+    }
+  },
+  "2026-03-30": {
+    "timeLabel": "7:30 PM IST lock",
+    "lockTime": "19:30",
+    "venue": "Barsapara Cricket Stadium, Guwahati",
+    "runsTarget": 336,
+    "team1": {
+      "name": "Rajasthan Royals",
+      "short": "RR",
+      "emoji": "🩷",
+      "players": []
+    },
+    "team2": {
+      "name": "Chennai Super Kings",
+      "short": "CSK",
+      "emoji": "🟡",
+      "players": []
+    }
+  },
+  "2026-03-31": {
+    "timeLabel": "7:30 PM IST lock",
+    "lockTime": "19:30",
+    "venue": "New Chandigarh",
+    "runsTarget": 352,
+    "team1": {
+      "name": "Punjab Kings",
+      "short": "PBKS",
+      "emoji": "🔴",
+      "players": []
+    },
+    "team2": {
+      "name": "Gujarat Titans",
+      "short": "GT",
+      "emoji": "🟦",
+      "players": []
+    }
+  },
+  "2026-04-01": {
+    "timeLabel": "7:30 PM IST lock",
+    "lockTime": "19:30",
+    "venue": "Lucknow",
+    "runsTarget": 341,
+    "team1": {
+      "name": "Lucknow Super Giants",
+      "short": "LSG",
+      "emoji": "🔷",
+      "players": []
+    },
+    "team2": {
+      "name": "Delhi Capitals",
+      "short": "DC",
+      "emoji": "🔵",
+      "players": []
+    }
+  },
+  "2026-04-02": {
+    "timeLabel": "7:30 PM IST lock",
+    "lockTime": "19:30",
+    "venue": "Kolkata",
+    "runsTarget": 344,
+    "team1": {
+      "name": "Kolkata Knight Riders",
+      "short": "KKR",
+      "emoji": "🟣",
+      "players": []
+    },
+    "team2": {
+      "name": "Sunrisers Hyderabad",
+      "short": "SRH",
+      "emoji": "🟠",
+      "players": []
+    }
+  },
+  "2026-04-03": {
+    "timeLabel": "7:30 PM IST lock",
+    "lockTime": "19:30",
+    "venue": "Chennai",
+    "runsTarget": 343,
+    "team1": {
+      "name": "Chennai Super Kings",
+      "short": "CSK",
+      "emoji": "🟡",
+      "players": []
+    },
+    "team2": {
+      "name": "Punjab Kings",
+      "short": "PBKS",
+      "emoji": "🔴",
+      "players": []
+    }
+  },
+  "2026-04-04-A": {
+    "timeLabel": "3:30 PM IST lock",
+    "lockTime": "15:30",
+    "venue": "Delhi",
+    "runsTarget": 335,
+    "team1": {
+      "name": "Delhi Capitals",
+      "short": "DC",
+      "emoji": "🔵",
+      "players": []
+    },
+    "team2": {
+      "name": "Mumbai Indians",
+      "short": "MI",
+      "emoji": "🔵",
+      "players": []
+    }
+  },
+  "2026-04-04-B": {
+    "timeLabel": "7:30 PM IST lock",
+    "lockTime": "19:30",
+    "venue": "Ahmedabad",
+    "runsTarget": 347,
+    "team1": {
+      "name": "Gujarat Titans",
+      "short": "GT",
+      "emoji": "🟦",
+      "players": []
+    },
+    "team2": {
+      "name": "Rajasthan Royals",
+      "short": "RR",
+      "emoji": "🩷",
+      "players": []
+    }
+  },
+  "2026-04-05-A": {
+    "timeLabel": "3:30 PM IST lock",
+    "lockTime": "15:30",
+    "venue": "Hyderabad",
+    "runsTarget": 346,
+    "team1": {
+      "name": "Sunrisers Hyderabad",
+      "short": "SRH",
+      "emoji": "🟠",
+      "players": []
+    },
+    "team2": {
+      "name": "Lucknow Super Giants",
+      "short": "LSG",
+      "emoji": "🔷",
+      "players": []
+    }
+  },
+  "2026-04-05-B": {
+    "timeLabel": "7:30 PM IST lock",
+    "lockTime": "19:30",
+    "venue": "Bengaluru",
+    "runsTarget": 358,
+    "team1": {
+      "name": "Royal Challengers Bengaluru",
+      "short": "RCB",
+      "emoji": "🔴",
+      "players": []
+    },
+    "team2": {
+      "name": "Chennai Super Kings",
+      "short": "CSK",
+      "emoji": "🟡",
+      "players": []
+    }
+  },
+  "2026-04-06": {
+    "timeLabel": "7:30 PM IST lock",
+    "lockTime": "19:30",
+    "venue": "Kolkata",
+    "runsTarget": 341,
+    "team1": {
+      "name": "Kolkata Knight Riders",
+      "short": "KKR",
+      "emoji": "🟣",
+      "players": []
+    },
+    "team2": {
+      "name": "Punjab Kings",
+      "short": "PBKS",
+      "emoji": "🔴",
+      "players": []
+    }
+  },
+  "2026-04-07": {
+    "timeLabel": "7:30 PM IST lock",
+    "lockTime": "19:30",
+    "venue": "Guwahati",
+    "runsTarget": 339,
+    "team1": {
+      "name": "Rajasthan Royals",
+      "short": "RR",
+      "emoji": "🩷",
+      "players": []
+    },
+    "team2": {
+      "name": "Mumbai Indians",
+      "short": "MI",
+      "emoji": "🔵",
+      "players": []
+    }
+  },
+  "2026-04-08": {
+    "timeLabel": "7:30 PM IST lock",
+    "lockTime": "19:30",
+    "venue": "Delhi",
+    "runsTarget": 340,
+    "team1": {
+      "name": "Delhi Capitals",
+      "short": "DC",
+      "emoji": "🔵",
+      "players": []
+    },
+    "team2": {
+      "name": "Gujarat Titans",
+      "short": "GT",
+      "emoji": "🟦",
+      "players": []
+    }
+  },
+  "2026-04-09": {
+    "timeLabel": "7:30 PM IST lock",
+    "lockTime": "19:30",
+    "venue": "Kolkata",
+    "runsTarget": 338,
+    "team1": {
+      "name": "Kolkata Knight Riders",
+      "short": "KKR",
+      "emoji": "🟣",
+      "players": []
+    },
+    "team2": {
+      "name": "Lucknow Super Giants",
+      "short": "LSG",
+      "emoji": "🔷",
+      "players": []
+    }
+  },
+  "2026-04-10": {
+    "timeLabel": "7:30 PM IST lock",
+    "lockTime": "19:30",
+    "venue": "Guwahati",
+    "runsTarget": 345,
+    "team1": {
+      "name": "Rajasthan Royals",
+      "short": "RR",
+      "emoji": "🩷",
+      "players": []
+    },
+    "team2": {
+      "name": "Royal Challengers Bengaluru",
+      "short": "RCB",
+      "emoji": "🔴",
+      "players": []
+    }
+  },
+  "2026-04-11-A": {
+    "timeLabel": "3:30 PM IST lock",
+    "lockTime": "15:30",
+    "venue": "New Chandigarh",
+    "runsTarget": 342,
+    "team1": {
+      "name": "Punjab Kings",
+      "short": "PBKS",
+      "emoji": "🔴",
+      "players": []
+    },
+    "team2": {
+      "name": "Sunrisers Hyderabad",
+      "short": "SRH",
+      "emoji": "🟠",
+      "players": []
+    }
+  },
+  "2026-04-11-B": {
+    "timeLabel": "7:30 PM IST lock",
+    "lockTime": "19:30",
+    "venue": "Chennai",
+    "runsTarget": 337,
+    "team1": {
+      "name": "Chennai Super Kings",
+      "short": "CSK",
+      "emoji": "🟡",
+      "players": []
+    },
+    "team2": {
+      "name": "Delhi Capitals",
+      "short": "DC",
+      "emoji": "🔵",
+      "players": []
+    }
+  },
+  "2026-04-12-A": {
+    "timeLabel": "3:30 PM IST lock",
+    "lockTime": "15:30",
+    "venue": "Lucknow",
+    "runsTarget": 341,
+    "team1": {
+      "name": "Lucknow Super Giants",
+      "short": "LSG",
+      "emoji": "🔷",
+      "players": []
+    },
+    "team2": {
+      "name": "Gujarat Titans",
+      "short": "GT",
+      "emoji": "🟦",
+      "players": []
+    }
+  },
+  "2026-04-12-B": {
+    "timeLabel": "7:30 PM IST lock",
+    "lockTime": "19:30",
+    "venue": "Mumbai",
+    "runsTarget": 352,
+    "team1": {
+      "name": "Mumbai Indians",
+      "short": "MI",
+      "emoji": "🔵",
+      "players": []
+    },
+    "team2": {
+      "name": "Royal Challengers Bengaluru",
+      "short": "RCB",
+      "emoji": "🔴",
+      "players": []
+    }
+  }
+}
