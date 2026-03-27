@@ -2,7 +2,11 @@
 
 window.addEventListener('DOMContentLoaded', () => {
   const dateInput = document.getElementById('gameDate');
-  const today = new Date().toISOString().split('T')[0];
+
+  // Get today's date in IST (UTC+5:30)
+  const istOffset = 5.5 * 60 * 60 * 1000; // 5h 30m in ms
+  const now = new Date(Date.now() + istOffset);
+  const today = now.toISOString().split('T')[0];
 
   dateInput.value = today;
   dateInput.max   = today;
