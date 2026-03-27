@@ -125,7 +125,6 @@
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
       text-decoration: none;
     }
-    /* Fix: emoji needs its own span so -webkit-text-fill-color doesn't hide it */
     .nav-logo-icon {
       font-size: 1.5rem;
       filter: drop-shadow(0 0 8px rgba(247,195,68,0.7)) sepia(1) saturate(4) hue-rotate(5deg) brightness(1.1);
@@ -388,10 +387,10 @@
     /* ─── BALL ANIMATIONS ─── */
     @keyframes bounceBall {
       0%   { transform: translateY(0px) scaleX(1) scaleY(1); animation-timing-function: cubic-bezier(0.215,0.61,0.355,1); }
-      45%  { transform: translateY(-160px) scaleX(1) scaleY(1); animation-timing-function: cubic-bezier(0.55,0.055,0.675,0.19); }
-      75%  { transform: translateY(-175px) scaleX(1) scaleY(1); animation-timing-function: cubic-bezier(0.215,0.61,0.355,1); }
-      92%  { transform: translateY(-10px) scaleX(1) scaleY(1); }
-      96%  { transform: translateY(0px) scaleX(1.22) scaleY(0.78); animation-timing-function: cubic-bezier(0.215,0.61,0.355,1); }
+      40%  { transform: translateY(-210px) scaleX(1) scaleY(1); animation-timing-function: cubic-bezier(0.55,0.055,0.675,0.19); }
+      70%  { transform: translateY(-232px) scaleX(1) scaleY(1); animation-timing-function: cubic-bezier(0.215,0.61,0.355,1); }
+      91%  { transform: translateY(-14px) scaleX(1.01) scaleY(0.99); }
+      96%  { transform: translateY(0px) scaleX(1.28) scaleY(0.72); animation-timing-function: cubic-bezier(0.215,0.61,0.355,1); }
       100% { transform: translateY(0px) scaleX(1) scaleY(1); }
     }
     @keyframes ballShadow {
@@ -434,12 +433,12 @@
     }
     .hero-right {
       display: flex; align-items: center; justify-content: center;
-      height: 400px;
+      height: 470px;
       animation: fadeUp 0.7s 0.1s ease both;
       overflow: visible;
     }
     .ball-bounce-wrap {
-      position: absolute; bottom: 44px;
+      position: absolute; bottom: 72px;
       animation: bounceBall 1.55s cubic-bezier(0.215,0.61,0.355,1) infinite;
       will-change: transform;
     }
@@ -471,7 +470,7 @@
       will-change: transform;
     }
     .ball-ground-shadow {
-      position: absolute; bottom: 26px; left: 50%;
+      position: absolute; bottom: 54px; left: 50%;
       width: 64px; height: 13px; border-radius: 50%;
       background: rgba(100,20,10,0.35);
       transform: translateX(-50%);
@@ -479,7 +478,7 @@
       filter: blur(5px);
     }
     .ball-glow {
-      position: absolute; bottom: 32px; left: 50%;
+      position: absolute; bottom: 60px; left: 50%;
       width: 190px; height: 190px; border-radius: 50%;
       transform: translateX(-50%) translateY(50%);
       background: radial-gradient(circle, rgba(180,40,20,0.18) 0%, transparent 65%);
@@ -487,14 +486,14 @@
       pointer-events: none;
     }
     .ball-orbit-wrap {
-      position: absolute; bottom: 74px; left: 50%;
+      position: absolute; bottom: 102px; left: 50%;
       width: 180px; height: 180px;
       margin-left: -90px; margin-bottom: -90px;
       animation: ballOrbitSpin 10s linear infinite;
       pointer-events: none;
     }
     .ball-orbit-wrap2 {
-      position: absolute; bottom: 74px; left: 50%;
+      position: absolute; bottom: 102px; left: 50%;
       width: 230px; height: 230px;
       margin-left: -115px; margin-bottom: -115px;
       animation: ballOrbitSpin 14s linear infinite reverse;
@@ -513,7 +512,7 @@
     }
     .ball-orbit-dot2 { width: 5px; height: 5px; top: -2.5px; margin-left: -2.5px; background: rgba(180,40,20,0.6); }
     .ball-ring-svg {
-      position: absolute; bottom: 30px; left: 50%;
+      position: absolute; bottom: 58px; left: 50%;
       transform: translateX(-50%);
       pointer-events: none; overflow: visible;
     }
@@ -523,9 +522,9 @@
       border-radius: 3px;
       pointer-events: none;
     }
-    .bt1 { bottom: 84px; height: 36px; width: 6px; margin-left: -3px; background: linear-gradient(to top, rgba(180,40,20,0.55), transparent); animation: ballTrailDrop 1.55s ease-out infinite 0.05s; }
-    .bt2 { bottom: 106px; height: 22px; width: 4px; margin-left: -6px; background: linear-gradient(to top, rgba(180,40,20,0.3), transparent); animation: ballTrailDrop 1.55s ease-out infinite 0.1s; }
-    .bt3 { bottom: 120px; height: 14px; width: 3px; margin-left: -1px; background: linear-gradient(to top, rgba(180,40,20,0.18), transparent); animation: ballTrailDrop 1.55s ease-out infinite 0.15s; }
+    .bt1 { bottom: 112px; height: 36px; width: 6px; margin-left: -3px; background: linear-gradient(to top, rgba(180,40,20,0.55), transparent); animation: ballTrailDrop 1.55s ease-out infinite 0.05s; }
+    .bt2 { bottom: 134px; height: 22px; width: 4px; margin-left: -6px; background: linear-gradient(to top, rgba(180,40,20,0.3), transparent); animation: ballTrailDrop 1.55s ease-out infinite 0.1s; }
+    .bt3 { bottom: 148px; height: 14px; width: 3px; margin-left: -1px; background: linear-gradient(to top, rgba(180,40,20,0.18), transparent); animation: ballTrailDrop 1.55s ease-out infinite 0.15s; }
     .ball-spark {
       position: absolute; border-radius: 50%;
       pointer-events: none;
@@ -610,6 +609,7 @@
     .gc-orange { --ca:#F97316; --cag:rgba(249,115,22,0.09); --cag2:rgba(249,115,22,0.18); --cas:rgba(249,115,22,0.25); }
     .gc-blue   { --ca:#4F8EF7; --cag:rgba(79,142,247,0.09); --cag2:rgba(79,142,247,0.18); --cas:rgba(79,142,247,0.25); }
     .gc-purple { --ca:#A855F7; --cag:rgba(168,85,247,0.09); --cag2:rgba(168,85,247,0.18); --cas:rgba(168,85,247,0.25); }
+    .gc-amber  { --ca:#F59E0B; --cag:rgba(245,158,11,0.09); --cag2:rgba(245,158,11,0.18); --cas:rgba(245,158,11,0.25); }
     .gc-red    { --ca:#E84040; --cag:rgba(232,64,64,0.09);  --cag2:rgba(232,64,64,0.18); --cas:rgba(232,64,64,0.25); }
     .gc-green  { --ca:#3DD68C; --cag:rgba(61,214,140,0.09); --cag2:rgba(61,214,140,0.18); --cas:rgba(61,214,140,0.25); }
     .gc-teal   { --ca:#06B6D4; --cag:rgba(6,182,212,0.09);  --cag2:rgba(6,182,212,0.18); --cas:rgba(6,182,212,0.25); }
@@ -815,7 +815,6 @@
       .ball-glow { display: none; }
       .card-shimmer { display: none; }
 
-      /* Disable hover effects on touch */
       .game-card:hover,
       .game-card.revealed:hover {
         transform: none; box-shadow: none; border-color: var(--border);
@@ -848,18 +847,16 @@
       .nav-pill-btn span { display: none; }
       .nav-pill-btn { padding: 7px 10px; }
 
-      /* FIX: Hide "Daily Live" badge on mobile */
       .live-badge { display: none; }
-
       .hero { grid-template-columns: 1fr 120px; text-align: left; padding: 28px 18px 20px; gap: 12px; align-items: center; }
       .hero-eyebrow { font-size: 0.62rem; }
       .hero-title { font-size: 2.5rem; margin-bottom: 12px; }
       .hero-sub { font-size: 0.82rem; margin: 0 0 18px; max-width: 100%; }
       .hero-cta-row { justify-content: flex-start; }
-      .hero-trust { justify-content: flex-start; margin-bottom: 20px; }
+      .hero-trust { justify-content: center; margin-bottom: 20px; }
       .cta-primary { padding: 10px 20px; font-size: 0.78rem; }
       .cta-secondary { padding: 10px 16px; font-size: 0.72rem; }
-      .hero-stats { margin: 0; }
+      .hero-stats { margin: 0 auto; }
       .hero-stat { padding: 10px 16px; }
       .hero-stat-num { font-size: 1.55rem; }
       .hero-stat-label { font-size: 0.58rem; }
@@ -887,20 +884,13 @@
       .card-meta span { font-size: 0.56rem; }
       .card-arrow { width: 30px; height: 30px; font-size: 0.85rem; }
 
-      /* FIX: Footer brand full width, then Games + Info side by side */
       .footer-top {
         grid-template-columns: 1fr 1fr;
         gap: 24px;
         padding-bottom: 32px;
       }
-      .footer-brand {
-        grid-column: 1 / -1;
-      }
-      /* FIX: Allow tagline to wrap fully — remove max-width constraint on mobile */
-      .footer-tagline {
-        max-width: 100%;
-      }
-
+      .footer-brand { grid-column: 1 / -1; }
+      .footer-tagline { max-width: 100%; }
       .footer-inner { padding: 40px 18px 0; }
       .footer-bottom-bar { padding: 16px 18px 24px; flex-direction: column; align-items: flex-start; }
     }
@@ -928,7 +918,6 @@
   <!-- NAV -->
   <nav>
     <a href="#" class="nav-logo">
-      <!-- FIX: Emoji wrapped in separate span to escape gradient text-fill -->
       <span class="nav-logo-icon">🏏</span>
       <span>Crickingo</span>
     </a>
@@ -1156,7 +1145,7 @@
         <div class="card-arrow">→</div>
       </a>
 
-      <a href="predict.html" class="game-card gc-purple">
+      <a href="predict.html" class="game-card gc-amber">
         <div class="card-glow"></div>
         <div class="card-icon">🔮</div>
         <div class="card-body">
