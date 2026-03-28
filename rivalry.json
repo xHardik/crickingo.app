@@ -808,34 +808,79 @@
   },
 
   "rivalry-2026-03-28": {
-    "title": "🔴🟠 Rivalry Grid - Day 28",
-    "subtitle": "RCB vs SRH - Match Day",
-    "players": [
-      "Virat Kohli", "Faf du Plessis", "Glenn Maxwell", "Rajat Patidar", "Mohammed Siraj",
-      "Yuzvendra Chahal", "Harshal Patel", "Dinesh Karthik", "Josh Hazlewood", "Alzarri Joseph",
-      "Suyash Prabhudessai", "David Warner", "Travis Head", "Pat Cummins", "Bhuvneshwar Kumar",
-      "Heinrich Klaasen", "Rashid Khan", "Abhishek Sharma", "Nitish Kumar Reddy", "Washington Sundar",
-      "AB de Villiers", "Chris Gayle", "Anil Kumble", "VVS Laxman", "Andrew Symonds",
-      "Matthew Hayden", "Shikhar Dhawan", "Adam Gilchrist", "Darren Sammy", "Shane Bond"
-    ],
-    "categories": [
-      { "title": "🔴 RCB Playing XI (2026)", "validPlayers": ["Virat Kohli", "Faf du Plessis", "Glenn Maxwell", "Rajat Patidar", "Mohammed Siraj", "Harshal Patel", "Dinesh Karthik", "Josh Hazlewood"] },
-      { "title": "🟠 SRH Playing XI (2026)", "validPlayers": ["Pat Cummins", "Travis Head", "Abhishek Sharma", "Heinrich Klaasen", "Rashid Khan", "Washington Sundar", "Nitish Kumar Reddy", "Bhuvneshwar Kumar"] },
-      { "title": "🔴 RCB All-Time Highest Run Scorers", "validPlayers": ["Virat Kohli", "AB de Villiers", "Chris Gayle", "Anil Kumble"] },
-      { "title": "🟠 SRH All-Time Highest Run Scorers", "validPlayers": ["David Warner", "Shikhar Dhawan"] },
-      { "title": "🏆 RCB vs SRH Head-to-Head Key Players", "validPlayers": ["Virat Kohli", "David Warner", "Pat Cummins", "Glenn Maxwell"] },
-      { "title": "🌍 Overseas Stars in This Match", "validPlayers": ["Glenn Maxwell", "Travis Head", "Josh Hazlewood", "Rashid Khan", "Heinrich Klaasen"] },
-      { "title": "🔴 RCB 3000+ IPL Runs", "validPlayers": ["Virat Kohli", "AB de Villiers", "Chris Gayle", "Faf du Plessis"] },
-      { "title": "🟠 SRH 2000+ IPL Runs", "validPlayers": ["David Warner", "Shikhar Dhawan", "Travis Head", "Abhishek Sharma"] },
-      { "title": "🔴 RCB 50+ IPL Wickets", "validPlayers": ["Mohammed Siraj", "Yuzvendra Chahal", "Harshal Patel"] },
-      { "title": "🟠 SRH 50+ IPL Wickets", "validPlayers": ["Bhuvneshwar Kumar", "Rashid Khan", "Washington Sundar"] },
-      { "title": "🏅 Won Man of the Match in RCB vs SRH game", "validPlayers": ["Virat Kohli", "AB de Villiers", "David Warner", "Pat Cummins"] },
-      { "title": "💥 RCB Strike Rate 150+ (Min 200 IPL Runs)", "validPlayers": ["AB de Villiers", "Chris Gayle", "Glenn Maxwell", "Dinesh Karthik"] },
-      { "title": "🎳 SRH Bowlers Economy Under 7 (Career)", "validPlayers": ["Rashid Khan", "Bhuvneshwar Kumar", "Washington Sundar"] },
-      { "title": "🌟 Played for Both RCB and SRH", "validPlayers": ["Yuzvendra Chahal", "Shikhar Dhawan", "Darren Sammy"] },
-      { "title": "📖 IPL Purple Cap Winners in This Match", "validPlayers": ["Yuzvendra Chahal", "Bhuvneshwar Kumar", "Kagiso Rabada"] }
-    ]
-  },
+  "title": "🔴🟠 Rivalry Grid - Day 28",
+  "subtitle": "RCB vs SRH - Match Day",
+  "players": [
+    "Virat Kohli", "Rajat Patidar", "Phil Salt", "Tim David", "Josh Hazlewood",
+    "Bhuvneshwar Kumar", "Devdutt Padikkal", "Krunal Pandya", "Jacob Bethell", "Yash Dayal",
+    "Suyash Prabhudessai", "David Warner", "Travis Head", "Pat Cummins", "Ishan Kishan",
+    "Heinrich Klaasen", "Abhishek Sharma", "Nitish Kumar Reddy", "Harshal Patel", "Brydon Carse",
+    "AB de Villiers", "Chris Gayle", "Shikhar Dhawan", "Kamindu Mendis", "Yuzvendra Chahal",
+    "Glenn Maxwell", "Faf du Plessis", "Adam Gilchrist", "Matthew Hayden", "Shane Bond"
+  ],
+  "categories": [
+    {
+      "title": "🔴 RCB Playing XI (2026)",
+      "validPlayers": ["Virat Kohli", "Rajat Patidar", "Phil Salt", "Tim David", "Josh Hazlewood", "Bhuvneshwar Kumar", "Devdutt Padikkal", "Krunal Pandya", "Jacob Bethell", "Yash Dayal"]
+    },
+    {
+      "title": "🟠 SRH Playing XI (2026)",
+      "validPlayers": ["Pat Cummins", "Travis Head", "Abhishek Sharma", "Heinrich Klaasen", "Ishan Kishan", "Nitish Kumar Reddy", "Harshal Patel", "Brydon Carse", "Kamindu Mendis"]
+    },
+    {
+      "title": "🔴 RCB All-Time Highest Run Scorer",
+      "validPlayers": ["Virat Kohli"]
+    },
+    {
+      "title": "🟠 SRH All-Time Highest Run Scorer",
+      "validPlayers": ["David Warner", ""]
+    },
+    {
+      "title": "🏆 RCB vs SRH Man of the matches",
+      "validPlayers": ["Virat Kohli", "David Warner", "Ishan Kishan","AB de Villiers"]
+    },
+    {
+      "title": "🌍 Overseas Stars in This Match",
+      "validPlayers": ["Phil Salt", "Tim David", "Josh Hazlewood", "Travis Head", "Heinrich Klaasen", "Brydon Carse", "Jacob Bethell", "Kamindu Mendis"]
+    },
+    {
+      "title": "🔴 RCB 3000+ IPL Runs",
+      "validPlayers": ["Virat Kohli", "AB de Villiers", "Chris Gayle", "Faf du Plessis"]
+    },
+    {
+      "title": "🟠 SRH 2000+ IPL Runs",
+      "validPlayers": ["David Warner", "Shikhar Dhawan", "Travis Head", "Abhishek Sharma"]
+    },
+    {
+      "title": "🔴 RCB 50+ IPL Wickets",
+      "validPlayers": ["Yuzvendra Chahal", "Harshal Patel", "Josh Hazlewood"]
+    },
+    {
+      "title": "🟠 SRH 50+ IPL Wickets",
+      "validPlayers": ["Bhuvneshwar Kumar", "Rashid Khan", "Washington Sundar"]
+    },
+    {
+      "title": "🏅 Won Man of the Match in RCB vs SRH game",
+      "validPlayers": ["Virat Kohli", "AB de Villiers", "David Warner", "Pat Cummins"]
+    },
+    {
+      "title": "💥 RCB Strike Rate 150+ (Min 200 IPL Runs)",
+      "validPlayers": ["AB de Villiers", "Chris Gayle", "Glenn Maxwell", "Tim David"]
+    },
+    {
+      "title": "🎳 SRH Bowlers Economy Under 7 (Career)",
+      "validPlayers": ["Rashid Khan", "Bhuvneshwar Kumar", "Washington Sundar"]
+    },
+    {
+      "title": "🌟 Played for Both RCB and SRH",
+      "validPlayers": ["Heinrich Klaasen","Harshal Patel","Bhuvneshwar Kumar"]
+    },
+    {
+      "title": "📖 IPL Purple Cap Winners in This Match",
+      "validPlayers": ["Yuzvendra Chahal", "Bhuvneshwar Kumar", "Harshal Patel"]
+    }
+  ]
+},
 
   "rivalry-2026-03-29": {
     "title": "🔵🟣 Rivalry Grid - Day 29",
