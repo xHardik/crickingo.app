@@ -864,10 +864,10 @@
       "validPlayers": ["Virat Kohli", "AB de Villiers", "David Warner", "Ishan Kishan", "Pat Cummins","Kane Williamson", "Travis Head"]
     },
     {
-      "title": "💥 RCB Strike Rate 150+ (Min 200 IPL Runs)",
+          "title": "💥 RCB Strike Rate 150+ (Min 200 IPL Runs)",
       "validPlayers": ["AB de Villiers", "Chris Gayle", "Glenn Maxwell", "Tim David"]
     },
-    {
+{
       "title": "🎳 SRH Bowlers Economy Under 7 (Career)",
       "validPlayers": ["Rashid Khan", "Bhuvneshwar Kumar", "Washington Sundar"]
     },
@@ -949,6 +949,12 @@
       {
         "title": "🌍 Overseas Player Who Played Both MI and KKR",
         "validPlayers": [ "Chris Lynn"]
+      },
+      {
+        
+      "title": "🎳 Bowlers Economy Under 7 (Career)",
+      "validPlayers": ["Jasprit Bumrah","Sunil Narine"]
+    
       }
     ]
   },
