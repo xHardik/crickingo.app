@@ -176,5 +176,6 @@
     window.submitPred=async function(){if(!match||!currentMatchKey||!username||pickedWinner===null||!pickedScorer||!pickedRunsChoice)return;const btn=document.getElementById('submitBtn');btn.disabled=true;btn.textContent='Saving...';const prediction={username,winner:pickedWinner===0?match.team1.name:match.team2.name,scorer:pickedScorer,runs:pickedRunsChoice,submittedAt:Date.now()};try{await set(ref(db,`predictor/predictions/${currentMatchKey}/${DEVICE_ID}`),prediction);savedPred=prediction;btn.style.display='none';lockInputs();if(match.result){showBanner('Saved. Results are already available for this fixture.','info');showResults();}else showBanner('Prediction locked. Come back after the match for the score reveal.','submitted');}catch(e){console.error(e);btn.disabled=false;btn.textContent='Lock In Predictions';alert('Saving failed. Please try again.');}};
     boot();
   </script>
+  <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
