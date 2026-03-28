@@ -65,24 +65,30 @@
       "emoji": "🟠",
           "players": ["Abhishek Sharma", "Travis Head", "Heinrich Klaasen" , "Ishaan Kishan" , "Anyone else"]
 
-    }
+    },
+    
+  "result": {
+    "winner": "Royal Challengers Bengaluru",
+    "topScorer": "Ishan Kishan",
+    "totalRuns": 404
+  }
   },
   "2026-03-29": {
     "timeLabel": "7:30 PM IST lock",
     "lockTime": "19:30",
     "venue": "Wankhede Stadium, Mumbai",
-    "runsTarget": 347,
+    "runsTarget": 420,
     "team1": {
       "name": "Mumbai Indians",
       "short": "MI",
       "emoji": "🔵",
-      "players": []
+      "players": ["Rohit Sharma","Tilak Varma","Suryakumar Yadav","Anyone else"]
     },
     "team2": {
       "name": "Kolkata Knight Riders",
       "short": "KKR",
       "emoji": "🟣",
-      "players": []
+      "players": ["Ajinkya Rahane","Angkrish Raghuvanshi","Finn Allen","Anyone else"]
     }
   },
   "2026-03-30": {

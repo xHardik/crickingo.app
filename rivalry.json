@@ -881,34 +881,75 @@
     }
   ]
 },
-
-  "rivalry-2026-03-29": {
+"rivalry-2026-03-29": {
     "title": "🔵🟣 Rivalry Grid - Day 29",
     "subtitle": "MI vs KKR - Match Day",
     "players": [
-      "Rohit Sharma", "Jasprit Bumrah", "Hardik Pandya", "Suryakumar Yadav", "Ishan Kishan",
-      "Tilak Varma", "Tim David", "Trent Boult", "Jason Behrendorff", "Piyush Chawla",
-      "Kieron Pollard", "Lasith Malinga", "Andre Russell", "Sunil Narine", "Shreyas Iyer",
-      "Nitish Rana", "Rinku Singh", "Phil Salt", "Mitchell Starc", "Varun Chakravarthy",
-      "Venkatesh Iyer", "Gautam Gambhir", "Harbhajan Singh", "Zaheer Khan", "Sachin Tendulkar",
-      "Yusuf Pathan", "Brendon McCullum", "Chris Lynn", "Robin Uthappa", "Dinesh Karthik"
+      "Rohit Sharma", "Jasprit Bumrah", "Hardik Pandya", "Suryakumar Yadav", "Quinton de Kock",
+      "Tilak Varma", "Will Jacks", "Trent Boult", "Deepak Chahar", "Piyush Chawla",
+      "Kieron Pollard", "Lasith Malinga", "Sunil Narine", "Rinku Singh", "Ajinkya Rahane",
+      "Finn Allen", "Cameron Green", "Varun Chakravarthy", "Rovman Powell", "Angkrish Raghuvanshi",
+      "Gautam Gambhir", "Harbhajan Singh", "Zaheer Khan", "Sachin Tendulkar",
+      "Yusuf Pathan", "Brendon McCullum", "Chris Lynn", "Robin Uthappa", "Dinesh Karthik",
+      "Andre Russell"
     ],
     "categories": [
-      { "title": "🔵 MI Playing XI (2026)", "validPlayers": ["Rohit Sharma", "Jasprit Bumrah", "Hardik Pandya", "Suryakumar Yadav", "Ishan Kishan", "Tilak Varma", "Tim David", "Trent Boult"] },
-      { "title": "🟣 KKR Playing XI (2026)", "validPlayers": ["Andre Russell", "Sunil Narine", "Shreyas Iyer", "Rinku Singh", "Phil Salt", "Mitchell Starc", "Varun Chakravarthy", "Venkatesh Iyer"] },
-      { "title": "🔵 MI All-Time Highest Run Scorers", "validPlayers": ["Rohit Sharma", "Sachin Tendulkar", "Kieron Pollard", "Suryakumar Yadav"] },
-      { "title": "🟣 KKR All-Time Highest Run Scorers", "validPlayers": ["Gautam Gambhir", "Andre Russell", "Robin Uthappa", "Dinesh Karthik"] },
-      { "title": "🏆 Won 5 IPL Titles (MI or KKR Players)", "validPlayers": ["Rohit Sharma", "Jasprit Bumrah", "Kieron Pollard", "Lasith Malinga", "Hardik Pandya", "Harbhajan Singh", "Gautam Gambhir"] },
-      { "title": "🔵 MI All-Time Highest Wicket Takers", "validPlayers": ["Jasprit Bumrah", "Lasith Malinga", "Harbhajan Singh", "Zaheer Khan"] },
-      { "title": "🟣 KKR All-Time Highest Wicket Takers", "validPlayers": ["Sunil Narine", "Andre Russell", "Varun Chakravarthy", "Piyush Chawla"] },
-      { "title": "🌟 Played for Both MI and KKR", "validPlayers": ["Harbhajan Singh", "Zaheer Khan", "Dinesh Karthik"] },
-      { "title": "💥 MI Power Hitters (SR 150+ IPL Career)", "validPlayers": ["Kieron Pollard", "Tim David", "Suryakumar Yadav", "Hardik Pandya"] },
-      { "title": "🎳 KKR Mystery Spinners", "validPlayers": ["Sunil Narine", "Varun Chakravarthy"] },
-      { "title": "🏅 Won Man of the Match in MI vs KKR", "validPlayers": ["Rohit Sharma", "Jasprit Bumrah", "Andre Russell", "Sunil Narine"] },
-      { "title": "📖 MI vs KKR — Both Played 150+ IPL Matches", "validPlayers": ["Rohit Sharma", "Sachin Tendulkar", "Gautam Gambhir", "Andre Russell"] },
-      { "title": "🟣 KKR IPL Title Winners (2012 or 2014 or 2024)", "validPlayers": ["Gautam Gambhir", "Sunil Narine", "Andre Russell", "Yusuf Pathan", "Robin Uthappa", "Dinesh Karthik"] },
-      { "title": "🔵 MI IPL Title Winners (2013/2015/2017/2019/2020)", "validPlayers": ["Rohit Sharma", "Jasprit Bumrah", "Kieron Pollard", "Lasith Malinga", "Hardik Pandya", "Harbhajan Singh"] },
-      { "title": "🌍 Overseas Players Who Played Both MI and KKR", "validPlayers": ["Brendon McCullum", "Chris Lynn", "Kieron Pollard"] }
+      {
+        "title": "🔵 MI Playing XI (2026)",
+        "validPlayers": ["Rohit Sharma", "Jasprit Bumrah", "Hardik Pandya", "Suryakumar Yadav", "Quinton de Kock", "Tilak Varma", "Will Jacks", "Trent Boult", "Deepak Chahar"]
+      },
+      {
+        "title": "🟣 KKR Playing XI (2026)",
+        "validPlayers": ["Sunil Narine", "Rinku Singh", "Ajinkya Rahane", "Finn Allen", "Cameron Green", "Varun Chakravarthy", "Rovman Powell", "Angkrish Raghuvanshi"]
+      },
+      {
+        "title": "🔵 MI All-Time Highest Run Scorer",
+        "validPlayers": ["Rohit Sharma"]
+      },
+      {
+        "title": "🟣 KKR All-Time Highest Run Scorer",
+        "validPlayers": ["Gautam Gambhir"]
+      },
+      {
+        "title": "🏆 Won IPL Titles with MI (2013/2015/2017/2019/2020)",
+        "validPlayers": ["Rohit Sharma", "Jasprit Bumrah", "Kieron Pollard", "Lasith Malinga", "Hardik Pandya", "Harbhajan Singh"]
+      },
+      {
+        "title": "🔵 MI All-Time Highest Wicket Takers",
+        "validPlayers": ["Jasprit Bumrah"]
+      },
+      {
+        "title": "🟣 KKR All-Time Highest Wicket Takers",
+        "validPlayers": ["Sunil Narine"]
+      },
+      {
+        "title": "🌟 Played for Both MI and KKR",
+        "validPlayers": ["Harbhajan Singh", "Zaheer Khan", "Dinesh Karthik","Chris Lynn"]
+      },
+      {
+        "title": "💥 MI Power Hitters (SR 150+ IPL Career)",
+        "validPlayers": ["Kieron Pollard", "Will Jacks", "Suryakumar Yadav", "Hardik Pandya"]
+      },
+      {
+        "title": "🎳 KKR Mystery Spinners",
+        "validPlayers": ["Sunil Narine", "Varun Chakravarthy"]
+      },
+      {
+        "title": "🏅 Won Man of the Match in MI vs KKR",
+        "validPlayers": ["Rohit Sharma", "Jasprit Bumrah", "Andre Russell", "Sunil Narine", "Suryakumar Yadav"]
+      },
+      {
+        "title": "📖 Played 150+ IPL Matches for MI or KKR",
+        "validPlayers": ["Rohit Sharma", "Sunil Narine", "Kieron Pollard"]
+      },
+      {
+        "title": "🟣 KKR IPL Title Winners (2012 or 2014 or 2024)",
+        "validPlayers": ["Gautam Gambhir", "Sunil Narine", "Andre Russell", "Yusuf Pathan", "Robin Uthappa", "Dinesh Karthik"]
+      },
+      {
+        "title": "🌍 Overseas Player Who Played Both MI and KKR",
+        "validPlayers": [ "Chris Lynn"]
+      }
     ]
   },
 
