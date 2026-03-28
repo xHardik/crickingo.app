@@ -816,12 +816,13 @@
     "Suyash Prabhudessai", "David Warner", "Travis Head", "Pat Cummins", "Ishan Kishan",
     "Heinrich Klaasen", "Abhishek Sharma", "Nitish Kumar Reddy", "Harshal Patel", "Brydon Carse",
     "AB de Villiers", "Chris Gayle", "Shikhar Dhawan", "Kamindu Mendis", "Yuzvendra Chahal",
-    "Glenn Maxwell", "Faf du Plessis", "Adam Gilchrist", "Matthew Hayden", "Shane Bond"
+    "Glenn Maxwell", "Faf du Plessis", "Adam Gilchrist", "Matthew Hayden", "Mohammed Siraj"
   ],
   "categories": [
     {
       "title": "🔴 RCB Playing XI (2026)",
-      "validPlayers": ["Virat Kohli", "Rajat Patidar", "Phil Salt", "Tim David", "Josh Hazlewood", "Bhuvneshwar Kumar", "Devdutt Padikkal", "Krunal Pandya", "Jacob Bethell", "Yash Dayal"]
+    "Suyash Prabhudessai", "David Warner", "Travis Head", "Pat Cummins", "Ishan Kishan",
+      "validPlayers": ["Virat Kohli", "Rajat Patidar", "Phil Salt", "Tim David", "Josh Hazlewood", "Bhuvneshwar Kumar", "Devdutt Padikkal", "Krunal Pandya", "Jacob Bethell", "Faf du Plessis"," Suyash Prabhudessai "]
     },
     {
       "title": "🟠 SRH Playing XI (2026)",
@@ -836,8 +837,8 @@
       "validPlayers": ["David Warner", ""]
     },
     {
-      "title": "🏆 RCB vs SRH Man of the matches",
-      "validPlayers": ["Virat Kohli", "David Warner", "Ishan Kishan","AB de Villiers"]
+      "title": "🏆 RCB vs SRH Man of the matches between 24-26",
+      "validPlayers": ["Virat Kohli",  "Ishan Kishan","Rajat Patidar"]
     },
     {
       "title": "🌍 Overseas Stars in This Match",
@@ -845,15 +846,15 @@
     },
     {
       "title": "🔴 RCB 3000+ IPL Runs",
-      "validPlayers": ["Virat Kohli", "AB de Villiers", "Chris Gayle", "Faf du Plessis"]
+      "validPlayers": ["Virat Kohli", "AB de Villiers", "Chris Gayle", ""]
     },
     {
       "title": "🟠 SRH 2000+ IPL Runs",
-      "validPlayers": ["David Warner", "Shikhar Dhawan", "Travis Head", "Abhishek Sharma"]
+      "validPlayers": ["David Warner", "Shikhar Dhawan"]
     },
     {
       "title": "🔴 RCB 50+ IPL Wickets",
-      "validPlayers": ["Yuzvendra Chahal", "Harshal Patel", "Josh Hazlewood"]
+      "validPlayers": ["Yuzvendra Chahal", "Harshal Patel", ""]
     },
     {
       "title": "🟠 SRH 50+ IPL Wickets",
@@ -861,7 +862,7 @@
     },
     {
       "title": "🏅 Won Man of the Match in RCB vs SRH game",
-      "validPlayers": ["Virat Kohli", "AB de Villiers", "David Warner", "Pat Cummins"]
+      "validPlayers": ["Virat Kohli", "AB de Villiers", "David Warner", "Ishan Kishan", "Pat Cummins","Kane Williamson", "Travis Head"]
     },
     {
       "title": "💥 RCB Strike Rate 150+ (Min 200 IPL Runs)",
