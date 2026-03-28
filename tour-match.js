@@ -17,10 +17,10 @@ const db = getDatabase(app);
 
 const GAMES = [
   { name: "Higher Or Lower",  url: "https://crickingo.vercel.app/hl.html" },
-  { name: "Cricket Bingo",    url: "https://crickingo.vercel.app/rivalry.html" },
-  { name: "Transfer History", url: "https://crickingo.vercel.app/transfer.html" },
-  { name: "Wordle",           url: "https://crickingo.vercel.app/wordle.html" },
-  { name: "Who Are Ya?",      url: "https://crickingo.vercel.app/whoareya.html" },
+ // { name: "Cricket Bingo",    url: "https://crickingo.vercel.app/rivalry.html" },
+ // { name: "Transfer History", url: "https://crickingo.vercel.app/transfer.html" },
+ // { name: "Wordle",           url: "https://crickingo.vercel.app/wordle.html" },
+ // { name: "Who Are Ya?",      url: "https://crickingo.vercel.app/whoareya.html" },
   { name: "Build Your Team",  url: "https://crickingo.vercel.app/builder.html" },
 ];
 
