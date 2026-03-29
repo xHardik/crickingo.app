@@ -89,24 +89,30 @@
       "short": "KKR",
       "emoji": "🟣",
       "players": ["Ajinkya Rahane","Angkrish Raghuvanshi","Finn Allen","Anyone else"]
-    }
-  },
+    },
+        
+  "result": {
+    "winner": "Mumbai Indians",
+    "topScorer": "Anyone Else",
+    "totalRuns": 444
+  }
+},
   "2026-03-30": {
     "timeLabel": "7:30 PM IST lock",
     "lockTime": "19:30",
     "venue": "Barsapara Cricket Stadium, Guwahati",
-    "runsTarget": 336,
+    "runsTarget": 380,
     "team1": {
       "name": "Rajasthan Royals",
       "short": "RR",
       "emoji": "🩷",
-      "players": []
+      "players": ["Vaibhav Suryavanshi","Yashasvi Jaiswal","Riyan Parag","Shimron Hetmyer"]
     },
     "team2": {
       "name": "Chennai Super Kings",
       "short": "CSK",
       "emoji": "🟡",
-      "players": []
+      "players": ["Ruturaj Gaikwad","Sanju Samson","Ayush Mhatre","Shivam Dube","Urvil Patel","Anyone else"]
     }
   },
   "2026-03-31": {

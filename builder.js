@@ -1,4 +1,3 @@
-// ==== FIREBASE IMPORT ====
 import { getDatabase, ref, set, get } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
 
@@ -29,7 +28,6 @@ let selectedTeam        = [];
 let currentFilter       = 'All';
 let currentSessionScore = null;
 
-// ── Storage keys ──
 const STATS_KEY   = 'crickingo_builder_stats';
 const HISTORY_KEY = 'crickingo_builder_history';
 
@@ -42,7 +40,6 @@ function getDateKey() {
 }
 
 function saveAndRenderResult(rating, won) {
-  // ✅ Never save in tournament mode
   if (isInTournament) return;
 
   const today = getRealTodayKey();
@@ -77,7 +74,6 @@ function saveAndRenderResult(rating, won) {
 }
 
 function updateTodayDot(rating) {
-  // ✅ Never update dots in tournament mode
   if (isInTournament) return;
 
   const puzzleDate = getDateKey();
@@ -104,7 +100,6 @@ function updateTodayDot(rating) {
 }
 
 function renderDashboard(stats, history, today) {
-  // ✅ In tournament mode, hide the entire dashboard
   if (isInTournament) {
     const dashboard = document.querySelector('.left-dashboard');
     if (dashboard) dashboard.style.display = 'none';
@@ -158,7 +153,6 @@ function renderDashboard(stats, history, today) {
   }
 }
 
-// ── MODAL ──
 function showRulesModal() {
   const modal = document.getElementById('rulesModal');
   if (modal) { modal.style.display = 'flex'; modal.classList.add('active'); }
@@ -202,7 +196,6 @@ function showTournamentInfo() {
   document.body.appendChild(infoDiv);
 }
 
-// ── Load data ──
 async function loadPlayersByDate(selectedDate) {
   try {
     const response = await fetch('builder.json');
@@ -218,7 +211,6 @@ async function loadPlayersByDate(selectedDate) {
 }
 
 function populatePuzzleBar(dateStr) {
-  // ✅ Hide puzzle bar in tournament mode only — date/number set by inline HTML script
   if (isInTournament) {
     const puzzleBar = document.querySelector('.puzzle-bar');
     if (puzzleBar) puzzleBar.style.display = 'none';
@@ -277,7 +269,6 @@ async function init() {
   updateSelectedTeam();
 }
 
-// ── Stat bars ──
 function makeStatBars(bat, bowl, field) {
   const allVals = PLAYERS.flatMap(p => [Number(p.batting)||0, Number(p.bowling)||0, Number(p.fielding)||0]);
   const max     = allVals.length ? Math.max(...allVals) : 100;
@@ -465,7 +456,6 @@ function calculateTeamRating() {
     total + (Number(p.batting)||0) + (Number(p.bowling)||0) + (Number(p.fielding)||0), 0);
 }
 
-// ── CHECK TEAM ──
 function checkTeam() {
   const resultEl = document.getElementById('result');
   if (!resultEl) return;
@@ -507,7 +497,6 @@ function checkTeam() {
     tomorrow: tomorrowStr
   };
 
-  // ✅ Only save and update dot in normal mode
   if (!isInTournament) {
     saveAndRenderResult(rating, isWin);
     updateTodayDot(rating);
@@ -561,8 +550,6 @@ function checkTeam() {
     if (checkBtn) checkBtn.style.display = 'none';
     const resetBtn = document.querySelector('.btn-reset');
     if (resetBtn) resetBtn.style.display = 'none';
-
-    // ✅ Skip result card entirely in tournament mode
     returnToTournament();
   }
 }
@@ -593,7 +580,6 @@ function returnToTournament() {
   window.location.href = `tournament.html?score=${currentSessionScore || 0}&game=${gameIndex}`;
 }
 
-// ── CANVAS SHARE CARD ──
 window._shareData = {};
 
 function roundRect(ctx, x, y, w, h, r) {
@@ -733,7 +719,7 @@ window.shareScore = async function () {
   }, 'image/png');
 };
 
-// ── Exports ──
+
 window.filterPlayers      = filterPlayers;
 window.togglePlayer       = togglePlayer;
 window.checkTeam          = checkTeam;

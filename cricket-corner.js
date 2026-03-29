@@ -217,7 +217,6 @@ export function renderCricketCorner(containerId) {
   const container = document.getElementById(containerId);
   if (!container) return;
 
-  // one random item each, picked fresh every page load
   const quiz  = pickRandom(QUIZZES);
   const fact  = pickRandom(FACTS);
   const gloss = pickRandom(GLOSSARY);
@@ -311,7 +310,6 @@ export function renderCricketCorner(containerId) {
     </div>
   `;
 
-  // tab switching
   container.querySelectorAll('.cc-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       container.querySelectorAll('.cc-tab').forEach(t => t.classList.remove('active'));
@@ -321,7 +319,6 @@ export function renderCricketCorner(containerId) {
     });
   });
 
-  // quiz — one question, answer reveals explanation
   document.getElementById(`${id}-qtext`).textContent = quiz.q;
   const optsEl = document.getElementById(`${id}-qopts`);
   quiz.opts.forEach((o, i) => {
@@ -341,10 +338,8 @@ export function renderCricketCorner(containerId) {
     optsEl.appendChild(b);
   });
 
-  // fact — just show it
   document.getElementById(`${id}-facttext`).textContent = fact;
 
-  // glossary — just show it
   document.getElementById(`${id}-gterm`).textContent = gloss.t;
   document.getElementById(`${id}-gdef`).textContent  = gloss.d;
   document.getElementById(`${id}-gex`).textContent   = '"' + gloss.ex + '"';

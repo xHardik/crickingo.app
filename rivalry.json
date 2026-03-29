@@ -957,37 +957,80 @@
     
       }
     ]
-  },
-
-  "rivalry-2026-03-30": {
-    "title": "💜🟡 Rivalry Grid - Day 30",
-    "subtitle": "RR vs CSK - Match Day",
-    "players": [
-      "Sanju Samson", "Jos Buttler", "Yuzvendra Chahal", "Trent Boult", "Jofra Archer",
-      "Yashasvi Jaiswal", "Devdutt Padikkal", "Shimron Hetmyer", "Dhruv Jurel", "Ravichandran Ashwin",
-      "MS Dhoni", "Ruturaj Gaikwad", "Ravindra Jadeja", "Deepak Chahar", "Ben Stokes",
-      "Faf du Plessis", "Ambati Rayudu", "Suresh Raina", "Dwayne Bravo", "Shane Watson",
-      "Ajinkya Rahane", "Adam Zampa", "Kumar Sangakkara", "Graeme Smith", "Shane Warne",
-      "Daryl Mitchell", "Riyan Parag", "Donovan Ferreira", "Nandre Burger", "Shubman Gill"
-    ],
-    "categories": [
-      { "title": "💜 RR Playing XI (2026)", "validPlayers": ["Sanju Samson", "Jos Buttler", "Yuzvendra Chahal", "Jofra Archer", "Yashasvi Jaiswal", "Devdutt Padikkal", "Shimron Hetmyer", "Riyan Parag"] },
-      { "title": "🟡 CSK Playing XI (2026)", "validPlayers": ["MS Dhoni", "Ruturaj Gaikwad", "Ravindra Jadeja", "Deepak Chahar", "Ravichandran Ashwin"] },
-      { "title": "💜 RR All-Time Key Players", "validPlayers": ["Shane Warne", "Kumar Sangakkara", "Graeme Smith", "Ajinkya Rahane", "Sanju Samson"] },
-      { "title": "🟡 CSK All-Time Highest Run Scorers", "validPlayers": ["MS Dhoni", "Suresh Raina", "Ravindra Jadeja", "Faf du Plessis", "Ruturaj Gaikwad"] },
-      { "title": "🏆 CSK IPL Title Winners (2010/2011/2018/2021/2023)", "validPlayers": ["MS Dhoni", "Suresh Raina", "Ravindra Jadeja", "Shane Watson", "Faf du Plessis", "Dwayne Bravo"] },
-      { "title": "🌍 Overseas Stars in This Match", "validPlayers": ["Jos Buttler", "Jofra Archer", "Shimron Hetmyer", "Ben Stokes"] },
-      { "title": "💜 RR 1000+ IPL Runs", "validPlayers": ["Sanju Samson", "Jos Buttler", "Ajinkya Rahane", "Yashasvi Jaiswal"] },
-      { "title": "🟡 CSK 2000+ IPL Runs", "validPlayers": ["MS Dhoni", "Suresh Raina", "Ruturaj Gaikwad", "Faf du Plessis"] },
-      { "title": "💜 RR All-Time Wicket Takers", "validPlayers": ["Shane Warne", "Yuzvendra Chahal", "Trent Boult", "Jofra Archer"] },
-      { "title": "🟡 CSK All-Time Wicket Takers", "validPlayers": ["Dwayne Bravo", "Ravindra Jadeja", "Deepak Chahar", "Ravichandran Ashwin"] },
-      { "title": "🌟 Played for Both RR and CSK", "validPlayers": ["Ravichandran Ashwin", "Ben Stokes", "Faf du Plessis"] },
-      { "title": "💥 RR Batting Strike Rate 150+ (Min 200 Runs)", "validPlayers": ["Jos Buttler", "Sanju Samson", "Shimron Hetmyer"] },
-      { "title": "🎳 CSK Death-Over Specialists (ER under 8)", "validPlayers": ["Dwayne Bravo", "Deepak Chahar", "Ravindra Jadeja"] },
-      { "title": "🏅 Won Man of the Match in RR vs CSK", "validPlayers": ["Shane Warne", "MS Dhoni", "Jos Buttler", "Suresh Raina"] },
-      { "title": "📖 RR 2008 Inaugural IPL Champions Squad", "validPlayers": ["Shane Warne", "Sanju Samson", "Yusuf Pathan"] }
-    ]
-  },
+  },"rivalry-2026-03-30": {
+  "title": "💜🟡 Rivalry Grid - Day 30",
+  "subtitle": "RR vs CSK - Match Day",
+  "players": [
+    "Sanju Samson", "Riyan Parag", "Yashasvi Jaiswal", "Shimron Hetmyer", "Dhruv Jurel",
+    "Jofra Archer", "Ravindra Jadeja", "Sam Curran", "Nandre Burger", "Donovan Ferreira",
+    "MS Dhoni", "Ruturaj Gaikwad", "Shivam Dube", "Khaleel Ahmed", "Rahul Chahar",
+    "Faf du Plessis", "Ambati Rayudu", "Suresh Raina", "Dwayne Bravo", "Shane Watson",
+    "Ajinkya Rahane", "Shane Warne", "Graeme Smith", "Kumar Sangakkara",
+    "Ravi Bishnoi", "Vaibhav Suryavanshi", "Sandeep Sharma", "Dewald Brevis", "Matt Henry", "Shubman Gill"
+  ],
+  "categories": [
+    {
+      "title": "💜 RR Playing XI (2026)",
+      "validPlayers": ["Riyan Parag", "Yashasvi Jaiswal", "Shimron Hetmyer", "Dhruv Jurel", "Jofra Archer", "Ravindra Jadeja", "Sam Curran", "Nandre Burger", "Donovan Ferreira", "Ravi Bishnoi", "Vaibhav Suryavanshi"]
+    },
+    {
+      "title": "🟡 CSK Playing XI (2026)",
+      "validPlayers": ["MS Dhoni", "Ruturaj Gaikwad", "Sanju Samson", "Shivam Dube", "Khaleel Ahmed", "Rahul Chahar", "Dewald Brevis", "Matt Henry"]
+    },
+    {
+      "title": "💜 RR Retired Legends",
+      "validPlayers": ["Shane Warne", "Kumar Sangakkara", "Graeme Smith","Shane Watson"]
+    },
+    {
+      "title": "🟡 CSK All-Time Highest Run Scorer",
+      "validPlayers": [ "Suresh Raina"]
+    },
+    {
+      "title": "🏆 CSK IPL Title Winners (2010/2011/2018/2021/2023)",
+      "validPlayers": ["MS Dhoni", "Suresh Raina", "Ravindra Jadeja", "Shane Watson", "Faf du Plessis", "Dwayne Bravo", "Ambati Rayudu"]
+    },
+    {
+      "title": "🌍 Overseas Highest wicket taker in season",
+      "validPlayers": ["Dwayne Bravo"]
+    },
+    {
+      "title": "💜 RR 2000+ IPL Runs",
+      "validPlayers": ["Sanju Samson", "Yashasvi Jaiswal", "Ajinkya Rahane", "Jos Buttler"]
+    },
+    {
+      "title": "🟡 CSK 4000+ IPL Runs",
+      "validPlayers": ["MS Dhoni", "Suresh Raina"]
+    },
+    {
+      "title": "💜 RR All-Time Wicket Taker",
+      "validPlayers": ["Shane Watson"]
+    },
+    {
+      "title": "🟡 CSK Top2 Wicket Takers",
+      "validPlayers": ["Dwayne Bravo", "Ravindra Jadeja"]
+    },
+    {
+      "title": "🌟 Played for Both RR and CSK",
+      "validPlayers": ["Faf du Plessis", "Ravindra Jadeja", "Sanju Samson"]
+    },
+    {
+      "title": "💥 RR Batting Strike Rate 150+ (Min 200 Runs)",
+      "validPlayers": ["Shimron Hetmyer", "Yashasvi Jaiswal", "Riyan Parag"]
+    },
+    {
+      "title": "🎳 CSK Death-Over Specialists (ER under 8)",
+      "validPlayers": ["Dwayne Bravo", "Ravindra Jadeja", "Khaleel Ahmed"]
+    },
+    {
+      "title": "🏅 Won Man of the Match in RR vs CSK",
+      "validPlayers": ["Shane Warne", "MS Dhoni", "Sanju Samson", "Suresh Raina","Yashasvi Jaiswal"]
+    },
+    {
+      "title": "📖 RR 2008 Inaugural IPL Champions Squad",
+      "validPlayers": ["Shane Warne", "Graeme Smith", "Shane Watson", "Sanju Samson"]
+    }
+  ]
+},
 
   "rivalry-2026-03-31": {
     "title": "🔴🔵 Rivalry Grid - Day 31",
