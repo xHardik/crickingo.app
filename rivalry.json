@@ -1031,34 +1031,78 @@
     }
   ]
 },
-
-  "rivalry-2026-03-31": {
-    "title": "🔴🔵 Rivalry Grid - Day 31",
-    "subtitle": "PBKS vs GT - Match Day",
-    "players": [
-      "Shikhar Dhawan", "Liam Livingstone", "Sam Curran", "Arshdeep Singh", "Kagiso Rabada",
-      "Jonny Bairstow", "Prabhsimran Singh", "Rilee Rossouw", "Shahrukh Khan", "Rahul Chahar",
-      "Shubman Gill", "David Miller", "Rashid Khan", "Mohammed Shami", "Hardik Pandya",
-      "Wriddhiman Saha", "Vijay Shankar", "Abhinav Manohar", "Sai Sudharsan", "Darshan Nalkande",
-      "Mayank Agarwal", "Chris Gayle", "Virender Sehwag", "Yuvraj Singh", "Brett Lee",
-      "Kevin Pietersen", "Adam Gilchrist", "Michael Hussey", "Murali Karthik", "Ravichandran Ashwin"
-    ],
-    "categories": [
-      { "title": "🔴 PBKS Playing XI (2026)", "validPlayers": ["Shikhar Dhawan", "Liam Livingstone", "Sam Curran", "Arshdeep Singh", "Kagiso Rabada", "Jonny Bairstow", "Prabhsimran Singh", "Rilee Rossouw", "Shahrukh Khan"] },
-      { "title": "🔵 GT Playing XI (2026)", "validPlayers": ["Shubman Gill", "David Miller", "Rashid Khan", "Mohammed Shami", "Hardik Pandya", "Wriddhiman Saha", "Sai Sudharsan", "Abhinav Manohar"] },
-      { "title": "🔴 PBKS All-Time Highest Run Scorers", "validPlayers": ["Chris Gayle", "Shikhar Dhawan", "KL Rahul", "Mayank Agarwal"] },
-      { "title": "🔵 GT All-Time Highest Run Scorers", "validPlayers": ["Shubman Gill", "David Miller", "Wriddhiman Saha", "Hardik Pandya"] },
-      { "title": "🏆 Won IPL with GT (2022 or 2023)", "validPlayers": ["Hardik Pandya", "Shubman Gill", "Rashid Khan", "Mohammed Shami", "David Miller", "Wriddhiman Saha"] },
-      { "title": "🌍 Overseas Stars in This Match", "validPlayers": ["Liam Livingstone", "Sam Curran", "Kagiso Rabada", "Jonny Bairstow", "Rashid Khan", "David Miller", "Rilee Rossouw"] },
-      { "title": "🔴 PBKS 50+ IPL Wickets", "validPlayers": ["Kagiso Rabada", "Arshdeep Singh", "Brett Lee", "Murali Karthik"] },
-      { "title": "🔵 GT IPL Wicket Takers (50+)", "validPlayers": ["Mohammed Shami", "Rashid Khan", "Hardik Pandya"] },
-      { "title": "🌟 Played for Both PBKS and GT", "validPlayers": ["Ravichandran Ashwin", "Mohammed Shami"] },
-      { "title": "💥 PBKS Power Hitters (SR 160+ in IPL Career)", "validPlayers": ["Chris Gayle", "Liam Livingstone", "Jonny Bairstow", "Rilee Rossouw"] },
-      { "title": "🎳 GT Bowling Attack (Economy Under 8 Career)", "validPlayers": ["Rashid Khan", "Mohammed Shami", "Hardik Pandya"] },
-      { "title": "🏅 PBKS — Never Won IPL", "validPlayers": ["Chris Gayle", "Yuvraj Singh", "Adam Gilchrist", "Kevin Pietersen", "Brett Lee", "Arshdeep Singh"] },
-      { "title": "💰 IPL 2025 Orange Cap (759 Runs)", "validPlayers": ["Sai Sudharsan"] },
-      { "title": "🔴 PBKS Season Orange Cap Contenders", "validPlayers": ["Chris Gayle", "Shikhar Dhawan", "KL Rahul", "Liam Livingstone"] },
-      { "title": "📖 PBKS vs GT — Played in Both 2022 and 2023 IPL", "validPlayers": ["Shubman Gill", "Rashid Khan", "Mohammed Shami", "Kagiso Rabada", "Arshdeep Singh"] }
-    ]
-  }
+"rivalry-2026-03-31": {
+  "title": "🔴🔵 Rivalry Grid - Day 31",
+  "subtitle": "PBKS vs GT - IPL 2026 Opener",
+  "players": [
+    "Priyansh Arya", "Prabhsimran Singh", "Shreyas Iyer", "Nehal Wadhera", "Shashank Singh",
+    "Marcus Stoinis", "Marco Jansen", "Arshdeep Singh", "Yuzvendra Chahal", "Xavier Bartlett", "Cooper Connolly",
+    "Shubman Gill", "Sai Sudharsan", "Jos Buttler", "Rashid Khan", "Mohammed Siraj",
+    "Washington Sundar", "Shahrukh Khan", "Rahul Tewatia", "Prasidh Krishna", "Sai Kishore",
+    "Wriddhiman Saha", "Glenn Maxwell", "David Miller", "Hardik Pandya",
+    "Mohammed Shami", "Kagiso Rabada", "Ravichandran Ashwin", "Adam Gilchrist", "Virender Sehwag"
+  ],
+  "categories": [
+    {
+      "title": "🔴 PBKS Squad 2026",
+      "validPlayers": ["Priyansh Arya", "Prabhsimran Singh", "Shreyas Iyer", "Nehal Wadhera", "Shashank Singh", "Marcus Stoinis", "Marco Jansen", "Arshdeep Singh", "Yuzvendra Chahal", "Xavier Bartlett", "Cooper Connolly"]
+    },
+    {
+      "title": "🔵 GT Squad 2026)",
+      "validPlayers": ["Shubman Gill", "Sai Sudharsan", "Jos Buttler", "Rashid Khan", "Mohammed Siraj", "Washington Sundar", "Shahrukh Khan", "Rahul Tewatia", "Prasidh Krishna", "Sai Kishore"]
+    },
+    {
+      "title": "🏆 Won IPL Title with GT (2022 or 2023 squad)",
+      "validPlayers": ["Shubman Gill", "Rashid Khan", "David Miller", "Hardik Pandya", "Mohammed Shami", "Wriddhiman Saha", "Rahul Tewatia", "Sai Sudharsan", "Sai Kishore", "Shahrukh Khan"]
+    },
+    {
+      "title": "🟠 Orange cap winner",
+      "validPlayers": ["Sai Sudharsan", "Shubman Gill", "Jos Buttler"]
+    },
+    {
+      "title": "🟣 Purple Cap winner",
+      "validPlayers": ["Prasidh Krishna", "Kagiso Rabada"]
+    },
+    {
+      "title": "🏏 Scored a Century in an IPL Final",
+      "validPlayers": ["Wriddhiman Saha"]
+    },
+    {
+      "title": "📜 Played for Both PBKS and GT in IPL",
+      "validPlayers": ["Ravichandran Ashwin", "Kagiso Rabada", "Mohammed Shami"]
+    },
+    {
+      "title": "🎳 IPL All-Time Top Wicket taker",
+      "validPlayers": ["Yuzvendra Chahal"]
+    },
+    {
+      "title": "🔴 PBKS leading non-retired run scorer (in PBKS jersey)",
+      "validPlayers": [ "David Miller"]
+    },
+    {
+      "title": "💰 Bought/Retained for ₹18 Crore+ at IPL 2025 Mega Auction",
+      "validPlayers": ["Shreyas Iyer", "Yuzvendra Chahal", "Arshdeep Singh"]
+    },
+    {
+      "title": "🌍 South African Players in This Match",
+      "validPlayers": ["Marco Jansen", "Kagiso Rabada"]
+    },
+    {
+      "title": "🏆 PBKS 2025 Runners-Up — Core Playing XI",
+      "validPlayers": ["Shreyas Iyer", "Prabhsimran Singh", "Priyansh Arya", "Shashank Singh", "Nehal Wadhera", "Arshdeep Singh", "Yuzvendra Chahal"]
+    },
+    {
+      "title": "🧤 Players Who Played for PBKS and Were PBKS WK",
+      "validPlayers": ["Adam Gilchrist", "Wriddhiman Saha", "Prabhsimran Singh"]
+    },
+    {
+      "title": "🌟 GT Player with 500+ Runs in IPL 2025",
+      "validPlayers": ["Sai Sudharsan", "Shubman Gill", "Jos Buttler"]
+    },
+    {
+      "title": "🏅 Played IPL Before GT Existed (Pre-2022) AND Now in GT 2026 Squad",
+      "validPlayers": ["Rashid Khan", "David Miller", "Rahul Tewatia", "Prasidh Krishna", "Wriddhiman Saha", "Mohammed Siraj", "Jos Buttler", "Washington Sundar"]
+    }
+  ]
+}
 }

@@ -113,24 +113,29 @@
       "short": "CSK",
       "emoji": "🟡",
       "players": ["Ruturaj Gaikwad","Sanju Samson","Ayush Mhatre","Shivam Dube","Urvil Patel","Anyone else"]
-    }
+    },
+  "result": {
+    "winner": "Rajasthan Royals",
+    "topScorer": "Vaibhav Suryavanshi",
+    "totalRuns": 255
+  }
   },
   "2026-03-31": {
     "timeLabel": "7:30 PM IST lock",
     "lockTime": "19:30",
     "venue": "New Chandigarh",
-    "runsTarget": 352,
+    "runsTarget": 380,
     "team1": {
       "name": "Punjab Kings",
       "short": "PBKS",
       "emoji": "🔴",
-      "players": []
+      "players": ["Priyansh Arya","Prabhsimran Singh","Shreyas Iyer","Nehal Wadhera"]
     },
     "team2": {
       "name": "Gujarat Titans",
       "short": "GT",
       "emoji": "🟦",
-      "players": []
+      "players": ["Shubhman Gill","Sai Sudarshan","Jos Buttler","Anyone else"]
     }
   },
   "2026-04-01": {
