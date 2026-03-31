@@ -1102,7 +1102,7 @@
       },
       {
         "title": "🎳 Bowlers with 100+ IPL Wickets",
-        "validPlayers": ["Mohammed Shami", "Avesh Khan", "Kuldeep Yadav", "T. Natarajan", "Mitchell Starc"]
+        "validPlayers": ["Mohammed Shami", "Kuldeep Yadav", "Mitchell Starc","Axar Patel"]
       },
       {
         "title": "🏏 Batters with 3000+ IPL Runs",
@@ -1110,7 +1110,7 @@
       },
       {
         "title": "🌟 Played for Both LSG and DC",
-        "validPlayers": ["Kuldeep Yadav", "Axar Patel"]
+        "validPlayers": ["Kuldeep Yadav", "Avesh Khan"]
       },
       {
         "title": "💥 Wicketkeepers in This Match",
@@ -1130,7 +1130,7 @@
       },
       {
         "title": "⭐ Players Who Have Won Orange Cap (All-Time)",
-        "validPlayers": ["David Warner", "KL Rahul", "Rishabh Pant"]
+        "validPlayers": ["David Warner", "KL Rahul"]
       }
     ]
   },
