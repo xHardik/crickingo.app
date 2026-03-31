@@ -524,5 +524,244 @@
       {"name": "Vijay Shankar", "stat": "IPL Wickets", "value": 34, "image": "🔵"},
       {"name": "Darshan Nalkande", "stat": "IPL Wickets", "value": 28, "image": "🔵"}
     ]
+  },
+
+  "day-2026-04-01": {
+    "date": "2026-04-01",
+    "theme": "🟡🔵 LSG vs DC - IPL Runs",
+    "matchup": "Lucknow Super Giants vs Delhi Capitals",
+    "players": [
+      {"name": "Rishabh Pant", "stat": "IPL Runs", "value": 3284, "image": "🟡"},
+      {"name": "KL Rahul", "stat": "IPL Runs", "value": 5243, "image": "🟡"},
+      {"name": "Nicholas Pooran", "stat": "IPL Runs", "value": 1621, "image": "🟡"},
+      {"name": "Aiden Markram", "stat": "IPL Runs", "value": 1488, "image": "🟡"},
+      {"name": "Ayush Badoni", "stat": "IPL Runs", "value": 712, "image": "🟡"},
+      {"name": "Axar Patel", "stat": "IPL Runs", "value": 1743, "image": "🔵"},
+      {"name": "David Warner", "stat": "IPL Runs", "value": 6565, "image": "🔵"},
+      {"name": "Shreyas Iyer", "stat": "IPL Runs", "value": 3931, "image": "🔵"},
+      {"name": "Ben Duckett", "stat": "IPL Runs", "value": 312, "image": "🔵"},
+      {"name": "Prithvi Shaw", "stat": "IPL Runs", "value": 1243, "image": "🔵"}
+    ]
+  },
+  "day-2026-04-02": {
+    "date": "2026-04-02",
+    "theme": "🟣🟠 KKR vs SRH - IPL Wickets",
+    "matchup": "Kolkata Knight Riders vs Sunrisers Hyderabad",
+    "players": [
+      {"name": "Sunil Narine", "stat": "IPL Wickets", "value": 181, "image": "🟣"},
+      {"name": "Varun Chakravarthy", "stat": "IPL Wickets", "value": 91, "image": "🟣"},
+      {"name": "Harshit Rana", "stat": "IPL Wickets", "value": 43, "image": "🟣"},
+      {"name": "Matheesha Pathirana", "stat": "IPL Wickets", "value": 28, "image": "🟣"},
+      {"name": "Andre Russell", "stat": "IPL Wickets", "value": 101, "image": "🟣"},
+      {"name": "Pat Cummins", "stat": "IPL Wickets", "value": 67, "image": "🟠"},
+      {"name": "Bhuvneshwar Kumar", "stat": "IPL Wickets", "value": 181, "image": "🟠"},
+      {"name": "T Natarajan", "stat": "IPL Wickets", "value": 97, "image": "🟠"},
+      {"name": "Harshal Patel", "stat": "IPL Wickets", "value": 178, "image": "🟠"},
+      {"name": "Liam Livingstone", "stat": "IPL Wickets", "value": 29, "image": "🟠"}
+    ]
+  },
+  "day-2026-04-03": {
+    "date": "2026-04-03",
+    "theme": "🟡🔴 CSK vs PBKS - IPL Runs",
+    "matchup": "Chennai Super Kings vs Punjab Kings",
+    "players": [
+      {"name": "Ruturaj Gaikwad", "stat": "IPL Runs", "value": 3124, "image": "🟡"},
+      {"name": "MS Dhoni", "stat": "IPL Runs", "value": 5243, "image": "🟡"},
+      {"name": "Shivam Dube", "stat": "IPL Runs", "value": 1231, "image": "🟡"},
+      {"name": "Sanju Samson", "stat": "IPL Runs", "value": 4893, "image": "🟡"},
+      {"name": "Dewald Brevis", "stat": "IPL Runs", "value": 489, "image": "🟡"},
+      {"name": "Shreyas Iyer", "stat": "IPL Runs", "value": 3931, "image": "🔴"},
+      {"name": "Prabhsimran Singh", "stat": "IPL Runs", "value": 1243, "image": "🔴"},
+      {"name": "Priyansh Arya", "stat": "IPL Runs", "value": 631, "image": "🔴"},
+      {"name": "Shashank Singh", "stat": "IPL Runs", "value": 843, "image": "🔴"},
+      {"name": "Nehal Wadhera", "stat": "IPL Runs", "value": 712, "image": "🔴"}
+    ]
+  },
+  "day-2026-04-04": {
+    "date": "2026-04-04",
+    "theme": "🔵🔵 DC vs MI + GT vs RR - IPL Sixes",
+    "matchup": "Delhi Capitals vs Mumbai Indians / Gujarat Titans vs Rajasthan Royals",
+    "players": [
+      {"name": "Rohit Sharma", "stat": "IPL Sixes", "value": 264, "image": "🔵"},
+      {"name": "Hardik Pandya", "stat": "IPL Sixes", "value": 133, "image": "🔵"},
+      {"name": "Tilak Varma", "stat": "IPL Sixes", "value": 98, "image": "🔵"},
+      {"name": "Axar Patel", "stat": "IPL Sixes", "value": 72, "image": "🔵"},
+      {"name": "Tristan Stubbs", "stat": "IPL Sixes", "value": 61, "image": "🔵"},
+      {"name": "Shubman Gill", "stat": "IPL Sixes", "value": 108, "image": "🔵"},
+      {"name": "Jos Buttler", "stat": "IPL Sixes", "value": 143, "image": "🔵"},
+      {"name": "Sai Sudharsan", "stat": "IPL Sixes", "value": 52, "image": "🔵"},
+      {"name": "Riyan Parag", "stat": "IPL Sixes", "value": 76, "image": "🩷"},
+      {"name": "Yashasvi Jaiswal", "stat": "IPL Sixes", "value": 89, "image": "🩷"}
+    ]
+  },
+  "day-2026-04-05": {
+    "date": "2026-04-05",
+    "theme": "🔴🟡 RCB vs CSK + SRH vs LSG - IPL Wickets",
+    "matchup": "Royal Challengers Bengaluru vs CSK / Sunrisers Hyderabad vs LSG",
+    "players": [
+      {"name": "Josh Hazlewood", "stat": "IPL Wickets", "value": 56, "image": "🔴"},
+      {"name": "Mohammed Siraj", "stat": "IPL Wickets", "value": 102, "image": "🔴"},
+      {"name": "Krunal Pandya", "stat": "IPL Wickets", "value": 89, "image": "🔴"},
+      {"name": "Yash Dayal", "stat": "IPL Wickets", "value": 49, "image": "🔴"},
+      {"name": "Romario Shepherd", "stat": "IPL Wickets", "value": 31, "image": "🔴"},
+      {"name": "Khaleel Ahmed", "stat": "IPL Wickets", "value": 78, "image": "🟡"},
+      {"name": "Noor Ahmad", "stat": "IPL Wickets", "value": 33, "image": "🟡"},
+      {"name": "Bhuvneshwar Kumar", "stat": "IPL Wickets", "value": 181, "image": "🟠"},
+      {"name": "Mohammed Shami", "stat": "IPL Wickets", "value": 95, "image": "🟡"},
+      {"name": "Avesh Khan", "stat": "IPL Wickets", "value": 92, "image": "🟡"}
+    ]
+  },
+  "day-2026-04-06": {
+    "date": "2026-04-06",
+    "theme": "🟣🔴 KKR vs PBKS - IPL Runs",
+    "matchup": "Kolkata Knight Riders vs Punjab Kings",
+    "players": [
+      {"name": "Sunil Narine", "stat": "IPL Runs", "value": 2843, "image": "🟣"},
+      {"name": "Rinku Singh", "stat": "IPL Runs", "value": 1243, "image": "🟣"},
+      {"name": "Angkrish Raghuvanshi", "stat": "IPL Runs", "value": 543, "image": "🟣"},
+      {"name": "Cameron Green", "stat": "IPL Runs", "value": 201, "image": "🟣"},
+      {"name": "Ajinkya Rahane", "stat": "IPL Runs", "value": 4492, "image": "🟣"},
+      {"name": "Shreyas Iyer", "stat": "IPL Runs", "value": 3931, "image": "🔴"},
+      {"name": "Arshdeep Singh", "stat": "IPL Runs", "value": 243, "image": "🔴"},
+      {"name": "Prabhsimran Singh", "stat": "IPL Runs", "value": 1243, "image": "🔴"},
+      {"name": "Marcus Stoinis", "stat": "IPL Runs", "value": 1532, "image": "🔴"},
+      {"name": "Harpreet Brar", "stat": "IPL Runs", "value": 312, "image": "🔴"}
+    ]
+  },
+  "day-2026-04-07": {
+    "date": "2026-04-07",
+    "theme": "🩷🔵 RR vs MI - IPL Wickets",
+    "matchup": "Rajasthan Royals vs Mumbai Indians",
+    "players": [
+      {"name": "Yuzvendra Chahal", "stat": "IPL Wickets", "value": 205, "image": "🩷"},
+      {"name": "Riyan Parag", "stat": "IPL Wickets", "value": 23, "image": "🩷"},
+      {"name": "Ravi Bishnoi", "stat": "IPL Wickets", "value": 82, "image": "🩷"},
+      {"name": "Sandeep Sharma", "stat": "IPL Wickets", "value": 143, "image": "🩷"},
+      {"name": "Tushar Deshpande", "stat": "IPL Wickets", "value": 67, "image": "🩷"},
+      {"name": "Jasprit Bumrah", "stat": "IPL Wickets", "value": 170, "image": "🔵"},
+      {"name": "Hardik Pandya", "stat": "IPL Wickets", "value": 54, "image": "🔵"},
+      {"name": "Trent Boult", "stat": "IPL Wickets", "value": 149, "image": "🔵"},
+      {"name": "Piyush Chawla", "stat": "IPL Wickets", "value": 177, "image": "🔵"},
+      {"name": "Karn Sharma", "stat": "IPL Wickets", "value": 71, "image": "🔵"}
+    ]
+  },
+  "day-2026-04-08": {
+    "date": "2026-04-08",
+    "theme": "🔵🔵 DC vs GT - IPL Runs",
+    "matchup": "Delhi Capitals vs Gujarat Titans",
+    "players": [
+      {"name": "Axar Patel", "stat": "IPL Runs", "value": 1743, "image": "🔵"},
+      {"name": "Faf du Plessis", "stat": "IPL Runs", "value": 4311, "image": "🔵"},
+      {"name": "Ben Duckett", "stat": "IPL Runs", "value": 312, "image": "🔵"},
+      {"name": "David Miller", "stat": "IPL Runs", "value": 3878, "image": "🔵"},
+      {"name": "Tristan Stubbs", "stat": "IPL Runs", "value": 843, "image": "🔵"},
+      {"name": "Shubman Gill", "stat": "IPL Runs", "value": 3843, "image": "🔵"},
+      {"name": "Jos Buttler", "stat": "IPL Runs", "value": 4143, "image": "🔵"},
+      {"name": "Sai Sudharsan", "stat": "IPL Runs", "value": 1243, "image": "🔵"},
+      {"name": "Shahrukh Khan", "stat": "IPL Runs", "value": 712, "image": "🔵"},
+      {"name": "Wriddhiman Saha", "stat": "IPL Runs", "value": 2987, "image": "🔵"}
+    ]
+  },
+  "day-2026-04-09": {
+    "date": "2026-04-09",
+    "theme": "🟣🟡 KKR vs LSG - IPL Sixes",
+    "matchup": "Kolkata Knight Riders vs Lucknow Super Giants",
+    "players": [
+      {"name": "Andre Russell", "stat": "IPL Sixes", "value": 243, "image": "🟣"},
+      {"name": "Sunil Narine", "stat": "IPL Sixes", "value": 112, "image": "🟣"},
+      {"name": "Rinku Singh", "stat": "IPL Sixes", "value": 76, "image": "🟣"},
+      {"name": "Cameron Green", "stat": "IPL Sixes", "value": 21, "image": "🟣"},
+      {"name": "Ajinkya Rahane", "stat": "IPL Sixes", "value": 68, "image": "🟣"},
+      {"name": "Nicholas Pooran", "stat": "IPL Sixes", "value": 138, "image": "🟡"},
+      {"name": "KL Rahul", "stat": "IPL Sixes", "value": 132, "image": "🟡"},
+      {"name": "Rishabh Pant", "stat": "IPL Sixes", "value": 89, "image": "🟡"},
+      {"name": "Mitchell Marsh", "stat": "IPL Sixes", "value": 54, "image": "🟡"},
+      {"name": "Abdul Samad", "stat": "IPL Sixes", "value": 63, "image": "🟡"}
+    ]
+  },
+  "day-2026-04-10": {
+    "date": "2026-04-10",
+    "theme": "🔴🩷 RCB vs RR - IPL Runs",
+    "matchup": "Royal Challengers Bengaluru vs Rajasthan Royals",
+    "players": [
+      {"name": "Virat Kohli", "stat": "IPL Runs", "value": 8004, "image": "🔴"},
+      {"name": "Devdutt Padikkal", "stat": "IPL Runs", "value": 1843, "image": "🔴"},
+      {"name": "Phil Salt", "stat": "IPL Runs", "value": 743, "image": "🔴"},
+      {"name": "Rajat Patidar", "stat": "IPL Runs", "value": 1543, "image": "🔴"},
+      {"name": "Tim David", "stat": "IPL Runs", "value": 843, "image": "🔴"},
+      {"name": "Sanju Samson", "stat": "IPL Runs", "value": 4893, "image": "🩷"},
+      {"name": "Yashasvi Jaiswal", "stat": "IPL Runs", "value": 2843, "image": "🩷"},
+      {"name": "Riyan Parag", "stat": "IPL Runs", "value": 1843, "image": "🩷"},
+      {"name": "Jos Buttler", "stat": "IPL Runs", "value": 4143, "image": "🩷"},
+      {"name": "Shimron Hetmyer", "stat": "IPL Runs", "value": 1543, "image": "🩷"}
+    ]
+  },
+  "day-2026-04-11": {
+    "date": "2026-04-11",
+    "theme": "🟠🔴 SRH vs PBKS + CSK vs DC - IPL Wickets",
+    "matchup": "Sunrisers Hyderabad vs Punjab Kings / Chennai Super Kings vs Delhi Capitals",
+    "players": [
+      {"name": "Bhuvneshwar Kumar", "stat": "IPL Wickets", "value": 181, "image": "🟠"},
+      {"name": "Pat Cummins", "stat": "IPL Wickets", "value": 67, "image": "🟠"},
+      {"name": "T Natarajan", "stat": "IPL Wickets", "value": 97, "image": "🟠"},
+      {"name": "Harshal Patel", "stat": "IPL Wickets", "value": 178, "image": "🟠"},
+      {"name": "Liam Livingstone", "stat": "IPL Wickets", "value": 29, "image": "🟠"},
+      {"name": "Arshdeep Singh", "stat": "IPL Wickets", "value": 98, "image": "🔴"},
+      {"name": "Kagiso Rabada", "stat": "IPL Wickets", "value": 131, "image": "🔴"},
+      {"name": "Khaleel Ahmed", "stat": "IPL Wickets", "value": 78, "image": "🟡"},
+      {"name": "Axar Patel", "stat": "IPL Wickets", "value": 73, "image": "🔵"},
+      {"name": "Kuldeep Yadav", "stat": "IPL Wickets", "value": 92, "image": "🔵"}
+    ]
+  },
+  "day-2026-04-12": {
+    "date": "2026-04-12",
+    "theme": "🔵🔴 MI vs RCB - IPL Runs",
+    "matchup": "Mumbai Indians vs Royal Challengers Bengaluru",
+    "players": [
+      {"name": "Rohit Sharma", "stat": "IPL Runs", "value": 6628, "image": "🔵"},
+      {"name": "Hardik Pandya", "stat": "IPL Runs", "value": 2243, "image": "🔵"},
+      {"name": "Suryakumar Yadav", "stat": "IPL Runs", "value": 3243, "image": "🔵"},
+      {"name": "Tilak Varma", "stat": "IPL Runs", "value": 1343, "image": "🔵"},
+      {"name": "Ryan Rickelton", "stat": "IPL Runs", "value": 81, "image": "🔵"},
+      {"name": "Virat Kohli", "stat": "IPL Runs", "value": 8004, "image": "🔴"},
+      {"name": "Rajat Patidar", "stat": "IPL Runs", "value": 1543, "image": "🔴"},
+      {"name": "Devdutt Padikkal", "stat": "IPL Runs", "value": 1843, "image": "🔴"},
+      {"name": "Phil Salt", "stat": "IPL Runs", "value": 743, "image": "🔴"},
+      {"name": "Krunal Pandya", "stat": "IPL Runs", "value": 843, "image": "🔴"}
+    ]
+  },
+  "day-2026-04-13": {
+    "date": "2026-04-13",
+    "theme": "🟠🩷 SRH vs RR - IPL Wickets",
+    "matchup": "Sunrisers Hyderabad vs Rajasthan Royals",
+    "players": [
+      {"name": "Bhuvneshwar Kumar", "stat": "IPL Wickets", "value": 181, "image": "🟠"},
+      {"name": "Pat Cummins", "stat": "IPL Wickets", "value": 67, "image": "🟠"},
+      {"name": "T Natarajan", "stat": "IPL Wickets", "value": 97, "image": "🟠"},
+      {"name": "Jaydev Unadkat", "stat": "IPL Wickets", "value": 122, "image": "🟠"},
+      {"name": "Adam Zampa", "stat": "IPL Wickets", "value": 38, "image": "🟠"},
+      {"name": "Yuzvendra Chahal", "stat": "IPL Wickets", "value": 205, "image": "🩷"},
+      {"name": "Ravi Bishnoi", "stat": "IPL Wickets", "value": 82, "image": "🩷"},
+      {"name": "Sandeep Sharma", "stat": "IPL Wickets", "value": 143, "image": "🩷"},
+      {"name": "Trent Boult", "stat": "IPL Wickets", "value": 149, "image": "🩷"},
+      {"name": "Vaibhav Suryavanshi", "stat": "IPL Wickets", "value": 0, "image": "🩷"}
+    ]
+  },
+  "day-2026-04-14": {
+    "date": "2026-04-14",
+    "theme": "🟡🟣 CSK vs KKR - IPL Sixes",
+    "matchup": "Chennai Super Kings vs Kolkata Knight Riders",
+    "players": [
+      {"name": "MS Dhoni", "stat": "IPL Sixes", "value": 234, "image": "🟡"},
+      {"name": "Ruturaj Gaikwad", "stat": "IPL Sixes", "value": 78, "image": "🟡"},
+      {"name": "Shivam Dube", "stat": "IPL Sixes", "value": 89, "image": "🟡"},
+      {"name": "Sanju Samson", "stat": "IPL Sixes", "value": 121, "image": "🟡"},
+      {"name": "Dewald Brevis", "stat": "IPL Sixes", "value": 43, "image": "🟡"},
+      {"name": "Andre Russell", "stat": "IPL Sixes", "value": 243, "image": "🟣"},
+      {"name": "Sunil Narine", "stat": "IPL Sixes", "value": 112, "image": "🟣"},
+      {"name": "Rinku Singh", "stat": "IPL Sixes", "value": 76, "image": "🟣"},
+      {"name": "Cameron Green", "stat": "IPL Sixes", "value": 21, "image": "🟣"},
+      {"name": "Ajinkya Rahane", "stat": "IPL Sixes", "value": 68, "image": "🟣"}
+    ]
   }
 }

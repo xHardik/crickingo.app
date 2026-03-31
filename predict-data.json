@@ -24,30 +24,38 @@
     }
   },
   "2026-03-27": {
-  "timeLabel": "7:30 PM IST lock",
-  "lockTime": "19:30",
-  "venue": "M. Chinnaswamy Stadium, Bengaluru",
-  "runsTarget": 349,
-  "team1": {
-    "name": "Royal Challengers Bengaluru",
-    "short": "RCB",
-    "emoji": "🔴",
-    "players": ["Virat Kohli", "Rajat Patidar", "Phil Salt"]
+    "timeLabel": "7:30 PM IST lock",
+    "lockTime": "19:30",
+    "venue": "M. Chinnaswamy Stadium, Bengaluru",
+    "runsTarget": 349,
+    "team1": {
+      "name": "Royal Challengers Bengaluru",
+      "short": "RCB",
+      "emoji": "🔴",
+      "players": [
+        "Virat Kohli",
+        "Rajat Patidar",
+        "Phil Salt"
+      ]
+    },
+    "team2": {
+      "name": "Sunrisers Hyderabad",
+      "short": "SRH",
+      "emoji": "🟠",
+      "players": [
+        "Abhishek Sharma",
+        "Travis Head",
+        "Heinrich Klaasen",
+        "Ishaan Kishan",
+        "Anyone else"
+      ]
+    },
+    "result": {
+      "winner": "Royal Challengers Bengaluru",
+      "topScorer": "Virat Kohli",
+      "totalRuns": 372
+    }
   },
-  "team2": {
-    "name": "Sunrisers Hyderabad",
-    "short": "SRH",
-    "emoji": "🟠",
-    "players": ["Abhishek Sharma", "Travis Head", "Heinrich Klaasen" , "Ishaan Kishan" , "Anyone else"]
-  },
-  
-  "result": {
-    "winner": "Royal Challengers Bengaluru",
-    "topScorer": "Virat Kohli",
-    "totalRuns": 372
-  }
-},
-
   "2026-03-28": {
     "timeLabel": "7:30 PM IST lock",
     "lockTime": "19:30",
@@ -57,21 +65,32 @@
       "name": "Royal Challengers Bengaluru",
       "short": "RCB",
       "emoji": "🔴",
-      "players": ["Virat Kohli", "Rajat Patidar", "Phil Salt", "Jacob Bethel", "Jiesh Sharma" , "Anyone else"]
+      "players": [
+        "Virat Kohli",
+        "Rajat Patidar",
+        "Phil Salt",
+        "Jacob Bethel",
+        "Jiesh Sharma",
+        "Anyone else"
+      ]
     },
     "team2": {
       "name": "Sunrisers Hyderabad",
       "short": "SRH",
       "emoji": "🟠",
-          "players": ["Abhishek Sharma", "Travis Head", "Heinrich Klaasen" , "Ishaan Kishan" , "Anyone else"]
-
+      "players": [
+        "Abhishek Sharma",
+        "Travis Head",
+        "Heinrich Klaasen",
+        "Ishaan Kishan",
+        "Anyone else"
+      ]
     },
-    
-  "result": {
-    "winner": "Royal Challengers Bengaluru",
-    "topScorer": "Ishan Kishan",
-    "totalRuns": 404
-  }
+    "result": {
+      "winner": "Royal Challengers Bengaluru",
+      "topScorer": "Ishan Kishan",
+      "totalRuns": 404
+    }
   },
   "2026-03-29": {
     "timeLabel": "7:30 PM IST lock",
@@ -82,21 +101,30 @@
       "name": "Mumbai Indians",
       "short": "MI",
       "emoji": "🔵",
-      "players": ["Rohit Sharma","Tilak Varma","Suryakumar Yadav","Anyone else"]
+      "players": [
+        "Rohit Sharma",
+        "Tilak Varma",
+        "Suryakumar Yadav",
+        "Anyone else"
+      ]
     },
     "team2": {
       "name": "Kolkata Knight Riders",
       "short": "KKR",
       "emoji": "🟣",
-      "players": ["Ajinkya Rahane","Angkrish Raghuvanshi","Finn Allen","Anyone else"]
+      "players": [
+        "Ajinkya Rahane",
+        "Angkrish Raghuvanshi",
+        "Finn Allen",
+        "Anyone else"
+      ]
     },
-        
-  "result": {
-    "winner": "Mumbai Indians",
-    "topScorer": "Anyone Else",
-    "totalRuns": 444
-  }
-},
+    "result": {
+      "winner": "Mumbai Indians",
+      "topScorer": "Anyone Else",
+      "totalRuns": 444
+    }
+  },
   "2026-03-30": {
     "timeLabel": "7:30 PM IST lock",
     "lockTime": "19:30",
@@ -106,19 +134,31 @@
       "name": "Rajasthan Royals",
       "short": "RR",
       "emoji": "🩷",
-      "players": ["Vaibhav Suryavanshi","Yashasvi Jaiswal","Riyan Parag","Shimron Hetmyer"]
+      "players": [
+        "Vaibhav Suryavanshi",
+        "Yashasvi Jaiswal",
+        "Riyan Parag",
+        "Shimron Hetmyer"
+      ]
     },
     "team2": {
       "name": "Chennai Super Kings",
       "short": "CSK",
       "emoji": "🟡",
-      "players": ["Ruturaj Gaikwad","Sanju Samson","Ayush Mhatre","Shivam Dube","Urvil Patel","Anyone else"]
+      "players": [
+        "Ruturaj Gaikwad",
+        "Sanju Samson",
+        "Ayush Mhatre",
+        "Shivam Dube",
+        "Urvil Patel",
+        "Anyone else"
+      ]
     },
-  "result": {
-    "winner": "Rajasthan Royals",
-    "topScorer": "Vaibhav Suryavanshi",
-    "totalRuns": 255
-  }
+    "result": {
+      "winner": "Rajasthan Royals",
+      "topScorer": "Vaibhav Suryavanshi",
+      "totalRuns": 255
+    }
   },
   "2026-03-31": {
     "timeLabel": "7:30 PM IST lock",
@@ -129,301 +169,572 @@
       "name": "Punjab Kings",
       "short": "PBKS",
       "emoji": "🔴",
-      "players": ["Priyansh Arya","Prabhsimran Singh","Shreyas Iyer","Nehal Wadhera"]
+      "players": [
+        "Priyansh Arya",
+        "Prabhsimran Singh",
+        "Shreyas Iyer",
+        "Nehal Wadhera"
+      ]
     },
     "team2": {
       "name": "Gujarat Titans",
       "short": "GT",
       "emoji": "🟦",
-      "players": ["Shubhman Gill","Sai Sudarshan","Jos Buttler","Anyone else"]
+      "players": [
+        "Shubhman Gill",
+        "Sai Sudarshan",
+        "Jos Buttler",
+        "Anyone else"
+      ]
+    },
+    
+    "result": {
+      "winner": "Punjab Kings",
+      "topScorer": "Anyone Else",
+      "totalRuns": 327
     }
   },
   "2026-04-01": {
     "timeLabel": "7:30 PM IST lock",
     "lockTime": "19:30",
-    "venue": "Lucknow",
+    "venue": "Bharat Ratna Shri Atal Bihari Vajpayee Ekana Cricket Stadium, Lucknow",
     "runsTarget": 341,
     "team1": {
       "name": "Lucknow Super Giants",
       "short": "LSG",
-      "emoji": "🔷",
-      "players": []
+      "emoji": "🟦",
+      "players": [
+        "Rishabh Pant",
+        "Nicholas Pooran",
+        "Aiden Markram",
+        "Mitchell Marsh",
+        "Ayush Badoni",
+        "Abdul Samad"
+      ]
     },
     "team2": {
       "name": "Delhi Capitals",
       "short": "DC",
       "emoji": "🔵",
-      "players": []
+      "players": [
+        "KL Rahul",
+        "Tristan Stubbs",
+        "Axar Patel",
+        "Ashutosh Sharma",
+        "Anyone Else"
+      ]
     }
   },
   "2026-04-02": {
     "timeLabel": "7:30 PM IST lock",
     "lockTime": "19:30",
-    "venue": "Kolkata",
+    "venue": "Eden Gardens, Kolkata",
     "runsTarget": 344,
     "team1": {
       "name": "Kolkata Knight Riders",
       "short": "KKR",
-      "emoji": "🟣",
-      "players": []
+      "emoji": "??",
+      "players": [
+        "Ajinkya Rahane",
+        "Sunil Narine",
+        "Rinku Singh",
+        "Cameron Green",
+        "Varun Chakravarthy",
+        "Harshit Rana"
+      ]
     },
     "team2": {
       "name": "Sunrisers Hyderabad",
       "short": "SRH",
-      "emoji": "🟠",
-      "players": []
+      "emoji": "??",
+      "players": [
+        "Travis Head",
+        "Ishan Kishan",
+        "Heinrich Klaasen",
+        "Abhishek Sharma",
+        "Nitish Kumar Reddy",
+        "Pat Cummins"
+      ]
     }
   },
   "2026-04-03": {
     "timeLabel": "7:30 PM IST lock",
     "lockTime": "19:30",
-    "venue": "Chennai",
+    "venue": "MA Chidambaram Stadium, Chennai",
     "runsTarget": 343,
     "team1": {
       "name": "Chennai Super Kings",
       "short": "CSK",
-      "emoji": "🟡",
-      "players": []
+      "emoji": "??",
+      "players": [
+        "Ruturaj Gaikwad",
+        "Dewald Brevis",
+        "MS Dhoni",
+        "Sanju Samson",
+        "Shivam Dube",
+        "Noor Ahmad"
+      ]
     },
     "team2": {
       "name": "Punjab Kings",
       "short": "PBKS",
-      "emoji": "🔴",
-      "players": []
+      "emoji": "??",
+      "players": [
+        "Shreyas Iyer",
+        "Priyansh Arya",
+        "Prabhsimran Singh",
+        "Nehal Wadhera",
+        "Shashank Singh",
+        "Marcus Stoinis"
+      ]
     }
   },
   "2026-04-04-A": {
     "timeLabel": "3:30 PM IST lock",
     "lockTime": "15:30",
-    "venue": "Delhi",
+    "venue": "Arun Jaitley Stadium, Delhi",
     "runsTarget": 335,
     "team1": {
       "name": "Delhi Capitals",
       "short": "DC",
-      "emoji": "🔵",
-      "players": []
+      "emoji": "??",
+      "players": [
+        "KL Rahul",
+        "Tristan Stubbs",
+        "Axar Patel",
+        "Ashutosh Sharma",
+        "Kuldeep Yadav",
+        "Mitchell Starc"
+      ]
     },
     "team2": {
       "name": "Mumbai Indians",
       "short": "MI",
-      "emoji": "🔵",
-      "players": []
+      "emoji": "??",
+      "players": [
+        "Rohit Sharma",
+        "Ryan Rickelton",
+        "Quinton de Kock",
+        "Suryakumar Yadav",
+        "Tilak Varma",
+        "Hardik Pandya"
+      ]
     }
   },
   "2026-04-04-B": {
     "timeLabel": "7:30 PM IST lock",
     "lockTime": "19:30",
-    "venue": "Ahmedabad",
+    "venue": "Narendra Modi Stadium, Ahmedabad",
     "runsTarget": 347,
     "team1": {
       "name": "Gujarat Titans",
       "short": "GT",
-      "emoji": "🟦",
-      "players": []
+      "emoji": "??",
+      "players": [
+        "Shubman Gill",
+        "Sai Sudharsan",
+        "Jos Buttler",
+        "Glenn Phillips",
+        "Rashid Khan",
+        "Washington Sundar"
+      ]
     },
     "team2": {
       "name": "Rajasthan Royals",
       "short": "RR",
-      "emoji": "🩷",
-      "players": []
+      "emoji": "??",
+      "players": [
+        "Yashasvi Jaiswal",
+        "Riyan Parag",
+        "Dhruv Jurel",
+        "Shimron Hetmyer",
+        "Sam Curran",
+        "Ravindra Jadeja"
+      ]
     }
   },
   "2026-04-05-A": {
     "timeLabel": "3:30 PM IST lock",
     "lockTime": "15:30",
-    "venue": "Hyderabad",
+    "venue": "Rajiv Gandhi International Stadium, Hyderabad",
     "runsTarget": 346,
     "team1": {
       "name": "Sunrisers Hyderabad",
       "short": "SRH",
-      "emoji": "🟠",
-      "players": []
+      "emoji": "??",
+      "players": [
+        "Travis Head",
+        "Ishan Kishan",
+        "Heinrich Klaasen",
+        "Abhishek Sharma",
+        "Nitish Kumar Reddy",
+        "Pat Cummins"
+      ]
     },
     "team2": {
       "name": "Lucknow Super Giants",
       "short": "LSG",
-      "emoji": "🔷",
-      "players": []
+      "emoji": "??",
+      "players": [
+        "Rishabh Pant",
+        "Nicholas Pooran",
+        "Aiden Markram",
+        "Mitchell Marsh",
+        "Ayush Badoni",
+        "Abdul Samad"
+      ]
     }
   },
   "2026-04-05-B": {
     "timeLabel": "7:30 PM IST lock",
     "lockTime": "19:30",
-    "venue": "Bengaluru",
+    "venue": "M. Chinnaswamy Stadium, Bengaluru",
     "runsTarget": 358,
     "team1": {
       "name": "Royal Challengers Bengaluru",
       "short": "RCB",
-      "emoji": "🔴",
-      "players": []
+      "emoji": "??",
+      "players": [
+        "Virat Kohli",
+        "Phil Salt",
+        "Rajat Patidar",
+        "Jitesh Sharma",
+        "Tim David",
+        "Jacob Bethell"
+      ]
     },
     "team2": {
       "name": "Chennai Super Kings",
       "short": "CSK",
-      "emoji": "🟡",
-      "players": []
+      "emoji": "??",
+      "players": [
+        "Ruturaj Gaikwad",
+        "Dewald Brevis",
+        "MS Dhoni",
+        "Sanju Samson",
+        "Shivam Dube",
+        "Noor Ahmad"
+      ]
     }
   },
   "2026-04-06": {
     "timeLabel": "7:30 PM IST lock",
     "lockTime": "19:30",
-    "venue": "Kolkata",
+    "venue": "Eden Gardens, Kolkata",
     "runsTarget": 341,
     "team1": {
       "name": "Kolkata Knight Riders",
       "short": "KKR",
-      "emoji": "🟣",
-      "players": []
+      "emoji": "??",
+      "players": [
+        "Ajinkya Rahane",
+        "Sunil Narine",
+        "Rinku Singh",
+        "Cameron Green",
+        "Varun Chakravarthy",
+        "Harshit Rana"
+      ]
     },
     "team2": {
       "name": "Punjab Kings",
       "short": "PBKS",
-      "emoji": "🔴",
-      "players": []
+      "emoji": "??",
+      "players": [
+        "Shreyas Iyer",
+        "Priyansh Arya",
+        "Prabhsimran Singh",
+        "Nehal Wadhera",
+        "Shashank Singh",
+        "Marcus Stoinis"
+      ]
     }
   },
   "2026-04-07": {
     "timeLabel": "7:30 PM IST lock",
     "lockTime": "19:30",
-    "venue": "Guwahati",
+    "venue": "Barsapara Cricket Stadium, Guwahati",
     "runsTarget": 339,
     "team1": {
       "name": "Rajasthan Royals",
       "short": "RR",
-      "emoji": "🩷",
-      "players": []
+      "emoji": "??",
+      "players": [
+        "Yashasvi Jaiswal",
+        "Riyan Parag",
+        "Dhruv Jurel",
+        "Shimron Hetmyer",
+        "Sam Curran",
+        "Ravindra Jadeja"
+      ]
     },
     "team2": {
       "name": "Mumbai Indians",
       "short": "MI",
-      "emoji": "🔵",
-      "players": []
+      "emoji": "??",
+      "players": [
+        "Rohit Sharma",
+        "Ryan Rickelton",
+        "Quinton de Kock",
+        "Suryakumar Yadav",
+        "Tilak Varma",
+        "Hardik Pandya"
+      ]
     }
   },
   "2026-04-08": {
     "timeLabel": "7:30 PM IST lock",
     "lockTime": "19:30",
-    "venue": "Delhi",
+    "venue": "Arun Jaitley Stadium, Delhi",
     "runsTarget": 340,
     "team1": {
       "name": "Delhi Capitals",
       "short": "DC",
-      "emoji": "🔵",
-      "players": []
+      "emoji": "??",
+      "players": [
+        "KL Rahul",
+        "Tristan Stubbs",
+        "Axar Patel",
+        "Ashutosh Sharma",
+        "Kuldeep Yadav",
+        "Mitchell Starc"
+      ]
     },
     "team2": {
       "name": "Gujarat Titans",
       "short": "GT",
-      "emoji": "🟦",
-      "players": []
+      "emoji": "??",
+      "players": [
+        "Shubman Gill",
+        "Sai Sudharsan",
+        "Jos Buttler",
+        "Glenn Phillips",
+        "Rashid Khan",
+        "Washington Sundar"
+      ]
     }
   },
   "2026-04-09": {
     "timeLabel": "7:30 PM IST lock",
     "lockTime": "19:30",
-    "venue": "Kolkata",
+    "venue": "Eden Gardens, Kolkata",
     "runsTarget": 338,
     "team1": {
       "name": "Kolkata Knight Riders",
       "short": "KKR",
-      "emoji": "🟣",
-      "players": []
+      "emoji": "??",
+      "players": [
+        "Ajinkya Rahane",
+        "Sunil Narine",
+        "Rinku Singh",
+        "Cameron Green",
+        "Varun Chakravarthy",
+        "Harshit Rana"
+      ]
     },
     "team2": {
       "name": "Lucknow Super Giants",
       "short": "LSG",
-      "emoji": "🔷",
-      "players": []
+      "emoji": "??",
+      "players": [
+        "Rishabh Pant",
+        "Nicholas Pooran",
+        "Aiden Markram",
+        "Mitchell Marsh",
+        "Ayush Badoni",
+        "Abdul Samad"
+      ]
     }
   },
   "2026-04-10": {
     "timeLabel": "7:30 PM IST lock",
     "lockTime": "19:30",
-    "venue": "Guwahati",
+    "venue": "Barsapara Cricket Stadium, Guwahati",
     "runsTarget": 345,
     "team1": {
       "name": "Rajasthan Royals",
       "short": "RR",
-      "emoji": "🩷",
-      "players": []
+      "emoji": "??",
+      "players": [
+        "Yashasvi Jaiswal",
+        "Riyan Parag",
+        "Dhruv Jurel",
+        "Shimron Hetmyer",
+        "Sam Curran",
+        "Ravindra Jadeja"
+      ]
     },
     "team2": {
       "name": "Royal Challengers Bengaluru",
       "short": "RCB",
-      "emoji": "🔴",
-      "players": []
+      "emoji": "??",
+      "players": [
+        "Virat Kohli",
+        "Phil Salt",
+        "Rajat Patidar",
+        "Jitesh Sharma",
+        "Tim David",
+        "Jacob Bethell"
+      ]
     }
   },
   "2026-04-11-A": {
     "timeLabel": "3:30 PM IST lock",
     "lockTime": "15:30",
-    "venue": "New Chandigarh",
+    "venue": "Maharaja Yadavindra Singh International Cricket Stadium, Mullanpur, New Chandigarh",
     "runsTarget": 342,
     "team1": {
       "name": "Punjab Kings",
       "short": "PBKS",
-      "emoji": "🔴",
-      "players": []
+      "emoji": "??",
+      "players": [
+        "Shreyas Iyer",
+        "Priyansh Arya",
+        "Prabhsimran Singh",
+        "Nehal Wadhera",
+        "Shashank Singh",
+        "Marcus Stoinis"
+      ]
     },
     "team2": {
       "name": "Sunrisers Hyderabad",
       "short": "SRH",
-      "emoji": "🟠",
-      "players": []
+      "emoji": "??",
+      "players": [
+        "Travis Head",
+        "Ishan Kishan",
+        "Heinrich Klaasen",
+        "Abhishek Sharma",
+        "Nitish Kumar Reddy",
+        "Pat Cummins"
+      ]
     }
   },
   "2026-04-11-B": {
     "timeLabel": "7:30 PM IST lock",
     "lockTime": "19:30",
-    "venue": "Chennai",
+    "venue": "MA Chidambaram Stadium, Chennai",
     "runsTarget": 337,
     "team1": {
       "name": "Chennai Super Kings",
       "short": "CSK",
-      "emoji": "🟡",
-      "players": []
+      "emoji": "??",
+      "players": [
+        "Ruturaj Gaikwad",
+        "Dewald Brevis",
+        "MS Dhoni",
+        "Sanju Samson",
+        "Shivam Dube",
+        "Noor Ahmad"
+      ]
     },
     "team2": {
       "name": "Delhi Capitals",
       "short": "DC",
-      "emoji": "🔵",
-      "players": []
+      "emoji": "??",
+      "players": [
+        "KL Rahul",
+        "Tristan Stubbs",
+        "Axar Patel",
+        "Ashutosh Sharma",
+        "Kuldeep Yadav",
+        "Mitchell Starc"
+      ]
     }
   },
   "2026-04-12-A": {
     "timeLabel": "3:30 PM IST lock",
     "lockTime": "15:30",
-    "venue": "Lucknow",
+    "venue": "Bharat Ratna Shri Atal Bihari Vajpayee Ekana Cricket Stadium, Lucknow",
     "runsTarget": 341,
     "team1": {
       "name": "Lucknow Super Giants",
       "short": "LSG",
-      "emoji": "🔷",
-      "players": []
+      "emoji": "??",
+      "players": [
+        "Rishabh Pant",
+        "Nicholas Pooran",
+        "Aiden Markram",
+        "Mitchell Marsh",
+        "Ayush Badoni",
+        "Abdul Samad"
+      ]
     },
     "team2": {
       "name": "Gujarat Titans",
       "short": "GT",
-      "emoji": "🟦",
-      "players": []
+      "emoji": "??",
+      "players": [
+        "Shubman Gill",
+        "Sai Sudharsan",
+        "Jos Buttler",
+        "Glenn Phillips",
+        "Rashid Khan",
+        "Washington Sundar"
+      ]
     }
   },
   "2026-04-12-B": {
     "timeLabel": "7:30 PM IST lock",
     "lockTime": "19:30",
-    "venue": "Mumbai",
+    "venue": "Wankhede Stadium, Mumbai",
     "runsTarget": 352,
     "team1": {
       "name": "Mumbai Indians",
       "short": "MI",
-      "emoji": "🔵",
-      "players": []
+      "emoji": "??",
+      "players": [
+        "Rohit Sharma",
+        "Ryan Rickelton",
+        "Quinton de Kock",
+        "Suryakumar Yadav",
+        "Tilak Varma",
+        "Hardik Pandya"
+      ]
     },
     "team2": {
       "name": "Royal Challengers Bengaluru",
       "short": "RCB",
-      "emoji": "🔴",
-      "players": []
+      "emoji": "??",
+      "players": [
+        "Virat Kohli",
+        "Phil Salt",
+        "Rajat Patidar",
+        "Jitesh Sharma",
+        "Tim David",
+        "Jacob Bethell"
+      ]
+    }
+  },
+  "2026-04-13": {
+    "timeLabel": "7:30 PM IST lock",
+    "lockTime": "19:30",
+    "venue": "Rajiv Gandhi International Stadium, Hyderabad",
+    "runsTarget": 344,
+    "team1": {
+      "name": "Sunrisers Hyderabad",
+      "short": "SRH",
+      "emoji": "??",
+      "players": [
+        "Travis Head",
+        "Ishan Kishan",
+        "Heinrich Klaasen",
+        "Abhishek Sharma",
+        "Nitish Kumar Reddy",
+        "Pat Cummins"
+      ]
+    },
+    "team2": {
+      "name": "Rajasthan Royals",
+      "short": "RR",
+      "emoji": "??",
+      "players": [
+        "Yashasvi Jaiswal",
+        "Riyan Parag",
+        "Dhruv Jurel",
+        "Shimron Hetmyer",
+        "Sam Curran",
+        "Ravindra Jadeja"
+      ]
     }
   }
 }

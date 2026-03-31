@@ -1050,5 +1050,441 @@
         ]
       }
     ]
+  },
+  
+  "transfer-2026-04-01": {
+    "title": "🔄 Transfer History - Day 32",
+    "subtitle": "Guess the player from their IPL journey",
+    "players": [
+      {
+        "name": "MS Dhoni",
+        "transfers": [
+          { "year": "2008", "team": "Chennai Super Kings" },
+          { "year": "2016", "team": "Rising Pune Supergiant" },
+          { "year": "2018", "team": "Chennai Super Kings" }
+        ]
+      },
+      {
+        "name": "Chris Gayle",
+        "transfers": [
+          { "year": "2008", "team": "Kolkata Knight Riders" },
+          { "year": "2011", "team": "Royal Challengers Bangalore" },
+          { "year": "2018", "team": "Kings XI Punjab" }
+        ]
+      },
+      {
+        "name": "Hardik Pandya",
+        "transfers": [
+          { "year": "2015", "team": "Mumbai Indians" },
+          { "year": "2022", "team": "Gujarat Titans" },
+          { "year": "2024", "team": "Mumbai Indians" }
+        ]
+      }
+    ]
+  },
+  
+
+  "transfer-2026-04-02": {
+    "title": "🔄 Transfer History - Day 33",
+    "subtitle": "Guess the player from their IPL journey",
+    "players": [
+      {
+        "name": "Rohit Sharma",
+        "transfers": [
+          { "year": "2008", "team": "Deccan Chargers" },
+          { "year": "2011", "team": "Mumbai Indians" }
+        ]
+      },
+      {
+        "name": "Dinesh Karthik",
+        "transfers": [
+          { "year": "2008", "team": "Delhi Daredevils" },
+          { "year": "2011", "team": "Kings XI Punjab" },
+          { "year": "2012", "team": "Mumbai Indians" },
+          { "year": "2014", "team": "Delhi Daredevils" },
+          { "year": "2015", "team": "Royal Challengers Bangalore" },
+          { "year": "2016", "team": "Gujarat Lions" },
+          { "year": "2018", "team": "Kolkata Knight Riders" },
+          { "year": "2022", "team": "Royal Challengers Bangalore" }
+        ]
+      },
+      {
+        "name": "Shreyas Iyer",
+        "transfers": [
+          { "year": "2015", "team": "Delhi Daredevils" },
+          { "year": "2022", "team": "Kolkata Knight Riders" },
+          { "year": "2025", "team": "Punjab Kings" }
+        ]
+      }
+    ]
+  },
+
+  "transfer-2026-04-03": {
+    "title": "🔄 Transfer History - Day 34",
+    "subtitle": "Guess the player from their IPL journey",
+    "players": [
+      {
+        "name": "Suresh Raina",
+        "transfers": [
+          { "year": "2008", "team": "Chennai Super Kings" },
+          { "year": "2016", "team": "Gujarat Lions" },
+          { "year": "2018", "team": "Chennai Super Kings" }
+        ]
+      },
+      {
+        "name": "Wriddhiman Saha",
+        "transfers": [
+          { "year": "2008", "team": "Kolkata Knight Riders" },
+          { "year": "2011", "team": "Chennai Super Kings" },
+          { "year": "2014", "team": "Kings XI Punjab" },
+          { "year": "2018", "team": "Sunrisers Hyderabad" },
+          { "year": "2022", "team": "Gujarat Titans" }
+        ]
+      },
+      {
+        "name": "Rishabh Pant",
+        "transfers": [
+          { "year": "2016", "team": "Delhi Daredevils" },
+          { "year": "2025", "team": "Lucknow Super Giants" }
+        ]
+      }
+    ]
+  },
+
+  "transfer-2026-04-04": {
+    "title": "🔄 Transfer History - Day 35",
+    "subtitle": "Guess the player from their IPL journey",
+    "players": [
+      {
+        "name": "Yuvraj Singh",
+        "transfers": [
+          { "year": "2008", "team": "Kings XI Punjab" },
+          { "year": "2011", "team": "Pune Warriors India" },
+          { "year": "2014", "team": "Royal Challengers Bangalore" },
+          { "year": "2015", "team": "Delhi Daredevils" },
+          { "year": "2016", "team": "Sunrisers Hyderabad" },
+          { "year": "2018", "team": "Kings XI Punjab" },
+          { "year": "2019", "team": "Mumbai Indians" }
+        ]
+      },
+      {
+        "name": "Manish Pandey",
+        "transfers": [
+          { "year": "2008", "team": "Mumbai Indians" },
+          { "year": "2009", "team": "Royal Challengers Bangalore" },
+          { "year": "2011", "team": "Pune Warriors India" },
+          { "year": "2014", "team": "Kolkata Knight Riders" },
+          { "year": "2018", "team": "Sunrisers Hyderabad" },
+          { "year": "2022", "team": "Lucknow Super Giants" },
+          { "year": "2023", "team": "Delhi Capitals" },
+          { "year": "2024", "team": "Kolkata Knight Riders" }
+        ]
+      },
+      {
+        "name": "Shubman Gill",
+        "transfers": [
+          { "year": "2018", "team": "Kolkata Knight Riders" },
+          { "year": "2022", "team": "Gujarat Titans" }
+        ]
+      }
+    ]
+  },
+
+  "transfer-2026-04-05": {
+    "title": "🔄 Transfer History - Day 36",
+    "subtitle": "Guess the player from their IPL journey",
+    "players": [
+      {
+        "name": "Virender Sehwag",
+        "transfers": [
+          { "year": "2008", "team": "Delhi Daredevils" },
+          { "year": "2014", "team": "Kings XI Punjab" }
+        ]
+      },
+      {
+        "name": "Zaheer Khan",
+        "transfers": [
+          { "year": "2008", "team": "Royal Challengers Bangalore" },
+          { "year": "2011", "team": "Mumbai Indians" },
+          { "year": "2015", "team": "Delhi Daredevils" }
+        ]
+      },
+      {
+        "name": "KL Rahul",
+        "transfers": [
+          { "year": "2014", "team": "Sunrisers Hyderabad" },
+          { "year": "2016", "team": "Royal Challengers Bangalore" },
+          { "year": "2018", "team": "Kings XI Punjab" },
+          { "year": "2022", "team": "Lucknow Super Giants" },
+          { "year": "2026", "team": "Delhi Capitals" }
+        ]
+      }
+    ]
+  },
+
+  "transfer-2026-04-06": {
+    "title": "🔄 Transfer History - Day 37",
+    "subtitle": "Guess the player from their IPL journey",
+    "players": [
+      {
+        "name": "Gautam Gambhir",
+        "transfers": [
+          { "year": "2008", "team": "Delhi Daredevils" },
+          { "year": "2011", "team": "Kolkata Knight Riders" },
+          { "year": "2018", "team": "Delhi Daredevils" }
+        ]
+      },
+      {
+        "name": "Adam Gilchrist",
+        "transfers": [
+          { "year": "2008", "team": "Deccan Chargers" },
+          { "year": "2011", "team": "Kings XI Punjab" }
+        ]
+      },
+      {
+        "name": "Yuzvendra Chahal",
+        "transfers": [
+          { "year": "2014", "team": "Mumbai Indians" },
+          { "year": "2015", "team": "Royal Challengers Bangalore" },
+          { "year": "2022", "team": "Rajasthan Royals" }
+        ]
+      }
+    ]
+  },
+
+  "transfer-2026-04-07": {
+    "title": "🔄 Transfer History - Day 38",
+    "subtitle": "Guess the player from their IPL journey",
+    "players": [
+      {
+        "name": "Harbhajan Singh",
+        "transfers": [
+          { "year": "2008", "team": "Mumbai Indians" },
+          { "year": "2018", "team": "Chennai Super Kings" },
+          { "year": "2021", "team": "Kolkata Knight Riders" }
+        ]
+      },
+      {
+        "name": "Sourav Ganguly",
+        "transfers": [
+          { "year": "2008", "team": "Kolkata Knight Riders" },
+          { "year": "2011", "team": "Pune Warriors India" }
+        ]
+      },
+      {
+        "name": "Sanju Samson",
+        "transfers": [
+          { "year": "2013", "team": "Rajasthan Royals" },
+          { "year": "2026", "team": "Chennai Super Kings" }
+        ]
+      }
+    ]
+  },
+
+  "transfer-2026-04-08": {
+    "title": "🔄 Transfer History - Day 39",
+    "subtitle": "Guess the player from their IPL journey",
+    "players": [
+      {
+        "name": "Ravindra Jadeja",
+        "transfers": [
+          { "year": "2008", "team": "Rajasthan Royals" },
+          { "year": "2010", "team": "Kochi Tuskers Kerala" },
+          { "year": "2012", "team": "Chennai Super Kings" }
+        ]
+      },
+      {
+        "name": "Shane Watson",
+        "transfers": [
+          { "year": "2008", "team": "Rajasthan Royals" },
+          { "year": "2016", "team": "Royal Challengers Bangalore" },
+          { "year": "2018", "team": "Chennai Super Kings" }
+        ]
+      },
+      {
+        "name": "Ishan Kishan",
+        "transfers": [
+          { "year": "2016", "team": "Gujarat Lions" },
+          { "year": "2018", "team": "Mumbai Indians" },
+          { "year": "2025", "team": "Sunrisers Hyderabad" }
+        ]
+      }
+    ]
+  },
+
+  "transfer-2026-04-09": {
+    "title": "🔄 Transfer History - Day 40",
+    "subtitle": "Guess the player from their IPL journey",
+    "players": [
+      {
+        "name": "Rahul Dravid",
+        "transfers": [
+          { "year": "2008", "team": "Delhi Daredevils" },
+          { "year": "2011", "team": "Rajasthan Royals" }
+        ]
+      },
+      {
+        "name": "Brendon McCullum",
+        "transfers": [
+          { "year": "2008", "team": "Kolkata Knight Riders" },
+          { "year": "2010", "team": "Royal Challengers Bangalore" },
+          { "year": "2012", "team": "Chennai Super Kings" },
+          { "year": "2013", "team": "Kochi Tuskers Kerala" }
+        ]
+      },
+      {
+        "name": "Axar Patel",
+        "transfers": [
+          { "year": "2014", "team": "Kings XI Punjab" },
+          { "year": "2019", "team": "Delhi Capitals" }
+        ]
+      }
+    ]
+  },
+
+  "transfer-2026-04-10": {
+    "title": "🔄 Transfer History - Day 41",
+    "subtitle": "Guess the player from their IPL journey",
+    "players": [
+      {
+        "name": "Virat Kohli",
+        "transfers": [
+          { "year": "2008", "team": "Royal Challengers Bangalore" }
+        ]
+      },
+      {
+        "name": "Dale Steyn",
+        "transfers": [
+          { "year": "2008", "team": "Deccan Chargers" },
+          { "year": "2014", "team": "Sunrisers Hyderabad" },
+          { "year": "2015", "team": "Royal Challengers Bangalore" },
+          { "year": "2019", "team": "Kings XI Punjab" }
+        ]
+      },
+      {
+        "name": "Washington Sundar",
+        "transfers": [
+          { "year": "2017", "team": "Rising Pune Supergiant" },
+          { "year": "2018", "team": "Royal Challengers Bangalore" },
+          { "year": "2023", "team": "Sunrisers Hyderabad" }
+        ]
+      }
+    ]
+  },
+
+  "transfer-2026-04-11": {
+    "title": "🔄 Transfer History - Day 42",
+    "subtitle": "Guess the player from their IPL journey",
+    "players": [
+      {
+        "name": "Sachin Tendulkar",
+        "transfers": [
+          { "year": "2008", "team": "Mumbai Indians" }
+        ]
+      },
+      {
+        "name": "Murali Vijay",
+        "transfers": [
+          { "year": "2008", "team": "Chennai Super Kings" },
+          { "year": "2014", "team": "Kings XI Punjab" },
+          { "year": "2017", "team": "Gujarat Lions" },
+          { "year": "2018", "team": "Chennai Super Kings" }
+        ]
+      },
+      {
+        "name": "Ruturaj Gaikwad",
+        "transfers": [
+          { "year": "2019", "team": "Chennai Super Kings" }
+        ]
+      }
+    ]
+  },
+
+  "transfer-2026-04-12": {
+    "title": "🔄 Transfer History - Day 43",
+    "subtitle": "Guess the player from their IPL journey",
+    "players": [
+      {
+        "name": "Dwayne Bravo",
+        "transfers": [
+          { "year": "2008", "team": "Chennai Super Kings" },
+          { "year": "2014", "team": "Chennai Super Kings" }
+        ]
+      },
+      {
+        "name": "Kevin Pietersen",
+        "transfers": [
+          { "year": "2009", "team": "Royal Challengers Bangalore" },
+          { "year": "2010", "team": "Deccan Chargers" },
+          { "year": "2014", "team": "Delhi Daredevils" }
+        ]
+      },
+      {
+        "name": "Deepak Chahar",
+        "transfers": [
+          { "year": "2015", "team": "Sunrisers Hyderabad" },
+          { "year": "2016", "team": "Rising Pune Supergiant" },
+          { "year": "2018", "team": "Chennai Super Kings" },
+          { "year": "2022", "team": "Rajasthan Royals" }
+        ]
+      }
+    ]
+  },
+
+  "transfer-2026-04-13": {
+    "title": "🔄 Transfer History - Day 44",
+    "subtitle": "Guess the player from their IPL journey",
+    "players": [
+      {
+        "name": "Lasith Malinga",
+        "transfers": [
+          { "year": "2009", "team": "Mumbai Indians" }
+        ]
+      },
+      {
+        "name": "Robin Uthappa",
+        "transfers": [
+          { "year": "2008", "team": "Royal Challengers Bangalore" },
+          { "year": "2011", "team": "Pune Warriors India" },
+          { "year": "2014", "team": "Kolkata Knight Riders" },
+          { "year": "2018", "team": "Rajasthan Royals" },
+          { "year": "2021", "team": "Chennai Super Kings" }
+        ]
+      },
+      {
+        "name": "Yashasvi Jaiswal",
+        "transfers": [
+          { "year": "2020", "team": "Rajasthan Royals" }
+        ]
+      }
+    ]
+  },
+
+  "transfer-2026-04-14": {
+    "title": "🔄 Transfer History - Day 45",
+    "subtitle": "Guess the player from their IPL journey",
+    "players": [
+      {
+        "name": "VVS Laxman",
+        "transfers": [
+          { "year": "2008", "team": "Deccan Chargers" },
+          { "year": "2011", "team": "Kochi Tuskers Kerala" }
+        ]
+      },
+      {
+        "name": "Ambati Rayudu",
+        "transfers": [
+          { "year": "2010", "team": "Mumbai Indians" },
+          { "year": "2018", "team": "Chennai Super Kings" },
+          { "year": "2022", "team": "Chennai Super Kings" }
+        ]
+      },
+      {
+        "name": "Tilak Varma",
+        "transfers": [
+          { "year": "2022", "team": "Mumbai Indians" }
+        ]
+      }
+    ]
   }
 }
