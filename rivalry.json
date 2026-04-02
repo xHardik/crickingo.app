@@ -1161,7 +1161,7 @@
       },
       {
         "title": "🌍 Overseas Stars in This Match",
-        "validPlayers": ["Cameron Green", "Matheesha Pathirana", "Rachin Ravindra", "Travis Head", "Heinrich Klaasen", "Liam Livingstone", "Pat Cummins"]
+        "validPlayers": ["Cameron Green", "Rachin Ravindra", "Travis Head", "Heinrich Klaasen", "Liam Livingstone", "Pat Cummins"]
       },
       {
         "title": "🟣 KKR All-Time 100+ IPL Wickets (While at KKR)",
@@ -1173,7 +1173,7 @@
       },
       {
         "title": "🟣 Captained KKR (All-Time)",
-        "validPlayers": ["Gautam Gambhir", "MS Dhoni", "Ajinkya Rahane", "Dinesh Karthik"]
+        "validPlayers": ["Gautam Gambhir", "Ajinkya Rahane", "Dinesh Karthik"]
       },
       {
         "title": "🟠 Captained SRH (All-Time)",
@@ -1181,23 +1181,23 @@
       },
       {
         "title": "🌟 Played for Both KKR and SRH",
-        "validPlayers": ["Manish Pandey", "Shakib Al Hasan"]
+        "validPlayers": ["Manish Pandey", "Shakib Al Hasan","Pat Cummins"]
       },
       {
         "title": "📖 T20 World Cup Winners in This Match",
         "validPlayers": ["Ishan Kishan", "Abhishek Sharma", "Nitish Kumar Reddy", "Ajinkya Rahane", "Rinku Singh", "Travis Head", "Heinrich Klaasen", "Pat Cummins", "Cameron Green"]
       },
       {
-        "title": "💥 All-Rounders in This Match",
-        "validPlayers": ["Sunil Narine", "Cameron Green", "Liam Livingstone", "Nitish Kumar Reddy", "Rachin Ravindra"]
+        "title": "💥 IPL MVP winner",
+        "validPlayers": ["Sunil Narine", "Andre Russell","Virat Kohli","David Warner"]
       },
       {
-        "title": "🎳 Death Bowling Specialists in This Match",
-        "validPlayers": ["Matheesha Pathirana", "Harshal Patel", "Jaydev Unadkat", "Pat Cummins"]
+        "title": "🎳 Bowlers Economy Under 7 (Career)",
+        "validPlayers": ["Sunil Narine"]
       },
       {
-        "title": "🏏 KKR 3x IPL Champions",
-        "validPlayers": ["Sunil Narine", "Andre Russell", "Ajinkya Rahane", "Rinku Singh", "Varun Chakravarthy", "Harshit Rana"]
+        "title": "🏏 KKR 3x IPL Champions Squad",
+        "validPlayers": ["Sunil Narine", "Andre Russell", "Rinku Singh", "Varun Chakravarthy", "Harshit Rana"]
       },
       {
         "title": "🟠 SRH 2016 Title Winners",

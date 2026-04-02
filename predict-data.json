@@ -223,6 +223,12 @@
         "Ashutosh Sharma",
         "Anyone Else"
       ]
+    },
+    
+    "result": {
+      "winner": "Delhi Capitals",
+      "topScorer": "Anyone Else",
+      "totalRuns": 285
     }
   },
   "2026-04-02": {
@@ -233,27 +239,26 @@
     "team1": {
       "name": "Kolkata Knight Riders",
       "short": "KKR",
-      "emoji": "??",
+      "emoji": "🟣",
       "players": [
         "Ajinkya Rahane",
         "Sunil Narine",
         "Rinku Singh",
         "Cameron Green",
-        "Varun Chakravarthy",
-        "Harshit Rana"
+        "Finn Allen"
       ]
     },
     "team2": {
       "name": "Sunrisers Hyderabad",
       "short": "SRH",
-      "emoji": "??",
+      "emoji": "",
       "players": [
         "Travis Head",
         "Ishan Kishan",
         "Heinrich Klaasen",
         "Abhishek Sharma",
         "Nitish Kumar Reddy",
-        "Pat Cummins"
+        "Anyone Else"
       ]
     }
   },
