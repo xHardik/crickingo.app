@@ -1219,15 +1219,15 @@
       "Shreyas Iyer", "Prabhsimran Singh", "Priyansh Arya", "Shashank Singh", "Nehal Wadhera",
       "Arshdeep Singh", "Yuzvendra Chahal", "Marco Jansen", "Marcus Stoinis", "Harpreet Brar",
       "Suresh Raina", "Matthew Hayden", "Stephen Fleming", "Virender Sehwag", "Yuvraj Singh",
-      "Andrew Flintoff", "Brett Lee", "Adam Gilchrist", "Chris Gayle", "Kieron Pollard"
+      "Andrew Flintoff", "Brett Lee", "Adam Gilchrist", "Sam Curran", "Ravichandran Ashwin"
     ],
     "categories": [
       {
-        "title": "🟡 CSK 2026 Squad (Key Players)",
+        "title": "🟡 CSK 2026 Squad",
         "validPlayers": ["Ruturaj Gaikwad", "MS Dhoni", "Sanju Samson", "Shivam Dube", "Dewald Brevis", "Khaleel Ahmed", "Noor Ahmad", "Nathan Ellis", "Anshul Kamboj", "Ayush Mhatre"]
       },
       {
-        "title": "🔴 PBKS 2026 Squad (Key Players)",
+        "title": "🔴 PBKS 2026 Squad",
         "validPlayers": ["Shreyas Iyer", "Prabhsimran Singh", "Priyansh Arya", "Shashank Singh", "Nehal Wadhera", "Arshdeep Singh", "Yuzvendra Chahal", "Marco Jansen", "Marcus Stoinis", "Harpreet Brar"]
       },
       {
@@ -1235,8 +1235,8 @@
         "validPlayers": ["MS Dhoni", "Ruturaj Gaikwad", "Shivam Dube", "Noor Ahmad"]
       },
       {
-        "title": "🌍 Overseas Stars in This Match",
-        "validPlayers": ["Dewald Brevis", "Nathan Ellis", "Marco Jansen", "Marcus Stoinis", "Noor Ahmad"]
+        "title": "🌍 Highest individual score",
+        "validPlayers": ["Chris Gayle"]
       },
       {
         "title": "🇮🇳 India Internationals in This Match",
@@ -1244,7 +1244,7 @@
       },
       {
         "title": "🟡 Captained CSK (All-Time)",
-        "validPlayers": ["MS Dhoni", "Suresh Raina"]
+        "validPlayers": ["MS Dhoni", "Suresh Raina","Ruturaj Gaikwad"]
       },
       {
         "title": "🔴 Captained PBKS (All-Time)",
@@ -1256,28 +1256,28 @@
       },
       {
         "title": "🌟 Played for Both CSK and PBKS",
-        "validPlayers": ["Suresh Raina", "Brett Lee", "Andrew Flintoff"]
+        "validPlayers": [  "Sam Curran","Ravichandran Ashwin"]
       },
       {
         "title": "💥 Wicketkeepers in This Match",
-        "validPlayers": ["MS Dhoni", "Sanju Samson", "Prabhsimran Singh"]
+        "validPlayers": [ "Sanju Samson", "Prabhsimran Singh"]
       },
       {
         "title": "🎳 Left-Arm Pacers in This Match",
         "validPlayers": ["Khaleel Ahmed", "Arshdeep Singh"]
       },
       {
-        "title": "🏏 Batters with 4000+ IPL Runs (All-Time)",
-        "validPlayers": ["MS Dhoni", "Suresh Raina", "Chris Gayle"]
+        "title": "🏏 Batters with 4000+ IPL Runs from CSK",
+        "validPlayers": ["MS Dhoni", "Suresh Raina"]
       },
       {
-        "title": "⭐ IPL Emerging Player of the Year Winners",
-        "validPlayers": ["Ruturaj Gaikwad", "Prabhsimran Singh", "Dewald Brevis"]
-      },
-      {
-        "title": "🔴 PBKS Never Won IPL — Captains Who Tried",
-        "validPlayers": ["Adam Gilchrist", "Yuvraj Singh", "Shreyas Iyer", "Virender Sehwag"]
-      },
+        "title": "⭐ IPL Emerging Player Winners in this squad",
+        "validPlayers": ["Ruturaj Gaikwad", "Prabhsimran Singh"]
+      },   
+    {
+      "title": "🟡 CSK 4000+ IPL Runs",
+      "validPlayers": ["MS Dhoni", "Suresh Raina"]
+    },
       {
         "title": "🎯 Leg-Spin Bowlers in This Match",
         "validPlayers": ["Yuzvendra Chahal", "Noor Ahmad"]
