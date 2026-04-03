@@ -223,5 +223,20 @@
     "hint_country": "🇦🇺 Australia",
     "hint_position": "🏏 Batsman",
     "difficulty": "hard"
+  },
+    "wordle-2026-04-03": {
+    "date": "2026-03-01",
+    "player": "SANGAKKARA",
+    "hint_country": "🇱🇰 Sri Lanka",
+    "hint_position": "🧤 Wicketkeeper/Batsman",
+    "difficulty": "hard"
+  },
+  
+  "wordle-2026-4-02": {
+    "date": "2026-03-13",
+    "player": "JADEJA",
+    "hint_country": "🇮🇳 India",
+    "hint_position": "🎯 All-rounder/Spinner",
+    "difficulty": "hard"
   }
 }
