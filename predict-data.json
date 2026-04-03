@@ -270,20 +270,19 @@
     "team1": {
       "name": "Chennai Super Kings",
       "short": "CSK",
-      "emoji": "??",
+      "emoji": "🟡",
       "players": [
         "Ruturaj Gaikwad",
         "Dewald Brevis",
         "MS Dhoni",
         "Sanju Samson",
-        "Shivam Dube",
-        "Noor Ahmad"
+        "Shivam Dube"
       ]
     },
     "team2": {
       "name": "Punjab Kings",
       "short": "PBKS",
-      "emoji": "??",
+      "emoji": "🔴",
       "players": [
         "Shreyas Iyer",
         "Priyansh Arya",
@@ -308,8 +307,7 @@
         "Tristan Stubbs",
         "Axar Patel",
         "Ashutosh Sharma",
-        "Kuldeep Yadav",
-        "Mitchell Starc"
+        "Anyone Else"
       ]
     },
     "team2": {
