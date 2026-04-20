@@ -1,4 +1,4 @@
-{
+﻿{
   "day-2026-03-01": {
     "date": "2026-03-01",
     "theme": "All-Time Run Machines",
@@ -746,7 +746,7 @@
       {"name": "Trent Boult", "stat": "IPL Wickets", "value": 149, "image": "🩷"},
       {"name": "Vaibhav Suryavanshi", "stat": "IPL Wickets", "value": 0, "image": "🩷"}
     ]
-  },
+  },   
   "day-2026-04-14": {
     "date": "2026-04-14",
     "theme": "🟡🟣 CSK vs KKR - IPL Sixes",
@@ -764,4 +764,346 @@
       {"name": "Ajinkya Rahane", "stat": "IPL Sixes", "value": 68, "image": "🟣"}
     ]
   }
+  {
+  "day-2026-04-15": {
+    "date": "2026-04-15",
+    "theme": "🔴🟡 RCB vs LSG - IPL Career Wickets",
+    "matchup": "Royal Challengers Bengaluru vs Lucknow Super Giants",
+    "players": [
+      {"name": "Yuzvendra Chahal", "stat": "IPL Career Wickets", "value": 221},
+      {"name": "Bhuvneshwar Kumar", "stat": "IPL Career Wickets", "value": 198},
+      {"name": "Yash Dayal", "stat": "IPL Career Wickets", "value": 47},
+      {"name": "Josh Hazlewood", "stat": "IPL Career Wickets", "value": 67},
+      {"name": "Wanindu Hasaranga", "stat": "IPL Career Wickets", "value": 58},
+      {"name": "Mohammad Shami", "stat": "IPL Career Wickets", "value": 134},
+      {"name": "Avesh Khan", "stat": "IPL Career Wickets", "value": 97},
+      {"name": "Mayank Yadav", "stat": "IPL Career Wickets", "value": 24},
+      {"name": "Jaydev Unadkat", "stat": "IPL Career Wickets", "value": 109},
+      {"name": "Ravi Bishnoi", "stat": "IPL Career Wickets", "value": 78}
+    ]
+  },
+  "day-2026-04-16": {
+    "date": "2026-04-16",
+    "theme": "🔵🔴 MI vs PBKS - IPL Career Sixes",
+    "matchup": "Mumbai Indians vs Punjab Kings",
+    "players": [
+      {"name": "Rohit Sharma", "stat": "IPL Career Sixes", "value": 311},
+      {"name": "Hardik Pandya", "stat": "IPL Career Sixes", "value": 183},
+      {"name": "Suryakumar Yadav", "stat": "IPL Career Sixes", "value": 197},
+      {"name": "Tilak Varma", "stat": "IPL Career Sixes", "value": 54},
+      {"name": "Quinton de Kock", "stat": "IPL Career Sixes", "value": 142},
+      {"name": "Shreyas Iyer", "stat": "IPL Career Sixes", "value": 138},
+      {"name": "Prabhsimran Singh", "stat": "IPL Career Sixes", "value": 41},
+      {"name": "Marcus Stoinis", "stat": "IPL Career Sixes", "value": 89},
+      {"name": "Priyansh Arya", "stat": "IPL Career Sixes", "value": 32},
+      {"name": "Shashank Singh", "stat": "IPL Career Sixes", "value": 67}
+    ]
+  },
+  "day-2026-04-17": {
+    "date": "2026-04-17",
+    "theme": "🔵🟣 GT vs KKR - IPL Career Wickets",
+    "matchup": "Gujarat Titans vs Kolkata Knight Riders",
+    "players": [
+      {"name": "Rashid Khan", "stat": "IPL Career Wickets", "value": 169},
+      {"name": "Kagiso Rabada", "stat": "IPL Career Wickets", "value": 112},
+      {"name": "Mohammed Siraj", "stat": "IPL Career Wickets", "value": 91},
+      {"name": "Prasidh Krishna", "stat": "IPL Career Wickets", "value": 89},
+      {"name": "Washington Sundar", "stat": "IPL Career Wickets", "value": 77},
+      {"name": "Sunil Narine", "stat": "IPL Career Wickets", "value": 192},
+      {"name": "Varun Chakravarthy", "stat": "IPL Career Wickets", "value": 103},
+      {"name": "Harshit Rana", "stat": "IPL Career Wickets", "value": 31},
+      {"name": "Matheesha Pathirana", "stat": "IPL Career Wickets", "value": 43},
+      {"name": "Akash Deep", "stat": "IPL Career Wickets", "value": 36}
+    ]
+  },
+  "day-2026-04-18-a": {
+    "date": "2026-04-18",
+    "theme": "🔴🔵 RCB vs DC - IPL Career Runs",
+    "matchup": "Royal Challengers Bengaluru vs Delhi Capitals",
+    "players": [
+      {"name": "Virat Kohli", "stat": "IPL Career Runs", "value": 8889},
+      {"name": "Rajat Patidar", "stat": "IPL Career Runs", "value": 1243},
+      {"name": "Phil Salt", "stat": "IPL Career Runs", "value": 512},
+      {"name": "Tim David", "stat": "IPL Career Runs", "value": 934},
+      {"name": "Krunal Pandya", "stat": "IPL Career Runs", "value": 2156},
+      {"name": "KL Rahul", "stat": "IPL Career Runs", "value": 5222},
+      {"name": "Axar Patel", "stat": "IPL Career Runs", "value": 1876},
+      {"name": "Karun Nair", "stat": "IPL Career Runs", "value": 1432},
+      {"name": "David Miller", "stat": "IPL Career Runs", "value": 3421},
+      {"name": "Tristan Stubbs", "stat": "IPL Career Runs", "value": 487}
+    ]
+  },
+  "day-2026-04-18-b": {
+    "date": "2026-04-18",
+    "theme": "🟠🟡 SRH vs CSK - IPL Career Sixes",
+    "matchup": "Sunrisers Hyderabad vs Chennai Super Kings",
+    "players": [
+      {"name": "Travis Head", "stat": "IPL Career Sixes", "value": 87},
+      {"name": "Abhishek Sharma", "stat": "IPL Career Sixes", "value": 112},
+      {"name": "Heinrich Klaasen", "stat": "IPL Career Sixes", "value": 96},
+      {"name": "Nitish Kumar Reddy", "stat": "IPL Career Sixes", "value": 29},
+      {"name": "Liam Livingstone", "stat": "IPL Career Sixes", "value": 148},
+      {"name": "MS Dhoni", "stat": "IPL Career Sixes", "value": 252},
+      {"name": "Ruturaj Gaikwad", "stat": "IPL Career Sixes", "value": 97},
+      {"name": "Shivam Dube", "stat": "IPL Career Sixes", "value": 107},
+      {"name": "Sanju Samson", "stat": "IPL Career Sixes", "value": 219},
+      {"name": "Dewald Brevis", "stat": "IPL Career Sixes", "value": 56}
+    ]
+  },
+  "day-2026-04-19-a": {
+    "date": "2026-04-19",
+    "theme": "🟣💗 KKR vs RR - IPL Career Runs",
+    "matchup": "Kolkata Knight Riders vs Rajasthan Royals",
+    "players": [
+      {"name": "Ajinkya Rahane", "stat": "IPL Career Runs", "value": 5032},
+      {"name": "Sunil Narine", "stat": "IPL Career Runs", "value": 3187},
+      {"name": "Rinku Singh", "stat": "IPL Career Runs", "value": 1243},
+      {"name": "Cameron Green", "stat": "IPL Career Runs", "value": 567},
+      {"name": "Manish Pandey", "stat": "IPL Career Runs", "value": 3850},
+      {"name": "Yashasvi Jaiswal", "stat": "IPL Career Runs", "value": 1876},
+      {"name": "Ravindra Jadeja", "stat": "IPL Career Runs", "value": 2672},
+      {"name": "Shimron Hetmyer", "stat": "IPL Career Runs", "value": 2134},
+      {"name": "Vaibhav Suryavanshi", "stat": "IPL Career Runs", "value": 101},
+      {"name": "Riyan Parag", "stat": "IPL Career Runs", "value": 1543}
+    ]
+  },
+  "day-2026-04-19-b": {
+    "date": "2026-04-19",
+    "theme": "🔴🟡 PBKS vs LSG - IPL Career Wickets",
+    "matchup": "Punjab Kings vs Lucknow Super Giants",
+    "players": [
+      {"name": "Yuzvendra Chahal", "stat": "IPL Career Wickets", "value": 221},
+      {"name": "Arshdeep Singh", "stat": "IPL Career Wickets", "value": 134},
+      {"name": "Marco Jansen", "stat": "IPL Career Wickets", "value": 39},
+      {"name": "Lockie Ferguson", "stat": "IPL Career Wickets", "value": 76},
+      {"name": "Harpreet Brar", "stat": "IPL Career Wickets", "value": 57},
+      {"name": "Mohammad Shami", "stat": "IPL Career Wickets", "value": 128},
+      {"name": "Avesh Khan", "stat": "IPL Career Wickets", "value": 97},
+      {"name": "Mayank Yadav", "stat": "IPL Career Wickets", "value": 24},
+      {"name": "Wanindu Hasaranga", "stat": "IPL Career Wickets", "value": 58},
+      {"name": "Ravi Bishnoi", "stat": "IPL Career Wickets", "value": 78}
+    ]
+  },
+  "day-2026-04-20": {
+    "date": "2026-04-20",
+    "theme": "🔵🔵 GT vs MI - IPL Career Runs",
+    "matchup": "Gujarat Titans vs Mumbai Indians",
+    "players": [
+      {"name": "Shubman Gill", "stat": "IPL Career Runs", "value": 3312},
+      {"name": "Jos Buttler", "stat": "IPL Career Runs", "value": 4187},
+      {"name": "Sai Sudharsan", "stat": "IPL Career Runs", "value": 1456},
+      {"name": "Jason Holder", "stat": "IPL Career Runs", "value": 876},
+      {"name": "Washington Sundar", "stat": "IPL Career Runs", "value": 1092},
+      {"name": "Rohit Sharma", "stat": "IPL Career Runs", "value": 7228},
+      {"name": "Suryakumar Yadav", "stat": "IPL Career Runs", "value": 4312},
+      {"name": "Hardik Pandya", "stat": "IPL Career Runs", "value": 3187},
+      {"name": "Tilak Varma", "stat": "IPL Career Runs", "value": 1432},
+      {"name": "Quinton de Kock", "stat": "IPL Career Runs", "value": 3567}
+    ]
+  },
+  "day-2026-04-21": {
+    "date": "2026-04-21",
+    "theme": "🟠🔵 SRH vs DC - IPL Career Sixes",
+    "matchup": "Sunrisers Hyderabad vs Delhi Capitals",
+    "players": [
+      {"name": "Travis Head", "stat": "IPL Career Sixes", "value": 87},
+      {"name": "Abhishek Sharma", "stat": "IPL Career Sixes", "value": 112},
+      {"name": "Heinrich Klaasen", "stat": "IPL Career Sixes", "value": 96},
+      {"name": "Liam Livingstone", "stat": "IPL Career Sixes", "value": 148},
+      {"name": "Ishan Kishan", "stat": "IPL Career Sixes", "value": 167},
+      {"name": "KL Rahul", "stat": "IPL Career Sixes", "value": 227},
+      {"name": "Axar Patel", "stat": "IPL Career Sixes", "value": 89},
+      {"name": "David Miller", "stat": "IPL Career Sixes", "value": 193},
+      {"name": "Mitchell Starc", "stat": "IPL Career Sixes", "value": 34},
+      {"name": "Kuldeep Yadav", "stat": "IPL Career Sixes", "value": 19}
+    ]
+  },
+  "day-2026-04-22": {
+    "date": "2026-04-22",
+    "theme": "🟡💗 LSG vs RR - IPL Career Runs",
+    "matchup": "Lucknow Super Giants vs Rajasthan Royals",
+    "players": [
+      {"name": "Rishabh Pant", "stat": "IPL Career Runs", "value": 3284},
+      {"name": "Nicholas Pooran", "stat": "IPL Career Runs", "value": 2134},
+      {"name": "Mitchell Marsh", "stat": "IPL Career Runs", "value": 1243},
+      {"name": "Aiden Markram", "stat": "IPL Career Runs", "value": 1654},
+      {"name": "Abdul Samad", "stat": "IPL Career Runs", "value": 876},
+      {"name": "Yashasvi Jaiswal", "stat": "IPL Career Runs", "value": 1876},
+      {"name": "Ravindra Jadeja", "stat": "IPL Career Runs", "value": 2672},
+      {"name": "Sanju Samson", "stat": "IPL Career Runs", "value": 4704},
+      {"name": "Shimron Hetmyer", "stat": "IPL Career Runs", "value": 1987},
+      {"name": "Jos Buttler", "stat": "IPL Career Runs", "value": 4187}
+    ]
+  },
+  "day-2026-04-23": {
+    "date": "2026-04-23",
+    "theme": "🔵🟡 MI vs CSK - IPL Career Sixes",
+    "matchup": "Mumbai Indians vs Chennai Super Kings",
+    "players": [
+      {"name": "Rohit Sharma", "stat": "IPL Career Sixes", "value": 311},
+      {"name": "Hardik Pandya", "stat": "IPL Career Sixes", "value": 183},
+      {"name": "Suryakumar Yadav", "stat": "IPL Career Sixes", "value": 197},
+      {"name": "Tilak Varma", "stat": "IPL Career Sixes", "value": 54},
+      {"name": "Jasprit Bumrah", "stat": "IPL Career Sixes", "value": 11},
+      {"name": "MS Dhoni", "stat": "IPL Career Sixes", "value": 252},
+      {"name": "Ruturaj Gaikwad", "stat": "IPL Career Sixes", "value": 97},
+      {"name": "Shivam Dube", "stat": "IPL Career Sixes", "value": 112},
+      {"name": "Sanju Samson", "stat": "IPL Career Sixes", "value": 219},
+      {"name": "Nathan Ellis", "stat": "IPL Career Sixes", "value": 12}
+    ]
+  },
+  "day-2026-04-24": {
+    "date": "2026-04-24",
+    "theme": "🔴🔵 RCB vs GT - IPL Career Wickets",
+    "matchup": "Royal Challengers Bengaluru vs Gujarat Titans",
+    "players": [
+      {"name": "Yuzvendra Chahal", "stat": "IPL Career Wickets", "value": 221},
+      {"name": "Bhuvneshwar Kumar", "stat": "IPL Career Wickets", "value": 198},
+      {"name": "Josh Hazlewood", "stat": "IPL Career Wickets", "value": 67},
+      {"name": "Yash Dayal", "stat": "IPL Career Wickets", "value": 47},
+      {"name": "Harshal Patel", "stat": "IPL Career Wickets", "value": 146},
+      {"name": "Rashid Khan", "stat": "IPL Career Wickets", "value": 169},
+      {"name": "Kagiso Rabada", "stat": "IPL Career Wickets", "value": 112},
+      {"name": "Mohammed Siraj", "stat": "IPL Career Wickets", "value": 91},
+      {"name": "Prasidh Krishna", "stat": "IPL Career Wickets", "value": 89},
+      {"name": "Nishant Sindhu", "stat": "IPL Career Wickets", "value": 18}
+    ]
+  },
+  "day-2026-04-25-a": {
+    "date": "2026-04-25",
+    "theme": "🔵🔴 DC vs PBKS - IPL Career Runs",
+    "matchup": "Delhi Capitals vs Punjab Kings",
+    "players": [
+      {"name": "KL Rahul", "stat": "IPL Career Runs", "value": 5222},
+      {"name": "Shikhar Dhawan", "stat": "IPL Career Runs", "value": 6769},
+      {"name": "Axar Patel", "stat": "IPL Career Runs", "value": 1876},
+      {"name": "David Miller", "stat": "IPL Career Runs", "value": 3421},
+      {"name": "Rishabh Pant", "stat": "IPL Career Runs", "value": 3284},
+      {"name": "Shreyas Iyer", "stat": "IPL Career Runs", "value": 4312},
+      {"name": "Chris Gayle", "stat": "IPL Career Runs", "value": 4965},
+      {"name": "Priyansh Arya", "stat": "IPL Career Runs", "value": 312},
+      {"name": "Shashank Singh", "stat": "IPL Career Runs", "value": 756},
+      {"name": "Nehal Wadhera", "stat": "IPL Career Runs", "value": 634}
+    ]
+  },
+  "day-2026-04-25-b": {
+    "date": "2026-04-25",
+    "theme": "💗🟠 RR vs SRH - IPL Career Wickets",
+    "matchup": "Rajasthan Royals vs Sunrisers Hyderabad",
+    "players": [
+      {"name": "Ravindra Jadeja", "stat": "IPL Career Wickets", "value": 170},
+      {"name": "Yuzvendra Chahal", "stat": "IPL Career Wickets", "value": 221},
+      {"name": "Jofra Archer", "stat": "IPL Career Wickets", "value": 71},
+      {"name": "Tushar Deshpande", "stat": "IPL Career Wickets", "value": 89},
+      {"name": "Ravi Bishnoi", "stat": "IPL Career Wickets", "value": 78},
+      {"name": "Bhuvneshwar Kumar", "stat": "IPL Career Wickets", "value": 198},
+      {"name": "Harshal Patel", "stat": "IPL Career Wickets", "value": 146},
+      {"name": "Jaydev Unadkat", "stat": "IPL Career Wickets", "value": 109},
+      {"name": "Rashid Khan", "stat": "IPL Career Wickets", "value": 169},
+      {"name": "T Natarajan", "stat": "IPL Career Wickets", "value": 98}
+    ]
+  },
+  "day-2026-04-26-a": {
+    "date": "2026-04-26",
+    "theme": "🔵🟡 GT vs CSK - IPL Career Sixes",
+    "matchup": "Gujarat Titans vs Chennai Super Kings",
+    "players": [
+      {"name": "Shubman Gill", "stat": "IPL Career Sixes", "value": 134},
+      {"name": "Jos Buttler", "stat": "IPL Career Sixes", "value": 178},
+      {"name": "Rashid Khan", "stat": "IPL Career Sixes", "value": 58},
+      {"name": "Sai Sudharsan", "stat": "IPL Career Sixes", "value": 63},
+      {"name": "Jason Holder", "stat": "IPL Career Sixes", "value": 74},
+      {"name": "MS Dhoni", "stat": "IPL Career Sixes", "value": 252},
+      {"name": "Ruturaj Gaikwad", "stat": "IPL Career Sixes", "value": 97},
+      {"name": "Shivam Dube", "stat": "IPL Career Sixes", "value": 112},
+      {"name": "Dewald Brevis", "stat": "IPL Career Sixes", "value": 56},
+      {"name": "Noor Ahmad", "stat": "IPL Career Sixes", "value": 14}
+    ]
+  },
+  "day-2026-04-26-b": {
+    "date": "2026-04-26",
+    "theme": "🟡🟣 LSG vs KKR - IPL Career Runs",
+    "matchup": "Lucknow Super Giants vs Kolkata Knight Riders",
+    "players": [
+      {"name": "Rishabh Pant", "stat": "IPL Career Runs", "value": 3284},
+      {"name": "KL Rahul", "stat": "IPL Career Runs", "value": 5222},
+      {"name": "Nicholas Pooran", "stat": "IPL Career Runs", "value": 2134},
+      {"name": "Aiden Markram", "stat": "IPL Career Runs", "value": 1654},
+      {"name": "Mitchell Marsh", "stat": "IPL Career Runs", "value": 1189},
+      {"name": "Ajinkya Rahane", "stat": "IPL Career Runs", "value": 5032},
+      {"name": "Sunil Narine", "stat": "IPL Career Runs", "value": 3187},
+      {"name": "Rinku Singh", "stat": "IPL Career Runs", "value": 1243},
+      {"name": "Cameron Green", "stat": "IPL Career Runs", "value": 567},
+      {"name": "Rachin Ravindra", "stat": "IPL Career Runs", "value": 287}
+    ]
+  },
+  "day-2026-04-27": {
+    "date": "2026-04-27",
+    "theme": "🔵🔴 DC vs RCB - IPL Career Sixes",
+    "matchup": "Delhi Capitals vs Royal Challengers Bengaluru",
+    "players": [
+      {"name": "KL Rahul", "stat": "IPL Career Sixes", "value": 227},
+      {"name": "Axar Patel", "stat": "IPL Career Sixes", "value": 89},
+      {"name": "David Miller", "stat": "IPL Career Sixes", "value": 193},
+      {"name": "Ben Duckett", "stat": "IPL Career Sixes", "value": 27},
+      {"name": "Mitchell Starc", "stat": "IPL Career Sixes", "value": 34},
+      {"name": "Virat Kohli", "stat": "IPL Career Sixes", "value": 271},
+      {"name": "Tim David", "stat": "IPL Career Sixes", "value": 134},
+      {"name": "Bhuvneshwar Kumar", "stat": "IPL Career Sixes", "value": 23},
+      {"name": "Krunal Pandya", "stat": "IPL Career Sixes", "value": 156},
+      {"name": "Romario Shepherd", "stat": "IPL Career Sixes", "value": 61}
+    ]
+  },
+  "day-2026-04-28": {
+    "date": "2026-04-28",
+    "theme": "🔴💗 PBKS vs RR - IPL Career Wickets",
+    "matchup": "Punjab Kings vs Rajasthan Royals",
+    "players": [
+      {"name": "Yuzvendra Chahal", "stat": "IPL Career Wickets", "value": 221},
+      {"name": "Arshdeep Singh", "stat": "IPL Career Wickets", "value": 134},
+      {"name": "Marco Jansen", "stat": "IPL Career Wickets", "value": 39},
+      {"name": "Lockie Ferguson", "stat": "IPL Career Wickets", "value": 76},
+      {"name": "Marcus Stoinis", "stat": "IPL Career Wickets", "value": 47},
+      {"name": "Ravindra Jadeja", "stat": "IPL Career Wickets", "value": 170},
+      {"name": "Jofra Archer", "stat": "IPL Career Wickets", "value": 71},
+      {"name": "Tushar Deshpande", "stat": "IPL Career Wickets", "value": 89},
+      {"name": "Ravi Bishnoi", "stat": "IPL Career Wickets", "value": 78},
+      {"name": "Kwena Maphaka", "stat": "IPL Career Wickets", "value": 22}
+    ]
+  },
+  "day-2026-04-29": {
+    "date": "2026-04-29",
+    "theme": "🔵🟠 MI vs SRH - IPL Career Runs",
+    "matchup": "Mumbai Indians vs Sunrisers Hyderabad",
+    "players": [
+      {"name": "Rohit Sharma", "stat": "IPL Career Runs", "value": 7228},
+      {"name": "Suryakumar Yadav", "stat": "IPL Career Runs", "value": 4312},
+      {"name": "Hardik Pandya", "stat": "IPL Career Runs", "value": 3187},
+      {"name": "Tilak Varma", "stat": "IPL Career Runs", "value": 1432},
+      {"name": "Quinton de Kock", "stat": "IPL Career Runs", "value": 3567},
+      {"name": "David Warner", "stat": "IPL Career Runs", "value": 6565},
+      {"name": "Kane Williamson", "stat": "IPL Career Runs", "value": 2659},
+      {"name": "Abhishek Sharma", "stat": "IPL Career Runs", "value": 1876},
+      {"name": "Ishan Kishan", "stat": "IPL Career Runs", "value": 2543},
+      {"name": "Nitish Kumar Reddy", "stat": "IPL Career Runs", "value": 543}
+    ]
+  },
+  "day-2026-04-30": {
+    "date": "2026-04-30",
+    "theme": "🔵🔴 GT vs RCB - IPL Career Wickets",
+    "matchup": "Gujarat Titans vs Royal Challengers Bengaluru",
+    "players": [
+      {"name": "Rashid Khan", "stat": "IPL Career Wickets", "value": 169},
+      {"name": "Kagiso Rabada", "stat": "IPL Career Wickets", "value": 112},
+      {"name": "Mohammed Siraj", "stat": "IPL Career Wickets", "value": 91},
+      {"name": "Prasidh Krishna", "stat": "IPL Career Wickets", "value": 89},
+      {"name": "Nishant Sindhu", "stat": "IPL Career Wickets", "value": 18},
+      {"name": "Yuzvendra Chahal", "stat": "IPL Career Wickets", "value": 221},
+      {"name": "Bhuvneshwar Kumar", "stat": "IPL Career Wickets", "value": 198},
+      {"name": "Josh Hazlewood", "stat": "IPL Career Wickets", "value": 67},
+      {"name": "Harshal Patel", "stat": "IPL Career Wickets", "value": 146},
+      {"name": "Yash Dayal", "stat": "IPL Career Wickets", "value": 47}
+    ]
+  }
+}
 }

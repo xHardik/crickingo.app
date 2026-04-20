@@ -223,8 +223,8 @@
     "hint_country": "🇦🇺 Australia",
     "hint_position": "🏏 Batsman",
     "difficulty": "hard"
-  },
-    "wordle-2026-04-03": {
+   },
+   "wordle-2026-04-03": {
     "date": "2026-03-01",
     "player": "SANGAKKARA",
     "hint_country": "🇱🇰 Sri Lanka",
@@ -237,6 +237,223 @@
     "player": "JADEJA",
     "hint_country": "🇮🇳 India",
     "hint_position": "🎯 All-rounder/Spinner",
+    "difficulty": "hard"
+  },
+
+  "wordle-2026-04-04": {
+    "date": "2026-04-04",
+    "player": "MARKRAM",
+    "hint_country": "🇿🇦 South Africa",
+    "hint_position": "🏏 Batter",
+    "hint_team": "🟡 Lucknow Super Giants",
+    "difficulty": "hard"
+  },
+  "wordle-2026-04-05": {
+    "date": "2026-04-05",
+    "player": "KAMBOJ",
+    "hint_country": "🇮🇳 India",
+    "hint_position": "🎯 All-rounder",
+    "hint_team": "🟡 Chennai Super Kings",
+    "difficulty": "hard"
+  },
+  "wordle-2026-04-06": {
+    "date": "2026-04-06",
+    "player": "NARINE",
+    "hint_country": "🇹🇹 Trinidad & Tobago",
+    "hint_position": "🎯 All-rounder/Spinner",
+    "hint_team": "🟣 Kolkata Knight Riders",
+    "difficulty": "hard"
+  },
+  "wordle-2026-04-07": {
+    "date": "2026-04-07",
+    "player": "BREVIS",
+    "hint_country": "🇿🇦 South Africa",
+    "hint_position": "🏏 Batter",
+    "hint_team": "🟡 Chennai Super Kings",
+    "difficulty": "hard"
+  },
+  "wordle-2026-04-08": {
+    "date": "2026-04-08",
+    "player": "BADONI",
+    "hint_country": "🇮🇳 India",
+    "hint_position": "🏏 Batter/All-rounder",
+    "hint_team": "🟡 Lucknow Super Giants",
+    "difficulty": "hard"
+  },
+  "wordle-2026-04-09": {
+    "date": "2026-04-09",
+    "player": "DAYAL",
+    "hint_country": "🇮🇳 India",
+    "hint_position": "🎳 Fast Bowler",
+    "hint_team": "🔴 Royal Challengers Bengaluru",
+    "difficulty": "hard"
+  },
+  "wordle-2026-04-10": {
+    "date": "2026-04-10",
+    "player": "HASARANGA",
+    "hint_country": "🇱🇰 Sri Lanka",
+    "hint_position": "🎯 All-rounder/Leg-spinner",
+    "hint_team": "🟡 Lucknow Super Giants",
+    "difficulty": "hard"
+  },
+  "wordle-2026-04-11": {
+    "date": "2026-04-11",
+    "player": "MHATRE",
+    "hint_country": "🇮🇳 India",
+    "hint_position": "🏏 Batter/Opener",
+    "hint_team": "🟡 Chennai Super Kings",
+    "difficulty": "hard"
+  },
+  "wordle-2026-04-12": {
+    "date": "2026-04-12",
+    "player": "KLAASEN",
+    "hint_country": "🇿🇦 South Africa",
+    "hint_position": "🧤 Wicketkeeper-Batter",
+    "hint_team": "🟠 Sunrisers Hyderabad",
+    "difficulty": "hard"
+  },
+  "wordle-2026-04-13": {
+    "date": "2026-04-13",
+    "player": "RICKELTON",
+    "hint_country": "🇿🇦 South Africa",
+    "hint_position": "🧤 Wicketkeeper-Batter",
+    "hint_team": "🔵 Mumbai Indians",
+    "difficulty": "hard"
+  },
+  "wordle-2026-04-14": {
+    "date": "2026-04-14",
+    "player": "PATHIRANA",
+    "hint_country": "🇱🇰 Sri Lanka",
+    "hint_position": "🎳 Fast Bowler",
+    "hint_team": "🟣 Kolkata Knight Riders",
+    "difficulty": "hard"
+  },
+  "wordle-2026-04-15": {
+    "date": "2026-04-15",
+    "player": "DEVDUTT",
+    "hint_country": "🇮🇳 India",
+    "hint_position": "🏏 Left-hand Batter",
+    "hint_team": "🔴 Royal Challengers Bengaluru",
+    "difficulty": "hard"
+  },
+  "wordle-2026-04-16": {
+    "date": "2026-04-16",
+    "player": "JANSEN",
+    "hint_country": "🇿🇦 South Africa",
+    "hint_position": "🎯 All-rounder/Pacer",
+    "hint_team": "🔴 Punjab Kings",
+    "difficulty": "hard"
+  },
+  "wordle-2026-04-17": {
+    "date": "2026-04-17",
+    "player": "NORTJE",
+    "hint_country": "🇿🇦 South Africa",
+    "hint_position": "🎳 Fast Bowler",
+    "hint_team": "🟡 Lucknow Super Giants",
+    "difficulty": "hard"
+  },
+  "wordle-2026-04-18": {
+    "date": "2026-04-18",
+    "player": "POORAN",
+    "hint_country": "🇹🇹 Trinidad & Tobago",
+    "hint_position": "🧤 Wicketkeeper-Batter",
+    "hint_team": "🟡 Lucknow Super Giants",
+    "difficulty": "hard"
+  },
+  "wordle-2026-04-19": {
+    "date": "2026-04-19",
+    "player": "OMARZAI",
+    "hint_country": "🇦🇫 Afghanistan",
+    "hint_position": "🎯 All-rounder",
+    "hint_team": "🔴 Punjab Kings",
+    "difficulty": "hard"
+  },
+  "wordle-2026-04-20": {
+    "date": "2026-04-20",
+    "player": "PRASIDH",
+    "hint_country": "🇮🇳 India",
+    "hint_position": "🎳 Fast Bowler",
+    "hint_team": "🔵 Gujarat Titans",
+    "difficulty": "hard"
+  },
+  "wordle-2026-04-21": {
+    "date": "2026-04-21",
+    "player": "NATARAJAN",
+    "hint_country": "🇮🇳 India",
+    "hint_position": "🎳 Left-arm Yorker Specialist",
+    "hint_team": "🔵 Delhi Capitals",
+    "difficulty": "hard"
+  },
+  "wordle-2026-04-22": {
+    "date": "2026-04-22",
+    "player": "SAMAD",
+    "hint_country": "🇮🇳 India",
+    "hint_position": "🏏 Batter/All-rounder",
+    "hint_team": "🟡 Lucknow Super Giants",
+    "difficulty": "hard"
+  },
+  "wordle-2026-04-23": {
+    "date": "2026-04-23",
+    "player": "DWARSHUIS",
+    "hint_country": "🇦🇺 Australia",
+    "hint_position": "🎳 Left-arm Pacer",
+    "hint_team": "🔴 Punjab Kings",
+    "difficulty": "hard"
+  },
+  "wordle-2026-04-24": {
+    "date": "2026-04-24",
+    "player": "VIPRAJ",
+    "hint_country": "🇮🇳 India",
+    "hint_position": "🎯 All-rounder/Off-spinner",
+    "hint_team": "🔵 Delhi Capitals",
+    "difficulty": "hard"
+  },
+  "wordle-2026-04-25": {
+    "date": "2026-04-25",
+    "player": "PRETORIUS",
+    "hint_country": "🇿🇦 South Africa",
+    "hint_position": "🧤 Wicketkeeper-Batter",
+    "hint_team": "💗 Rajasthan Royals",
+    "difficulty": "hard"
+  },
+  "wordle-2026-04-26": {
+    "date": "2026-04-26",
+    "player": "SHEPHERD",
+    "hint_country": "🇬🇾 Guyana",
+    "hint_position": "🎯 All-rounder",
+    "hint_team": "🔴 Royal Challengers Bengaluru",
+    "difficulty": "hard"
+  },
+  "wordle-2026-04-27": {
+    "date": "2026-04-27",
+    "player": "UNADKAT",
+    "hint_country": "🇮🇳 India",
+    "hint_position": "🎳 Left-arm Pacer",
+    "hint_team": "🟡 Lucknow Super Giants",
+    "difficulty": "hard"
+  },
+  "wordle-2026-04-28": {
+    "date": "2026-04-28",
+    "player": "CONNOLLY",
+    "hint_country": "🇦🇺 Australia",
+    "hint_position": "🏏 Batter/Left-arm Spinner",
+    "hint_team": "🔴 Punjab Kings",
+    "difficulty": "hard"
+  },
+  "wordle-2026-04-29": {
+    "date": "2026-04-29",
+    "player": "MARKANDE",
+    "hint_country": "🇮🇳 India",
+    "hint_position": "🎳 Leg-spinner",
+    "hint_team": "🔵 Mumbai Indians",
+    "difficulty": "hard"
+  },
+  "wordle-2026-04-30": {
+    "date": "2026-04-30",
+    "player": "THUSHARA",
+    "hint_country": "🇱🇰 Sri Lanka",
+    "hint_position": "🎳 Fast Bowler",
+    "hint_team": "🔴 Royal Challengers Bengaluru",
     "difficulty": "hard"
   }
 }
